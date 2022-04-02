@@ -8,6 +8,8 @@ from .serializers import RequestRideSerializer, AcceptRideSerializer, ScheduleRi
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import viewsets, permissions, generics, status
 from rest_framework.response import Response
+from django.conf import settings
+from .process_email import send_my_mail
 from rest_framework import filters
 from datetime import datetime, date, time
 
@@ -80,9 +82,9 @@ def request_ride(request):
 @permission_classes([permissions.IsAuthenticated])
 def accept_requested_ride(request, ride_id):
     ride = get_object_or_404(RequestRide, id=ride_id)
-    serializer = AcceptRideSerializer(data=request.data)
+    serializer = AcceptRideSerializer(ride, data=request.data)
     if serializer.is_valid():
-        serializer.save(user=request.user, ride=ride)
+        serializer.save(user=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

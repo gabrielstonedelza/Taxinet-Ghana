@@ -8,8 +8,8 @@ User = settings.AUTH_USER_MODEL
 
 @receiver(post_save, sender=User)
 def create_profile(sender, created, instance, **kwargs):
-    if created:
-        if instance.user_type == "Driver":
-            DriverProfile.objects.create(user=instance)
-        else:
-            PassengerProfile.objects.create(user=instance)
+    if created and instance.user_type == "Driver":
+        DriverProfile.objects.create(user=instance)
+
+    if created and instance.user_type == "Passenger":
+        PassengerProfile.objects.create(user=instance)

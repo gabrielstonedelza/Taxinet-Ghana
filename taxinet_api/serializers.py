@@ -32,7 +32,7 @@ class AcceptRideSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'ride', 'user', 'bid', 'price', 'accept', 'reject_ride', 'driver_approved',
                   'passenger_approved', 'date_accepted', 'get_driver_profile_pic',
                   'get_passenger_profile_pic']
-        read_only_fields = ['user', 'ride']
+        read_only_fields = ['user']
 
     def get_username(self, user):
         username = user.user.username

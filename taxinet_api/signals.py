@@ -27,7 +27,7 @@ def alert_request_ride(sender, created, instance, **kwargs):
 def alert_accepted_ride(sender, created, instance, **kwargs):
     title = "Ride Request Accepted"
     notification_tag = "Ride Accepted"
-    message = f"{instance.driver.username} accepted your request and added your fare,please check and feel free to bargain."
+    message = f"{instance.ride.driver.username} accepted your request and added your fare,please check and feel free to bargain."
 
     if created:
         Notifications.objects.create(notification_id=instance.id, notification_title=title,
@@ -40,7 +40,7 @@ def alert_accepted_ride(sender, created, instance, **kwargs):
 def alert_rejected_ride(sender, created, instance, **kwargs):
     title = "Ride Request Rejected"
     notification_tag = "Ride Rejected"
-    message = f"{instance.driver.username} rejected your request"
+    message = f"{instance.ride.driver.username} rejected your request"
 
     if created:
         Notifications.objects.create(notification_id=instance.id, notification_title=title,

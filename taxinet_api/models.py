@@ -53,13 +53,13 @@ class RequestRide(models.Model):
     drop_off = models.CharField(max_length=255)
     ride_accepted = models.BooleanField(default=False)
     ride_rejected = models.BooleanField(default=False)
-    price = models.FloatField(blank=True)
+    price = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
     completed = models.BooleanField(default=False)
     driver_status = models.CharField(max_length=20, choices=DRIVER_STATUS, default="Not Booked")
     date_requested = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.passenger.username} has requested a ride"
+        return str(self.pk)
 
     def get_driver_profile_pic(self):
         my_driver = DriverProfile.objects.get(user=self.driver)
@@ -77,12 +77,12 @@ class RequestRide(models.Model):
 class AcceptRide(models.Model):
     ride = models.ForeignKey(RequestRide, on_delete=models.CASCADE, related_name="Ride_to_accept")
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    bid = models.CharField(max_length=10, blank=True)
-    price = models.FloatField(blank=True)
-    accept = models.BooleanField(default=False)
+    bid = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
+    price = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
     reject_ride = models.CharField(max_length=10, choices=ACCEPT_RIDE_STATUS, default="Not Accepted Yet")
     driver_approved = models.CharField(blank=True, max_length=20, default="Not Approved")
     passenger_approved = models.CharField(blank=True, max_length=20, default="Not Approved")
+    accept = models.BooleanField(default=False)
     date_accepted = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -104,19 +104,6 @@ class AcceptRide(models.Model):
         if my_passenger:
             return "http://127.0.0.1:8000" + my_passenger.profile_pic.url
         return ""
-
-
-# class BargainPrice(models.Model):
-#     ride = models.ForeignKey(RequestRide, on_delete=models.CASCADE, related_name="Ride_to_bargain")
-#     passenger = models.ForeignKey(User, on_delete=models.CASCADE, related_name="passenger_bargaining")
-#     driver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="driver_bargaining")
-#     message = models.TextField(blank=True)
-#     is_driver = models.CharField(max_length=10, blank=True)
-#     is_passenger = models.CharField(max_length=10, blank=True)
-#     date_bargained = models.DtatetimeField(auto_now_add=True)
-#
-#     def __str__(self):
-#         return self.message
 
 
 class ScheduleRide(models.Model):
@@ -225,7 +212,7 @@ class Notifications(models.Model):
 
 
 class Complains(models.Model):
-    complainant = models.ForeignKey(User, on_delete=models.CASCADE,related_name="user_making_complain")
+    complainant = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_making_complain")
     offender = models.ForeignKey(User, on_delete=models.CASCADE)
     complain = models.TextField(blank=True)
     reply = models.TextField(blank=True)
@@ -249,7 +236,7 @@ class Complains(models.Model):
 
 
 class DriverReviews(models.Model):
-    passenger = models.ForeignKey(User, on_delete=models.CASCADE,related_name="user_giving_review")
+    passenger = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_giving_review")
     driver = models.ForeignKey(User, on_delete=models.CASCADE)
     reviews = models.TextField()
     date_posted = models.DateTimeField(auto_now_add=True)

@@ -1,0 +1,1 @@
+default_app_config = "taxinet_api.apps.TaxinetApiConfig"
