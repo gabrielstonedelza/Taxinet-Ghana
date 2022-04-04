@@ -8,6 +8,14 @@ from rest_framework.response import Response
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
+def get_user(request):
+    user = User.objects.filter(username=request.user.username)
+    serializer = UsersSerializer(user, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
 def driver_profile(request):
     my_profile = DriverProfile.objects.filter(user=request.user)
     serializer = DriverProfileSerializer(my_profile, many=True)

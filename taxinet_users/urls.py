@@ -6,6 +6,7 @@ urlpatterns = [
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.authtoken')),
     path('driver-profile/', views.driver_profile),
+    path('get_user/', views.get_user),
     path('passenger-profile/', views.passenger_profile),
     path('update_driver_profile/', views.update_driver_profile),
     path('update_passenger_profile/', views.update_passenger_profile),

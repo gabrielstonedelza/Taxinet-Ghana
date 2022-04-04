@@ -13,7 +13,7 @@ class UserCreateSerializer(UserCreateSerializer):
 class UsersSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'email', 'username', 'phone_number', 'first_name', 'last_name')
+        fields = ('id', 'email', 'username', 'phone_number', 'first_name', 'last_name', 'user_type',)
 
 
 class DriverProfileSerializer(serializers.ModelSerializer):
