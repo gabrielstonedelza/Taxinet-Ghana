@@ -10,12 +10,16 @@ urlpatterns = [
     path('passengers_requests_uncompleted/', views.get_passengers_requests_uncompleted),
     path('drivers_requests_uncompleted/', views.get_drivers_requests_uncompleted),
     path('request_ride/new/', views.request_ride),
-    path('accept_ride_requests/<int:ride_id>/', views.accept_requested_ride),
+    path('bid_ride/<int:ride_id>/', views.bid_ride),
+    path('all_bids/<int:ride_id>/', views.get_all_bids),
     path('accepted_ride/<int:accept_id>/update/', views.update_accepted_ride),
+    path('update_requested_ride/<int:ride_id>/', views.update_requested_ride),
     path('accepted_ride_detail/<int:accept_id>/', views.accepted_request_detail),
 
     #     scheduling rides
     path('scheduled_ride/new/', views.schedule_ride),
+    path('bid_scheduled_ride/<int:ride_id>/', views.bid_scheduled_ride),
+    path('update_schedule_ride/<int:ride_id>/', views.update_schedule_ride),
     path('all_scheduled_rides/', views.get_all_scheduled),
     path('scheduled_ride/<int:scheduled_ride>/', views.scheduled_ride_detail),
     path('one_time_schedule/', views.get_scheduled_for_one_time),
@@ -25,8 +29,6 @@ urlpatterns = [
     path('monthly_schedules/', views.get_scheduled_for_monthly),
     path('passengers_schedules/', views.get_scheduled_by_passenger),
     path('drivers_schedules/', views.get_scheduled_by_driver),
-    path('accept_schedules/<int:ride_id>/', views.accept_schedule_ride),
-    path('accept_schedules/<int:ride_id>/update/', views.update_schedule_ride),
     path('accept_schedules/<int:ride_id>/detail/', views.accept_schedule_ride_detail),
 
     #     notifications
@@ -54,5 +56,5 @@ urlpatterns = [
 
     #     drivers confirmed payments
     path('payment/new/', views.post_payment),
-    path('get_drivers_payments/',views.get_all_driver_payments)
+    path('get_drivers_payments/', views.get_all_driver_payments)
 ]

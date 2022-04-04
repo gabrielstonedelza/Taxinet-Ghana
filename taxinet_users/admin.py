@@ -3,7 +3,7 @@ from .models import DriverProfile, PassengerProfile, User
 
 
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('id', 'username', 'email', 'user_type', 'phone_number')
+    list_display = ('id', 'username', 'email', 'user_type', 'phone_number', 'first_name', 'last_name')
 
 
 admin.site.register(User, UserAdmin)

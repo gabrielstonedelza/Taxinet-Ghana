@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.conf import settings
-from .models import (RequestRide, AcceptRide, ScheduleRide, AcceptScheduleRide, Notifications, Complains, DriverReviews, \
+from .models import (RequestRide, BidRide, ScheduleRide, BidScheduleRide, Notifications, Complains, DriverReviews, \
                      Sos, RateDriver, ConfirmDriverPayment)
 
 User = settings.AUTH_USER_MODEL
@@ -22,81 +22,43 @@ def alert_request_ride(sender, created, instance, **kwargs):
                                      notification_from=instance.passenger, notification_to=instance.driver,
                                      ride_id=instance.id)
 
-
-@receiver(post_save, sender=AcceptRide)
-def alert_accepted_ride(sender, created, instance, **kwargs):
-    title = "Ride Request Accepted"
-    notification_tag = "Ride Accepted"
-    message = f"{instance.ride.driver.username} accepted your request and added your fare,please check and feel free to bargain."
-
-    if created:
+    if created and instance.ride_accepted:
+        title = "Ride Accepted"
+        notification_tag = "Ride Accepted"
+        message = f"{instance.driver.username} accepted your request."
         Notifications.objects.create(notification_id=instance.id, notification_title=title,
-                                     notification_tag=notification_tag,
-                                     notification_message=message, notification_from=instance.ride.driver,
-                                     notification_to=instance.ride.passenger, ride_accepted_id=instance.id)
+                                     notification_tag=notification_tag, notification_message=message,
+                                     notification_from=instance.driver, notification_to=instance.passenger,
+                                     ride_id=instance.id)
 
-
-@receiver(post_save, sender=AcceptRide)
-def alert_rejected_ride(sender, created, instance, **kwargs):
-    title = "Ride Request Rejected"
-    notification_tag = "Ride Rejected"
-    message = f"{instance.ride.driver.username} rejected your request"
-
-    if created:
+    if created and instance.ride_rejected:
+        title = "Ride Rejected"
+        notification_tag = "Ride Rejected"
+        message = f"{instance.driver.username} rejected your request."
         Notifications.objects.create(notification_id=instance.id, notification_title=title,
-                                     notification_tag=notification_tag,
-                                     notification_message=message, notification_from=instance.ride.driver,
-                                     notification_to=instance.ride.passenger, ride_rejected_id=instance.id)
+                                     notification_tag=notification_tag, notification_message=message,
+                                     notification_from=instance.driver, notification_to=instance.passenger,
+                                     ride_id=instance.id)
 
 
-@receiver(post_save, sender=AcceptRide)
+@receiver(post_save, sender=BidRide)
 def alert_bidding(sender, created, instance, **kwargs):
     if created and instance.ride.passenger == instance.user:
-        title = "Passenger bid on the price"
+        title = "New bid on price"
         notification_tag = "Bidding"
-        message = f"{instance.ride.passenger.username} has offered to pay {instance.bid}"
+        message = f"{instance.user.username} has offered to pay {instance.bid}"
         Notifications.objects.create(notification_id=instance.id, notification_title=title,
                                      notification_message=message, notification_tag=notification_tag,
                                      notification_from=instance.ride.passenger, notification_to=instance.ride.driver,
                                      ride_accepted_id=instance.id)
 
     if created and instance.ride.driver == instance.user:
-        title = "Driver bid on the price"
+        title = "New bid on price"
         notification_tag = "Bidding"
-        message = f"{instance.ride.driver.username} bid on the fare {instance.bid}"
+        message = f"{instance.user.username} wants you to pay {instance.bid}"
         Notifications.objects.create(notification_id=instance.id, notification_title=title,
                                      notification_message=message, notification_tag=notification_tag,
                                      notification_from=instance.ride.driver, notification_to=instance.ride.passenger,
-                                     ride_accepted_id=instance.id)
-
-    if created and instance.driver_approved == "Approved":
-        title = "Price Approved"
-        notification_tag = "Price Approved"
-        message = "Driver approved price"
-
-        Notifications.objects.create(notification_id=instance.id, notification_title=title,
-                                     notification_message=message, notification_tag=notification_tag,
-                                     notification_from=instance.user, notification_to=instance.ride.passenger,
-                                     ride_accepted_id=instance.id)
-
-    if created and instance.passenger_approved == "Approved":
-        title = "Price Approved"
-        notification_tag = "Price Approved"
-        message = "Passenger also approved price"
-
-        Notifications.objects.create(notification_id=instance.id, notification_title=title,
-                                     notification_message=message, notification_tag=notification_tag,
-                                     notification_from=instance.user, notification_to=instance.ride.driver,
-                                     ride_accepted_id=instance.id)
-
-    if created and instance.passenger_approved == "Approved" and instance.driver_approved == "Approved":
-        title = "Price Finally Approved"
-        notification_tag = "Final Price Approved"
-        message = f"Both of you have approved {instance.price}"
-
-        Notifications.objects.create(notification_id=instance.id, notification_title=title,
-                                     notification_message=message, notification_tag=notification_tag,
-                                     notification_from=instance.ride.passenger, notification_to=instance.ride.driver,
                                      ride_accepted_id=instance.id)
 
 
@@ -113,17 +75,25 @@ def alert_schedule(sender, created, instance, **kwargs):
                                      schedule_ride_id=instance.id)
 
 
-@receiver(post_save, sender=AcceptScheduleRide)
-def alert_schedule_accepted(sender, created, instance, **kwargs):
-    title = "Schedule Ride Request Accepted"
-    notification_tag = "Schedule Ride Accepted"
-    message = f"{instance.driver.username} accepted your request and would be calling you."
-
-    if created:
+@receiver(post_save, sender=BidScheduleRide)
+def alert_bidding(sender, created, instance, **kwargs):
+    if created and instance.scheduled_ride.passenger == instance.user:
+        title = "New bid on price"
+        notification_tag = "Bidding"
+        message = f"{instance.user.username} has offered to pay {instance.bid}"
         Notifications.objects.create(notification_id=instance.id, notification_title=title,
-                                     notification_tag=notification_tag,
-                                     notification_message=message, notification_from=instance.user,
-                                     notification_to=instance.scheduled_ride.passenger, ride_accepted_id=instance.id)
+                                     notification_message=message, notification_tag=notification_tag,
+                                     notification_from=instance.scheduled_ride.passenger, notification_to=instance.scheduled_ride.driver,
+                                     schedule_accepted_id=instance.id)
+
+    if created and instance.scheduled_ride.driver == instance.user:
+        title = "New bid on price"
+        notification_tag = "Bidding"
+        message = f"{instance.user.username} wants you to pay {instance.bid}"
+        Notifications.objects.create(notification_id=instance.id, notification_title=title,
+                                     notification_message=message, notification_tag=notification_tag,
+                                     notification_from=instance.scheduled_ride.driver, notification_to=instance.scheduled_ride.passenger,
+                                     schedule_accepted_id=instance.id)
 
 
 @receiver(post_save, sender=DriverReviews)
@@ -135,7 +105,7 @@ def alert_review(sender, created, instance, **kwargs):
     if created:
         Notifications.objects.create(notification_id=instance.id, notification_title=title,
                                      notification_message=message, notification_tag=notification_tag,
-                                     notification_from=instance.user, notification_to=instance.driver,
+                                     notification_from=instance.passenger, notification_to=instance.driver,
                                      review_id=instance.id)
 
 

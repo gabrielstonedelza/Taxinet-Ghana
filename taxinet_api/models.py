@@ -49,13 +49,13 @@ DRIVER_PAYMENT_CONFIRMATION = (
 class RequestRide(models.Model):
     driver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="driver_to_accept_ride")
     passenger = models.ForeignKey(User, on_delete=models.CASCADE)
-    pick_up = models.CharField(max_length=255)
-    drop_off = models.CharField(max_length=255)
+    pick_up = models.CharField(max_length=255, blank=True)
+    drop_off = models.CharField(max_length=255, blank=True)
     ride_accepted = models.BooleanField(default=False)
     ride_rejected = models.BooleanField(default=False)
     price = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
     completed = models.BooleanField(default=False)
-    driver_status = models.CharField(max_length=20, choices=DRIVER_STATUS, default="Not Booked")
+    driver_booked = models.BooleanField(default=False)
     date_requested = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -74,24 +74,18 @@ class RequestRide(models.Model):
         return ""
 
 
-class AcceptRide(models.Model):
+class BidRide(models.Model):
     ride = models.ForeignKey(RequestRide, on_delete=models.CASCADE, related_name="Ride_to_accept")
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     bid = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
-    price = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
-    reject_ride = models.CharField(max_length=10, choices=ACCEPT_RIDE_STATUS, default="Not Accepted Yet")
-    driver_approved = models.CharField(blank=True, max_length=20, default="Not Approved")
-    passenger_approved = models.CharField(blank=True, max_length=20, default="Not Approved")
-    accept = models.BooleanField(default=False)
     date_accepted = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.user.username} has accepted ride from {self.ride.passenger.username}"
+        return f"{self.user.username}'s bid"
 
-    def save(self, *args, **kwargs):
-        self.price = self.bid
-        self.ride.price = self.price
-        super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     super().save(*args, **kwargs)
+    #     self.ride.price = self.bid
 
     def get_driver_profile_pic(self):
         my_driver = DriverProfile.objects.get(user=self.ride.driver)
@@ -109,21 +103,18 @@ class AcceptRide(models.Model):
 class ScheduleRide(models.Model):
     passenger = models.ForeignKey(User, on_delete=models.CASCADE, related_name="passenger_scheduling_ride")
     driver = models.ForeignKey(User, on_delete=models.CASCADE)
-    date_of_pickup = models.DateField()
-    time_of_pickup = models.TimeField()
+    date_of_pickup = models.DateField(blank=True,)
+    time_of_pickup = models.TimeField(blank=True,)
     schedule_option = models.CharField(max_length=30, choices=SCHEDULE_RIDE_OPTIONS, default="One Time")
-    pickup_location = models.CharField(max_length=255)
-    drop_off_location = models.CharField(max_length=255)
-    confirmation_status = models.CharField(max_length=20, default="Not Accepted")
+    pickup_location = models.CharField(max_length=255, blank=True, )
+    drop_off_location = models.CharField(max_length=255, blank=True, )
     scheduled = models.BooleanField(default=False)
-    price = models.FloatField(blank=True)
+    price = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
+    initial_payment = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
     date_scheduled = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        if self.confirmation_status == "Accept":
-            return f"{self.driver.username} has accepted scheduled ride by {self.passenger.username}"
-        else:
-            return "Scheduled ride not accepted by drivers yet"
+        return str(self.pk)
 
     def get_driver_profile_pic(self):
         my_driver = DriverProfile.objects.get(user=self.driver)
@@ -138,24 +129,14 @@ class ScheduleRide(models.Model):
         return ""
 
 
-class AcceptScheduleRide(models.Model):
+class BidScheduleRide(models.Model):
     scheduled_ride = models.ForeignKey(ScheduleRide, on_delete=models.CASCADE, related_name="Scheduled_Ride_to_accept")
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     bid = models.CharField(max_length=10, blank=True)
-    price = models.FloatField(blank=True)
-    accept = models.BooleanField(default=False)
-    reject_scheduled = models.CharField(max_length=10, choices=ACCEPT_RIDE_STATUS, default="Not Accepted Yet")
-    driver_approved = models.CharField(blank=True, max_length=20, default="Not Approved")
-    passenger_approved = models.CharField(blank=True, max_length=20, default="Not Approved")
     date_accepted = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.scheduled_ride.passenger.username}'s ride is awaiting approval"
-
-    def save(self, *args, **kwargs):
-        self.price = self.bid
-        self.scheduled_ride.price = self.price
-        super().save(*args, **kwargs)
+        return f"{self.user.username}'s bid"
 
     def get_driver_profile_pic(self):
         my_driver = DriverProfile.objects.get(user=self.scheduled_ride.driver)
@@ -215,24 +196,23 @@ class Complains(models.Model):
     complainant = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_making_complain")
     offender = models.ForeignKey(User, on_delete=models.CASCADE)
     complain = models.TextField(blank=True)
-    reply = models.TextField(blank=True)
     read = models.BooleanField(default=False)
     date_posted = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.complainant.username} just posted a complain"
 
-    def get_complainant_profile_pic(self):
-        my_driver = DriverProfile.objects.get(user=self.complainant)
-        if my_driver:
-            return "http://127.0.0.1:8000" + my_driver.profile_pic.url
-        return ""
-
-    def get_offender_profile_pic(self):
-        my_passenger = PassengerProfile.objects.get(user=self.offender)
-        if my_passenger:
-            return "http://127.0.0.1:8000" + my_passenger.profile_pic.url
-        return ""
+    # def get_complainant_profile_pic(self):
+    #     my_driver = DriverProfile.objects.get(user=self.complainant)
+    #     if my_driver:
+    #         return "http://127.0.0.1:8000" + my_driver.profile_pic.url
+    #     return ""
+    #
+    # def get_offender_profile_pic(self):
+    #     my_passenger = PassengerProfile.objects.get(user=self.offender)
+    #     if my_passenger:
+    #         return "http://127.0.0.1:8000" + my_passenger.profile_pic.url
+    #     return ""
 
 
 class DriverReviews(models.Model):
@@ -244,17 +224,17 @@ class DriverReviews(models.Model):
     def __str__(self):
         return self.reviews
 
-    def get_passenger_profile_pic(self):
-        my_driver = DriverProfile.objects.get(user=self.passenger)
-        if my_driver:
-            return "http://127.0.0.1:8000" + my_driver.profile_pic.url
-        return ""
-
-    def get_driver_profile_pic(self):
-        my_passenger = PassengerProfile.objects.get(user=self.driver)
-        if my_passenger:
-            return "http://127.0.0.1:8000" + my_passenger.profile_pic.url
-        return ""
+    # def get_passenger_profile_pic(self):
+    #     my_driver = DriverProfile.objects.get(user=self.passenger)
+    #     if my_driver:
+    #         return "http://127.0.0.1:8000" + my_driver.profile_pic.url
+    #     return ""
+    #
+    # def get_driver_profile_pic(self):
+    #     my_passenger = PassengerProfile.objects.get(user=self.driver)
+    #     if my_passenger:
+    #         return "http://127.0.0.1:8000" + my_passenger.profile_pic.url
+    #     return ""
 
 
 class Sos(models.Model):
@@ -275,24 +255,24 @@ class RateDriver(models.Model):
     def __str__(self):
         return f"{self.passenger.username} gave a rating of {self.rating} to driver {self.driver.username}"
 
-    def get_passenger_profile_pic(self):
-        my_driver = PassengerProfile.objects.get(user=self.passenger)
-        if my_driver:
-            return "http://127.0.0.1:8000" + my_driver.profile_pic.url
-        return ""
-
-    def get_driver_profile_pic(self):
-        my_passenger = DriverProfile.objects.get(user=self.driver)
-        if my_passenger:
-            return "http://127.0.0.1:8000" + my_passenger.profile_pic.url
-        return ""
+    # def get_passenger_profile_pic(self):
+    #     my_driver = PassengerProfile.objects.get(user=self.passenger)
+    #     if my_driver:
+    #         return "http://127.0.0.1:8000" + my_driver.profile_pic.url
+    #     return ""
+    #
+    # def get_driver_profile_pic(self):
+    #     my_passenger = DriverProfile.objects.get(user=self.driver)
+    #     if my_passenger:
+    #         return "http://127.0.0.1:8000" + my_passenger.profile_pic.url
+    #     return ""
 
 
 class ConfirmDriverPayment(models.Model):
     driver = models.ForeignKey(User, on_delete=models.CASCADE)
-    payment_confirmed = models.CharField(max_length=50, choices=DRIVER_PAYMENT_CONFIRMATION, default="Not Confirmed")
+    payment_confirmed = models.BooleanField(default=False)
     bank_payment_reference = models.CharField(max_length=100)
-    amount = models.FloatField()
+    amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
     date_confirmed = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

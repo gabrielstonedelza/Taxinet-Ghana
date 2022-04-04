@@ -1,13 +1,13 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser,AbstractBaseUser
+from django.contrib.auth.models import AbstractUser, AbstractBaseUser
 from django.conf import settings
 from PIL import Image
 import random
 
 DeUser = settings.AUTH_USER_MODEL
 APP_TYPE = (
-    ("Driver", "Driver"),
     ("Passenger", "Passenger"),
+    ("Driver", "Driver"),
 )
 
 
@@ -15,28 +15,21 @@ class User(AbstractUser):
     email = models.EmailField(unique=True, max_length=255)
     user_type = models.CharField(max_length=50, choices=APP_TYPE, default="Passenger")
     phone_number = models.CharField(max_length=16, unique=True)
-    # unique_code = models.CharField(max_length=100)
 
-    REQUIRED_FIELDS = ['email', 'user_type', 'phone_number']
+    REQUIRED_FIELDS = ['email', 'user_type', 'phone_number', 'first_name', 'last_name']
     USERNAME_FIELD = 'username'
 
     def get_username(self):
         return self.username
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        value = random.randint(1, 10000)
-        # self.unique_code = value
-
 
 class DriverProfile(models.Model):
     user = models.OneToOneField(DeUser, on_delete=models.CASCADE, related_name="d_profile")
     profile_pic = models.ImageField(upload_to="profile_pics", default="default_user.png")
-    fullname = models.CharField(max_length=150, blank=True)
     drivers_license = models.ImageField(upload_to="drivers_licenses", blank=True)
     name_on_licence = models.CharField(max_length=100, blank=True)
     license_number = models.CharField(max_length=100, blank=True)
-    license_expiration_date = models.DateField(auto_now_add=True)
+    license_expiration_date = models.CharField(max_length=12, blank=True)
     license_plate = models.CharField(max_length=100, blank=True)
     car_name = models.CharField(max_length=100, blank=True)
     car_model = models.CharField(max_length=100, blank=True)
@@ -80,13 +73,13 @@ class DriverProfile(models.Model):
 class PassengerProfile(models.Model):
     user = models.OneToOneField(DeUser, on_delete=models.CASCADE, related_name="p_profile")
     profile_pic = models.ImageField(upload_to="passenger_profile_pics", default="default_user.png")
-    fullname = models.CharField(max_length=150, blank=True)
     ghana_card = models.ImageField(upload_to="ghana_cards", blank=True)
     name_on_ghana_card = models.CharField(max_length=100, blank=True)
     ghana_card_number = models.CharField(max_length=100, blank=True)
     next_of_kin = models.CharField(max_length=100, blank=True)
     next_of_kin_number = models.CharField(max_length=100, blank=True)
     referral = models.CharField(max_length=100, blank=True)
+    referral_number = models.CharField(max_length=20, blank=True)
     verified = models.BooleanField(default=False)
 
     def __str__(self):

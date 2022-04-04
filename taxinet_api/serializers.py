@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import (RequestRide, AcceptRide, ScheduleRide, AcceptScheduleRide, Notifications, Complains, DriverReviews, \
+from .models import (RequestRide, BidRide, ScheduleRide, BidScheduleRide, Notifications, Complains, DriverReviews,
                      Sos, RateDriver, ConfirmDriverPayment)
 
 
@@ -11,28 +11,28 @@ class RequestRideSerializer(serializers.ModelSerializer):
         model = RequestRide
         fields = ['id', 'passengers_username', 'drivers_username', 'driver', 'passenger', 'pick_up', 'drop_off',
                   'ride_accepted', 'ride_rejected',
-                  'price', 'completed', 'driver_status', 'date_requested', 'get_driver_profile_pic',
+                  'price', 'completed', 'driver_booked', 'date_requested',
+                  'get_driver_profile_pic',
                   'get_passenger_profile_pic']
         read_only_fields = ['passenger']
 
-    def get_username(self, user):
-        passengers_username = user.passenger.username
+    def get_username(self, ride):
+        passengers_username = ride.passenger.username
         return passengers_username
 
-    def get_driver_username(self, user):
-        drivers_username = user.driver.username
+    def get_driver_username(self, ride):
+        drivers_username = ride.driver.username
         return drivers_username
 
 
-class AcceptRideSerializer(serializers.ModelSerializer):
+class BidRideSerializer(serializers.ModelSerializer):
     username = serializers.SerializerMethodField('get_username')
 
     class Meta:
-        model = AcceptRide
-        fields = ['id', 'username', 'ride', 'user', 'bid', 'price', 'accept', 'reject_ride', 'driver_approved',
-                  'passenger_approved', 'date_accepted', 'get_driver_profile_pic',
+        model = BidRide
+        fields = ['id', 'username', 'ride', 'user', 'bid', 'date_accepted', 'get_driver_profile_pic',
                   'get_passenger_profile_pic']
-        read_only_fields = ['user']
+        read_only_fields = ['user', 'ride']
 
     def get_username(self, user):
         username = user.user.username
@@ -47,7 +47,7 @@ class ScheduleRideSerializer(serializers.ModelSerializer):
         model = ScheduleRide
         fields = ['id', 'username', 'passenger', 'drivers_username', 'driver', 'date_of_pickup', 'time_of_pickup',
                   'schedule_option',
-                  'pickup_location', 'drop_off_location', 'confirmation_status', 'scheduled', 'price', 'date_scheduled',
+                  'pickup_location', 'drop_off_location', 'scheduled', 'price', 'date_scheduled',
                   'get_driver_profile_pic',
                   'get_passenger_profile_pic']
         read_only_fields = ['passenger']
@@ -61,15 +61,14 @@ class ScheduleRideSerializer(serializers.ModelSerializer):
         return drivers_username
 
 
-class AcceptScheduleRideSerializer(serializers.ModelSerializer):
+class BidScheduleRideSerializer(serializers.ModelSerializer):
     username = serializers.SerializerMethodField('get_username')
 
     class Meta:
-        model = AcceptScheduleRide
-        fields = ['id', 'username', 'scheduled_ride', 'user', 'bid', 'price', 'accept', 'reject_scheduled',
-                  'driver_approved', 'passenger_approved', 'date_accepted', 'get_driver_profile_pic',
+        model = BidScheduleRide
+        fields = ['id', 'username', 'scheduled_ride', 'user', 'bid', 'date_accepted', 'get_driver_profile_pic',
                   'get_passenger_profile_pic']
-        read_only_fields = ['user']
+        read_only_fields = ['user', 'scheduled_ride']
 
     def get_username(self, user):
         username = user.user.username
@@ -91,8 +90,7 @@ class ComplainsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Complains
-        fields = ['id', 'username', 'complainant', 'offender', 'complain', 'reply', 'read', 'date_posted',
-                  'get_complainant_profile_pic', 'get_offender_profile_pic']
+        fields = ['id', 'username', 'complainant', 'offender', 'complain', 'read', 'date_posted']
         read_only_fields = ['complainant']
 
     def get_username(self, user):
@@ -105,8 +103,7 @@ class DriverReviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DriverReviews
-        fields = ['id', 'username', 'passenger', 'driver', 'reviews', 'date_posted', 'get_passenger_profile_pic',
-                  'get_driver_profile_pic']
+        fields = ['id', 'username', 'passenger', 'driver', 'reviews', 'date_posted']
         read_only_fields = ['passenger']
 
     def get_username(self, user):

@@ -1,8 +1,8 @@
 from django.shortcuts import get_object_or_404
-from .models import (RequestRide, AcceptRide, ScheduleRide, AcceptScheduleRide, Notifications, Complains, DriverReviews, \
+from .models import (RequestRide, BidRide, ScheduleRide, BidScheduleRide, Notifications, Complains, DriverReviews, \
                      Sos, RateDriver, ConfirmDriverPayment)
-from .serializers import RequestRideSerializer, AcceptRideSerializer, ScheduleRideSerializer, ComplainsSerializer, \
-    AcceptScheduleRideSerializer, NotificationSerializer, DriverReviewSerializer, RateDriverSerializer, \
+from .serializers import RequestRideSerializer, BidRideSerializer, ScheduleRideSerializer, ComplainsSerializer, \
+    BidScheduleRideSerializer, NotificationSerializer, DriverReviewSerializer, RateDriverSerializer, \
     ConfirmDriverPaymentSerializer
 
 from rest_framework.decorators import api_view, permission_classes
@@ -77,24 +77,44 @@ def request_ride(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@api_view(['GET', 'PUT'])
+@permission_classes([permissions.IsAuthenticated])
+def update_requested_ride(request, ride_id):
+    ride = get_object_or_404(RequestRide, id=ride_id)
+    serializer = RequestRideSerializer(ride, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 # accept requested ride functions
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
-def accept_requested_ride(request, ride_id):
+def bid_ride(request, ride_id):
     ride = get_object_or_404(RequestRide, id=ride_id)
-    serializer = AcceptRideSerializer(ride, data=request.data)
+    serializer = BidRideSerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save(user=request.user)
+        serializer.save(user=request.user, ride=ride)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_all_bids(request, ride_id):
+    ride = get_object_or_404(RequestRide, id=ride_id)
+    bids = BidRide.objects.filter(ride=ride).order_by('-date_accepted')
+    serializer = BidRideSerializer(bids, many=True)
+    return Response(serializer.data)
 
 
 @api_view(['GET', 'PUT'])
 @permission_classes([permissions.IsAuthenticated])
 def update_accepted_ride(request, ride_id, accept_id):
     ride = get_object_or_404(RequestRide, id=ride_id)
-    accepted_id = get_object_or_404(AcceptRide, id=accept_id)
-    serializer = AcceptRideSerializer(accepted_id, data=request.data)
+    accepted_id = get_object_or_404(BidRide, id=accept_id)
+    serializer = BidRideSerializer(accepted_id, data=request.data)
     if serializer.is_valid():
         serializer.save(user=request.user, ride=ride)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -104,8 +124,8 @@ def update_accepted_ride(request, ride_id, accept_id):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def accepted_request_detail(request, accept_id):
-    accepted_id = get_object_or_404(AcceptRide, id=accept_id)
-    serializer = AcceptRideSerializer(accepted_id, many=False)
+    accepted_id = get_object_or_404(BidRide, id=accept_id)
+    serializer = BidRideSerializer(accepted_id, many=False)
     return Response(serializer.data)
 
 
@@ -116,6 +136,28 @@ def schedule_ride(request):
     serializer = ScheduleRideSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save(passenger=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def bid_scheduled_ride(request, ride_id):
+    ride = get_object_or_404(ScheduleRide, id=ride_id)
+    serializer = BidScheduleRideSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(user=request.user, scheduled_ride=ride)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'PUT'])
+@permission_classes([permissions.IsAuthenticated])
+def update_schedule_ride(request, ride_id):
+    ride = get_object_or_404(ScheduleRide, id=ride_id)
+    serializer = ScheduleRideSerializer(ride, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -198,19 +240,7 @@ def get_scheduled_by_driver(request):
 @permission_classes([permissions.IsAuthenticated])
 def accept_schedule_ride(request, ride_id):
     ride = get_object_or_404(ScheduleRide, id=ride_id)
-    serializer = AcceptScheduleRideSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save(user=request.user, ride=ride)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-@api_view(['GET', 'PUT'])
-@permission_classes([permissions.IsAuthenticated])
-def update_schedule_ride(request, ride_id, accept_id):
-    ride = get_object_or_404(ScheduleRide, id=ride_id)
-    accepted_id = get_object_or_404(AcceptScheduleRide, id=accept_id)
-    serializer = AcceptScheduleRideSerializer(accepted_id, data=request.data)
+    serializer = BidScheduleRideSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save(user=request.user, ride=ride)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -220,8 +250,8 @@ def update_schedule_ride(request, ride_id, accept_id):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def accept_schedule_ride_detail(request, accept_id):
-    accepted_id = get_object_or_404(AcceptScheduleRide, id=accept_id)
-    serializer = AcceptScheduleRideSerializer(accepted_id, many=False)
+    accepted_id = get_object_or_404(BidScheduleRide, id=accept_id)
+    serializer = BidScheduleRideSerializer(accepted_id, many=False)
     return Response(serializer.data)
 
 
