@@ -38,7 +38,7 @@ class DriverProfile(models.Model):
     ghana_card_number = models.CharField(max_length=100, blank=True)
     digital_address = models.CharField(max_length=100, blank=True)
     next_of_kin = models.CharField(max_length=100, blank=True)
-    next_of_kin_number = models.CharField(max_length=100)
+    next_of_kin_number = models.CharField(max_length=100, blank=True)
     verified = models.BooleanField(default=False)
 
     def __str__(self):
