@@ -56,17 +56,17 @@ class DriverProfile(models.Model):
 
     def driver_profile_pic(self):
         if self.profile_pic:
-            return "http://127.0.0.1:8000" + self.profile_pic.url
+            return "https://taxinetghana.xyz" + self.profile_pic.url
         return ''
 
     def get_drivers_license(self):
         if self.drivers_license:
-            return "http://127.0.0.1:8000" + self.drivers_license.url
+            return "https://taxinetghana.xyz" + self.drivers_license.url
         return ''
 
     def get_ghana_card(self):
         if self.ghana_card:
-            return "http://127.0.0.1:8000" + self.ghana_card.url
+            return "https://taxinetghana.xyz" + self.ghana_card.url
         return ''
 
 
@@ -97,10 +97,10 @@ class PassengerProfile(models.Model):
 
     def get_ghana_card(self):
         if self.ghana_card:
-            return "http://127.0.0.1:8000" + self.ghana_card.url
+            return "https://taxinetghana.xyz" + self.ghana_card.url
         return ''
 
     def passenger_profile_pic(self):
         if self.profile_pic:
-            return "http://127.0.0.1:8000" + self.profile_pic.url
+            return "https://taxinetghana.xyz" + self.profile_pic.url
         return ''
