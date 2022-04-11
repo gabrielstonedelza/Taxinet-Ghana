@@ -3,7 +3,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.conf import settings
 from .models import (RequestRide, BidRide, ScheduleRide, BidScheduleRide, Notifications, Complains, DriverReviews, \
-                     Sos, RateDriver, ConfirmDriverPayment)
+                     Sos, DriversPoints, ConfirmDriverPayment)
 
 User = settings.AUTH_USER_MODEL
 from taxinet_users.models import User as taxinet_user
@@ -109,11 +109,11 @@ def alert_review(sender, created, instance, **kwargs):
                                      review_id=instance.id)
 
 
-@receiver(post_save, sender=RateDriver)
+@receiver(post_save, sender=DriversPoints)
 def alert_rating(sender, created, instance, **kwargs):
     title = "New Rating for you"
     notification_tag = "Rating"
-    message = f"{instance.passenger.username} gave you a rating of {instance.rating}"
+    message = f"{instance.passenger.username} gave you a rating of {instance.points}"
 
     if created:
         Notifications.objects.create(notification_id=instance.id, notification_title=title,

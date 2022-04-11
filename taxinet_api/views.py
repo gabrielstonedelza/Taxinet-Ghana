@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
 from .models import (RequestRide, BidRide, ScheduleRide, BidScheduleRide, Notifications, Complains, DriverReviews, \
-                     Sos, RateDriver, ConfirmDriverPayment)
+                     Sos, DriversPoints, ConfirmDriverPayment)
 from .serializers import RequestRideSerializer, BidRideSerializer, ScheduleRideSerializer, ComplainsSerializer, \
     BidScheduleRideSerializer, NotificationSerializer, DriverReviewSerializer, RateDriverSerializer, \
     ConfirmDriverPaymentSerializer
@@ -368,7 +368,7 @@ def post_review(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_driver_ratings(request):
-    ratings = RateDriver.objects.filter(driver=request.user).order_by('-date_rated')
+    ratings = DriversPoints.objects.filter(driver=request.user).order_by('-date_rated')
     serializer = RateDriverSerializer(ratings, many=True)
     return Response(serializer.data)
 
@@ -376,7 +376,7 @@ def get_driver_ratings(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_passenger_ratings(request):
-    ratings = RateDriver.objects.filter(passenger=request.user).order_by('-date_rated')
+    ratings = DriversPoints.objects.filter(passenger=request.user).order_by('-date_rated')
     serializer = RateDriverSerializer(ratings, many=True)
     return Response(serializer.data)
 

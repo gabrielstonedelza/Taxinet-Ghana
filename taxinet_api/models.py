@@ -246,14 +246,14 @@ class Sos(models.Model):
         return f"{self.user.username} sent an sos"
 
 
-class RateDriver(models.Model):
+class DriversPoints(models.Model):
     passenger = models.ForeignKey(User, on_delete=models.CASCADE)
     driver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="driver_being_rated")
-    rating = models.IntegerField(default=0)
+    points = models.IntegerField(default=0)
     date_rated = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.passenger.username} gave a rating of {self.rating} to driver {self.driver.username}"
+        return f"{self.passenger.username} gave {self.points} points to driver '{self.driver.username}'"
 
     # def get_passenger_profile_pic(self):
     #     my_driver = PassengerProfile.objects.get(user=self.passenger)
@@ -274,6 +274,7 @@ class ConfirmDriverPayment(models.Model):
     bank_payment_reference = models.CharField(max_length=100)
     amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
     date_confirmed = models.DateTimeField(auto_now_add=True)
+    date_posted = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         if self.payment_confirmed == "Not Confirmed":
