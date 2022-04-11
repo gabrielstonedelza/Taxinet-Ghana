@@ -40,11 +40,11 @@ def store_drivers_location(request):
 
 @api_view(['GET', 'PUT'])
 @permission_classes([permissions.IsAuthenticated])
-def update_drivers_location(request, location_id):
-    ride = get_object_or_404(DriversLocation, id=location_id)
+def update_drivers_location(request, driver):
+    ride = get_object_or_404(DriversLocation, driver=driver)
     serializer = RequestRideSerializer(ride, data=request.data)
     if serializer.is_valid():
-        serializer.save()
+        serializer.save(driver=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
