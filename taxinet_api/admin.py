@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import (RequestRide, BidRide, ScheduleRide, BidScheduleRide, Notifications, Complains, DriverReviews,
-                     Sos, DriversPoints, ConfirmDriverPayment)
+                     DriversLocation, DriversPoints, ConfirmDriverPayment)
 
 
 class RideRequestAdmin(admin.ModelAdmin):
@@ -31,6 +31,6 @@ admin.site.register(BidScheduleRide, BidScheduleRideAdmin)
 admin.site.register(Notifications)
 admin.site.register(Complains)
 admin.site.register(DriverReviews)
-admin.site.register(Sos)
+admin.site.register(DriversLocation)
 admin.site.register(DriversPoints)
 admin.site.register(ConfirmDriverPayment)
