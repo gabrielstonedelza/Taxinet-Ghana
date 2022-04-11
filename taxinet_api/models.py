@@ -64,13 +64,13 @@ class RequestRide(models.Model):
     def get_driver_profile_pic(self):
         my_driver = DriverProfile.objects.get(user=self.driver)
         if my_driver:
-            return "http://127.0.0.1:8000" + my_driver.profile_pic.url
+            return "https://taxinetghana.xyz" + my_driver.profile_pic.url
         return ""
 
     def get_passenger_profile_pic(self):
         my_passenger = PassengerProfile.objects.get(user=self.passenger)
         if my_passenger:
-            return "http://127.0.0.1:8000" + my_passenger.profile_pic.url
+            return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
         return ""
 
 
@@ -90,13 +90,13 @@ class BidRide(models.Model):
     def get_driver_profile_pic(self):
         my_driver = DriverProfile.objects.get(user=self.ride.driver)
         if my_driver:
-            return "http://127.0.0.1:8000" + my_driver.profile_pic.url
+            return "https://taxinetghana.xyz" + my_driver.profile_pic.url
         return ""
 
     def get_passenger_profile_pic(self):
         my_passenger = PassengerProfile.objects.get(user=self.ride.passenger)
         if my_passenger:
-            return "http://127.0.0.1:8000" + my_passenger.profile_pic.url
+            return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
         return ""
 
 
@@ -119,13 +119,13 @@ class ScheduleRide(models.Model):
     def get_driver_profile_pic(self):
         my_driver = DriverProfile.objects.get(user=self.driver)
         if my_driver:
-            return "http://127.0.0.1:8000" + my_driver.profile_pic.url
+            return "https://taxinetghana.xyz" + my_driver.profile_pic.url
         return ""
 
     def get_passenger_profile_pic(self):
         my_passenger = PassengerProfile.objects.get(user=self.passenger)
         if my_passenger:
-            return "http://127.0.0.1:8000" + my_passenger.profile_pic.url
+            return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
         return ""
 
 
@@ -141,13 +141,13 @@ class BidScheduleRide(models.Model):
     def get_driver_profile_pic(self):
         my_driver = DriverProfile.objects.get(user=self.scheduled_ride.driver)
         if my_driver:
-            return "http://127.0.0.1:8000" + my_driver.profile_pic.url
+            return "https://taxinetghana.xyz" + my_driver.profile_pic.url
         return ""
 
     def get_passenger_profile_pic(self):
         my_passenger = PassengerProfile.objects.get(user=self.scheduled_ride.passenger)
         if my_passenger:
-            return "http://127.0.0.1:8000" + my_passenger.profile_pic.url
+            return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
         return ""
 
 
@@ -182,13 +182,13 @@ class Notifications(models.Model):
     def get_notification_from_profile_pic(self):
         my_driver = DriverProfile.objects.get(user=self.notification_from)
         if my_driver:
-            return "http://127.0.0.1:8000" + my_driver.profile_pic.url
+            return "https://taxinetghana.xyz" + my_driver.profile_pic.url
         return ""
 
     def get_notification_to_profile_pic(self):
         my_passenger = PassengerProfile.objects.get(user=self.notification_to)
         if my_passenger:
-            return "http://127.0.0.1:8000" + my_passenger.profile_pic.url
+            return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
         return ""
 
 
@@ -205,13 +205,13 @@ class Complains(models.Model):
     # def get_complainant_profile_pic(self):
     #     my_driver = DriverProfile.objects.get(user=self.complainant)
     #     if my_driver:
-    #         return "http://127.0.0.1:8000" + my_driver.profile_pic.url
+    #         return "https://taxinetghana.xyz" + my_driver.profile_pic.url
     #     return ""
     #
     # def get_offender_profile_pic(self):
     #     my_passenger = PassengerProfile.objects.get(user=self.offender)
     #     if my_passenger:
-    #         return "http://127.0.0.1:8000" + my_passenger.profile_pic.url
+    #         return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
     #     return ""
 
 
@@ -227,13 +227,13 @@ class DriverReviews(models.Model):
     # def get_passenger_profile_pic(self):
     #     my_driver = DriverProfile.objects.get(user=self.passenger)
     #     if my_driver:
-    #         return "http://127.0.0.1:8000" + my_driver.profile_pic.url
+    #         return "https://taxinetghana.xyz" + my_driver.profile_pic.url
     #     return ""
     #
     # def get_driver_profile_pic(self):
     #     my_passenger = PassengerProfile.objects.get(user=self.driver)
     #     if my_passenger:
-    #         return "http://127.0.0.1:8000" + my_passenger.profile_pic.url
+    #         return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
     #     return ""
 
 
@@ -258,13 +258,13 @@ class DriversPoints(models.Model):
     # def get_passenger_profile_pic(self):
     #     my_driver = PassengerProfile.objects.get(user=self.passenger)
     #     if my_driver:
-    #         return "http://127.0.0.1:8000" + my_driver.profile_pic.url
+    #         return "https://taxinetghana.xyz" + my_driver.profile_pic.url
     #     return ""
     #
     # def get_driver_profile_pic(self):
     #     my_passenger = DriverProfile.objects.get(user=self.driver)
     #     if my_passenger:
-    #         return "http://127.0.0.1:8000" + my_passenger.profile_pic.url
+    #         return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
     #     return ""
 
 
@@ -285,5 +285,5 @@ class ConfirmDriverPayment(models.Model):
     def get_driver_profile_pic(self):
         my_passenger = DriverProfile.objects.get(user=self.driver)
         if my_passenger:
-            return "http://127.0.0.1:8000" + my_passenger.profile_pic.url
+            return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
         return ""
