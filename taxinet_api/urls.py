@@ -16,6 +16,11 @@ urlpatterns = [
     path('update_requested_ride/<int:ride_id>/', views.update_requested_ride),
     path('accepted_ride_detail/<int:accept_id>/', views.accepted_request_detail),
 
+    # post,get and update drivers location
+    path("get_drivers_location/", views.get_drivers_current_location),
+    path("drivers_location/new/", views.store_drivers_location),
+    path("drivers_location/update/<int:location_id>/", views.store_drivers_location),
+
     #     scheduling rides
     path('scheduled_ride/new/', views.schedule_ride),
     path('bid_scheduled_ride/<int:ride_id>/', views.bid_scheduled_ride),

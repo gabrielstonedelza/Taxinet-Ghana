@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import (RequestRide, BidRide, ScheduleRide, BidScheduleRide, Notifications, Complains, DriverReviews,
-                     Sos, DriversPoints, ConfirmDriverPayment)
+                     DriversLocation, DriversPoints, ConfirmDriverPayment)
 
 
 class RequestRideSerializer(serializers.ModelSerializer):
@@ -129,10 +129,24 @@ class ConfirmDriverPaymentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ConfirmDriverPayment
-        fields = ['id', 'username', 'driver', 'payment_confirmed', 'bank_payment_reference', 'amount', 'date_confirmed','date_posted']
+        fields = ['id', 'username', 'driver', 'payment_confirmed', 'bank_payment_reference', 'amount', 'date_confirmed',
+                  'date_posted']
 
         read_only_fields = ['driver']
 
     def get_username(self, user):
         username = user.driver.username
+        return username
+
+
+class DriversLocationSerializer(serializers.ModelSerializer):
+    username = serializers.SerializerMethodField('get_username')
+
+    class Meta:
+        model = DriversLocation
+        fields = ['id', 'username', 'driver', 'loc_lat', 'loc_lng', 'date_updated']
+        read_only_fields = ['driver']
+
+    def get_username(self, user):
+        username = user.passenger.username
         return username

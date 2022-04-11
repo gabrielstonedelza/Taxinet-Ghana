@@ -103,8 +103,8 @@ class BidRide(models.Model):
 class ScheduleRide(models.Model):
     passenger = models.ForeignKey(User, on_delete=models.CASCADE, related_name="passenger_scheduling_ride")
     driver = models.ForeignKey(User, on_delete=models.CASCADE)
-    date_of_pickup = models.DateField(blank=True,)
-    time_of_pickup = models.TimeField(blank=True,)
+    date_of_pickup = models.DateField(blank=True, )
+    time_of_pickup = models.TimeField(blank=True, )
     schedule_option = models.CharField(max_length=30, choices=SCHEDULE_RIDE_OPTIONS, default="One Time")
     pickup_location = models.CharField(max_length=255, blank=True, )
     drop_off_location = models.CharField(max_length=255, blank=True, )
@@ -287,3 +287,13 @@ class ConfirmDriverPayment(models.Model):
         if my_passenger:
             return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
         return ""
+
+
+class DriversLocation(models.Model):
+    driver = models.ForeignKey(User, on_delete=models.CASCADE)
+    loc_lat = models.CharField(max_length=100, blank=True)
+    loc_lng = models.CharField(max_length=100, blank=True)
+    date_updated = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.driver.username}'s location is updated"

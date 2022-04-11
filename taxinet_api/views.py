@@ -1,9 +1,12 @@
+from urllib import request
+
 from django.shortcuts import get_object_or_404
-from .models import (RequestRide, BidRide, ScheduleRide, BidScheduleRide, Notifications, Complains, DriverReviews, \
-                     Sos, DriversPoints, ConfirmDriverPayment)
-from .serializers import RequestRideSerializer, BidRideSerializer, ScheduleRideSerializer, ComplainsSerializer, \
-    BidScheduleRideSerializer, NotificationSerializer, DriverReviewSerializer, RateDriverSerializer, \
-    ConfirmDriverPaymentSerializer
+from .models import (RequestRide, BidRide, ScheduleRide, BidScheduleRide, Notifications, Complains, DriverReviews,
+                     DriversLocation, DriversPoints, ConfirmDriverPayment)
+from .serializers import (RequestRideSerializer, BidRideSerializer, ScheduleRideSerializer, ComplainsSerializer,
+                          BidScheduleRideSerializer, NotificationSerializer, DriverReviewSerializer,
+                          RateDriverSerializer,
+                          ConfirmDriverPaymentSerializer, DriversLocationSerializer)
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import viewsets, permissions, generics, status
@@ -12,6 +15,36 @@ from django.conf import settings
 from .process_email import send_my_mail
 from rest_framework import filters
 from datetime import datetime, date, time
+
+
+# get and store drivers current location
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticatedOrReadOnly])
+def get_drivers_current_location(request):
+    location = DriversLocation.objects.all().order_by('-date_updated')
+    serializer = DriversLocationSerializer(location, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticatedOrReadOnly])
+def store_drivers_location(request):
+    serializer = DriversLocationSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(driver=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'PUT'])
+@permission_classes([permissions.IsAuthenticated])
+def update_drivers_location(request, location_id):
+    ride = get_object_or_404(DriversLocation, id=location_id)
+    serializer = RequestRideSerializer(ride, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # get all requests
