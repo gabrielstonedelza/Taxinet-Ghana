@@ -148,5 +148,5 @@ class DriversLocationSerializer(serializers.ModelSerializer):
         read_only_fields = ['driver']
 
     def get_username(self, user):
-        username = user.passenger.username
+        username = user.driver.username
         return username
