@@ -29,13 +29,11 @@ def get_drivers_current_location(request):
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticatedOrReadOnly])
 def store_drivers_location(request):
-    online_drivers = DriversLocation.objects.all().order_by('-date_updated')
-    if request.user not in online_drivers:
-        serializer = DriversLocationSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(driver=request.user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    serializer = DriversLocationSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(driver=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET', 'PUT'])
