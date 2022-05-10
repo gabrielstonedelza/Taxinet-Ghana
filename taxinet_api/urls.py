@@ -61,5 +61,9 @@ urlpatterns = [
 
     #     drivers confirmed payments
     path('payment/new/', views.post_payment),
-    path('get_drivers_payments/', views.get_all_driver_payments)
+    path('get_drivers_payments/', views.get_all_driver_payments),
+
+    #     post and get searched_destinations
+    path('destination/new/', views.add_to_searched_locations),
+    path('get_destinations/', views.get_searched_locations),
 ]

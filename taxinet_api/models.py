@@ -296,3 +296,15 @@ class DriversLocation(models.Model):
 
     def __str__(self):
         return f"{self.driver.username}'s location is updated"
+
+    def get_drivers_current_location(self):
+        return self.objects.all().order_by('-date_updated')[0]
+
+
+class SearchedDestinations(models.Model):
+    passenger = models.ForeignKey(User, on_delete=models.CASCADE)
+    searched_destination = models.CharField(max_length=255)
+    date_searched = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.searched_destination
