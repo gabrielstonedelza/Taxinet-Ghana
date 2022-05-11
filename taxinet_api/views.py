@@ -49,14 +49,16 @@ def store_drivers_location(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET'])
+@api_view(['GET', 'DELETE'])
 @permission_classes([permissions.IsAuthenticated])
 def delete_drivers_locations(request):
-    all_drivers_locations = DriversLocation.objects.all().order_by('-date_updated')
-    for i in all_drivers_locations:
-        i.delete()
-    serializer = RequestRideSerializer(all_drivers_locations, many=True)
-    return Response(serializer.data)
+    try:
+        all_drivers_locations = DriversLocation.objects.all().order_by('-date_updated')
+        for i in all_drivers_locations:
+            i.delete()
+    except DriversLocation.DoesNotExist:
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 # get all requests
