@@ -144,7 +144,8 @@ class DriversLocationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DriversLocation
-        fields = ['id', 'username', 'driver', 'place_id', 'date_updated']
+        fields = ['id', 'username', 'driver', 'place_id', 'date_updated', 'get_drivers_pic', 'get_drivers_name',
+                  'drivers_plate', 'drivers_car_model', 'drivers_car_name']
         read_only_fields = ['driver']
 
     def get_username(self, user):

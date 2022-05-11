@@ -19,7 +19,7 @@ urlpatterns = [
     # post,get and update drivers location
     path("get_drivers_location/", views.get_drivers_current_location),
     path("drivers_location/new/", views.store_drivers_location),
-    path("drivers_location/update/<int:driver>/", views.store_drivers_location),
+    path("delete_drivers_locations/", views.delete_drivers_locations),
 
     #     scheduling rides
     path('scheduled_ride/new/', views.schedule_ride),

@@ -15,7 +15,7 @@ from .serializers import (RequestRideSerializer, BidRideSerializer, ScheduleRide
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticatedOrReadOnly])
 def get_searched_locations(request):
-    searched_destinations = SearchedDestinations.objects.filter(passenger=request.user).order_by('-date_searched')
+    searched_destinations = SearchedDestinations.objects.filter(passenger=request.user).order_by('-date_searched')[:3]
     serializer = SearchDestinationsSerializer(searched_destinations, many=True)
     return Response(serializer.data)
 
@@ -49,15 +49,14 @@ def store_drivers_location(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET', 'PUT'])
+@api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
-def update_drivers_location(request, driver):
-    ride = get_object_or_404(DriversLocation, driver=driver)
-    serializer = DriversLocationSerializer(ride, data=request.data)
-    if serializer.is_valid():
-        serializer.save(driver=request.user)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+def delete_drivers_locations(request):
+    all_drivers_locations = DriversLocation.objects.all().order_by('-date_updated')
+    for i in all_drivers_locations:
+        i.delete()
+    serializer = RequestRideSerializer(all_drivers_locations, many=True)
+    return Response(serializer.data)
 
 
 # get all requests
