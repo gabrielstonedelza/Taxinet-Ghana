@@ -157,7 +157,7 @@ class SearchDestinationsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SearchedDestinations
-        fields = ['id', 'username', 'passenger', 'searched_destination', 'date_searched']
+        fields = ['id', 'username', 'passenger', 'searched_destination', 'place_id', 'date_searched']
         read_only_fields = ['passenger']
 
     def get_username(self, user):

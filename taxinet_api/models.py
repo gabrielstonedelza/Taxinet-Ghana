@@ -304,6 +304,7 @@ class DriversLocation(models.Model):
 class SearchedDestinations(models.Model):
     passenger = models.ForeignKey(User, on_delete=models.CASCADE)
     searched_destination = models.CharField(max_length=255)
+    place_id = models.CharField(max_length=255, default="")
     date_searched = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
