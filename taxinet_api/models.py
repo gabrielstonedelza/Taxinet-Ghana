@@ -298,31 +298,31 @@ class DriversLocation(models.Model):
         return f"{self.driver.username}'s location is updated"
 
     def get_drivers_pic(self):
-        drivers_profile = DriverProfile.objects.get(user=self.user)
+        drivers_profile = DriverProfile.objects.get(user=self.driver)
         if drivers_profile:
             return "https://taxinetghana.xyz" + drivers_profile.profile_pic.url
         return ""
 
     def get_drivers_name(self):
-        drivers_profile = DriverProfile.objects.get(user=self.user)
+        drivers_profile = DriverProfile.objects.get(user=self.driver)
         if drivers_profile:
             return drivers_profile.name_on_ghana_card
         return ""
 
     def drivers_plate(self):
-        drivers_profile = DriverProfile.objects.get(user=self.user)
+        drivers_profile = DriverProfile.objects.get(user=self.driver)
         if drivers_profile:
             return drivers_profile.license_plate
         return ""
 
     def drivers_car_model(self):
-        drivers_profile = DriverProfile.objects.get(user=self.user)
+        drivers_profile = DriverProfile.objects.get(user=self.driver)
         if drivers_profile:
             return drivers_profile.car_model
         return ""
 
     def drivers_car_name(self):
-        drivers_profile = DriverProfile.objects.get(user=self.user)
+        drivers_profile = DriverProfile.objects.get(user=self.driver)
         if drivers_profile:
             return drivers_profile.car_name
         return ""
