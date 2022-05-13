@@ -24,7 +24,7 @@ class DriverProfileSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'user', 'profile_pic', 'drivers_license', 'name_on_licence',
                   'license_number', 'license_expiration_date', 'license_plate', 'car_name',
                   'car_model', 'ghana_card', 'name_on_ghana_card', 'ghana_card_number', 'digital_address',
-                  'next_of_kin', 'next_of_kin_number', 'driver_profile_pic', 'get_drivers_license', 'get_ghana_card', 'verified']
+                  'next_of_kin', 'next_of_kin_number', 'driver_profile_pic', 'get_drivers_license', 'get_ghana_card', 'taxinet_number', 'verified']
         read_only_fields = ['user']
 
     def get_username(self, user):

@@ -39,6 +39,7 @@ class DriverProfile(models.Model):
     digital_address = models.CharField(max_length=100, blank=True)
     next_of_kin = models.CharField(max_length=100, blank=True)
     next_of_kin_number = models.CharField(max_length=100, blank=True)
+    taxinet_number = models.CharField(max_length=100, default=0)
     verified = models.BooleanField(default=False)
 
     def __str__(self):
