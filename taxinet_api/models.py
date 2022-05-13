@@ -327,6 +327,12 @@ class DriversLocation(models.Model):
             return drivers_profile.car_name
         return ""
 
+    def drivers_taxinet_number(self):
+        drivers_profile = DriverProfile.objects.get(user=self.driver)
+        if drivers_profile:
+            return drivers_profile.taxinet_number
+        return ""
+
 
 class SearchedDestinations(models.Model):
     passenger = models.ForeignKey(User, on_delete=models.CASCADE)
