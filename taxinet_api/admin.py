@@ -7,7 +7,7 @@ from .models import (RequestRide, BidRide, ScheduleRide, BidScheduleRide, Notifi
 class RideRequestAdmin(admin.ModelAdmin):
     list_display = (
         'id', 'driver', 'passenger', 'pick_up', 'drop_off', 'ride_accepted', 'ride_rejected', 'price', 'completed',
-        'driver_booked', 'date_requested')
+        'driver_booked', 'date_requested', 'passengers_pick_up_place_id','passengers_drop_off_place_id')
 
 
 class BidRideAdmin(admin.ModelAdmin):
