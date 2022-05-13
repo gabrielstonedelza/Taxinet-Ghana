@@ -7,7 +7,7 @@ from rest_framework.response import Response
 
 
 @api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 def get_all_passengers(request):
     passengers = User.objects.filter(user_type="Passenger")
     serializer = UsersSerializer(passengers, many=True)
@@ -15,7 +15,7 @@ def get_all_passengers(request):
 
 
 @api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.permissions.AllowAny])
 def get_all_drivers(request):
     drivers = User.objects.filter(user_type="Driver")
     serializer = UsersSerializer(drivers, many=True)
