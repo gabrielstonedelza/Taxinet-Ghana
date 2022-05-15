@@ -15,7 +15,7 @@ def get_all_passengers(request):
 
 
 @api_view(['GET'])
-@permission_classes([permissions.permissions.AllowAny])
+@permission_classes([permissions.AllowAny])
 def get_all_drivers(request):
     drivers = User.objects.filter(user_type="Driver")
     serializer = UsersSerializer(drivers, many=True)
