@@ -184,29 +184,29 @@ class Notifications(models.Model):
     def __str__(self):
         return self.notification_title
 
-    def get_notification_from_passenger_profile_pic(self):
-        passenger_pic = PassengerProfile.objects.get(user=self.notification_from)
-        if passenger_pic:
-            return "https://taxinetghana.xyz" + passenger_pic.profile_pic.url
-        return ""
-
-    def get_notification_to_passenger_profile_pic(self):
-        passenger_pic = PassengerProfile.objects.get(user=self.notification_to)
-        if passenger_pic:
-            return "https://taxinetghana.xyz" + passenger_pic.profile_pic.url
-        return ""
-
-    def get_notification_from_driver_profile_pic(self):
-        my_driver = PassengerProfile.objects.get(user=self.notification_from)
-        if my_driver:
-            return "https://taxinetghana.xyz" + my_driver.profile_pic.url
-        return ""
-
-    def get_notification_to_driver_profile_pic(self):
-        my_passenger = DriverProfile.objects.get(user=self.notification_to)
-        if my_passenger:
-            return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
-        return ""
+    # def get_notification_from_passenger_profile_pic(self):
+    #     passenger_pic = PassengerProfile.objects.get(user=self.notification_from)
+    #     if passenger_pic:
+    #         return "https://taxinetghana.xyz" + passenger_pic.profile_pic.url
+    #     return ""
+    #
+    # def get_notification_to_passenger_profile_pic(self):
+    #     passenger_pic = PassengerProfile.objects.get(user=self.notification_to)
+    #     if passenger_pic:
+    #         return "https://taxinetghana.xyz" + passenger_pic.profile_pic.url
+    #     return ""
+    #
+    # def get_notification_from_driver_profile_pic(self):
+    #     my_driver = PassengerProfile.objects.get(user=self.notification_from)
+    #     if my_driver:
+    #         return "https://taxinetghana.xyz" + my_driver.profile_pic.url
+    #     return ""
+    #
+    # def get_notification_to_driver_profile_pic(self):
+    #     my_passenger = DriverProfile.objects.get(user=self.notification_to)
+    #     if my_passenger:
+    #         return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
+    #     return ""
 
 
 class Complains(models.Model):
