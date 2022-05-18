@@ -19,7 +19,7 @@ def alert_request_ride(sender, created, instance, **kwargs):
     if created:
         Notifications.objects.create(notification_id=instance.id, notification_title=title,
                                      notification_tag=notification_tag, notification_message=message,
-                                     notification_from=instance.passenger, notification_to=instance.driver,
+                                     notification_from=instance.passenger, notification_to=instance.driver.id,
                                      ride_id=instance.id, pick_up_place_id=instance.passengers_pick_up_place_id,drop_off_place_id=instance.passengers_drop_off_place_id)
 
     if created and instance.ride_accepted:
