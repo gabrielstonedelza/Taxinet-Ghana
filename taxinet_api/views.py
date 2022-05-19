@@ -332,8 +332,8 @@ def get_triggered_notifications(request):
 
 @api_view(['GET', 'PUT'])
 @permission_classes([permissions.IsAuthenticated])
-def read_notification(request, notification_id):
-    notification = get_object_or_404(Notifications, id=notification_id)
+def read_notification(request, id):
+    notification = get_object_or_404(Notifications, id=id)
     serializer = NotificationSerializer(notification, data=request.data)
     if serializer.is_valid():
         serializer.save()
