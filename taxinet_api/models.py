@@ -53,6 +53,8 @@ class RequestRide(models.Model):
     drop_off = models.CharField(max_length=255, blank=True)
     ride_accepted = models.BooleanField(default=False)
     ride_rejected = models.BooleanField(default=False)
+    passengers_lat = models.CharField(max_length=255, null=True)
+    passengers_lng = models.CharField(max_length=255, null=True)
     passengers_pick_up_place_id = models.CharField(max_length=255, blank=True, default="")
     passengers_drop_off_place_id = models.CharField(max_length=255, blank=True, default="")
     drivers_location_place_id = models.CharField(max_length=255, blank=True, default="")
@@ -165,6 +167,8 @@ class Notifications(models.Model):
     notification_from = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     notification_to = models.ForeignKey(User, on_delete=models.CASCADE, related_name="User_receiving_notification",
                                         null=True)
+    passengers_lat = models.CharField(max_length=255, null=True, blank=True)
+    passengers_lng = models.CharField(max_length=255, null=True, blank=True)
     ride_id = models.CharField(max_length=100, blank=True)
     ride_accepted_id = models.CharField(max_length=100, blank=True)
     ride_rejected_id = models.CharField(max_length=100, blank=True)
