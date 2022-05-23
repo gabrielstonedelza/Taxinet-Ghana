@@ -20,7 +20,9 @@ def alert_request_ride(sender, created, instance, **kwargs):
         Notifications.objects.create(notification_id=instance.id, notification_title=title,
                                      notification_tag=notification_tag, notification_message=message,
                                      notification_from=instance.passenger, notification_to=instance.driver,
-                                     ride_id=instance.id, pick_up_place_id=instance.passengers_pick_up_place_id,drop_off_place_id=instance.passengers_drop_off_place_id,passengers_lat=instance.passengers_lat,passengers_lng=instance.passengers_lng)
+                                     ride_id=instance.id, pick_up_place_id=instance.passengers_pick_up_place_id,
+                                     drop_off_place_id=instance.passengers_drop_off_place_id,
+                                     passengers_lat=instance.passengers_lat, passengers_lng=instance.passengers_lng)
 
     if created and instance.ride_accepted:
         title = "Ride Accepted"
@@ -83,7 +85,8 @@ def alert_bidding(sender, created, instance, **kwargs):
         message = f"{instance.user.username} has offered to pay {instance.bid}"
         Notifications.objects.create(notification_id=instance.id, notification_title=title,
                                      notification_message=message, notification_tag=notification_tag,
-                                     notification_from=instance.scheduled_ride.passenger, notification_to=instance.scheduled_ride.driver,
+                                     notification_from=instance.scheduled_ride.passenger,
+                                     notification_to=instance.scheduled_ride.driver,
                                      schedule_accepted_id=instance.id)
 
     if created and instance.scheduled_ride.driver == instance.user:
@@ -92,7 +95,8 @@ def alert_bidding(sender, created, instance, **kwargs):
         message = f"{instance.user.username} wants you to pay {instance.bid}"
         Notifications.objects.create(notification_id=instance.id, notification_title=title,
                                      notification_message=message, notification_tag=notification_tag,
-                                     notification_from=instance.scheduled_ride.driver, notification_to=instance.scheduled_ride.passenger,
+                                     notification_from=instance.scheduled_ride.driver,
+                                     notification_to=instance.scheduled_ride.passenger,
                                      schedule_accepted_id=instance.id)
 
 

@@ -14,7 +14,7 @@ class RequestRideSerializer(serializers.ModelSerializer):
                   'price', 'completed', 'driver_booked', 'date_requested',
                   'get_driver_profile_pic',
                   'get_passenger_profile_pic', 'passengers_pick_up_place_id', 'passengers_drop_off_place_id',
-                  'drivers_location_place_id']
+                  'drivers_location_place_id', 'passengers_lat', 'passengers_lng']
         read_only_fields = ['passenger']
 
     def get_username(self, ride):
