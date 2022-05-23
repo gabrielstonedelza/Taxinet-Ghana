@@ -22,7 +22,7 @@ def alert_request_ride(sender, created, instance, **kwargs):
                                      notification_from=instance.passenger, notification_to=instance.driver,
                                      ride_id=instance.id, pick_up_place_id=instance.passengers_pick_up_place_id,
                                      drop_off_place_id=instance.passengers_drop_off_place_id,
-                                     passengers_lat=instance.passengers_lat, passengers_lng=instance.passengers_lng)
+                                     passengers_lat=instance.passengers_lat, passengers_lng=instance.passengers_lng,passengers_pickup=instance.pick_up,passengers_dropff=instance.drop_off)
 
     if created and instance.ride_accepted:
         title = "Ride Accepted"

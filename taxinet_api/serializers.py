@@ -83,7 +83,8 @@ class NotificationSerializer(serializers.ModelSerializer):
                   'notification_trigger', 'read', 'notification_from', 'notification_to', 'ride_id', 'ride_accepted_id',
                   'ride_rejected_id', 'completed_ride_id', 'schedule_ride_id', 'schedule_accepted_id',
                   'schedule_rejected_id', 'complain_id', 'reply_id', 'review_id', 'rating_id', 'payment_confirmed_id',
-                  'date_created', 'pick_up_place_id', 'drop_off_place_id', 'passengers_lat', 'passengers_lng']
+                  'date_created', 'pick_up_place_id', 'drop_off_place_id', 'passengers_lat', 'passengers_lng',
+                  'passengers_pickup', 'passengers_dropff']
 
 
 class ComplainsSerializer(serializers.ModelSerializer):

@@ -169,6 +169,8 @@ class Notifications(models.Model):
                                         null=True)
     passengers_lat = models.CharField(max_length=255, null=True, blank=True)
     passengers_lng = models.CharField(max_length=255, null=True, blank=True)
+    passengers_pickup = models.CharField(max_length=255, null=True, blank=True)
+    passengers_dropff = models.CharField(max_length=255, null=True, blank=True)
     ride_id = models.CharField(max_length=100, blank=True)
     ride_accepted_id = models.CharField(max_length=100, blank=True)
     ride_rejected_id = models.CharField(max_length=100, blank=True)
