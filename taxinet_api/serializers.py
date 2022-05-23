@@ -13,7 +13,8 @@ class RequestRideSerializer(serializers.ModelSerializer):
                   'ride_accepted', 'ride_rejected',
                   'price', 'completed', 'driver_booked', 'date_requested',
                   'get_driver_profile_pic',
-                  'get_passenger_profile_pic', 'passengers_pick_up_place_id', 'passengers_drop_off_place_id', 'drivers_location_place_id']
+                  'get_passenger_profile_pic', 'passengers_pick_up_place_id', 'passengers_drop_off_place_id',
+                  'drivers_location_place_id']
         read_only_fields = ['passenger']
 
     def get_username(self, ride):
@@ -82,7 +83,7 @@ class NotificationSerializer(serializers.ModelSerializer):
                   'notification_trigger', 'read', 'notification_from', 'notification_to', 'ride_id', 'ride_accepted_id',
                   'ride_rejected_id', 'completed_ride_id', 'schedule_ride_id', 'schedule_accepted_id',
                   'schedule_rejected_id', 'complain_id', 'reply_id', 'review_id', 'rating_id', 'payment_confirmed_id',
-                  'date_created']
+                  'date_created', 'pick_up_place_id', 'drop_off_place_id']
 
 
 class ComplainsSerializer(serializers.ModelSerializer):
