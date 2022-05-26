@@ -90,10 +90,6 @@ class BidRide(models.Model):
     def __str__(self):
         return f"{self.user.username}'s bid"
 
-    # def save(self, *args, **kwargs):
-    #     super().save(*args, **kwargs)
-    #     self.ride.price = self.bid
-
     def get_driver_profile_pic(self):
         my_driver = DriverProfile.objects.get(user=self.ride.driver)
         if my_driver:

@@ -151,7 +151,7 @@ def bid_ride(request, ride_id):
 @permission_classes([permissions.IsAuthenticated])
 def get_all_bids(request, ride_id):
     ride = get_object_or_404(RequestRide, id=ride_id)
-    bids = BidRide.objects.filter(ride=ride).order_by('-date_accepted')
+    bids = BidRide.objects.filter(ride=ride).order_by('date_accepted')
     serializer = BidRideSerializer(bids, many=True)
     return Response(serializer.data)
 
