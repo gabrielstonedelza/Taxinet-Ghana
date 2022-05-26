@@ -85,6 +85,12 @@ class BidRide(models.Model):
     ride = models.ForeignKey(RequestRide, on_delete=models.CASCADE, related_name="Ride_to_accept")
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     bid = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
+    passenger_accepted_bid = models.BooleanField(default=False)
+    passenger_rejected_bid = models.BooleanField(default=False)
+    driver_accepted_bid = models.BooleanField(default=False)
+    driver_rejected_bid = models.BooleanField(default=False)
+    bid_rejected = models.BooleanField(default=False)
+    bid_accepted = models.BooleanField(default=False)
     date_accepted = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
