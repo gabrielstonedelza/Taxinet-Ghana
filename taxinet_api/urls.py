@@ -11,6 +11,7 @@ urlpatterns = [
     path('drivers_requests_uncompleted/', views.get_drivers_requests_uncompleted),
     path('request_ride/new/', views.request_ride),
     path('bid_ride/<int:ride_id>/', views.bid_ride),
+    path('update_bid/<int:bid_id>/', views.update_bid),
     path('all_bids/<int:ride_id>/', views.get_all_bids),
     path('accepted_ride/<int:accept_id>/update/', views.update_accepted_ride),
     path('update_requested_ride/<int:ride_id>/', views.update_requested_ride),
