@@ -13,7 +13,7 @@ urlpatterns = [
     path('bid_ride/<int:ride_id>/', views.bid_ride),
     path('update_bid/<int:bid_id>/', views.update_bid),
     path('all_bids/<int:ride_id>/', views.get_all_bids),
-    path('accept_or_reject_bid/<int:bid_id>/<int:ride_id>/', views.post_bid_accept_or_reject),
+    path('accept_or_reject_bid/', views.post_bid_accept_or_reject),
     path('accept_or_reject_bid/<int:bid_id>/', views.get_all_bids_accept_or_reject),
     path('accepted_ride/<int:accept_id>/update/', views.update_accepted_ride),
     path('update_requested_ride/<int:ride_id>/', views.update_requested_ride),
