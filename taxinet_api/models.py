@@ -113,7 +113,7 @@ class AcceptRejectBid(models.Model):
     date_posted = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.bid_message} bid"
+        return f"{self.bid_message}"
 
 
 class ScheduleRide(models.Model):
