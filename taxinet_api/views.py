@@ -182,7 +182,7 @@ def post_bid_accept_or_reject(request):
 def get_all_bids_accept_or_reject(request, ride_id):
     ride = get_object_or_404(RequestRide, id=ride_id)
     accept_or_rejects = AcceptRejectBid.objects.filter(ride=ride).order_by('date_posted')
-    serializer = BidRideSerializer(accept_or_rejects, many=True)
+    serializer = AcceptRejectBidSerializer(accept_or_rejects, many=True)
     return Response(serializer.data)
 
 
