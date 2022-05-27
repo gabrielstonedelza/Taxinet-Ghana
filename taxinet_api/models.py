@@ -112,9 +112,6 @@ class AcceptRejectBid(models.Model):
     bid_message = models.CharField(max_length=150, blank=True, null=True)
     date_posted = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f"{self.bid_message} the bid of {self.bid.bid}"
-
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
 
@@ -123,6 +120,9 @@ class AcceptRejectBid(models.Model):
 
         if self.bid_rejected:
             self.bid_message = f"{self.user.username} rejected bid"
+
+    def __str__(self):
+        return f"{self.bid_message} the bid of {self.bid.bid}"
 
 
 class ScheduleRide(models.Model):
