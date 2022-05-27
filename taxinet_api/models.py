@@ -112,22 +112,7 @@ class AcceptRejectBid(models.Model):
     bid_message = models.CharField(max_length=150, blank=True, null=True)
     date_posted = models.DateTimeField(auto_now_add=True)
 
-    # def save(self, *args, **kwargs):
-    #     super().save(*args, **kwargs)
-    #
-    #     if self.bid_accepted:
-    #         self.bid_message = f"{self.user.username} accepted bid"
-    #
-    #     if self.bid_rejected:
-    #         self.bid_message = f"{self.user.username} rejected bid"
-
     def __str__(self):
-        if self.bid_accepted:
-            self.bid_message = f"{self.user.username} accepted bid"
-
-        if self.bid_rejected:
-            self.bid_message = f"{self.user.username} rejected bid"
-
         return f"{self.bid_message} the bid of {self.bid.bid}"
 
 
