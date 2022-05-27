@@ -85,10 +85,6 @@ class BidRide(models.Model):
     ride = models.ForeignKey(RequestRide, on_delete=models.CASCADE, related_name="Ride_to_accept")
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     bid = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
-    bid_rejected = models.BooleanField(default=False, blank=True)
-    bid_accepted = models.BooleanField(default=False, blank=True)
-    driver_accepted_bid = models.BooleanField(default=False, blank=True)
-    bid_message = models.CharField(max_length=150, blank=True, null=True)
     date_accepted = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -105,6 +101,28 @@ class BidRide(models.Model):
         if my_passenger:
             return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
         return ""
+
+
+class AcceptRejectBid(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_accepting_rejecting_bid")
+    ride = models.ForeignKey(RequestRide, on_delete=models.CASCADE, related_name="Ride_to_bid")
+    bid = models.ForeignKey(BidRide, on_delete=models.CASCADE)
+    bid_accepted = models.BooleanField(default=False, blank=True)
+    bid_rejected = models.BooleanField(default=False, blank=True)
+    bid_message = models.CharField(max_length=150, blank=True, null=True)
+    date_posted = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.bid_message} the bid of {self.bid.bid}"
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        if self.bid_accepted:
+            self.bid_message = f"{self.user.username} accepted bid"
+
+        if self.bid_rejected:
+            self.bid_message = f"{self.user.username} rejected bid"
 
 
 class ScheduleRide(models.Model):
