@@ -88,7 +88,7 @@ class BidRide(models.Model):
     date_accepted = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.bid
+        return str(self.bid)
 
     def get_driver_profile_pic(self):
         my_driver = DriverProfile.objects.get(user=self.ride.driver)
