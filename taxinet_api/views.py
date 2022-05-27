@@ -170,9 +170,7 @@ def get_all_bids(request, ride_id):
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
 def post_bid_accept_or_reject(request, bid_id, ride_id):
-    bid = get_object_or_404(BidRide, id=bid_id)
-    ride = get_object_or_404(RequestRide, id=ride_id)
-    serializer = AcceptRejectBidSerializer(bid, ride, data=request.data)
+    serializer = AcceptRejectBidSerializer(bid_id, ride_id, data=request.data)
     if serializer.is_valid():
         serializer.save(user=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
