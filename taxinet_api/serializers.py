@@ -46,7 +46,7 @@ class AcceptRejectBidSerializer(serializers.ModelSerializer):
     class Meta:
         model = AcceptRejectBid
         fields = ['id', 'user', 'username', 'ride', 'bid', 'bid_accepted', 'bid_rejected', 'bid_message', 'date_posted']
-        read_only_fields = ['user', 'ride', 'bid']
+        read_only_fields = ['user', 'bid', 'ride']
 
     def get_username(self, user):
         username = user.user.username
