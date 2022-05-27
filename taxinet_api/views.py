@@ -179,9 +179,9 @@ def post_bid_accept_or_reject(request):
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
-def get_all_bids_accept_or_reject(request, bid_id):
-    bid = get_object_or_404(BidRide, id=bid_id)
-    accept_or_rejects = AcceptRejectBid.objects.filter(bid=bid).order_by('date_posted')
+def get_all_bids_accept_or_reject(request, ride_id):
+    ride = get_object_or_404(RequestRide, id=ride_id)
+    accept_or_rejects = AcceptRejectBid.objects.filter(ride=ride).order_by('date_posted')
     serializer = BidRideSerializer(accept_or_rejects, many=True)
     return Response(serializer.data)
 
