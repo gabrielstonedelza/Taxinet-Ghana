@@ -12,11 +12,10 @@ from taxinet_users.models import DriverProfile, PassengerProfile
 
 @receiver(post_save, sender=RequestRide)
 def alert_request_ride(sender, created, instance, **kwargs):
-    title = "New Ride Request"
-    notification_tag = "Ride Request"
-    message = f"{instance.passenger.username} is requesting a ride from you."
-
     if created:
+        title = "New Ride Request"
+        notification_tag = "Ride Request"
+        message = f"{instance.passenger.username} is requesting a ride from you."
         Notifications.objects.create(notification_id=instance.id, notification_title=title,
                                      notification_tag=notification_tag, notification_message=message,
                                      notification_from=instance.passenger, notification_to=instance.driver,
