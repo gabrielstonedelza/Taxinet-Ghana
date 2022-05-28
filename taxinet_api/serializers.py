@@ -31,7 +31,7 @@ class RejectedRidesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RejectedRides
-        fields = ['id', 'ride', 'driver', 'date_rejected']
+        fields = ['id', 'ride', 'username', 'driver', 'date_rejected']
         read_only_fields = ['driver']
 
     def get_username(self, user):
