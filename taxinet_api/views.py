@@ -4,10 +4,10 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
 from .models import (RequestRide, BidRide, ScheduleRide, BidScheduleRide, Notifications, Complains, DriverReviews,
-                     DriversLocation, DriversPoints, ConfirmDriverPayment, SearchedDestinations, AcceptRejectBid)
+                     DriversLocation, DriversPoints, ConfirmDriverPayment, SearchedDestinations)
 from .serializers import (RequestRideSerializer, BidRideSerializer, ScheduleRideSerializer, ComplainsSerializer,
                           BidScheduleRideSerializer, NotificationSerializer, DriverReviewSerializer,
-                          RateDriverSerializer, AcceptRejectBidSerializer,
+                          RateDriverSerializer,
                           ConfirmDriverPaymentSerializer, DriversLocationSerializer, SearchDestinationsSerializer)
 
 
@@ -164,25 +164,6 @@ def get_all_bids(request, ride_id):
     ride = get_object_or_404(RequestRide, id=ride_id)
     bids = BidRide.objects.filter(ride=ride).order_by('date_accepted')
     serializer = BidRideSerializer(bids, many=True)
-    return Response(serializer.data)
-
-
-@api_view(['POST'])
-@permission_classes([permissions.IsAuthenticated])
-def post_bid_accept_or_reject(request):
-    serializer = AcceptRejectBidSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save(user=request.user)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-@api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
-def get_all_bids_accept_or_reject(request, ride_id):
-    ride = get_object_or_404(RequestRide, id=ride_id)
-    accept_or_rejects = AcceptRejectBid.objects.filter(ride=ride).order_by('date_posted')
-    serializer = AcceptRejectBidSerializer(accept_or_rejects, many=True)
     return Response(serializer.data)
 
 

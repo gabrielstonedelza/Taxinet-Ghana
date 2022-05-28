@@ -103,19 +103,6 @@ class BidRide(models.Model):
         return ""
 
 
-class AcceptRejectBid(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_accepting_rejecting_bid")
-    ride = models.ForeignKey(RequestRide, on_delete=models.CASCADE, related_name="Ride_to_bid")
-    bid = models.ForeignKey(BidRide, on_delete=models.CASCADE)
-    bid_accepted = models.BooleanField(default=False, blank=True)
-    bid_rejected = models.BooleanField(default=False, blank=True)
-    bid_message = models.CharField(max_length=150, blank=True, null=True)
-    date_posted = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.bid_message}"
-
-
 class ScheduleRide(models.Model):
     passenger = models.ForeignKey(User, on_delete=models.CASCADE, related_name="passenger_scheduling_ride")
     driver = models.ForeignKey(User, on_delete=models.CASCADE)
