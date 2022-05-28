@@ -87,7 +87,7 @@ class RejectedRides(models.Model):
     date_rejected = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.driver} rejected ride from {self.passenger}"
+        return f"{self.driver} rejected ride {self.ride.id}"
 
 
 class BidRide(models.Model):
