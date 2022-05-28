@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import (RequestRide, BidRide, ScheduleRide, BidScheduleRide, Notifications, Complains, DriverReviews,
-                     DriversLocation, DriversPoints, ConfirmDriverPayment, SearchedDestinations)
+                     DriversLocation, DriversPoints, ConfirmDriverPayment, SearchedDestinations, RejectedRides)
 
 
 class RequestRideSerializer(serializers.ModelSerializer):
@@ -24,6 +24,19 @@ class RequestRideSerializer(serializers.ModelSerializer):
     def get_driver_username(self, ride):
         drivers_username = ride.driver.username
         return drivers_username
+
+
+class RejectedRidesSerializer(serializers.ModelSerializer):
+    username = serializers.SerializerMethodField('get_username')
+
+    class Meta:
+        model = RejectedRides
+        fields = ['id', 'ride', 'driver', 'date_rejected']
+        read_only_fields = ['driver']
+
+    def get_username(self, user):
+        username = user.driver.username
+        return username
 
 
 class BidRideSerializer(serializers.ModelSerializer):

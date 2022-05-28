@@ -4,11 +4,11 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
 from .models import (RequestRide, BidRide, ScheduleRide, BidScheduleRide, Notifications, Complains, DriverReviews,
-                     DriversLocation, DriversPoints, ConfirmDriverPayment, SearchedDestinations)
+                     DriversLocation, DriversPoints, ConfirmDriverPayment, SearchedDestinations, RejectedRides)
 from .serializers import (RequestRideSerializer, BidRideSerializer, ScheduleRideSerializer, ComplainsSerializer,
                           BidScheduleRideSerializer, NotificationSerializer, DriverReviewSerializer,
                           RateDriverSerializer,
-                          ConfirmDriverPaymentSerializer, DriversLocationSerializer, SearchDestinationsSerializer)
+                          ConfirmDriverPaymentSerializer, DriversLocationSerializer, SearchDestinationsSerializer, RejectedRidesSerializer)
 
 
 # get passengers searched locations
@@ -26,6 +26,25 @@ def add_to_searched_locations(request):
     serializer = SearchDestinationsSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save(passenger=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# rejected rides in
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticatedOrReadOnly])
+def get_all_rejected_rides(request):
+    rejected_rides = RejectedRides.objects.all().order_by('-date_rejected')
+    serializer = RejectedRidesSerializer(rejected_rides, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticatedOrReadOnly])
+def add_to_rejected_rides(request):
+    serializer = RejectedRidesSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(driver=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

@@ -81,6 +81,15 @@ class RequestRide(models.Model):
         return ""
 
 
+class RejectedRides(models.Model):
+    ride = models.ForeignKey(RequestRide, on_delete=models.CASCADE)
+    driver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="driver_rejecting_ride")
+    date_rejected = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.driver} rejected ride from {self.passenger}"
+
+
 class BidRide(models.Model):
     ride = models.ForeignKey(RequestRide, on_delete=models.CASCADE, related_name="Ride_to_accept")
     user = models.ForeignKey(User, on_delete=models.CASCADE)

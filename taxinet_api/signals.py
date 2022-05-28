@@ -3,7 +3,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.conf import settings
 from .models import (RequestRide, BidRide, ScheduleRide, BidScheduleRide, Notifications, Complains, DriverReviews, \
-                     Sos, DriversPoints, ConfirmDriverPayment)
+                     Sos, DriversPoints, ConfirmDriverPayment, RejectedRides)
 
 User = settings.AUTH_USER_MODEL
 from taxinet_users.models import User as taxinet_user
@@ -25,23 +25,17 @@ def alert_request_ride(sender, created, instance, **kwargs):
                                      passengers_pickup=instance.pick_up, passengers_dropff=instance.drop_off,
                                      ride_duration=instance.ride_duration, ride_distance=instance.ride_distance)
 
-    if created and instance.ride_accepted:
-        title = "Ride Accepted"
-        notification_tag = "Ride Accepted"
-        message = f"{instance.driver.username} accepted your request."
-        Notifications.objects.create(notification_id=instance.id, notification_title=title,
-                                     notification_tag=notification_tag, notification_message=message,
-                                     notification_from=instance.driver, notification_to=instance.passenger,
-                                     ride_id=instance.id)
 
-    if created and instance.ride_rejected:
-        title = "Ride Rejected"
+@receiver(post_save, sender=RejectedRides)
+def alert_rejected_ride(sender, created, instance, **kwargs):
+    if created:
+        title = "Your ride was rejected"
         notification_tag = "Ride Rejected"
-        message = f"{instance.driver.username} rejected your request."
+        message = f"{instance.driver.username} rejected your ride."
         Notifications.objects.create(notification_id=instance.id, notification_title=title,
                                      notification_tag=notification_tag, notification_message=message,
-                                     notification_from=instance.driver, notification_to=instance.passenger,
-                                     ride_id=instance.id)
+                                     notification_from=instance.ride.driver, notification_to=instance.ride.passenger,
+                                     ride_id=instance.ride.id)
 
 
 @receiver(post_save, sender=BidRide)

@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import (RequestRide, BidRide, ScheduleRide, BidScheduleRide, Notifications, Complains, DriverReviews,
-                     DriversLocation, DriversPoints, ConfirmDriverPayment, SearchedDestinations)
+                     DriversLocation, DriversPoints, ConfirmDriverPayment, SearchedDestinations, RejectedRides)
 
 admin.site.register(RequestRide)
 admin.site.register(BidRide)
@@ -14,3 +14,4 @@ admin.site.register(DriversLocation)
 admin.site.register(DriversPoints)
 admin.site.register(ConfirmDriverPayment)
 admin.site.register(SearchedDestinations)
+admin.site.register(RejectedRides)
