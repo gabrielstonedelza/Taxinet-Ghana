@@ -29,7 +29,7 @@ def alert_request_ride(sender, created, instance, **kwargs):
 @receiver(post_save, sender=RejectedRides)
 def alert_rejected_ride(sender, created, instance, **kwargs):
     if created:
-        title = "Your ride was rejected"
+        title = "Ride was rejected"
         notification_tag = "Ride Rejected"
         message = f"{instance.driver.username} rejected your ride."
         Notifications.objects.create(notification_id=instance.id, notification_title=title,
