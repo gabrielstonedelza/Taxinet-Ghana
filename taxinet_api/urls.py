@@ -17,6 +17,8 @@ urlpatterns = [
     path('update_requested_ride/<int:ride_id>/', views.update_requested_ride),
     path('delete_requested_ride/<int:ride_id>/', views.delete_requested_ride),
     path('accepted_ride_detail/<int:accept_id>/', views.accepted_request_detail),
+    path('get_all_rejected_rides/', views.get_all_rejected_rides),
+    path('add_to_rejected_rides/', views.add_to_rejected_rides),
 
     # post,get and update drivers location
     path("get_drivers_location/", views.get_drivers_current_location),
