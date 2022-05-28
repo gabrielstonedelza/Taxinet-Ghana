@@ -135,6 +135,17 @@ def update_requested_ride(request, ride_id):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@api_view(['GET', 'DELETE'])
+@permission_classes([permissions.IsAuthenticated])
+def delete_requested_ride(request, ride_id):
+    try:
+        ride = get_object_or_404(RequestRide, id=ride_id)
+        ride.delete()
+    except RequestRide.DoesNotExist:
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 # accept requested ride functions
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
