@@ -57,8 +57,6 @@ class RequestRide(models.Model):
     ride_distance = models.CharField(max_length=100, null=True)
     passengers_lat = models.CharField(max_length=255, null=True)
     passengers_lng = models.CharField(max_length=255, null=True)
-    drivers_lat = models.CharField(max_length=255, null=True,blank=True)
-    drivers_lng = models.CharField(max_length=255, null=True,blank=True)
     passengers_pick_up_place_id = models.CharField(max_length=255, blank=True, default="")
     passengers_drop_off_place_id = models.CharField(max_length=255, blank=True, default="")
     drivers_location_place_id = models.CharField(max_length=255, blank=True, default="")
@@ -199,8 +197,6 @@ class Notifications(models.Model):
                                         null=True)
     passengers_lat = models.CharField(max_length=255, null=True, blank=True)
     passengers_lng = models.CharField(max_length=255, null=True, blank=True)
-    drivers_lat = models.CharField(max_length=255, null=True, blank=True)
-    drivers_lng = models.CharField(max_length=255, null=True, blank=True)
     passengers_pickup = models.CharField(max_length=255, null=True, blank=True)
     passengers_dropff = models.CharField(max_length=255, null=True, blank=True)
     ride_duration = models.CharField(max_length=100, null=True, blank=True)
@@ -349,6 +345,8 @@ class ConfirmDriverPayment(models.Model):
 class DriversLocation(models.Model):
     driver = models.ForeignKey(User, on_delete=models.CASCADE)
     place_id = models.CharField(max_length=100, blank=True)
+    drivers_lat = models.CharField(max_length=255, null=True, blank=True)
+    drivers_lng = models.CharField(max_length=255, null=True, blank=True)
     date_updated = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
