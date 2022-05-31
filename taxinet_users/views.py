@@ -92,3 +92,18 @@ def get_drivers_profile(request,id):
     drivers_profile = DriverProfile.objects.filter(id=id)
     serializer = DriverProfileSerializer(drivers_profile, many=True)
     return Response(serializer.data)
+
+# user details
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_passenger_details(request,id):
+    passenger_detaisl = User.objects.filter(id=id)
+    serializer = UsersSerializer(passenger_detaisl, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_drivers_details(request,id):
+    driver_details = User.objects.filter(id=id)
+    serializer = UsersSerializer(driver_details, many=True)
+    return Response(serializer.data)
