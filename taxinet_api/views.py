@@ -4,21 +4,25 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
 from .models import (RequestRide, BidRide, ScheduleRide, BidScheduleRide, Notifications, Complains, DriverReviews,
-                     DriversLocation, DriversPoints, ConfirmDriverPayment, SearchedDestinations, RejectedRides, AcceptedRides,CompletedRides,CompletedBidOnRide)
+                     DriversLocation, DriversPoints, ConfirmDriverPayment, SearchedDestinations, RejectedRides,
+                     AcceptedRides, CompletedRides, CompletedBidOnRide)
 from .serializers import (RequestRideSerializer, BidRideSerializer, ScheduleRideSerializer, ComplainsSerializer,
                           BidScheduleRideSerializer, NotificationSerializer, DriverReviewSerializer,
                           RateDriverSerializer,
-                          ConfirmDriverPaymentSerializer, DriversLocationSerializer, SearchDestinationsSerializer, RejectedRidesSerializer, AcceptedRidesSerializer,CompletedBidOnRideSerializer,CompletedRidesSerializer)
-
+                          ConfirmDriverPaymentSerializer, DriversLocationSerializer, SearchDestinationsSerializer,
+                          RejectedRidesSerializer, AcceptedRidesSerializer, CompletedBidOnRideSerializer,
+                          CompletedRidesSerializer)
 
 
 # get driver location
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticatedOrReadOnly])
-def get_driver_location(request,id):
-    driver_location = get_object_or_404(DriversLocation,id=id)
-    serializer = DriversLocationSerializer(driver_location,many=True)
+def get_driver_location(request, driver_id):
+    driver_location = DriversLocation.objects.filter(driver=driver_id).order_by('-date_updated')[:1]
+    serializer = DriversLocationSerializer(driver_location, many=True)
     return Response(serializer.data)
+
+
 # get passengers searched locations
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticatedOrReadOnly])
@@ -75,6 +79,7 @@ def add_to_completed_rides(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 # accepted rides
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticatedOrReadOnly])
@@ -92,6 +97,7 @@ def add_to_accepted_rides(request):
         serializer.save(driver=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 # rejected rides in
 @api_view(['GET'])
