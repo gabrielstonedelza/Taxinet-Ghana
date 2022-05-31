@@ -85,3 +85,10 @@ def get_passenger_profile(request,id):
     passenger_profile = PassengerProfile.objects.filter(id=id)
     serializer = PassengerProfileSerializer(passenger_profile, many=True)
     return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_drivers_profile(request,id):
+    drivers_profile = DriverProfile.objects.filter(id=id)
+    serializer = DriverProfileSerializer(drivers_profile, many=True)
+    return Response(serializer.data)

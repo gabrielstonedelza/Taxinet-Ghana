@@ -8,6 +8,7 @@ urlpatterns = [
     path('driver-profile/', views.driver_profile),
     path('get_user/', views.get_user),
     path('get_passenger_profile/<int:id>/', views.get_passenger_profile),
+    path('get_drivers_profile/<int:id>/', views.get_drivers_profile),
     path('all_passengers/', views.get_all_passengers),
     path('all_drivers/', views.get_all_drivers),
     path('passenger-profile/', views.passenger_profile),
