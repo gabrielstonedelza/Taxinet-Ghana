@@ -4,11 +4,11 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
 from .models import (RequestRide, BidRide, ScheduleRide, BidScheduleRide, Notifications, Complains, DriverReviews,
-                     DriversLocation, DriversPoints, ConfirmDriverPayment, SearchedDestinations, RejectedRides)
+                     DriversLocation, DriversPoints, ConfirmDriverPayment, SearchedDestinations, RejectedRides, AcceptedRides,CompletedRides,CompletedBidOnRide)
 from .serializers import (RequestRideSerializer, BidRideSerializer, ScheduleRideSerializer, ComplainsSerializer,
                           BidScheduleRideSerializer, NotificationSerializer, DriverReviewSerializer,
                           RateDriverSerializer,
-                          ConfirmDriverPaymentSerializer, DriversLocationSerializer, SearchDestinationsSerializer, RejectedRidesSerializer)
+                          ConfirmDriverPaymentSerializer, DriversLocationSerializer, SearchDestinationsSerializer, RejectedRidesSerializer, AcceptedRidesSerializer,CompletedBidOnRideSerializer,CompletedRidesSerializer)
 
 
 # get passengers searched locations
@@ -29,6 +29,61 @@ def add_to_searched_locations(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+# completed rides
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticatedOrReadOnly])
+def get_all_completed_rides(request):
+    completed_rides = CompletedRides.objects.all().order_by('-date_completed')
+    serializer = CompletedRidesSerializer(completed_rides, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticatedOrReadOnly])
+def add_to_completed_rides(request):
+    serializer = CompletedRidesSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(driver=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# completed bid on rides
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticatedOrReadOnly])
+def get_all_completed_bid_on_rides(request):
+    completed_bid_rides = CompletedBidOnRide.objects.all().order_by('-date_completed')
+    serializer = CompletedBidOnRideSerializer(completed_bid_rides, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticatedOrReadOnly])
+def add_to_completed_rides(request):
+    serializer = CompletedBidOnRideSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(driver=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# accepted rides
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticatedOrReadOnly])
+def get_all_accepted_rides(request):
+    accepted_rides = AcceptedRides.objects.all().order_by('-date_accepted')
+    serializer = AcceptedRidesSerializer(accepted_rides, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticatedOrReadOnly])
+def add_to_accepted_rides(request):
+    serializer = AcceptedRidesSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(driver=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # rejected rides in
 @api_view(['GET'])

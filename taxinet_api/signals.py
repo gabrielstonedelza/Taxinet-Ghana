@@ -3,7 +3,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.conf import settings
 from .models import (RequestRide, BidRide, ScheduleRide, BidScheduleRide, Notifications, Complains, DriverReviews, \
-                     Sos, DriversPoints, ConfirmDriverPayment, RejectedRides)
+                     Sos, DriversPoints, ConfirmDriverPayment, RejectedRides, AcceptedRides,CompletedRides,CompletedBidOnRide)
 
 User = settings.AUTH_USER_MODEL
 from taxinet_users.models import User as taxinet_user
@@ -27,12 +27,46 @@ def alert_request_ride(sender, created, instance, **kwargs):
                                      drivers_lat=instance.drivers_lat, drivers_lng=instance.drivers_lng)
 
 
+@receiver(post_save, sender=AcceptedRides)
+def alert_accepted_ride(sender, created, instance, **kwargs):
+    if created:
+        title = "Ride was accepted"
+        notification_tag = "Ride Accepted"
+        message = f"{instance.driver.username} accepted your ride."
+        Notifications.objects.create(notification_id=instance.id, notification_title=title,
+                                     notification_tag=notification_tag, notification_message=message,
+                                     notification_from=instance.ride.driver, notification_to=instance.ride.passenger,
+                                     ride_id=instance.ride.id)
+
 @receiver(post_save, sender=RejectedRides)
 def alert_rejected_ride(sender, created, instance, **kwargs):
     if created:
         title = "Ride was rejected"
         notification_tag = "Ride Rejected"
         message = f"{instance.driver.username} rejected your ride."
+        Notifications.objects.create(notification_id=instance.id, notification_title=title,
+                                     notification_tag=notification_tag, notification_message=message,
+                                     notification_from=instance.ride.driver, notification_to=instance.ride.passenger,
+                                     ride_id=instance.ride.id)
+
+
+@receiver(post_save, sender=CompletedBidOnRide)
+def alert_completed_bid_on_ride(sender, created, instance, **kwargs):
+    if created:
+        title = "Bidding was accepted and now complete"
+        notification_tag = "Bid Completed"
+        message = f"{instance.driver.username} accepted bid and now complete."
+        Notifications.objects.create(notification_id=instance.id, notification_title=title,
+                                     notification_tag=notification_tag, notification_message=message,
+                                     notification_from=instance.ride.driver, notification_to=instance.ride.passenger,
+                                     ride_id=instance.ride.id)
+
+@receiver(post_save, sender=CompletedRides)
+def alert_completed_ride(sender, created, instance, **kwargs):
+    if created:
+        title = "Your trip is completed"
+        notification_tag = "Ride Completed"
+        message = f"Your trip from {instance.pick_up} to {instance.drop_off} is now completed."
         Notifications.objects.create(notification_id=instance.id, notification_title=title,
                                      notification_tag=notification_tag, notification_message=message,
                                      notification_from=instance.ride.driver, notification_to=instance.ride.passenger,
