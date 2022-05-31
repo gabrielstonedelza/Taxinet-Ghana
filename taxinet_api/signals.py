@@ -53,7 +53,7 @@ def alert_rejected_ride(sender, created, instance, **kwargs):
 @receiver(post_save, sender=CompletedBidOnRide)
 def alert_completed_bid_on_ride(sender, created, instance, **kwargs):
     if created:
-        title = "Bidding was accepted and now complete"
+        title = "Bidding Accepted"
         notification_tag = "Bid Completed"
         message = f"{instance.driver.username} accepted bid and now complete."
         Notifications.objects.create(notification_id=instance.id, notification_title=title,
