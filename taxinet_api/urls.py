@@ -32,6 +32,7 @@ urlpatterns = [
     path("get_drivers_location/", views.get_drivers_current_location),
     path("drivers_location/new/", views.store_drivers_location),
     path("delete_drivers_locations/", views.delete_drivers_locations),
+    path("get_driver_location/<int:id>/", views.get_driver_location),
 
     #     scheduling rides
     path('scheduled_ride/new/', views.schedule_ride),

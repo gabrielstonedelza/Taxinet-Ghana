@@ -11,6 +11,14 @@ from .serializers import (RequestRideSerializer, BidRideSerializer, ScheduleRide
                           ConfirmDriverPaymentSerializer, DriversLocationSerializer, SearchDestinationsSerializer, RejectedRidesSerializer, AcceptedRidesSerializer,CompletedBidOnRideSerializer,CompletedRidesSerializer)
 
 
+
+# get driver location
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticatedOrReadOnly])
+def get_driver_location(request,id):
+    driver_location = get_object_or_404(DriversLocation,id=id)
+    serializer = DriversLocationSerializer(driver_location,many=True)
+    return Response(serializer.data)
 # get passengers searched locations
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticatedOrReadOnly])
