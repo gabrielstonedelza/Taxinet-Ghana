@@ -3,7 +3,8 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.conf import settings
 from .models import (RequestRide, BidRide, ScheduleRide, BidScheduleRide, Notifications, Complains, DriverReviews, \
-                     Sos, DriversPoints, ConfirmDriverPayment, RejectedRides, AcceptedRides,CompletedRides,CompletedBidOnRide)
+                     Sos, DriversPoints, ConfirmDriverPayment, RejectedRides, AcceptedRides, CompletedRides,
+                     CompletedBidOnRide)
 
 User = settings.AUTH_USER_MODEL
 from taxinet_users.models import User as taxinet_user
@@ -38,6 +39,7 @@ def alert_accepted_ride(sender, created, instance, **kwargs):
                                      notification_from=instance.ride.driver, notification_to=instance.ride.passenger,
                                      ride_id=instance.ride.id)
 
+
 @receiver(post_save, sender=RejectedRides)
 def alert_rejected_ride(sender, created, instance, **kwargs):
     if created:
@@ -60,6 +62,7 @@ def alert_completed_bid_on_ride(sender, created, instance, **kwargs):
                                      notification_tag=notification_tag, notification_message=message,
                                      notification_from=instance.ride.driver, notification_to=instance.ride.passenger,
                                      ride_id=instance.ride.id)
+
 
 @receiver(post_save, sender=CompletedRides)
 def alert_completed_ride(sender, created, instance, **kwargs):

@@ -72,7 +72,7 @@ def get_all_completed_bid_on_rides(request):
 
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticatedOrReadOnly])
-def add_to_completed_rides(request):
+def add_to_completed_bid_on_rides(request):
     serializer = CompletedBidOnRideSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save(driver=request.user)

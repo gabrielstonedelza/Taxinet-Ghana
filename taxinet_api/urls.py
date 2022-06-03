@@ -26,7 +26,7 @@ urlpatterns = [
     path('add_to_completed_rides/', views.add_to_completed_rides),
 
     path('get_all_completed_bid_on_rides/', views.get_all_completed_bid_on_rides),
-    path('add_to_completed_rides/', views.add_to_completed_rides),
+    path('add_to_completed_rides/', views.add_to_completed_bid_on_rides),
 
     # post,get and update drivers location
     path("get_drivers_location/", views.get_drivers_current_location),

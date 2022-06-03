@@ -81,6 +81,7 @@ class RequestRide(models.Model):
             return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
         return ""
 
+
 class AcceptedRides(models.Model):
     ride = models.ForeignKey(RequestRide, on_delete=models.CASCADE)
     driver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="driver_accepting_ride")
@@ -89,6 +90,7 @@ class AcceptedRides(models.Model):
     def __str__(self):
         return f"{self.driver} accepted ride {self.ride.id}"
 
+
 class RejectedRides(models.Model):
     ride = models.ForeignKey(RequestRide, on_delete=models.CASCADE)
     driver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="driver_rejecting_ride")
@@ -96,6 +98,7 @@ class RejectedRides(models.Model):
 
     def __str__(self):
         return f"{self.driver} rejected ride {self.ride.id}"
+
 
 class BidRide(models.Model):
     ride = models.ForeignKey(RequestRide, on_delete=models.CASCADE, related_name="Ride_to_accept")
@@ -118,6 +121,7 @@ class BidRide(models.Model):
             return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
         return ""
 
+
 class CompletedBidOnRide(models.Model):
     ride = models.ForeignKey(RequestRide, on_delete=models.CASCADE)
     driver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="driver_completing_ride")
@@ -126,12 +130,14 @@ class CompletedBidOnRide(models.Model):
     def __str__(self):
         return f"Bid on ride {self.ride.id} is complete"
 
+
 class CompletedRides(models.Model):
     ride = models.ForeignKey(RequestRide, on_delete=models.CASCADE)
     date_completed = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Ride {self.ride.id} is complete"
+
 
 class ScheduleRide(models.Model):
     passenger = models.ForeignKey(User, on_delete=models.CASCADE, related_name="passenger_scheduling_ride")
