@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import (RequestRide, BidRide, ScheduleRide, BidScheduleRide, Notifications, Complains, DriverReviews,
-                     DriversLocation, DriversPoints, ConfirmDriverPayment, SearchedDestinations, RejectedRides, AcceptedRides, CompletedRides, CompletedBidOnRide)
+                     DriversLocation, DriversPoints, ConfirmDriverPayment, SearchedDestinations, RejectedRides,
+                     AcceptedRides, CompletedRides, CompletedBidOnRide)
 
 
 class RequestRideSerializer(serializers.ModelSerializer):
@@ -14,7 +15,7 @@ class RequestRideSerializer(serializers.ModelSerializer):
                   'price', 'completed', 'driver_booked', 'date_requested',
                   'get_driver_profile_pic',
                   'get_passenger_profile_pic', 'passengers_pick_up_place_id', 'passengers_drop_off_place_id',
-                  'drivers_location_place_id', 'passengers_lat', 'passengers_lng', 'ride_duration', 'ride_distance',
+                  'drivers_location_place_id', 'passengers_lat', 'passengers_lng', 'ride_duration', 'ride_distance', 'passenger_boarded'
                   ]
         read_only_fields = ['passenger']
 
@@ -38,6 +39,7 @@ class AcceptedRidesSerializer(serializers.ModelSerializer):
     def get_username(self, user):
         username = user.driver.username
         return username
+
 
 class RejectedRidesSerializer(serializers.ModelSerializer):
     username = serializers.SerializerMethodField('get_username')
@@ -65,11 +67,11 @@ class BidRideSerializer(serializers.ModelSerializer):
         username = user.user.username
         return username
 
-class CompletedRidesSerializer(serializers.ModelSerializer):
 
+class CompletedRidesSerializer(serializers.ModelSerializer):
     class Meta:
         model = CompletedRides
-        fields = ['id', 'ride','date_accepted']
+        fields = ['id', 'ride', 'date_accepted']
 
 
 class CompletedBidOnRideSerializer(serializers.ModelSerializer):
@@ -192,7 +194,8 @@ class DriversLocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = DriversLocation
         fields = ['id', 'username', 'driver', 'place_id', 'date_updated', 'get_drivers_pic', 'get_drivers_name',
-                  'drivers_plate', 'drivers_car_model', 'drivers_car_name', 'drivers_taxinet_number','drivers_lat', 'drivers_lng']
+                  'drivers_plate', 'drivers_car_model', 'drivers_car_name', 'drivers_taxinet_number', 'drivers_lat',
+                  'drivers_lng']
         read_only_fields = ['driver']
 
     def get_username(self, user):
