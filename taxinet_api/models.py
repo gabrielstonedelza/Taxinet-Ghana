@@ -352,6 +352,7 @@ class ConfirmDriverPayment(models.Model):
 class DriversLocation(models.Model):
     driver = models.ForeignKey(User, on_delete=models.CASCADE)
     place_id = models.CharField(max_length=100, blank=True)
+    location_name = models.CharField(max_length=100, default="")
     drivers_lat = models.CharField(max_length=255, null=True, blank=True)
     drivers_lng = models.CharField(max_length=255, null=True, blank=True)
     date_updated = models.DateTimeField(auto_now_add=True)
