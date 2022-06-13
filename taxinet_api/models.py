@@ -64,6 +64,7 @@ class RequestRide(models.Model):
     completed = models.BooleanField(default=False)
     bid_completed = models.BooleanField(default=False)
     driver_booked = models.BooleanField(default=False)
+    driver_on_route = models.BooleanField(default=False)
     passenger_boarded = models.BooleanField(default=False)
     date_requested = models.DateTimeField(auto_now_add=True)
 
