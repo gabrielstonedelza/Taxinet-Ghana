@@ -5,13 +5,13 @@ from rest_framework.response import Response
 
 from .models import (RequestRide, BidRide, ScheduleRide, BidScheduleRide, Notifications, Complains, DriverReviews,
                      DriversLocation, DriversPoints, ConfirmDriverPayment, SearchedDestinations, RejectedRides,
-                     AcceptedRides, CompletedRides, CompletedBidOnRide)
+                     AcceptedRides, CompletedRides, CompletedBidOnRide, Messages)
 from .serializers import (RequestRideSerializer, BidRideSerializer, ScheduleRideSerializer, ComplainsSerializer,
                           BidScheduleRideSerializer, NotificationSerializer, DriverReviewSerializer,
                           RateDriverSerializer,
                           ConfirmDriverPaymentSerializer, DriversLocationSerializer, SearchDestinationsSerializer,
                           RejectedRidesSerializer, AcceptedRidesSerializer, CompletedBidOnRideSerializer,
-                          CompletedRidesSerializer)
+                          CompletedRidesSerializer, MessagesSerializer)
 
 
 # get driver location
@@ -40,6 +40,27 @@ def add_to_searched_locations(request):
         serializer.save(passenger=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# messages
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticatedOrReadOnly])
+def send_message(request, ride_id):
+    ride = get_object_or_404(RequestRide, id=ride_id)
+    serializer = MessagesSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(user=request.user, ride=ride)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_driver_passenger_messages(request, ride_id):
+    ride = get_object_or_404(RequestRide, id=ride_id)
+    messages = Messages.objects.filter(ride=ride).order_by('date_sent')
+    serializer = BidRideSerializer(messages, many=True)
+    return Response(serializer.data)
 
 
 # completed rides

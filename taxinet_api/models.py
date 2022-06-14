@@ -124,6 +124,16 @@ class BidRide(models.Model):
         return ""
 
 
+class Messages(models.Model):
+    ride = models.ForeignKey(RequestRide, on_delete=models.CASCADE, related_name="Ride_receiing_messages")
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    message = models.TextField()
+    date_sent = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.ride
+
+
 class CompletedBidOnRide(models.Model):
     ride = models.ForeignKey(RequestRide, on_delete=models.CASCADE)
     driver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="driver_completing_ride")
@@ -217,6 +227,7 @@ class Notifications(models.Model):
     schedule_accepted_id = models.CharField(max_length=100, blank=True)
     pick_up_place_id = models.CharField(max_length=100, blank=True, default='')
     drop_off_place_id = models.CharField(max_length=100, blank=True, default='')
+    message_id = models.CharField(max_length=100, blank=True, default='')
     schedule_rejected_id = models.CharField(max_length=100, blank=True)
     complain_id = models.CharField(max_length=100, blank=True)
     reply_id = models.CharField(max_length=100, blank=True)

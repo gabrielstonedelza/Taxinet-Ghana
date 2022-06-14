@@ -4,7 +4,7 @@ from django.dispatch import receiver
 from django.conf import settings
 from .models import (RequestRide, BidRide, ScheduleRide, BidScheduleRide, Notifications, Complains, DriverReviews, \
                      Sos, DriversPoints, ConfirmDriverPayment, RejectedRides, AcceptedRides, CompletedRides,
-                     CompletedBidOnRide)
+                     CompletedBidOnRide, Messages)
 
 User = settings.AUTH_USER_MODEL
 from taxinet_users.models import User as taxinet_user
@@ -95,6 +95,27 @@ def alert_bidding(sender, created, instance, **kwargs):
                                      notification_message=message, notification_tag=notification_tag,
                                      notification_from=instance.ride.driver, notification_to=instance.ride.passenger,
                                      ride_accepted_id=instance.id)
+
+
+@receiver(post_save, sender=Messages)
+def alert_received_message(sender, created, instance, **kwargs):
+    if created and instance.ride.passenger == instance.user:
+        title = "New message"
+        notification_tag = "Messaging"
+        message = f"{instance.user.username} sent you a message"
+        Notifications.objects.create(notification_id=instance.id, notification_title=title,
+                                     notification_message=message, notification_tag=notification_tag,
+                                     notification_from=instance.ride.passenger, notification_to=instance.ride.driver,
+                                     message_id=instance.id)
+
+    if created and instance.ride.driver == instance.user:
+        title = "New message"
+        notification_tag = "Messaging"
+        message = f"{instance.user.username} sent you a message"
+        Notifications.objects.create(notification_id=instance.id, notification_title=title,
+                                     notification_message=message, notification_tag=notification_tag,
+                                     notification_from=instance.ride.driver, notification_to=instance.ride.passenger,
+                                     message_id=instance.id)
 
 
 @receiver(post_save, sender=ScheduleRide)
