@@ -3,9 +3,9 @@ from random import choices
 
 from django.db import models
 from django.conf import settings
-from taxinet_users.models import DriverProfile, PassengerProfile
+from taxinet_users.models import DriverProfile, PassengerProfile, User
 
-User = settings.AUTH_USER_MODEL
+DeUser = settings.AUTH_USER_MODEL
 # Create your models here.
 
 NOTIFICATIONS_STATUS = (
@@ -47,8 +47,8 @@ DRIVER_PAYMENT_CONFIRMATION = (
 
 
 class RequestRide(models.Model):
-    driver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="driver_to_accept_ride")
-    passenger = models.ForeignKey(User, on_delete=models.CASCADE)
+    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="driver_to_accept_ride")
+    passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE)
     pick_up = models.CharField(max_length=255, blank=True)
     drop_off = models.CharField(max_length=255, blank=True)
     ride_accepted = models.BooleanField(default=False)
@@ -84,7 +84,7 @@ class RequestRide(models.Model):
 
 class AcceptedRides(models.Model):
     ride = models.ForeignKey(RequestRide, on_delete=models.CASCADE)
-    driver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="driver_accepting_ride")
+    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="driver_accepting_ride")
     date_accepted = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -93,7 +93,7 @@ class AcceptedRides(models.Model):
 
 class RejectedRides(models.Model):
     ride = models.ForeignKey(RequestRide, on_delete=models.CASCADE)
-    driver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="driver_rejecting_ride")
+    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="driver_rejecting_ride")
     date_rejected = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -102,29 +102,31 @@ class RejectedRides(models.Model):
 
 class BidRide(models.Model):
     ride = models.ForeignKey(RequestRide, on_delete=models.CASCADE, related_name="Ride_to_accept")
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(DeUser, on_delete=models.CASCADE)
     bid = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
     date_accepted = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return str(self.bid)
 
-    def get_driver_profile_pic(self):
-        my_driver = DriverProfile.objects.get(user=self.ride.driver)
-        if my_driver:
-            return "https://taxinetghana.xyz" + my_driver.profile_pic.url
-        return ""
+    def get_profile_pic(self):
+        deuser = User.objects.get(username=self.user.username)
+        if deuser.app_type == 'Passenger':
+            my_passenger = PassengerProfile.objects.get(user=self.ride.passenger)
+            if my_passenger:
+                return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
+            return ""
 
-    def get_passenger_profile_pic(self):
-        my_passenger = PassengerProfile.objects.get(user=self.ride.passenger)
-        if my_passenger:
-            return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
-        return ""
+        if deuser.app_type == 'Driver':
+            my_driver = DriverProfile.objects.get(user=self.ride.passenger)
+            if my_driver:
+                return "https://taxinetghana.xyz" + my_driver.profile_pic.url
+            return ""
 
 
 class Messages(models.Model):
     ride = models.ForeignKey(RequestRide, on_delete=models.CASCADE, related_name="Ride_receiing_messages")
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(DeUser, on_delete=models.CASCADE)
     message = models.TextField()
     date_sent = models.DateTimeField(auto_now_add=True)
 
@@ -134,7 +136,7 @@ class Messages(models.Model):
 
 class CompletedBidOnRide(models.Model):
     ride = models.ForeignKey(RequestRide, on_delete=models.CASCADE)
-    driver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="driver_completing_ride")
+    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="driver_completing_ride")
     date_accepted = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -150,8 +152,8 @@ class CompletedRides(models.Model):
 
 
 class ScheduleRide(models.Model):
-    passenger = models.ForeignKey(User, on_delete=models.CASCADE, related_name="passenger_scheduling_ride")
-    driver = models.ForeignKey(User, on_delete=models.CASCADE)
+    passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="passenger_scheduling_ride")
+    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
     date_of_pickup = models.DateField(blank=True, )
     time_of_pickup = models.TimeField(blank=True, )
     schedule_option = models.CharField(max_length=30, choices=SCHEDULE_RIDE_OPTIONS, default="One Time")
@@ -180,7 +182,7 @@ class ScheduleRide(models.Model):
 
 class BidScheduleRide(models.Model):
     scheduled_ride = models.ForeignKey(ScheduleRide, on_delete=models.CASCADE, related_name="Scheduled_Ride_to_accept")
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(DeUser, on_delete=models.CASCADE)
     bid = models.CharField(max_length=10, blank=True)
     date_accepted = models.DateTimeField(auto_now_add=True)
 
@@ -208,8 +210,8 @@ class Notifications(models.Model):
     read = models.CharField(max_length=20, choices=NOTIFICATIONS_STATUS, default="Not Read")
     notification_trigger = models.CharField(max_length=100, choices=NOTIFICATIONS_TRIGGERS, default="Triggered",
                                             blank=True)
-    notification_from = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    notification_to = models.ForeignKey(User, on_delete=models.CASCADE, related_name="User_receiving_notification",
+    notification_from = models.ForeignKey(DeUser, on_delete=models.CASCADE, null=True)
+    notification_to = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="User_receiving_notification",
                                         null=True)
     passengers_lat = models.CharField(max_length=255, null=True, blank=True)
     passengers_lng = models.CharField(max_length=255, null=True, blank=True)
@@ -261,8 +263,8 @@ class Notifications(models.Model):
 
 
 class Complains(models.Model):
-    complainant = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_making_complain")
-    offender = models.ForeignKey(User, on_delete=models.CASCADE)
+    complainant = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="user_making_complain")
+    offender = models.ForeignKey(DeUser, on_delete=models.CASCADE)
     complain = models.TextField(blank=True)
     read = models.BooleanField(default=False)
     date_posted = models.DateTimeField(auto_now_add=True)
@@ -284,8 +286,8 @@ class Complains(models.Model):
 
 
 class DriverReviews(models.Model):
-    passenger = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_giving_review")
-    driver = models.ForeignKey(User, on_delete=models.CASCADE)
+    passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="user_giving_review")
+    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
     reviews = models.TextField()
     date_posted = models.DateTimeField(auto_now_add=True)
 
@@ -306,7 +308,7 @@ class DriverReviews(models.Model):
 
 
 class Sos(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(DeUser, on_delete=models.CASCADE)
     message = models.CharField(max_length=255, blank=True)
     date_posted = models.DateTimeField(auto_now_add=True)
 
@@ -315,8 +317,8 @@ class Sos(models.Model):
 
 
 class DriversPoints(models.Model):
-    passenger = models.ForeignKey(User, on_delete=models.CASCADE)
-    driver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="driver_being_rated")
+    passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE)
+    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="driver_being_rated")
     points = models.IntegerField(default=0)
     date_rated = models.DateTimeField(auto_now_add=True)
 
@@ -337,7 +339,7 @@ class DriversPoints(models.Model):
 
 
 class ConfirmDriverPayment(models.Model):
-    driver = models.ForeignKey(User, on_delete=models.CASCADE)
+    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
     payment_confirmed = models.BooleanField(default=False)
     bank_payment_reference = models.CharField(max_length=100)
     amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
@@ -358,7 +360,7 @@ class ConfirmDriverPayment(models.Model):
 
 
 class DriversLocation(models.Model):
-    driver = models.ForeignKey(User, on_delete=models.CASCADE)
+    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
     place_id = models.CharField(max_length=100, blank=True)
     location_name = models.CharField(max_length=100, default="")
     drivers_lat = models.CharField(max_length=255, null=True, blank=True)
@@ -406,7 +408,7 @@ class DriversLocation(models.Model):
 
 
 class SearchedDestinations(models.Model):
-    passenger = models.ForeignKey(User, on_delete=models.CASCADE)
+    passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE)
     searched_destination = models.CharField(max_length=255)
     place_id = models.CharField(max_length=255, default="")
     date_searched = models.DateTimeField(auto_now_add=True)

@@ -60,8 +60,7 @@ class BidRideSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BidRide
-        fields = ['id', 'username', 'ride', 'user', 'bid', 'date_accepted', 'get_driver_profile_pic',
-                  'get_passenger_profile_pic']
+        fields = ['id', 'username', 'ride', 'user', 'bid', 'date_accepted', 'get_profile_pic']
         read_only_fields = ['user', 'ride']
 
     def get_username(self, user):
