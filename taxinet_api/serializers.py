@@ -12,7 +12,7 @@ class RequestRideSerializer(serializers.ModelSerializer):
         model = RequestRide
         fields = ['id', 'passengers_username', 'drivers_username', 'driver', 'passenger', 'pick_up', 'drop_off',
                   'ride_accepted', 'ride_rejected',
-                  'price', 'completed', 'driver_booked', 'date_requested',
+                  'price', 'completed', 'driver_booked', 'date_requested', 'time_requested',
                   'get_driver_profile_pic',
                   'get_passenger_profile_pic', 'passengers_pick_up_place_id', 'passengers_drop_off_place_id',
                   'drivers_location_place_id', 'passengers_lat', 'passengers_lng',
