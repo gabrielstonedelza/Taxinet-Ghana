@@ -111,7 +111,7 @@ class BidRide(models.Model):
 
     def get_profile_pic(self):
         deuser = User.objects.get(username=self.user.username)
-        if deuser.app_type == 'Passenger':
+        if deuser.user_type == 'Passenger':
             my_passenger = PassengerProfile.objects.get(user=self.ride.passenger)
             if my_passenger:
                 return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
