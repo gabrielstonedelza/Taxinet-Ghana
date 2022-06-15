@@ -118,7 +118,7 @@ class BidRide(models.Model):
             return ""
 
         if deuser.user_type == 'Driver':
-            my_driver = DriverProfile.objects.get(user=self.ride.passenger)
+            my_driver = DriverProfile.objects.get(user=self.ride.driver)
             if my_driver:
                 return "https://taxinetghana.xyz" + my_driver.profile_pic.url
             return ""
