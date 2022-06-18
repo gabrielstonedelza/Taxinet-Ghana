@@ -1,14 +1,14 @@
-from django.shortcuts import get_object_or_404
+from django.db.models.signals import post_save
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.conf import settings
+
 from .models import (RequestRide, BidRide, ScheduleRide, BidScheduleRide, Notifications, Complains, DriverReviews, \
-                     Sos, DriversPoints, ConfirmDriverPayment, RejectedRides, AcceptedRides, CompletedRides,
+                     DriversPoints, ConfirmDriverPayment, RejectedRides, AcceptedRides, CompletedRides,
                      CompletedBidOnRide, Messages)
+from django.conf import settings
 
 User = settings.AUTH_USER_MODEL
 from taxinet_users.models import User as taxinet_user
-from taxinet_users.models import DriverProfile, PassengerProfile
 
 
 @receiver(post_save, sender=RequestRide)
@@ -23,7 +23,8 @@ def alert_request_ride(sender, created, instance, **kwargs):
                                      ride_id=instance.id, pick_up_place_id=instance.passengers_pick_up_place_id,
                                      drop_off_place_id=instance.passengers_drop_off_place_id,
                                      passengers_lat=instance.passengers_lat, passengers_lng=instance.passengers_lng,
-                                     passengers_pickup=instance.pick_up, passengers_dropff=instance.drop_off,passenger=instance.passenger.username,driver=instance.driver.username
+                                     passengers_pickup=instance.pick_up, passengers_dropff=instance.drop_off,
+                                     passenger=instance.passenger.username, driver=instance.driver.username
                                      )
 
 
@@ -60,6 +61,7 @@ def alert_completed_bid_on_ride(sender, created, instance, **kwargs):
         Notifications.objects.create(notification_id=instance.id, notification_title=title,
                                      notification_tag=notification_tag, notification_message=message,
                                      notification_from=instance.ride.driver, notification_to=instance.ride.passenger,
+                                     drivers_lat=instance.drivers_lat, drivers_lng=instance.driver_lng,
                                      ride_id=instance.ride.id)
 
 

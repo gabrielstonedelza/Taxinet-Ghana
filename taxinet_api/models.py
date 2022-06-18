@@ -57,7 +57,6 @@ class RequestRide(models.Model):
     passengers_lng = models.CharField(max_length=255, null=True)
     passengers_pick_up_place_id = models.CharField(max_length=255, blank=True, default="")
     passengers_drop_off_place_id = models.CharField(max_length=255, blank=True, default="")
-    drivers_location_place_id = models.CharField(max_length=255, blank=True, default="")
     price = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
     completed = models.BooleanField(default=False)
     bid_completed = models.BooleanField(default=False)
@@ -138,6 +137,8 @@ class Messages(models.Model):
 class CompletedBidOnRide(models.Model):
     ride = models.ForeignKey(RequestRide, on_delete=models.CASCADE)
     driver = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="driver_completing_ride")
+    drivers_lat = models.CharField(max_length=255, null=True, blank=True)
+    drivers_lng = models.CharField(max_length=255, null=True, blank=True)
     date_accepted = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -216,6 +217,8 @@ class Notifications(models.Model):
                                         null=True)
     passengers_lat = models.CharField(max_length=255, null=True, blank=True)
     passengers_lng = models.CharField(max_length=255, null=True, blank=True)
+    drivers_lat = models.CharField(max_length=255, null=True, blank=True)
+    drivers_lng = models.CharField(max_length=255, null=True, blank=True)
     driver = models.CharField(max_length=255, null=True, blank=True)
     passenger = models.CharField(max_length=255, null=True, blank=True)
     passengers_pickup = models.CharField(max_length=255, null=True, blank=True)
