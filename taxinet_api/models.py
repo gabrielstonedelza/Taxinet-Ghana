@@ -63,8 +63,8 @@ class RequestRide(models.Model):
     driver_booked = models.BooleanField(default=False)
     driver_on_route = models.BooleanField(default=False)
     passenger_boarded = models.BooleanField(default=False)
-    date_requested = models.DateField(default=timezone.now)
-    time_requested = models.TimeField(default=timezone.now)
+    date_requested = models.DateField(auto_now_add=True)
+    time_requested = models.TimeField(auto_now_add=True)
 
     def __str__(self):
         return str(self.pk)
