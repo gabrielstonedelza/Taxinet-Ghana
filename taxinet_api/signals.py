@@ -37,7 +37,8 @@ def alert_accepted_ride(sender, created, instance, **kwargs):
         Notifications.objects.create(notification_id=instance.id, notification_title=title,
                                      notification_tag=notification_tag, notification_message=message,
                                      notification_from=instance.ride.driver, notification_to=instance.ride.passenger,
-                                     ride_id=instance.ride.id)
+                                     ride_id=instance.ride.id, passengers_lat=instance.passengers_lat,
+                                     passengers_lng=instance.passengers_lng, )
 
 
 @receiver(post_save, sender=RejectedRides)

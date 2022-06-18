@@ -85,6 +85,8 @@ class RequestRide(models.Model):
 class AcceptedRides(models.Model):
     ride = models.ForeignKey(RequestRide, on_delete=models.CASCADE)
     driver = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="driver_accepting_ride")
+    passengers_lat = models.CharField(max_length=255, null=True)
+    passengers_lng = models.CharField(max_length=255, null=True)
     date_accepted = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
