@@ -141,6 +141,8 @@ class CompletedBidOnRide(models.Model):
     driver = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="driver_completing_ride")
     drivers_lat = models.CharField(max_length=255, null=True, blank=True)
     drivers_lng = models.CharField(max_length=255, null=True, blank=True)
+    passengers_pickup = models.CharField(max_length=255, null=True, blank=True)
+    pick_up_place_id = models.CharField(max_length=255, null=True, blank=True)
     date_accepted = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

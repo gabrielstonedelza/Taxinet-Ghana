@@ -63,7 +63,8 @@ def alert_completed_bid_on_ride(sender, created, instance, **kwargs):
                                      notification_tag=notification_tag, notification_message=message,
                                      notification_from=instance.ride.driver, notification_to=instance.ride.passenger,
                                      drivers_lat=instance.drivers_lat, drivers_lng=instance.driver_lng,
-                                     ride_id=instance.ride.id)
+                                     ride_id=instance.ride.id, passengers_pickup=instance.ride.pick_up,
+                                     pick_up_place_id=instance.ride.passengers_pick_up_place_id)
 
 
 @receiver(post_save, sender=CompletedRides)
