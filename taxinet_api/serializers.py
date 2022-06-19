@@ -34,7 +34,7 @@ class AcceptedRidesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AcceptedRides
-        fields = ['id', 'ride', 'username', 'driver', 'date_accepted']
+        fields = ['id', 'ride', 'username', 'driver', 'passengers_lat', 'passengers_lng', 'date_accepted']
         read_only_fields = ['driver']
 
     def get_username(self, user):
@@ -92,7 +92,7 @@ class CompletedBidOnRideSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CompletedBidOnRide
-        fields = ['id', 'ride', 'username', 'driver', 'drivers_lat', 'drivers_lng', 'date_accepted']
+        fields = ['id', 'ride', 'username', 'driver', 'drivers_lat', 'drivers_lng', 'passengers_pickup', 'pick_up_place_id', 'date_accepted']
         read_only_fields = ['driver']
 
     def get_username(self, user):
