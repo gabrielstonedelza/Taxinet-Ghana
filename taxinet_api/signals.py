@@ -6,9 +6,9 @@ from .models import (RequestRide, BidRide, ScheduleRide, BidScheduleRide, Notifi
                      DriversPoints, ConfirmDriverPayment, RejectedRides, AcceptedRides, CompletedRides,
                      CompletedBidOnRide, Messages)
 from django.conf import settings
+from taxinet_users.models import User as taxinet_user
 
 User = settings.AUTH_USER_MODEL
-from taxinet_users.models import User as taxinet_user
 
 
 @receiver(post_save, sender=RequestRide)
@@ -23,7 +23,8 @@ def alert_request_ride(sender, created, instance, **kwargs):
                                      ride_id=instance.id, pick_up_place_id=instance.passengers_pick_up_place_id,
                                      drop_off_place_id=instance.passengers_drop_off_place_id,
                                      passengers_lat=instance.passengers_lat, passengers_lng=instance.passengers_lng,
-                                     passengers_pickup=instance.pick_up, passengers_dropff=instance.drop_off, driver=instance.driver.username
+                                     passengers_pickup=instance.pick_up, passengers_dropOff=instance.drop_off,
+
                                      )
 
 
