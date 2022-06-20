@@ -24,6 +24,7 @@ def alert_request_ride(sender, created, instance, **kwargs):
                                      drop_off_place_id=instance.passengers_drop_off_place_id,
                                      passengers_lat=instance.passengers_lat, passengers_lng=instance.passengers_lng,
                                      passengers_pickup=instance.pick_up, passengers_dropOff=instance.drop_off,
+                                     drop_off_lat=instance.drop_off_lat, drop_off_lng=instance.drop_off_lng
 
                                      )
 

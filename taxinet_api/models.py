@@ -55,6 +55,8 @@ class RequestRide(models.Model):
     ride_rejected = models.BooleanField(default=False)
     passengers_lat = models.CharField(max_length=255, null=True)
     passengers_lng = models.CharField(max_length=255, null=True)
+    drop_off_lat = models.CharField(max_length=255, null=True)
+    drop_off_lng = models.CharField(max_length=255, null=True)
     passengers_pick_up_place_id = models.CharField(max_length=255, blank=True, default="")
     passengers_drop_off_place_id = models.CharField(max_length=255, blank=True, default="")
     price = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
@@ -219,6 +221,8 @@ class Notifications(models.Model):
     notification_from = models.ForeignKey(DeUser, on_delete=models.CASCADE, null=True)
     notification_to = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="User_receiving_notification",
                                         null=True)
+    drop_off_lat = models.CharField(max_length=255, null=True)
+    drop_off_lng = models.CharField(max_length=255, null=True)
     passengers_lat = models.CharField(max_length=255, null=True, blank=True)
     passengers_lng = models.CharField(max_length=255, null=True, blank=True)
     drivers_lat = models.CharField(max_length=255, null=True, blank=True)
