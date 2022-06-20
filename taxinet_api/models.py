@@ -427,6 +427,8 @@ class SearchedDestinations(models.Model):
     passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE)
     searched_destination = models.CharField(max_length=255)
     place_id = models.CharField(max_length=255, default="")
+    drop_off_lat = models.CharField(max_length=255, null=True)
+    drop_off_lng = models.CharField(max_length=255, null=True)
     date_searched = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
