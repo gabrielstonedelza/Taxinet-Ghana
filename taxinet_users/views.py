@@ -6,6 +6,10 @@ from rest_framework import viewsets, permissions, generics, status
 from rest_framework.response import Response
 
 
+def taxinet_home(request):
+    return render(request, "users/taxinet_home.html")
+
+
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def get_all_passengers(request):

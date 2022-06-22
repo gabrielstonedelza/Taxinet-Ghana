@@ -5,6 +5,7 @@ from . import views
 urlpatterns = [
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.authtoken')),
+    path('', views.taxinet_home, name="home"),
     path('driver-profile/', views.driver_profile),
     path('get_user/', views.get_user),
     path('get_passenger_profile/<int:id>/', views.get_passenger_profile),
