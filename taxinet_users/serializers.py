@@ -23,9 +23,12 @@ class DriverProfileSerializer(serializers.ModelSerializer):
         model = DriverProfile
         fields = ['id', 'username', 'user', 'profile_pic', 'drivers_license', 'name_on_licence',
                   'license_number', 'license_expiration_date', 'license_plate', 'car_name',
-                  'car_model', 'ghana_card', 'name_on_ghana_card', 'ghana_card_number', 'digital_address',
-                  'next_of_kin', 'next_of_kin_number', 'driver_profile_pic', 'get_drivers_license', 'get_ghana_card',
-                  'taxinet_number', 'verified']
+                  'car_model', 'front_side_ghana_card',
+                  'back_side_ghana_card', 'name_on_ghana_card', 'ghana_card_number', 'digital_address',
+                  'next_of_kin', 'next_of_kin_number', 'driver_profile_pic', 'get_drivers_license',
+                  'taxinet_number', 'verified', 'get_front_side_ghana_card', 'get_back_side_ghana_card',
+                  'get_drivers_email',
+                  'get_drivers_phone_number', ]
         read_only_fields = ['user']
 
     def get_username(self, user):
@@ -38,11 +41,12 @@ class PassengerProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PassengerProfile
-        fields = ['id', 'username', 'user', 'profile_pic', 'passenger_profile_pic', 'ghana_card',
+        fields = ['id', 'username', 'user', 'profile_pic', 'passenger_profile_pic', 'front_side_ghana_card',
+                  'back_side_ghana_card',
                   'name_on_ghana_card', 'ghana_card_number', 'next_of_kin', 'next_of_kin_number', 'referral',
                   'referral_number', 'verified',
-                  'get_ghana_card', 'next_of_kin', 'next_of_kin_number', 'get_passengers_email',
-                  'get_passengers_phone_number']
+                  'next_of_kin', 'next_of_kin_number', 'get_passengers_email',
+                  'get_passengers_phone_number', 'get_front_side_ghana_card', 'get_back_side_ghana_card']
         read_only_fields = ['user']
 
     def get_username(self, user):

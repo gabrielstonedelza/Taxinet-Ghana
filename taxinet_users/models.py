@@ -33,7 +33,8 @@ class DriverProfile(models.Model):
     license_plate = models.CharField(max_length=100, blank=True)
     car_name = models.CharField(max_length=100, blank=True)
     car_model = models.CharField(max_length=100, blank=True)
-    ghana_card = models.ImageField(upload_to="ghana_cards", blank=True)
+    front_side_ghana_card = models.ImageField(upload_to="ghana_cards", blank=True)
+    back_side_ghana_card = models.ImageField(upload_to="ghana_cards", blank=True)
     name_on_ghana_card = models.CharField(max_length=100, blank=True)
     ghana_card_number = models.CharField(max_length=100, blank=True)
     digital_address = models.CharField(max_length=100, blank=True)
@@ -45,15 +46,15 @@ class DriverProfile(models.Model):
     def __str__(self):
         return self.user.username
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
+    def get_front_side_ghana_card(self):
+        if self.front_side_ghana_card:
+            return "https://taxinetghana.xyz" + self.front_side_ghana_card.url
+        return ''
 
-        img = Image.open(self.profile_pic.path)
-
-        if img.height > 300 or img.width > 300:
-            output_size = (300, 300)
-            img.thumbnail(output_size)
-            img.save(self.profile_pic.path)
+    def get_back_side_ghana_card(self):
+        if self.back_side_ghana_card:
+            return "https://taxinetghana.xyz" + self.back_side_ghana_card.url
+        return ''
 
     def driver_profile_pic(self):
         if self.profile_pic:
@@ -65,16 +66,18 @@ class DriverProfile(models.Model):
             return "https://taxinetghana.xyz" + self.drivers_license.url
         return ''
 
-    def get_ghana_card(self):
-        if self.ghana_card:
-            return "https://taxinetghana.xyz" + self.ghana_card.url
-        return ''
+    def get_drivers_email(self):
+        return self.user.email
+
+    def get_drivers_phone_number(self):
+        return self.user.phone_number
 
 
 class PassengerProfile(models.Model):
     user = models.OneToOneField(DeUser, on_delete=models.CASCADE, related_name="p_profile")
     profile_pic = models.ImageField(upload_to="passenger_profile_pics", default="default_user.png")
-    ghana_card = models.ImageField(upload_to="ghana_cards", blank=True)
+    front_side_ghana_card = models.ImageField(upload_to="ghana_cards", blank=True)
+    back_side_ghana_card = models.ImageField(upload_to="ghana_cards", blank=True)
     name_on_ghana_card = models.CharField(max_length=100, blank=True)
     ghana_card_number = models.CharField(max_length=100, blank=True)
     next_of_kin = models.CharField(max_length=100, blank=True)
@@ -86,9 +89,14 @@ class PassengerProfile(models.Model):
     def __str__(self):
         return self.user.username
 
-    def get_ghana_card(self):
-        if self.ghana_card:
-            return "https://taxinetghana.xyz" + self.ghana_card.url
+    def get_front_side_ghana_card(self):
+        if self.front_side_ghana_card:
+            return "https://taxinetghana.xyz" + self.front_side_ghana_card.url
+        return ''
+
+    def get_back_side_ghana_card(self):
+        if self.back_side_ghana_card:
+            return "https://taxinetghana.xyz" + self.back_side_ghana_card.url
         return ''
 
     def passenger_profile_pic(self):
