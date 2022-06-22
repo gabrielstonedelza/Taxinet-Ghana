@@ -86,16 +86,6 @@ class PassengerProfile(models.Model):
     def __str__(self):
         return self.user.username
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-
-        img = Image.open(self.profile_pic.path)
-
-        if img.height > 300 or img.width > 300:
-            output_size = (300, 300)
-            img.thumbnail(output_size)
-            img.save(self.profile_pic.path)
-
     def get_ghana_card(self):
         if self.ghana_card:
             return "https://taxinetghana.xyz" + self.ghana_card.url
