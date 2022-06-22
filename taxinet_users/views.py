@@ -7,7 +7,7 @@ from rest_framework.response import Response
 
 
 def taxinet_home(request):
-    return render(request, "users/taxinet_home.html")
+    return render(request, "taxinet_users/taxinet_home.html")
 
 
 @api_view(['GET'])
