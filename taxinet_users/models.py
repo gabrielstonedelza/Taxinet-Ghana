@@ -105,3 +105,9 @@ class PassengerProfile(models.Model):
         if self.profile_pic:
             return "https://taxinetghana.xyz" + self.profile_pic.url
         return ''
+
+    def get_passengers_email(self):
+        return self.user.email
+
+    def get_passengers_phone_number(self):
+        return self.user.phone_number
