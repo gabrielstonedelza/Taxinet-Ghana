@@ -152,7 +152,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 AUTH_USER_MODEL = 'taxinet_users.User'
 DJOSER = {
-    'LOGIN_FIELD': 'username',
+    'LOGIN_FIELD': 'phone_number',
     'USER_CREATE_PASSWORD_RETYPE': True,
     'SERIALIZERS': {
         'user_create': 'taxinet_users.serializers.UserCreateSerializer',
