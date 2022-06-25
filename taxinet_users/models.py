@@ -15,8 +15,9 @@ class User(AbstractUser):
     email = models.EmailField(unique=True, max_length=255)
     user_type = models.CharField(max_length=50, choices=APP_TYPE, default="Passenger")
     phone_number = models.CharField(max_length=16, unique=True)
+    full_name = models.CharField(max_length=100, unique=True, default="")
 
-    REQUIRED_FIELDS = ['email', 'user_type', 'phone_number', 'first_name', 'last_name']
+    REQUIRED_FIELDS = ['email', 'user_type', 'phone_number', 'full_name']
     USERNAME_FIELD = 'username'
 
     def get_username(self):

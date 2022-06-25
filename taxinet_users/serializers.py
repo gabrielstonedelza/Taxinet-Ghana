@@ -7,13 +7,13 @@ from .models import User, DriverProfile, PassengerProfile
 class UserCreateSerializer(UserCreateSerializer):
     class Meta(UserCreateSerializer.Meta):
         model = User
-        fields = ('id', 'email', 'username', 'password', 'user_type', 'phone_number', 'first_name', 'last_name')
+        fields = ('id', 'email', 'username', 'password', 'user_type', 'phone_number', 'full_name')
 
 
 class UsersSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'email', 'username', 'phone_number', 'first_name', 'last_name', 'user_type',)
+        fields = ('id', 'email', 'username', 'phone_number', 'full_name', 'user_type',)
 
 
 class DriverProfileSerializer(serializers.ModelSerializer):
