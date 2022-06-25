@@ -14,10 +14,10 @@ APP_TYPE = (
 class User(AbstractUser):
     email = models.EmailField(unique=True, max_length=255)
     user_type = models.CharField(max_length=50, choices=APP_TYPE, default="Passenger")
-    full_name = models.CharField(max_length=100, unique=True, default="")
+    full_name = models.CharField(max_length=100, unique=True)
     phone_number = models.CharField(max_length=16, unique=True)
 
-    REQUIRED_FIELDS = ['email', 'user_type', 'full_name', 'phone_number', ]
+    REQUIRED_FIELDS = ['user_type', 'email', 'full_name', 'phone_number', ]
     USERNAME_FIELD = 'username'
 
     def get_username(self):
@@ -110,3 +110,6 @@ class PassengerProfile(models.Model):
 
     def get_passengers_phone_number(self):
         return self.user.phone_number
+
+    def get_passengers_full_name(self):
+        return self.user.full_name
