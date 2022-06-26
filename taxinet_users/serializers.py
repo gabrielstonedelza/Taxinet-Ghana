@@ -43,10 +43,11 @@ class PassengerProfileSerializer(serializers.ModelSerializer):
         model = PassengerProfile
         fields = ['id', 'username', 'user', 'profile_pic', 'passenger_profile_pic', 'front_side_ghana_card',
                   'back_side_ghana_card',
-                  'name_on_ghana_card', 'ghana_card_number', 'next_of_kin', 'next_of_kin_number', 'referral',
-                  'referral_number', 'verified',
+                  'name_on_ghana_card', 'next_of_kin', 'next_of_kin_number', 'referral',
+                  'verified',
                   'next_of_kin', 'next_of_kin_number', 'get_passengers_email',
-                  'get_passengers_phone_number', 'get_front_side_ghana_card', 'get_back_side_ghana_card','get_passengers_full_name']
+                  'get_passengers_phone_number', 'get_front_side_ghana_card', 'get_back_side_ghana_card',
+                  'get_passengers_full_name']
         read_only_fields = ['user']
 
     def get_username(self, user):

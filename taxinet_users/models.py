@@ -80,11 +80,9 @@ class PassengerProfile(models.Model):
     front_side_ghana_card = models.ImageField(upload_to="ghana_cards", blank=True)
     back_side_ghana_card = models.ImageField(upload_to="ghana_cards", blank=True)
     name_on_ghana_card = models.CharField(max_length=100, blank=True)
-    ghana_card_number = models.CharField(max_length=100, blank=True)
     next_of_kin = models.CharField(max_length=100, blank=True)
     next_of_kin_number = models.CharField(max_length=100, blank=True)
     referral = models.CharField(max_length=100, blank=True)
-    referral_number = models.CharField(max_length=20, blank=True)
     verified = models.BooleanField(default=False)
 
     def __str__(self):
