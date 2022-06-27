@@ -73,6 +73,9 @@ class DriverProfile(models.Model):
     def get_drivers_phone_number(self):
         return self.user.phone_number
 
+    def get_drivers_full_name(self):
+        return self.user.full_name
+
 
 class PassengerProfile(models.Model):
     user = models.OneToOneField(DeUser, on_delete=models.CASCADE, related_name="p_profile")
