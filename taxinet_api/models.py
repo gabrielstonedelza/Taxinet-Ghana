@@ -221,8 +221,8 @@ class Notifications(models.Model):
     notification_from = models.ForeignKey(DeUser, on_delete=models.CASCADE, null=True)
     notification_to = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="User_receiving_notification",
                                         null=True)
-    drop_off_lat = models.CharField(max_length=255, null=True)
-    drop_off_lng = models.CharField(max_length=255, null=True)
+    drop_off_lat = models.CharField(max_length=255, null=True, blank=True)
+    drop_off_lng = models.CharField(max_length=255, null=True, blank=True)
     passengers_lat = models.CharField(max_length=255, null=True, blank=True)
     passengers_lng = models.CharField(max_length=255, null=True, blank=True)
     drivers_lat = models.CharField(max_length=255, null=True, blank=True)
