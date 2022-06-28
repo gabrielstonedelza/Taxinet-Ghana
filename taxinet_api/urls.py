@@ -23,6 +23,7 @@ urlpatterns = [
     path('add_to_rejected_rides/', views.add_to_rejected_rides),
     path('get_all_accepted_rides/', views.get_all_accepted_rides),
     path('add_to_accepted_rides/', views.add_to_accepted_rides),
+    path('announce_drivers_arrival/', views.announce_drivers_arrival),
 
     path('get_all_completed_rides/', views.get_all_completed_rides),
     path('add_to_completed_rides/', views.add_to_completed_rides),

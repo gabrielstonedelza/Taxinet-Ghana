@@ -4,7 +4,7 @@ from django.dispatch import receiver
 
 from .models import (RequestRide, BidRide, ScheduleRide, BidScheduleRide, Notifications, Complains, DriverReviews, \
                      DriversPoints, ConfirmDriverPayment, RejectedRides, AcceptedRides, CompletedRides,
-                     CompletedBidOnRide, Messages)
+                     CompletedBidOnRide, Messages, DriverAnnounceArrival)
 from django.conf import settings
 from taxinet_users.models import User as taxinet_user
 
@@ -40,6 +40,18 @@ def alert_accepted_ride(sender, created, instance, **kwargs):
                                      notification_from=instance.ride.driver, notification_to=instance.ride.passenger,
                                      ride_id=instance.ride.id, passengers_lat=instance.ride.passengers_lat,
                                      passengers_lng=instance.ride.passengers_lng, )
+
+
+@receiver(post_save, sender=DriverAnnounceArrival)
+def announce_arrival(sender, created, instance, **kwargs):
+    if created:
+        title = "Driver has arrived"
+        notification_tag = "Drivers Arrival"
+        message = f"Hi {instance.ride.passenger.username}, driver has arrived."
+        Notifications.objects.create(notification_id=instance.id, notification_title=title,
+                                     notification_tag=notification_tag, notification_message=message,
+                                     notification_from=instance.ride.driver, notification_to=instance.ride.passenger,
+                                     ride_id=instance.ride.id)
 
 
 @receiver(post_save, sender=RejectedRides)

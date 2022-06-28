@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from .models import (RequestRide, BidRide, ScheduleRide, BidScheduleRide, Notifications, Complains, DriverReviews,
                      DriversLocation, DriversPoints, ConfirmDriverPayment, SearchedDestinations, RejectedRides,
-                     AcceptedRides, CompletedRides, CompletedBidOnRide, Messages)
+                     AcceptedRides, CompletedRides, CompletedBidOnRide, Messages, DriverAnnounceArrival)
 
 admin.site.register(RequestRide)
 admin.site.register(BidRide)
@@ -20,3 +20,4 @@ admin.site.register(AcceptedRides)
 admin.site.register(CompletedRides)
 admin.site.register(CompletedBidOnRide)
 admin.site.register(Messages)
+admin.site.register(DriverAnnounceArrival)

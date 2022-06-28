@@ -95,6 +95,15 @@ class AcceptedRides(models.Model):
         return f"{self.driver} accepted ride {self.ride.id}"
 
 
+class DriverAnnounceArrival(models.Model):
+    ride = models.ForeignKey(RequestRide, on_delete=models.CASCADE)
+    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="driver_announcing_arrival")
+    date_announced = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.driver} accepted ride {self.ride.id}"
+
+
 class RejectedRides(models.Model):
     ride = models.ForeignKey(RequestRide, on_delete=models.CASCADE)
     driver = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="driver_rejecting_ride")
