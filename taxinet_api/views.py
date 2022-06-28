@@ -39,7 +39,7 @@ def get_driver_location(request, driver_id):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticatedOrReadOnly])
 def get_searched_locations(request):
-    searched_destinations = SearchedDestinations.objects.filter(passenger=request.user).order_by('-date_searched')[:3]
+    searched_destinations = SearchedDestinations.objects.filter(passenger=request.user).order_by('-date_searched')[:1]
     serializer = SearchDestinationsSerializer(searched_destinations, many=True)
     return Response(serializer.data)
 
