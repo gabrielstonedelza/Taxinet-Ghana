@@ -262,13 +262,12 @@ class Notifications(models.Model):
     def __str__(self):
         return self.notification_title
 
+
     def get_notification_from_profile_pic(self):
-        deUser = User.objects.get(user=self.notification_from)
-        if deUser:
-            my_passenger = PassengerProfile.objects.get(user=self.notification_from)
-            if my_passenger:
-                return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
-            return ""
+        my_passenger = PassengerProfile.objects.get(user=self.notification_from)
+        if my_passenger:
+            return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
+        return ""
 
 
 class Complains(models.Model):
