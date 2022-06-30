@@ -263,7 +263,7 @@ class Notifications(models.Model):
         return self.notification_title
 
     def get_notification_from_profile_pic(self):
-        deUser = User.objects.get(username=self.notification_from.username)
+        deUser = User.objects.get(user=self.notification_from)
         if deUser:
             my_passenger = PassengerProfile.objects.get(user=self.notification_from)
             if my_passenger:
