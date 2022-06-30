@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import (RequestRide, BidRide, ScheduleRide, BidScheduleRide, Notifications, Complains, DriverReviews,
                      DriversLocation, DriversPoints, ConfirmDriverPayment, SearchedDestinations, RejectedRides,
                      AcceptedRides, CompletedRides, CompletedBidOnRide, Messages, DriverAnnounceArrival)
+from taxinet_users.models import DriverProfile, PassengerProfile
 
 
 class RequestRideSerializer(serializers.ModelSerializer):
@@ -163,7 +164,7 @@ class NotificationSerializer(serializers.ModelSerializer):
                   'schedule_rejected_id', 'complain_id', 'reply_id', 'review_id', 'rating_id', 'payment_confirmed_id',
                   'date_created', 'pick_up_place_id', 'drop_off_place_id', 'passengers_lat', 'passengers_lng',
                   'passengers_pickup', 'passengers_dropOff', 'ride_distance', 'ride_duration',
-                  'drivers_lat', 'drivers_lng', 'drop_off_lat', 'drop_off_lng','get_passenger_profile_pic']
+                  'drivers_lat', 'drivers_lng', 'drop_off_lat', 'drop_off_lng','get_passengers_notification_from_pic']
 
     def get_username(self, notification):
         passengers_username = notification.notification_from.username
