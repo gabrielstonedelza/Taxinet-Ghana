@@ -264,30 +264,10 @@ class Notifications(models.Model):
 
     def get_notification_from_profile_pic(self):
         deUser = User.objects.get(username=self.notification_from.username)
-        if deUser.user_type == 'Passenger':
+        if deUser:
             my_passenger = PassengerProfile.objects.get(user=self.notification_from)
             if my_passenger:
                 return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
-            return ""
-
-        if deUser.user_type == 'Driver':
-            my_driver = DriverProfile.objects.get(user=self.notification_from)
-            if my_driver:
-                return "https://taxinetghana.xyz" + my_driver.profile_pic.url
-            return ""
-
-    def get_notification_to_profile_pic(self):
-        deuser = User.objects.get(username=self.notification_to.username)
-        if deuser.user_type == 'Passenger':
-            my_passenger = PassengerProfile.objects.get(user=self.notification_to)
-            if my_passenger:
-                return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
-            return ""
-
-        if deuser.user_type == 'Driver':
-            my_driver = DriverProfile.objects.get(user=self.notification_to)
-            if my_driver:
-                return "https://taxinetghana.xyz" + my_driver.profile_pic.url
             return ""
 
 
