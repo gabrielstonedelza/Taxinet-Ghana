@@ -16,7 +16,7 @@ class RequestRideSerializer(serializers.ModelSerializer):
                   'get_driver_profile_pic',
                   'get_passenger_profile_pic', 'passengers_pick_up_place_id', 'passengers_drop_off_place_id',
                   'passengers_lat', 'passengers_lng', 'drop_off_lat', 'drop_off_lng', 'ride_distance', 'ride_duration',
-                  'driver_on_route', 'passenger_boarded', 'd_pick', 'p_pick',
+                  'driver_on_route', 'passenger_boarded',
                   ]
         read_only_fields = ['passenger']
 
@@ -162,8 +162,8 @@ class NotificationSerializer(serializers.ModelSerializer):
                   'ride_rejected_id', 'completed_ride_id', 'schedule_ride_id', 'schedule_accepted_id',
                   'schedule_rejected_id', 'complain_id', 'reply_id', 'review_id', 'rating_id', 'payment_confirmed_id',
                   'date_created', 'pick_up_place_id', 'drop_off_place_id', 'passengers_lat', 'passengers_lng',
-                  'passengers_pickup', 'passengers_dropOff', 'd_pick', 'p_pick', 'ride_distance', 'ride_duration',
-                  'drivers_lat', 'drivers_lng', 'drop_off_lat', 'drop_off_lng']
+                  'passengers_pickup', 'passengers_dropOff', 'ride_distance', 'ride_duration',
+                  'drivers_lat', 'drivers_lng', 'drop_off_lat', 'drop_off_lng','get_passenger_profile_pic']
 
     def get_username(self, notification):
         passengers_username = notification.notification_from.username

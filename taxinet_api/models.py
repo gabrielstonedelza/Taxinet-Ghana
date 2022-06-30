@@ -65,8 +65,6 @@ class RequestRide(models.Model):
     driver_booked = models.BooleanField(default=False)
     driver_on_route = models.BooleanField(default=False)
     passenger_boarded = models.BooleanField(default=False)
-    p_pick = models.CharField(max_length=355, default="")
-    d_pick = models.CharField(max_length=355, default="")
     ride_distance = models.CharField(max_length=100, default="")
     ride_duration = models.CharField(max_length=100, default="")
     date_requested = models.DateField(auto_now_add=True)
@@ -74,17 +72,6 @@ class RequestRide(models.Model):
 
     def __str__(self):
         return str(self.pk)
-
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        # save to d_pick
-        my_driver = DriverProfile.objects.get(user=self.driver)
-        if my_driver:
-            self.d_pick = f"https://taxinetghana.xyz{my_driver.profile_pic.url}"
-
-        my_passenger = PassengerProfile.objects.get(user=self.passenger)
-        if my_passenger:
-            self.p_pick = f"https://taxinetghana.xyz{my_passenger.profile_pic.url}"
 
     def get_driver_profile_pic(self):
         my_driver = DriverProfile.objects.get(user=self.driver)
@@ -245,8 +232,6 @@ class Notifications(models.Model):
     notification_from = models.ForeignKey(DeUser, on_delete=models.CASCADE, null=True)
     notification_to = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="User_receiving_notification",
                                         null=True)
-    p_pick = models.CharField(max_length=355, default="")
-    d_pick = models.CharField(max_length=355, default="")
     drop_off_lat = models.CharField(max_length=255, null=True, blank=True)
     drop_off_lng = models.CharField(max_length=255, null=True, blank=True)
     passengers_lat = models.CharField(max_length=255, null=True, blank=True)
@@ -276,6 +261,12 @@ class Notifications(models.Model):
 
     def __str__(self):
         return self.notification_title
+
+    def get_passenger_profile_pic(self):
+        my_passenger = PassengerProfile.objects.get(user=self.notification_from)
+        if my_passenger:
+            return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
+        return ""
 
 
 class Complains(models.Model):
