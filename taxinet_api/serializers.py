@@ -15,7 +15,7 @@ class RequestRideSerializer(serializers.ModelSerializer):
                   'price', 'completed', 'driver_booked', 'date_requested', 'time_requested',
                   'get_driver_profile_pic',
                   'get_passenger_profile_pic', 'passengers_pick_up_place_id', 'passengers_drop_off_place_id',
-                  'passengers_lat', 'passengers_lng', 'drop_off_lat', 'drop_off_lng',
+                  'passengers_lat', 'passengers_lng', 'drop_off_lat', 'drop_off_lng', 'ride_distance', 'ride_duration',
                   'driver_on_route', 'passenger_boarded'
                   ]
         read_only_fields = ['passenger']
@@ -162,7 +162,7 @@ class NotificationSerializer(serializers.ModelSerializer):
                   'ride_rejected_id', 'completed_ride_id', 'schedule_ride_id', 'schedule_accepted_id',
                   'schedule_rejected_id', 'complain_id', 'reply_id', 'review_id', 'rating_id', 'payment_confirmed_id',
                   'date_created', 'pick_up_place_id', 'drop_off_place_id', 'passengers_lat', 'passengers_lng',
-                  'passengers_pickup', 'passengers_dropOff', 'get_notification_from_profile_pic',
+                  'passengers_pickup', 'passengers_dropOff', 'get_notification_from_profile_pic', 'ride_distance', 'ride_duration',
                   'drivers_lat', 'drivers_lng', 'drop_off_lat', 'drop_off_lng',
                   'get_notification_to_profile_pic']
 

@@ -65,6 +65,8 @@ class RequestRide(models.Model):
     driver_booked = models.BooleanField(default=False)
     driver_on_route = models.BooleanField(default=False)
     passenger_boarded = models.BooleanField(default=False)
+    ride_distance = models.CharField(max_length=100, default="")
+    ride_duration = models.CharField(max_length=100, default="")
     date_requested = models.DateField(auto_now_add=True)
     time_requested = models.TimeField(auto_now_add=True)
 
@@ -238,6 +240,8 @@ class Notifications(models.Model):
     drivers_lng = models.CharField(max_length=255, null=True, blank=True)
     passengers_pickup = models.CharField(max_length=255, null=True, blank=True)
     passengers_dropOff = models.CharField(max_length=255, null=True, blank=True)
+    ride_distance = models.CharField(max_length=100, default="", blank=True)
+    ride_duration = models.CharField(max_length=100, default="", blank=True)
     ride_id = models.CharField(max_length=100, blank=True)
     ride_accepted_id = models.CharField(max_length=255, blank=True)
     ride_rejected_id = models.CharField(max_length=255, blank=True)
