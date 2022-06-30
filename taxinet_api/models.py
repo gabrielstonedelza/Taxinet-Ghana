@@ -263,15 +263,15 @@ class Notifications(models.Model):
         return self.notification_title
 
     def get_notification_from_profile_pic(self):
-        deUser = User.objects.get(username=self.notification_to.username)
+        deUser = User.objects.get(username=self.notification_from.username)
         if deUser.user_type == 'Passenger':
-            my_passenger = PassengerProfile.objects.get(user=self.notification_to)
+            my_passenger = PassengerProfile.objects.get(user=self.notification_from)
             if my_passenger:
                 return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
             return ""
 
         if deUser.user_type == 'Driver':
-            my_driver = DriverProfile.objects.get(user=self.notification_to)
+            my_driver = DriverProfile.objects.get(user=self.notification_from)
             if my_driver:
                 return "https://taxinetghana.xyz" + my_driver.profile_pic.url
             return ""
