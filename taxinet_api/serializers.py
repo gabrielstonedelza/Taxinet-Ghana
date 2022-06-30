@@ -163,8 +163,7 @@ class NotificationSerializer(serializers.ModelSerializer):
                   'schedule_rejected_id', 'complain_id', 'reply_id', 'review_id', 'rating_id', 'payment_confirmed_id',
                   'date_created', 'pick_up_place_id', 'drop_off_place_id', 'passengers_lat', 'passengers_lng',
                   'passengers_pickup', 'passengers_dropOff', 'get_notification_from_profile_pic', 'ride_distance', 'ride_duration',
-                  'drivers_lat', 'drivers_lng', 'drop_off_lat', 'drop_off_lng',
-                  'get_notification_to_profile_pic']
+                  'drivers_lat', 'drivers_lng', 'drop_off_lat', 'drop_off_lng']
 
     def get_username(self, notification):
         passengers_username = notification.notification_from.username
