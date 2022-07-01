@@ -27,6 +27,7 @@ urlpatterns = [
 
     path('get_all_completed_rides/', views.get_all_completed_rides),
     path('add_to_completed_rides/', views.add_to_completed_rides),
+    path('add_to_started_rides/', views.add_to_started_rides),
 
     path('get_all_completed_bid_on_rides/', views.get_all_completed_bid_on_rides),
     path('add_to_completed_bid_on_rides/', views.add_to_completed_bid_on_rides),

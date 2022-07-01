@@ -4,9 +4,9 @@ from django.dispatch import receiver
 
 from .models import (RequestRide, BidRide, ScheduleRide, BidScheduleRide, Notifications, Complains, DriverReviews, \
                      DriversPoints, ConfirmDriverPayment, RejectedRides, AcceptedRides, CompletedRides,
-                     CompletedBidOnRide, Messages, DriverAnnounceArrival)
+                     CompletedBidOnRide, Messages, DriverAnnounceArrival,RideStarted)
 from django.conf import settings
-from taxinet_users.models import User as taxinet_user
+
 
 User = settings.AUTH_USER_MODEL
 
@@ -87,6 +87,18 @@ def alert_completed_ride(sender, created, instance, **kwargs):
         title = "Your trip is completed"
         notification_tag = "Ride Completed"
         message = f"Your trip from {instance.pick_up} to {instance.drop_off} is now completed."
+        Notifications.objects.create(notification_id=instance.id, notification_title=title,
+                                     notification_tag=notification_tag, notification_message=message,
+                                     notification_from=instance.ride.driver, notification_to=instance.ride.passenger,
+                                     ride_id=instance.ride.id)
+
+
+@receiver(post_save, sender=RideStarted)
+def alert_completed_ride(sender, created, instance, **kwargs):
+    if created:
+        title = "Driver started your trip"
+        notification_tag = "Ride Started"
+        message = f"Your trip from {instance.pick_up} to {instance.drop_off} just started."
         Notifications.objects.create(notification_id=instance.id, notification_title=title,
                                      notification_tag=notification_tag, notification_message=message,
                                      notification_from=instance.ride.driver, notification_to=instance.ride.passenger,

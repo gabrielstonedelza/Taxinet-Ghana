@@ -1,8 +1,7 @@
 from rest_framework import serializers
 from .models import (RequestRide, BidRide, ScheduleRide, BidScheduleRide, Notifications, Complains, DriverReviews,
                      DriversLocation, DriversPoints, ConfirmDriverPayment, SearchedDestinations, RejectedRides,
-                     AcceptedRides, CompletedRides, CompletedBidOnRide, Messages, DriverAnnounceArrival)
-from taxinet_users.models import DriverProfile, PassengerProfile
+                     AcceptedRides, CompletedRides, CompletedBidOnRide, Messages, DriverAnnounceArrival, RideStarted)
 
 
 class RequestRideSerializer(serializers.ModelSerializer):
@@ -98,6 +97,12 @@ class MessagesSerializer(serializers.ModelSerializer):
 class CompletedRidesSerializer(serializers.ModelSerializer):
     class Meta:
         model = CompletedRides
+        fields = ['id', 'ride', 'date_accepted']
+
+
+class RideStartedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RideStarted
         fields = ['id', 'ride', 'date_accepted']
 
 

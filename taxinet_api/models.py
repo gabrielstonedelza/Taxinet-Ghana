@@ -172,6 +172,14 @@ class CompletedRides(models.Model):
         return f"Ride {self.ride.id} is complete"
 
 
+class RideStarted(models.Model):
+    ride = models.ForeignKey(RequestRide, on_delete=models.CASCADE)
+    date_completed = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Trip {self.ride.id} just started"
+
+
 class ScheduleRide(models.Model):
     passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="passenger_scheduling_ride")
     driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)

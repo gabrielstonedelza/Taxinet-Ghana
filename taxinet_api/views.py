@@ -5,16 +5,25 @@ from rest_framework.response import Response
 
 from .models import (RequestRide, BidRide, ScheduleRide, BidScheduleRide, Notifications, Complains, DriverReviews,
                      DriversLocation, DriversPoints, ConfirmDriverPayment, SearchedDestinations, RejectedRides,
-                     AcceptedRides, CompletedRides, CompletedBidOnRide, Messages, DriverAnnounceArrival)
+                     AcceptedRides, CompletedRides, CompletedBidOnRide, Messages, DriverAnnounceArrival, RideStarted)
 from .serializers import (RequestRideSerializer, BidRideSerializer, ScheduleRideSerializer, ComplainsSerializer,
                           BidScheduleRideSerializer, NotificationSerializer, DriverReviewSerializer,
                           RateDriverSerializer,
                           ConfirmDriverPaymentSerializer, DriversLocationSerializer, SearchDestinationsSerializer,
                           RejectedRidesSerializer, AcceptedRidesSerializer, CompletedBidOnRideSerializer,
-                          CompletedRidesSerializer, MessagesSerializer, DriversArrivalSerializer)
+                          CompletedRidesSerializer, MessagesSerializer, DriversArrivalSerializer, RideStartedSerializer)
 
 
 # announce drivers arrival
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticatedOrReadOnly])
+def add_to_started_rides(request):
+    serializer = RideStarted(data=request.data)
+    if serializer.is_valid():
+        serializer.save(driver=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticatedOrReadOnly])
