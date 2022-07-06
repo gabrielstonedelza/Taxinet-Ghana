@@ -5,13 +5,19 @@ from rest_framework.response import Response
 
 from .models import (RequestRide, BidRide, ScheduleRide, BidScheduleRide, Notifications, Complains, DriverReviews,
                      DriversLocation, DriversPoints, ConfirmDriverPayment, SearchedDestinations, RejectedRides,
-                     AcceptedRides, CompletedRides, CompletedBidOnRide, Messages, DriverAnnounceArrival, RideStarted)
+                     AcceptedRides, CompletedRides, CompletedBidOnRide, Messages, DriverAnnounceArrival, RideStarted,
+                     AcceptedScheduledRides, RejectedScheduledRides, BidScheduleRide, CompletedBidOnScheduledRide,
+                     CompletedScheduledRides, ScheduledNotifications, DriverAnnounceArrival, Messages, ScheduleRide)
 from .serializers import (RequestRideSerializer, BidRideSerializer, ScheduleRideSerializer, ComplainsSerializer,
                           BidScheduleRideSerializer, NotificationSerializer, DriverReviewSerializer,
                           RateDriverSerializer,
                           ConfirmDriverPaymentSerializer, DriversLocationSerializer, SearchDestinationsSerializer,
                           RejectedRidesSerializer, AcceptedRidesSerializer, CompletedBidOnRideSerializer,
-                          CompletedRidesSerializer, MessagesSerializer, DriversArrivalSerializer, RideStartedSerializer)
+                          CompletedRidesSerializer, MessagesSerializer, DriversArrivalSerializer, RideStartedSerializer,
+                          ScheduleRideSerializer, BidScheduleRideSerializer, AcceptedScheduledRidesSerializer, \
+                          DriversArrivalSerializer, RejectedScheduledRidesSerializer, MessagesSerializer,
+                          CompletedScheduledRidesSerializer, \
+                          CompletedBidOnScheduledRideSerializer, ScheduledNotificationSerializer)
 
 
 # announce drivers arrival
@@ -67,7 +73,7 @@ def add_to_searched_locations(request):
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticatedOrReadOnly])
 def send_message(request, ride_id):
-    ride = get_object_or_404(RequestRide, id=ride_id)
+    ride = get_object_or_404(ScheduleRide, id=ride_id)
     serializer = MessagesSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save(user=request.user, ride=ride)
@@ -78,9 +84,9 @@ def send_message(request, ride_id):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_driver_passenger_messages(request, ride_id):
-    ride = get_object_or_404(RequestRide, id=ride_id)
+    ride = get_object_or_404(ScheduleRide, id=ride_id)
     messages = Messages.objects.filter(ride=ride).order_by('date_sent')
-    serializer = BidRideSerializer(messages, many=True)
+    serializer = BidScheduleRideSerializer(messages, many=True)
     return Response(serializer.data)
 
 
@@ -88,15 +94,15 @@ def get_driver_passenger_messages(request, ride_id):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticatedOrReadOnly])
 def get_all_completed_rides(request):
-    completed_rides = CompletedRides.objects.all().order_by('-date_completed')
-    serializer = CompletedRidesSerializer(completed_rides, many=True)
+    completed_rides = CompletedScheduledRides.objects.all().order_by('-date_completed')
+    serializer = CompletedScheduledRidesSerializer(completed_rides, many=True)
     return Response(serializer.data)
 
 
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticatedOrReadOnly])
 def add_to_completed_rides(request):
-    serializer = CompletedRidesSerializer(data=request.data)
+    serializer = CompletedScheduledRidesSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save(driver=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -107,15 +113,15 @@ def add_to_completed_rides(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticatedOrReadOnly])
 def get_all_completed_bid_on_rides(request):
-    completed_bid_rides = CompletedBidOnRide.objects.all().order_by('-date_completed')
-    serializer = CompletedBidOnRideSerializer(completed_bid_rides, many=True)
+    completed_bid_rides = CompletedBidOnScheduledRide.objects.all().order_by('-date_completed')
+    serializer = CompletedBidOnScheduledRideSerializer(completed_bid_rides, many=True)
     return Response(serializer.data)
 
 
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticatedOrReadOnly])
 def add_to_completed_bid_on_rides(request):
-    serializer = CompletedBidOnRideSerializer(data=request.data)
+    serializer = CompletedBidOnScheduledRideSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save(driver=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -126,15 +132,15 @@ def add_to_completed_bid_on_rides(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticatedOrReadOnly])
 def get_all_accepted_rides(request):
-    accepted_rides = AcceptedRides.objects.all().order_by('-date_accepted')
-    serializer = AcceptedRidesSerializer(accepted_rides, many=True)
+    accepted_rides = AcceptedScheduledRides.objects.all().order_by('-date_accepted')
+    serializer = AcceptedScheduledRidesSerializer(accepted_rides, many=True)
     return Response(serializer.data)
 
 
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticatedOrReadOnly])
 def add_to_accepted_rides(request):
-    serializer = AcceptedRidesSerializer(data=request.data)
+    serializer = AcceptedScheduledRidesSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save(driver=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -145,15 +151,15 @@ def add_to_accepted_rides(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticatedOrReadOnly])
 def get_all_rejected_rides(request):
-    rejected_rides = RejectedRides.objects.all().order_by('-date_rejected')
-    serializer = RejectedRidesSerializer(rejected_rides, many=True)
+    rejected_rides = RejectedScheduledRides.objects.all().order_by('-date_rejected')
+    serializer = RejectedScheduledRidesSerializer(rejected_rides, many=True)
     return Response(serializer.data)
 
 
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticatedOrReadOnly])
 def add_to_rejected_rides(request):
-    serializer = RejectedRidesSerializer(data=request.data)
+    serializer = RejectedScheduledRidesSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save(driver=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -195,59 +201,59 @@ def delete_drivers_locations(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticatedOrReadOnly])
 def get_all_requests(request):
-    all_ride_requests = RequestRide.objects.all().order_by('-date_requested')
-    serializer = RequestRideSerializer(all_ride_requests, many=True)
+    all_ride_requests = ScheduleRide.objects.all().order_by('-date_scheduled')
+    serializer = ScheduleRideSerializer(all_ride_requests, many=True)
     return Response(serializer.data)
 
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def ride_detail(request, ride_id):
-    ride = get_object_or_404(RequestRide, id=ride_id)
-    serializer = RequestRideSerializer(ride, many=False)
+    ride = get_object_or_404(ScheduleRide, id=ride_id)
+    serializer = ScheduleRideSerializer(ride, many=False)
     return Response(serializer.data)
 
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_passengers_requests_completed(request):
-    passenger_requests = RequestRide.objects.filter(passenger=request.user).filter(completed=True).order_by(
-        '-date_requested')
-    serializer = RequestRideSerializer(passenger_requests, many=True)
+    passenger_requests = ScheduleRide.objects.filter(passenger=request.user).filter(completed=True).order_by(
+        '-date_scheduled')
+    serializer = ScheduleRideSerializer(passenger_requests, many=True)
     return Response(serializer.data)
 
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_drivers_requests_completed(request):
-    drivers_requests = RequestRide.objects.filter(driver=request.user).filter(completed=True).order_by(
-        '-date_requested')
-    serializer = RequestRideSerializer(drivers_requests, many=True)
+    drivers_requests = ScheduleRide.objects.filter(driver=request.user).filter(completed=True).order_by(
+        '-date_scheduled')
+    serializer = ScheduleRideSerializer(drivers_requests, many=True)
     return Response(serializer.data)
 
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_passengers_requests_uncompleted(request):
-    passenger_requests = RequestRide.objects.filter(passenger=request.user).filter(completed=False).order_by(
-        '-date_requested')
-    serializer = RequestRideSerializer(passenger_requests, many=True)
+    passenger_requests = ScheduleRide.objects.filter(passenger=request.user).filter(completed=False).order_by(
+        '-date_scheduled')
+    serializer = ScheduleRideSerializer(passenger_requests, many=True)
     return Response(serializer.data)
 
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_drivers_requests_uncompleted(request):
-    drivers_requests = RequestRide.objects.filter(driver=request.user).filter(completed=False).order_by(
-        '-date_requested')
-    serializer = RequestRideSerializer(drivers_requests, many=True)
+    drivers_requests = ScheduleRide.objects.filter(driver=request.user).filter(completed=False).order_by(
+        '-date_scheduled')
+    serializer = ScheduleRideSerializer(drivers_requests, many=True)
     return Response(serializer.data)
 
 
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
 def request_ride(request):
-    serializer = RequestRideSerializer(data=request.data)
+    serializer = ScheduleRideSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save(passenger=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -257,10 +263,10 @@ def request_ride(request):
 @api_view(['GET', 'PUT'])
 @permission_classes([permissions.IsAuthenticated])
 def update_requested_ride(request, ride_id):
-    ride = get_object_or_404(RequestRide, id=ride_id)
-    serializer = RequestRideSerializer(ride, data=request.data)
+    ride = get_object_or_404(ScheduleRide, id=ride_id)
+    serializer = ScheduleRideSerializer(ride, data=request.data)
     if serializer.is_valid():
-        serializer.save()
+        serializer.save(passenger=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -269,9 +275,9 @@ def update_requested_ride(request, ride_id):
 @permission_classes([permissions.IsAuthenticated])
 def delete_requested_ride(request, ride_id):
     try:
-        ride = get_object_or_404(RequestRide, id=ride_id)
+        ride = get_object_or_404(ScheduleRide, id=ride_id)
         ride.delete()
-    except RequestRide.DoesNotExist:
+    except ScheduleRide.DoesNotExist:
         return Response(status=status.HTTP_204_NO_CONTENT)
     return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -280,70 +286,6 @@ def delete_requested_ride(request, ride_id):
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
 def bid_ride(request, ride_id):
-    ride = get_object_or_404(RequestRide, id=ride_id)
-    serializer = BidRideSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save(user=request.user, ride=ride)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-@api_view(['GET', 'PUT'])
-@permission_classes([permissions.IsAuthenticated])
-def update_bid(request, bid_id):
-    bid = get_object_or_404(BidRide, id=bid_id)
-    serializer = BidRideSerializer(bid, data=request.data)
-    if serializer.is_valid():
-        serializer.save(user=request.user)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-@api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
-def get_all_bids(request, ride_id):
-    ride = get_object_or_404(RequestRide, id=ride_id)
-    bids = BidRide.objects.filter(ride=ride).order_by('date_accepted')
-    serializer = BidRideSerializer(bids, many=True)
-    return Response(serializer.data)
-
-
-@api_view(['POST'])
-@permission_classes([permissions.IsAuthenticated])
-@api_view(['GET', 'PUT'])
-@permission_classes([permissions.IsAuthenticated])
-def update_accepted_ride(request, ride_id, accept_id):
-    ride = get_object_or_404(RequestRide, id=ride_id)
-    accepted_id = get_object_or_404(BidRide, id=accept_id)
-    serializer = BidRideSerializer(accepted_id, data=request.data)
-    if serializer.is_valid():
-        serializer.save(user=request.user, ride=ride)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-@api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
-def accepted_request_detail(request, accept_id):
-    accepted_id = get_object_or_404(BidRide, id=accept_id)
-    serializer = BidRideSerializer(accepted_id, many=False)
-    return Response(serializer.data)
-
-
-# scheduling ride
-@api_view(['POST'])
-@permission_classes([permissions.IsAuthenticated])
-def schedule_ride(request):
-    serializer = ScheduleRideSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save(passenger=request.user)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-@api_view(['POST'])
-@permission_classes([permissions.IsAuthenticated])
-def bid_scheduled_ride(request, ride_id):
     ride = get_object_or_404(ScheduleRide, id=ride_id)
     serializer = BidScheduleRideSerializer(data=request.data)
     if serializer.is_valid():
@@ -352,37 +294,19 @@ def bid_scheduled_ride(request, ride_id):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET', 'PUT'])
+@api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
-def update_schedule_ride(request, ride_id):
+def get_all_bids(request, ride_id):
     ride = get_object_or_404(ScheduleRide, id=ride_id)
-    serializer = ScheduleRideSerializer(ride, data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-@api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
-def get_all_scheduled(request):
-    scheduled = ScheduleRide.objects.all().order_by('-date_scheduled')
-    serializer = ScheduleRideSerializer(scheduled, many=True)
-    return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-@api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
-def scheduled_ride_detail(request, scheduled_ride):
-    scheduled_ride = get_object_or_404(ScheduleRide, id=scheduled_ride)
-    serializer = ScheduleRideSerializer(scheduled_ride, many=False)
+    bids = BidScheduleRide.objects.filter(scheduled_ride=ride).order_by('date_accepted')
+    serializer = BidScheduleRideSerializer(bids, many=True)
     return Response(serializer.data)
 
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_scheduled_for_one_time(request):
-    one_time_schedule = ScheduleRide.objects.filter(schedule_option="One Time").order_by('-date_scheduled')
+    one_time_schedule = ScheduleRide.objects.filter(schedule_type="One Time").order_by('-date_scheduled')
     serializer = ScheduleRideSerializer(one_time_schedule, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -390,7 +314,7 @@ def get_scheduled_for_one_time(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_scheduled_for_daily(request):
-    daily_schedule = ScheduleRide.objects.filter(schedule_option="Daily").order_by('-date_scheduled')
+    daily_schedule = ScheduleRide.objects.filter(schedule_type="Daily").order_by('-date_scheduled')
     serializer = ScheduleRideSerializer(daily_schedule, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -398,7 +322,7 @@ def get_scheduled_for_daily(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_scheduled_for_days(request):
-    days_schedule = ScheduleRide.objects.filter(schedule_option="Days").order_by('-date_scheduled')
+    days_schedule = ScheduleRide.objects.filter(schedule_type="Days").order_by('-date_scheduled')
     serializer = ScheduleRideSerializer(days_schedule, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -406,16 +330,8 @@ def get_scheduled_for_days(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_scheduled_for_weekly(request):
-    weekly_schedule = ScheduleRide.objects.filter(schedule_option="Weekly").order_by('-date_scheduled')
+    weekly_schedule = ScheduleRide.objects.filter(schedule_type="Weekly").order_by('-date_scheduled')
     serializer = ScheduleRideSerializer(weekly_schedule, many=True)
-    return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-@api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
-def get_scheduled_for_monthly(request):
-    monthly_schedule = ScheduleRide.objects.filter(schedule_option="Monthly").order_by('-date_scheduled')
-    serializer = ScheduleRideSerializer(monthly_schedule, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -435,60 +351,39 @@ def get_scheduled_by_driver(request):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-# accept schedule ride and bid
-
-@api_view(['POST'])
-@permission_classes([permissions.IsAuthenticated])
-def accept_schedule_ride(request, ride_id):
-    ride = get_object_or_404(ScheduleRide, id=ride_id)
-    serializer = BidScheduleRideSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save(user=request.user, ride=ride)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-@api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
-def accept_schedule_ride_detail(request, accept_id):
-    accepted_id = get_object_or_404(BidScheduleRide, id=accept_id)
-    serializer = BidScheduleRideSerializer(accepted_id, many=False)
-    return Response(serializer.data)
-
-
 # notifications
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_all_user_notifications(request):
-    notifications = Notifications.objects.filter(notification_to=request.user).order_by('-date_created')
-    serializer = NotificationSerializer(notifications, many=True)
+    notifications = ScheduledNotifications.objects.filter(notification_to=request.user).order_by('-date_created')
+    serializer = ScheduledNotificationSerializer(notifications, many=True)
     return Response(serializer.data)
 
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_user_notifications(request):
-    notifications = Notifications.objects.filter(notification_to=request.user).filter(read="Not Read").order_by(
+    notifications = ScheduledNotifications.objects.filter(notification_to=request.user).filter(read="Not Read").order_by(
         '-date_created')
-    serializer = NotificationSerializer(notifications, many=True)
+    serializer = ScheduledNotificationSerializer(notifications, many=True)
     return Response(serializer.data)
 
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_triggered_notifications(request):
-    notifications = Notifications.objects.filter(notification_to=request.user).filter(
+    notifications = ScheduledNotifications.objects.filter(notification_to=request.user).filter(
         notification_trigger="Triggered").filter(
         read="Not Read").order_by('-date_created')
-    serializer = NotificationSerializer(notifications, many=True)
+    serializer = ScheduledNotificationSerializer(notifications, many=True)
     return Response(serializer.data)
 
 
 @api_view(['GET', 'PUT'])
 @permission_classes([permissions.IsAuthenticated])
 def read_notification(request, id):
-    notification = get_object_or_404(Notifications, id=id)
-    serializer = NotificationSerializer(notification, data=request.data)
+    notification = get_object_or_404(ScheduledNotifications, id=id)
+    serializer = ScheduledNotificationSerializer(notification, data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)

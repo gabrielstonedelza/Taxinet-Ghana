@@ -12,13 +12,10 @@ urlpatterns = [
     path('request_ride/new/', views.request_ride),
     path('bid_ride/<int:ride_id>/', views.bid_ride),
     path('send_message/<int:ride_id>/', views.send_message),
-    path('update_bid/<int:bid_id>/', views.update_bid),
     path('all_bids/<int:ride_id>/', views.get_all_bids),
     path('all_driver_passenger_messages/<int:ride_id>/', views.get_driver_passenger_messages),
-    path('accepted_ride/<int:accept_id>/update/', views.update_accepted_ride),
     path('update_requested_ride/<int:ride_id>/', views.update_requested_ride),
     path('delete_requested_ride/<int:ride_id>/', views.delete_requested_ride),
-    path('accepted_ride_detail/<int:accept_id>/', views.accepted_request_detail),
     path('get_all_rejected_rides/', views.get_all_rejected_rides),
     path('add_to_rejected_rides/', views.add_to_rejected_rides),
     path('get_all_accepted_rides/', views.get_all_accepted_rides),
@@ -27,31 +24,16 @@ urlpatterns = [
 
     path('get_all_completed_rides/', views.get_all_completed_rides),
     path('add_to_completed_rides/', views.add_to_completed_rides),
-    path('add_to_started_rides/', views.add_to_started_rides),
 
     path('get_all_completed_bid_on_rides/', views.get_all_completed_bid_on_rides),
     path('add_to_completed_bid_on_rides/', views.add_to_completed_bid_on_rides),
 
-    # post,get and update drivers location
-    path("get_drivers_location/", views.get_drivers_current_location),
-    path("drivers_location/new/", views.store_drivers_location),
-    path("delete_drivers_locations/", views.delete_drivers_locations),
-    path("get_driver_location/<int:driver_id>/", views.get_driver_location),
-
-    #     scheduling rides
-    path('scheduled_ride/new/', views.schedule_ride),
-    path('bid_scheduled_ride/<int:ride_id>/', views.bid_scheduled_ride),
-    path('update_schedule_ride/<int:ride_id>/', views.update_schedule_ride),
-    path('all_scheduled_rides/', views.get_all_scheduled),
-    path('scheduled_ride/<int:scheduled_ride>/', views.scheduled_ride_detail),
     path('one_time_schedule/', views.get_scheduled_for_one_time),
     path('daily_schedules/', views.get_scheduled_for_daily),
     path('days_schedules/', views.get_scheduled_for_days),
     path('weekly_schedules/', views.get_scheduled_for_weekly),
-    path('monthly_schedules/', views.get_scheduled_for_monthly),
     path('passengers_schedules/', views.get_scheduled_by_passenger),
     path('drivers_schedules/', views.get_scheduled_by_driver),
-    path('accept_schedules/<int:ride_id>/detail/', views.accept_schedule_ride_detail),
 
     #     notifications
     path('notifications/', views.get_all_user_notifications),
