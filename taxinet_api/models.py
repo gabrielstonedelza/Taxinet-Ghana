@@ -199,8 +199,8 @@ class ScheduleRide(models.Model):
     scheduled = models.BooleanField(default=False)
     price = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
     initial_payment = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
-    date_scheduled = models.DateField(auto_now_add=True)
-    time_scheduled = models.TimeField(auto_now_add=True)
+    date_scheduled = models.DateField(default=timezone.now)
+    time_scheduled = models.TimeField(default=timezone.now)
 
     def __str__(self):
         return str(self.schedule_title)
@@ -222,8 +222,8 @@ class Messages(models.Model):
     ride = models.ForeignKey(ScheduleRide, on_delete=models.CASCADE, related_name="Ride_receiving_messages")
     user = models.ForeignKey(DeUser, on_delete=models.CASCADE)
     message = models.TextField()
-    time_sent = models.TimeField(auto_now_add=True)
-    date_sent = models.DateField(auto_now_add=True)
+    time_sent = models.TimeField(default=timezone.now)
+    date_sent = models.DateField(default=timezone.now)
 
     def __str__(self):
         return self.ride
