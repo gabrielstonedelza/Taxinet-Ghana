@@ -20,7 +20,6 @@ urlpatterns = [
     path('add_to_rejected_rides/', views.add_to_rejected_rides),
     path('get_all_accepted_rides/', views.get_all_accepted_rides),
     path('add_to_accepted_rides/', views.add_to_accepted_rides),
-    path('announce_drivers_arrival/', views.announce_drivers_arrival),
 
     path('get_all_completed_rides/', views.get_all_completed_rides),
     path('add_to_completed_rides/', views.add_to_completed_rides),
@@ -47,22 +46,13 @@ urlpatterns = [
     path('user_complains/', views.user_complains),
     path('complain/<int:complain_id>/', views.get_detailed_complain),
 
-    #     reviews
-    path('drivers_reviews/', views.get_all_driver_reviews),
-    path('passengers_reviews/', views.get_all_passenger_reviews),
-    path('review/<int:review_id>/', views.review_detail),
-    path('review/new/', views.post_review),
-
-    #     drivers ratings
-    path('drivers_ratings/', views.get_driver_ratings),
-    path('passengers_ratings/', views.get_passenger_ratings),
-    path('rating/new/', views.post_ratings),
-
     #     drivers confirmed payments
     path('payment/new/', views.post_payment),
     path('get_drivers_payments/', views.get_all_driver_payments),
 
-    #     post and get searched_destinations
-    path('destination/new/', views.add_to_searched_locations),
-    path('get_destinations/', views.get_searched_locations),
+    #     drivers inventoryOptions
+    path("get_driver_inventory/", views.get_driver_inventory),
+    path("get_all_drivers_inventories/", views.get_all_drivers_inventories),
+    path("add_drivers_inventories/", views.create_drivers_inventory),
+
 ]

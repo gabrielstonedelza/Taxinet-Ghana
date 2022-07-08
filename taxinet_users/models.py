@@ -8,6 +8,8 @@ DeUser = settings.AUTH_USER_MODEL
 APP_TYPE = (
     ("Passenger", "Passenger"),
     ("Driver", "Driver"),
+    ("Investor", "Investor"),
+    ("Administrator", "Administrator"),
 )
 
 

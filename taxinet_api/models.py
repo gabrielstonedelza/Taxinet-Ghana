@@ -58,129 +58,10 @@ SCHEDULE_PRIORITY = (
     ("Low", "Low"),
 )
 
-
-class RequestRide(models.Model):
-    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="driver_to_accept_ride")
-    passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE)
-    pick_up = models.CharField(max_length=255, blank=True)
-    drop_off = models.CharField(max_length=255, blank=True)
-    ride_accepted = models.BooleanField(default=False)
-    ride_rejected = models.BooleanField(default=False)
-    passengers_lat = models.CharField(max_length=255, null=True)
-    passengers_lng = models.CharField(max_length=255, null=True)
-    drop_off_lat = models.CharField(max_length=255, null=True)
-    drop_off_lng = models.CharField(max_length=255, null=True)
-    passengers_pick_up_place_id = models.CharField(max_length=255, blank=True, default="")
-    passengers_drop_off_place_id = models.CharField(max_length=255, blank=True, default="")
-    price = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
-    completed = models.BooleanField(default=False)
-    bid_completed = models.BooleanField(default=False)
-    driver_booked = models.BooleanField(default=False)
-    driver_on_route = models.BooleanField(default=False)
-    passenger_boarded = models.BooleanField(default=False)
-    ride_distance = models.CharField(max_length=100, default="")
-    ride_duration = models.CharField(max_length=100, default="")
-    date_requested = models.DateField(auto_now_add=True)
-    time_requested = models.TimeField(auto_now_add=True)
-
-    def __str__(self):
-        return str(self.pk)
-
-    def get_driver_profile_pic(self):
-        my_driver = DriverProfile.objects.get(user=self.driver)
-        if my_driver:
-            return "https://taxinetghana.xyz" + my_driver.profile_pic.url
-        return ""
-
-    def get_passenger_profile_pic(self):
-        my_passenger = PassengerProfile.objects.get(user=self.passenger)
-        if my_passenger:
-            return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
-        return ""
-
-
-class AcceptedRides(models.Model):
-    ride = models.ForeignKey(RequestRide, on_delete=models.CASCADE)
-    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="driver_accepting_ride")
-    passengers_lat = models.CharField(max_length=255, null=True)
-    passengers_lng = models.CharField(max_length=255, null=True)
-    date_accepted = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.driver} accepted ride {self.ride.id}"
-
-
-class DriverAnnounceArrival(models.Model):
-    ride = models.ForeignKey(RequestRide, on_delete=models.CASCADE)
-    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="driver_announcing_arrival")
-    date_announced = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.driver} accepted ride {self.ride.id}"
-
-
-class RejectedRides(models.Model):
-    ride = models.ForeignKey(RequestRide, on_delete=models.CASCADE)
-    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="driver_rejecting_ride")
-    date_rejected = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.driver} rejected ride {self.ride.id}"
-
-
-class BidRide(models.Model):
-    ride = models.ForeignKey(RequestRide, on_delete=models.CASCADE, related_name="Ride_to_accept")
-    user = models.ForeignKey(DeUser, on_delete=models.CASCADE)
-    bid = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
-    date_accepted = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return str(self.bid)
-
-    def get_profile_pic(self):
-        deuser = User.objects.get(username=self.user.username)
-        if deuser.user_type == 'Passenger':
-            my_passenger = PassengerProfile.objects.get(user=self.ride.passenger)
-            if my_passenger:
-                return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
-            return ""
-
-        if deuser.user_type == 'Driver':
-            my_driver = DriverProfile.objects.get(user=self.ride.driver)
-            if my_driver:
-                return "https://taxinetghana.xyz" + my_driver.profile_pic.url
-            return ""
-
-
-class CompletedBidOnRide(models.Model):
-    ride = models.ForeignKey(RequestRide, on_delete=models.CASCADE)
-    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="driver_completing_ride")
-    drivers_lat = models.CharField(max_length=255, null=True, blank=True)
-    drivers_lng = models.CharField(max_length=255, null=True, blank=True)
-    passengers_lat = models.CharField(max_length=255, default="")
-    passengers_lng = models.CharField(max_length=255, default="")
-    passengers_pickup = models.CharField(max_length=255, null=True, blank=True)
-    pick_up_place_id = models.CharField(max_length=255, null=True, blank=True)
-    date_accepted = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"Bid on ride {self.ride.id} is complete"
-
-
-class CompletedRides(models.Model):
-    ride = models.ForeignKey(RequestRide, on_delete=models.CASCADE)
-    date_completed = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"Ride {self.ride.id} is complete"
-
-
-class RideStarted(models.Model):
-    ride = models.ForeignKey(RequestRide, on_delete=models.CASCADE)
-    date_completed = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"Trip {self.ride.id} just started"
+INVENTORY_OPTIONS = (
+    ("Okay", "Okay"),
+    ("No", "No")
+)
 
 
 # working and functioning now models
@@ -302,95 +183,6 @@ class CompletedScheduledRides(models.Model):
         return f"Ride {self.scheduled_ride.id} is complete"
 
 
-class ScheduledNotifications(models.Model):
-    notification_id = models.CharField(max_length=100, blank=True, default="")
-    notification_tag = models.CharField(max_length=255, blank=True, default="")
-    notification_title = models.CharField(max_length=255, blank=True)
-    notification_message = models.TextField(blank=True)
-    read = models.CharField(max_length=20, choices=NOTIFICATIONS_STATUS, default="Not Read")
-    notification_trigger = models.CharField(max_length=255, choices=NOTIFICATIONS_TRIGGERS, default="Triggered",
-                                            blank=True)
-    notification_from = models.ForeignKey(DeUser, on_delete=models.CASCADE, null=True)
-    notification_to = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="DeUser_receiving_notification",
-                                        null=True)
-    passengers_pickup = models.CharField(max_length=255, null=True, blank=True)
-    passengers_dropOff = models.CharField(max_length=255, null=True, blank=True)
-    schedule_ride_id = models.CharField(max_length=255, blank=True)
-    schedule_ride_accepted_id = models.CharField(max_length=255, blank=True)
-    schedule_ride_rejected_id = models.CharField(max_length=255, blank=True)
-    completed_schedule_ride_id = models.CharField(max_length=255, blank=True)
-    message_id = models.CharField(max_length=255, blank=True, default='')
-    complain_id = models.CharField(max_length=255, blank=True)
-    reply_id = models.CharField(max_length=255, blank=True)
-    review_id = models.CharField(max_length=255, blank=True)
-    rating_id = models.CharField(max_length=255, blank=True)
-    payment_confirmed_id = models.CharField(max_length=255, blank=True)
-    date_created = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.notification_title
-
-    def get_passengers_notification_from_pic(self):
-        my_user = User.objects.get(username=self.notification_from.username)
-        if my_user.user_type == "Passenger":
-            my_passenger = PassengerProfile.objects.get(user=self.notification_from)
-            if my_passenger:
-                return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
-            return ""
-
-
-# working and functioning now models
-
-class Notifications(models.Model):
-    notification_id = models.CharField(max_length=100, blank=True, default="")
-    notification_tag = models.CharField(max_length=255, blank=True, default="")
-    notification_title = models.CharField(max_length=255, blank=True)
-    notification_message = models.TextField(blank=True)
-    read = models.CharField(max_length=20, choices=NOTIFICATIONS_STATUS, default="Not Read")
-    notification_trigger = models.CharField(max_length=255, choices=NOTIFICATIONS_TRIGGERS, default="Triggered",
-                                            blank=True)
-    notification_from = models.ForeignKey(DeUser, on_delete=models.CASCADE, null=True)
-    notification_to = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="User_receiving_notification",
-                                        null=True)
-    drop_off_lat = models.CharField(max_length=255, null=True, blank=True)
-    drop_off_lng = models.CharField(max_length=255, null=True, blank=True)
-    passengers_lat = models.CharField(max_length=255, null=True, blank=True)
-    passengers_lng = models.CharField(max_length=255, null=True, blank=True)
-    drivers_lat = models.CharField(max_length=255, null=True, blank=True)
-    drivers_lng = models.CharField(max_length=255, null=True, blank=True)
-    passengers_pickup = models.CharField(max_length=255, null=True, blank=True)
-    passengers_dropOff = models.CharField(max_length=255, null=True, blank=True)
-    ride_distance = models.CharField(max_length=100, default="", blank=True)
-    ride_duration = models.CharField(max_length=100, default="", blank=True)
-    ride_id = models.CharField(max_length=100, blank=True)
-    ride_accepted_id = models.CharField(max_length=255, blank=True)
-    ride_rejected_id = models.CharField(max_length=255, blank=True)
-    completed_ride_id = models.CharField(max_length=255, blank=True)
-    schedule_ride_id = models.CharField(max_length=255, blank=True)
-    schedule_accepted_id = models.CharField(max_length=255, blank=True)
-    pick_up_place_id = models.CharField(max_length=255, blank=True, default='')
-    drop_off_place_id = models.CharField(max_length=255, blank=True, default='')
-    message_id = models.CharField(max_length=255, blank=True, default='')
-    schedule_rejected_id = models.CharField(max_length=255, blank=True)
-    complain_id = models.CharField(max_length=255, blank=True)
-    reply_id = models.CharField(max_length=255, blank=True)
-    review_id = models.CharField(max_length=255, blank=True)
-    rating_id = models.CharField(max_length=255, blank=True)
-    payment_confirmed_id = models.CharField(max_length=255, blank=True)
-    date_created = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.notification_title
-
-    def get_passengers_notification_from_pic(self):
-        my_user = User.objects.get(username=self.notification_from.username)
-        if my_user.user_type == "Passenger":
-            my_passenger = PassengerProfile.objects.get(user=self.notification_from)
-            if my_passenger:
-                return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
-            return ""
-
-
 class Complains(models.Model):
     complainant = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="user_making_complain")
     offender = models.ForeignKey(DeUser, on_delete=models.CASCADE)
@@ -400,71 +192,6 @@ class Complains(models.Model):
 
     def __str__(self):
         return f"{self.complainant.username} just posted a complain"
-
-    # def get_complainant_profile_pic(self):
-    #     my_driver = DriverProfile.objects.get(user=self.complainant)
-    #     if my_driver:
-    #         return "https://taxinetghana.xyz" + my_driver.profile_pic.url
-    #     return ""
-    #
-    # def get_offender_profile_pic(self):
-    #     my_passenger = PassengerProfile.objects.get(user=self.offender)
-    #     if my_passenger:
-    #         return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
-    #     return ""
-
-
-class DriverReviews(models.Model):
-    passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="user_giving_review")
-    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
-    reviews = models.TextField()
-    date_posted = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.reviews
-
-    # def get_passenger_profile_pic(self):
-    #     my_driver = DriverProfile.objects.get(user=self.passenger)
-    #     if my_driver:
-    #         return "https://taxinetghana.xyz" + my_driver.profile_pic.url
-    #     return ""
-    #
-    # def get_driver_profile_pic(self):
-    #     my_passenger = PassengerProfile.objects.get(user=self.driver)
-    #     if my_passenger:
-    #         return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
-    #     return ""
-
-
-class Sos(models.Model):
-    user = models.ForeignKey(DeUser, on_delete=models.CASCADE)
-    message = models.CharField(max_length=255, blank=True)
-    date_posted = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.user.username} sent an sos"
-
-
-class DriversPoints(models.Model):
-    passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE)
-    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="driver_being_rated")
-    points = models.IntegerField(default=0)
-    date_rated = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.passenger.username} gave {self.points} points to driver '{self.driver.username}'"
-
-    # def get_passenger_profile_pic(self):
-    #     my_driver = PassengerProfile.objects.get(user=self.passenger)
-    #     if my_driver:
-    #         return "https://taxinetghana.xyz" + my_driver.profile_pic.url
-    #     return ""
-    #
-    # def get_driver_profile_pic(self):
-    #     my_passenger = DriverProfile.objects.get(user=self.driver)
-    #     if my_passenger:
-    #         return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
-    #     return ""
 
 
 class ConfirmDriverPayment(models.Model):
@@ -536,13 +263,80 @@ class DriversLocation(models.Model):
         return ""
 
 
-class SearchedDestinations(models.Model):
-    passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE)
-    searched_destination = models.CharField(max_length=255)
-    place_id = models.CharField(max_length=255, default="")
-    drop_off_lat = models.CharField(max_length=255, null=True)
-    drop_off_lng = models.CharField(max_length=255, null=True)
-    date_searched = models.DateTimeField(auto_now_add=True)
+class DriverVehicleInventory(models.Model):
+    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
+    windscreen = models.CharField(max_length=10, choices=INVENTORY_OPTIONS, default="No")
+    side_mirror = models.CharField(max_length=10, choices=INVENTORY_OPTIONS, default="No")
+    registration_plate = models.CharField(max_length=10, choices=INVENTORY_OPTIONS, default="No")
+    tire_pressure = models.CharField(max_length=10, choices=INVENTORY_OPTIONS, default="No")
+    driving_mirror = models.CharField(max_length=10, choices=INVENTORY_OPTIONS, default="No")
+    tire_thread_depth = models.CharField(max_length=10, choices=INVENTORY_OPTIONS, default="No")
+    wheel_nuts = models.CharField(max_length=10, choices=INVENTORY_OPTIONS, default="No")
+    engine_oil = models.CharField(max_length=10, choices=INVENTORY_OPTIONS, default="No")
+    fuel_level = models.CharField(max_length=10, choices=INVENTORY_OPTIONS, default="No")
+    break_fluid = models.CharField(max_length=10, choices=INVENTORY_OPTIONS, default="No")
+    radiator_engine_coolant = models.CharField(max_length=10, choices=INVENTORY_OPTIONS, default="No")
+    power_steering_fluid = models.CharField(max_length=10, choices=INVENTORY_OPTIONS, default="No")
+    wiper_washer_fluid = models.CharField(max_length=10, choices=INVENTORY_OPTIONS, default="No")
+    seat_belts = models.CharField(max_length=10, choices=INVENTORY_OPTIONS, default="No")
+    steering_wheel = models.CharField(max_length=10, choices=INVENTORY_OPTIONS, default="No")
+    horn = models.CharField(max_length=10, choices=INVENTORY_OPTIONS, default="No")
+    electric_windows = models.CharField(max_length=10, choices=INVENTORY_OPTIONS, default="No")
+    windscreen_wipers = models.CharField(max_length=10, choices=INVENTORY_OPTIONS, default="No")
+    head_lights = models.CharField(max_length=10, choices=INVENTORY_OPTIONS, default="No")
+    trafficators = models.CharField(max_length=10, choices=INVENTORY_OPTIONS, default="No")
+    tail_rear_lights = models.CharField(max_length=10, choices=INVENTORY_OPTIONS, default="No")
+    reverse_lights = models.CharField(max_length=10, choices=INVENTORY_OPTIONS, default="No")
+    interior_lights = models.CharField(max_length=10, choices=INVENTORY_OPTIONS, default="No")
+    engine_noise = models.CharField(max_length=10, choices=INVENTORY_OPTIONS, default="No")
+    excessive_smoke = models.CharField(max_length=10, choices=INVENTORY_OPTIONS, default="No")
+    foot_break = models.CharField(max_length=10, choices=INVENTORY_OPTIONS, default="No")
+    hand_break = models.CharField(max_length=10, choices=INVENTORY_OPTIONS, default="No")
+    wheel_bearing_noise = models.CharField(max_length=10, choices=INVENTORY_OPTIONS, default="No")
+    warning_triangle = models.CharField(max_length=10, choices=INVENTORY_OPTIONS, default="No")
+    fire_extinguisher = models.CharField(max_length=10, choices=INVENTORY_OPTIONS, default="No")
+    first_aid_box = models.CharField(max_length=10, choices=INVENTORY_OPTIONS, default="No")
+    checked_today = models.BooleanField(default=False)
+    date_checked = models.DateField(auto_now_add=True)
+    time_checked = models.TimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.searched_destination
+        return f"{self.driver.username} has check car today"
+
+
+class ScheduledNotifications(models.Model):
+    notification_id = models.CharField(max_length=100, blank=True, default="")
+    notification_tag = models.CharField(max_length=255, blank=True, default="")
+    notification_title = models.CharField(max_length=255, blank=True)
+    notification_message = models.TextField(blank=True)
+    read = models.CharField(max_length=20, choices=NOTIFICATIONS_STATUS, default="Not Read")
+    notification_trigger = models.CharField(max_length=255, choices=NOTIFICATIONS_TRIGGERS, default="Triggered",
+                                            blank=True)
+    notification_from = models.ForeignKey(DeUser, on_delete=models.CASCADE, null=True)
+    notification_to = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="DeUser_receiving_notification",
+                                        null=True)
+    passengers_pickup = models.CharField(max_length=255, null=True, blank=True)
+    passengers_dropOff = models.CharField(max_length=255, null=True, blank=True)
+    schedule_ride_id = models.CharField(max_length=255, blank=True)
+    schedule_ride_accepted_id = models.CharField(max_length=255, blank=True)
+    schedule_ride_rejected_id = models.CharField(max_length=255, blank=True)
+    completed_schedule_ride_id = models.CharField(max_length=255, blank=True)
+    message_id = models.CharField(max_length=255, blank=True, default='')
+    drivers_inventory_id = models.CharField(max_length=255, blank=True, default='')
+    complain_id = models.CharField(max_length=255, blank=True)
+    reply_id = models.CharField(max_length=255, blank=True)
+    review_id = models.CharField(max_length=255, blank=True)
+    rating_id = models.CharField(max_length=255, blank=True)
+    payment_confirmed_id = models.CharField(max_length=255, blank=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.notification_title
+
+    def get_passengers_notification_from_pic(self):
+        my_user = User.objects.get(username=self.notification_from.username)
+        if my_user.user_type == "Passenger":
+            my_passenger = PassengerProfile.objects.get(user=self.notification_from)
+            if my_passenger:
+                return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
+            return ""

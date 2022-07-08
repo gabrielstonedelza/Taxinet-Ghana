@@ -3,70 +3,52 @@ from rest_framework import permissions, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
-from .models import (RequestRide, BidRide, ScheduleRide, BidScheduleRide, Notifications, Complains, DriverReviews,
-                     DriversLocation, DriversPoints, ConfirmDriverPayment, SearchedDestinations, RejectedRides,
-                     AcceptedRides, CompletedRides, CompletedBidOnRide, Messages, DriverAnnounceArrival, RideStarted,
+from .models import (ScheduleRide, BidScheduleRide, Complains,
+                     DriversLocation, ConfirmDriverPayment, Messages, DriverVehicleInventory,
                      AcceptedScheduledRides, RejectedScheduledRides, BidScheduleRide, CompletedBidOnScheduledRide,
-                     CompletedScheduledRides, ScheduledNotifications, DriverAnnounceArrival, Messages, ScheduleRide)
-from .serializers import (RequestRideSerializer, BidRideSerializer, ScheduleRideSerializer, ComplainsSerializer,
-                          BidScheduleRideSerializer, NotificationSerializer, DriverReviewSerializer,
-                          RateDriverSerializer,
-                          ConfirmDriverPaymentSerializer, DriversLocationSerializer, SearchDestinationsSerializer,
-                          RejectedRidesSerializer, AcceptedRidesSerializer, CompletedBidOnRideSerializer,
-                          CompletedRidesSerializer, MessagesSerializer, DriversArrivalSerializer, RideStartedSerializer,
+                     CompletedScheduledRides, ScheduledNotifications, Messages, ScheduleRide)
+from .serializers import (ScheduleRideSerializer, ComplainsSerializer,
+                          BidScheduleRideSerializer,
+                          ConfirmDriverPaymentSerializer, DriversLocationSerializer, MessagesSerializer,
                           ScheduleRideSerializer, BidScheduleRideSerializer, AcceptedScheduledRidesSerializer, \
-                          DriversArrivalSerializer, RejectedScheduledRidesSerializer, MessagesSerializer,
+                          RejectedScheduledRidesSerializer, MessagesSerializer, DriverVehicleInventorySerializer,
                           CompletedScheduledRidesSerializer, \
                           CompletedBidOnScheduledRideSerializer, ScheduledNotificationSerializer)
 
 
-# announce drivers arrival
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticatedOrReadOnly])
+def get_all_drivers_inventories(request):
+    inventories = DriverVehicleInventory.objects.all().order_by('-date_checked')
+    serializer = DriverVehicleInventorySerializer(inventories, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticatedOrReadOnly])
+def get_driver_inventory(request, driver_id):
+    driver_inventory = DriverVehicleInventory.objects.filter(driver=driver_id).order_by('-date_checked')
+    serializer = DriverVehicleInventorySerializer(driver_inventory, many=True)
+    return Response(serializer.data)
+
+
+# messages
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticatedOrReadOnly])
-def add_to_started_rides(request):
-    serializer = RideStarted(data=request.data)
+def create_drivers_inventory(request, ):
+    serializer = DriverVehicleInventorySerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save(driver=request.user)
+        serializer.save(driver=request.user, )
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['POST'])
-@permission_classes([permissions.IsAuthenticatedOrReadOnly])
-def announce_drivers_arrival(request):
-    serializer = DriversArrivalSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save(driver=request.user)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-# get driver location
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticatedOrReadOnly])
 def get_driver_location(request, driver_id):
     driver_location = DriversLocation.objects.filter(driver=driver_id).order_by('-date_updated')[:1]
     serializer = DriversLocationSerializer(driver_location, many=True)
     return Response(serializer.data)
-
-
-# get passengers searched locations
-@api_view(['GET'])
-@permission_classes([permissions.IsAuthenticatedOrReadOnly])
-def get_searched_locations(request):
-    searched_destinations = SearchedDestinations.objects.filter(passenger=request.user).order_by('-date_searched')[:1]
-    serializer = SearchDestinationsSerializer(searched_destinations, many=True)
-    return Response(serializer.data)
-
-
-@api_view(['POST'])
-@permission_classes([permissions.IsAuthenticatedOrReadOnly])
-def add_to_searched_locations(request):
-    serializer = SearchDestinationsSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save(passenger=request.user)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # messages
@@ -363,7 +345,8 @@ def get_all_user_notifications(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_user_notifications(request):
-    notifications = ScheduledNotifications.objects.filter(notification_to=request.user).filter(read="Not Read").order_by(
+    notifications = ScheduledNotifications.objects.filter(notification_to=request.user).filter(
+        read="Not Read").order_by(
         '-date_created')
     serializer = ScheduledNotificationSerializer(notifications, many=True)
     return Response(serializer.data)
@@ -423,68 +406,6 @@ def get_detailed_complain(request, complain_id):
     complain = get_object_or_404(Complains, id=complain_id)
     serializer = ComplainsSerializer(complain, many=False)
     return Response(serializer.data)
-
-
-# driver reviews
-@api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
-def get_all_driver_reviews(request):
-    reviews = DriverReviews.objects.filter(driver=request.user).order_by('-date_posted')
-    serializer = DriverReviewSerializer(reviews, many=True)
-    return Response(serializer.data)
-
-
-@api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
-def get_all_passenger_reviews(request):
-    reviews = DriverReviews.objects.filter(passenger=request.user).order_by('-date_posted')
-    serializer = DriverReviewSerializer(reviews, many=True)
-    return Response(serializer.data)
-
-
-@api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
-def review_detail(request, review_id):
-    review = get_object_or_404(DriverReviews, id=review_id)
-    serializer = DriverReviewSerializer(review, many=False)
-    return Response(serializer.data)
-
-
-@api_view(['POST'])
-@permission_classes([permissions.IsAuthenticated])
-def post_review(request):
-    serializer = DriverReviewSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save(passenger=request.user)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-# driver ratings
-@api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
-def get_driver_ratings(request):
-    ratings = DriversPoints.objects.filter(driver=request.user).order_by('-date_rated')
-    serializer = RateDriverSerializer(ratings, many=True)
-    return Response(serializer.data)
-
-
-@api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
-def get_passenger_ratings(request):
-    ratings = DriversPoints.objects.filter(passenger=request.user).order_by('-date_rated')
-    serializer = RateDriverSerializer(ratings, many=True)
-    return Response(serializer.data)
-
-
-@api_view(['POST'])
-@permission_classes([permissions.IsAuthenticated])
-def post_ratings(request):
-    serializer = RateDriverSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save(passenger=request.user)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # confirm driver payment
