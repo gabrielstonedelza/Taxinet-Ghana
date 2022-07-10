@@ -72,6 +72,7 @@ class ScheduleRide(models.Model):
     schedule_type = models.CharField(max_length=255, default="One Time", choices=SCHEDULE_TYPES)
     schedule_priority = models.CharField(max_length=255, default="High", choices=SCHEDULE_PRIORITY)
     schedule_description = models.TextField(default="", )
+    ride_type = models.CharField(max_length=30, default="")
     pickup_location = models.CharField(max_length=255, blank=True, )
     drop_off_location = models.CharField(max_length=255, blank=True, )
     pick_up_time = models.CharField(max_length=100, blank=True, )

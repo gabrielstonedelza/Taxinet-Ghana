@@ -125,7 +125,7 @@ class ScheduleRideSerializer(serializers.ModelSerializer):
     class Meta:
         model = ScheduleRide
         fields = ['id', 'username', 'passenger', 'admins_username', 'administrator', 'schedule_title',
-                  'schedule_priority',
+                  'schedule_priority', 'ride_type',
                   'schedule_type', 'schedule_description', 'pick_up_time', 'pick_up_date', 'completed',
                   'pickup_location', 'drop_off_location', 'active', 'price', 'date_scheduled', 'time_scheduled',
                   'get_driver_profile_pic',
