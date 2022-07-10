@@ -43,6 +43,10 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+media/drivers_licenses/
+media/ghana_cards/
+media/passenger_profile_pics/
+media/profile_pics/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template

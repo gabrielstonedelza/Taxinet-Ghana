@@ -3,7 +3,7 @@ from random import choices
 
 from django.db import models
 from django.conf import settings
-from taxinet_users.models import DriverProfile, PassengerProfile, User
+from taxinet_users.models import DriverProfile, PassengerProfile, User, InvestorsProfile, AdministratorsProfile
 from django.utils import timezone
 
 DeUser = settings.AUTH_USER_MODEL
@@ -67,7 +67,7 @@ INVENTORY_OPTIONS = (
 # working and functioning now models
 class ScheduleRide(models.Model):
     passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="passenger_scheduling_ride")
-    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
+    administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE)
     schedule_title = models.CharField(max_length=255, default="")
     schedule_type = models.CharField(max_length=255, default="One Time", choices=SCHEDULE_TYPES)
     schedule_priority = models.CharField(max_length=255, default="High", choices=SCHEDULE_PRIORITY)
@@ -77,7 +77,7 @@ class ScheduleRide(models.Model):
     pick_up_time = models.CharField(max_length=100, blank=True, )
     pick_up_date = models.CharField(max_length=100, blank=True, )
     completed = models.BooleanField(default=False)
-    scheduled = models.BooleanField(default=False)
+    active = models.BooleanField(default=False)
     price = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
     initial_payment = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
     date_scheduled = models.DateField(default=timezone.now)
@@ -86,10 +86,10 @@ class ScheduleRide(models.Model):
     def __str__(self):
         return str(self.schedule_title)
 
-    def get_driver_profile_pic(self):
-        my_driver = DriverProfile.objects.get(user=self.driver)
-        if my_driver:
-            return "https://taxinetghana.xyz" + my_driver.profile_pic.url
+    def get_administrator_profile_pic(self):
+        de_admin = AdministratorsProfile.objects.get(user=self.administrator)
+        if de_admin:
+            return "https://taxinetghana.xyz" + de_admin.profile_pic.url
         return ""
 
     def get_passenger_profile_pic(self):
@@ -117,8 +117,8 @@ class Messages(models.Model):
                 return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
             return ""
 
-        if de_user.user_type == 'Driver':
-            my_driver = DriverProfile.objects.get(user=self.ride.driver)
+        if de_user.user_type == 'Administrator':
+            my_driver = AdministratorsProfile.objects.get(user=self.ride.administrator)
             if my_driver:
                 return "https://taxinetghana.xyz" + my_driver.profile_pic.url
             return ""
@@ -159,20 +159,52 @@ class BidScheduleRide(models.Model):
                 return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
             return ""
 
-        if deUser.user_type == 'Driver':
-            my_driver = DriverProfile.objects.get(user=self.scheduled_ride.driver)
-            if my_driver:
-                return "https://taxinetghana.xyz" + my_driver.profile_pic.url
+        if deUser.user_type == 'Administrator':
+            my_admin = AdministratorsProfile.objects.get(user=self.scheduled_ride.administrator)
+            if my_admin:
+                return "https://taxinetghana.xyz" + my_admin.profile_pic.url
             return ""
 
 
 class CompletedBidOnScheduledRide(models.Model):
     scheduled_ride = models.ForeignKey(ScheduleRide, on_delete=models.CASCADE)
-    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="driver_completing_scheduled_ride")
+    administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE,
+                                      related_name="Administrator_completing_scheduled_ride")
     date_accepted = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Bid on ride {self.scheduled_ride.id} is complete"
+
+
+class AssignScheduleToDriver(models.Model):
+    ride = models.ForeignKey(ScheduleRide, on_delete=models.CASCADE)
+    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="Driver_receiving_scheduled_ride")
+    ride_accepted = models.BooleanField(default=False)
+    date_assigned = models.DateField(auto_now_add=True)
+    time_assigned = models.TimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.ride} was assigned to {self.driver}"
+
+
+class AcceptAssignedScheduled(models.Model):
+    assigned_to_driver = models.ForeignKey(AssignScheduleToDriver, on_delete=models.CASCADE)
+    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
+    date_accepted = models.DateField(auto_now_add=True)
+    time_accepted = models.TimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.driver.username} accepted ride {self.assigned_to_driver.ride}"
+
+
+class RejectAssignedScheduled(models.Model):
+    assigned_to_driver = models.ForeignKey(AssignScheduleToDriver, on_delete=models.CASCADE)
+    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
+    date_rejected = models.DateField(auto_now_add=True)
+    time_rejected = models.TimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.driver.username} rejected ride {self.assigned_to_driver.ride}"
 
 
 class CompletedScheduledRides(models.Model):
@@ -181,6 +213,16 @@ class CompletedScheduledRides(models.Model):
 
     def __str__(self):
         return f"Ride {self.scheduled_ride.id} is complete"
+
+
+class CancelScheduledRide(models.Model):
+    ride = models.ForeignKey(ScheduleRide, on_delete=models.CASCADE)
+    passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="passenger_cancelling_ride")
+    date_cancelled = models.DateField(auto_now_add=True)
+    time_cancelled = models.TimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.ride
 
 
 class Complains(models.Model):
@@ -323,6 +365,9 @@ class ScheduledNotifications(models.Model):
     completed_schedule_ride_id = models.CharField(max_length=255, blank=True)
     message_id = models.CharField(max_length=255, blank=True, default='')
     drivers_inventory_id = models.CharField(max_length=255, blank=True, default='')
+    assigned_scheduled_id = models.CharField(max_length=255, blank=True, default='')
+    accept_assigned_scheduled_id = models.CharField(max_length=255, blank=True, default='')
+    reject_assigned_scheduled_id = models.CharField(max_length=255, blank=True, default='')
     complain_id = models.CharField(max_length=255, blank=True)
     reply_id = models.CharField(max_length=255, blank=True)
     review_id = models.CharField(max_length=255, blank=True)

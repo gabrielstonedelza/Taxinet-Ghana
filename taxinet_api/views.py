@@ -3,17 +3,92 @@ from rest_framework import permissions, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
-from .models import (ScheduleRide, BidScheduleRide, Complains,
-                     DriversLocation, ConfirmDriverPayment, Messages, DriverVehicleInventory,
+from .models import (Complains,
+                     DriversLocation, ConfirmDriverPayment, DriverVehicleInventory,
                      AcceptedScheduledRides, RejectedScheduledRides, BidScheduleRide, CompletedBidOnScheduledRide,
-                     CompletedScheduledRides, ScheduledNotifications, Messages, ScheduleRide)
-from .serializers import (ScheduleRideSerializer, ComplainsSerializer,
-                          BidScheduleRideSerializer,
-                          ConfirmDriverPaymentSerializer, DriversLocationSerializer, MessagesSerializer,
-                          ScheduleRideSerializer, BidScheduleRideSerializer, AcceptedScheduledRidesSerializer, \
+                     CompletedScheduledRides, ScheduledNotifications, Messages, ScheduleRide, AssignScheduleToDriver,
+                     AcceptAssignedScheduled,
+                     RejectAssignedScheduled, CancelScheduledRide)
+from .serializers import (ComplainsSerializer,
+                          ConfirmDriverPaymentSerializer, DriversLocationSerializer, ScheduleRideSerializer,
+                          BidScheduleRideSerializer, AcceptedScheduledRidesSerializer, \
                           RejectedScheduledRidesSerializer, MessagesSerializer, DriverVehicleInventorySerializer,
                           CompletedScheduledRidesSerializer, \
-                          CompletedBidOnScheduledRideSerializer, ScheduledNotificationSerializer)
+                          CompletedBidOnScheduledRideSerializer, ScheduledNotificationSerializer,
+                          CancelledScheduledRideSerializer, RejectScheduleToDriverSerializer,
+                          AcceptScheduleToDriverSerializer, AssignScheduleToDriverSerializer)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticatedOrReadOnly])
+def add_to_assigned_rejected(request):
+    serializer = RejectScheduleToDriverSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(driver=request.user, )
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticatedOrReadOnly])
+def get_all_rejected_assigned_ride(request):
+    rejected_assigns = RejectAssignedScheduled.objects.all().order_by('-date_rejected')
+    serializer = RejectScheduleToDriverSerializer(rejected_assigns, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticatedOrReadOnly])
+def add_to_assigned_accepted(request):
+    serializer = AcceptScheduleToDriverSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(driver=request.user, )
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticatedOrReadOnly])
+def get_all_accepted_assigned_ride(request):
+    accepted_assigns = AcceptAssignedScheduled.objects.all().order_by('-date_accepted')
+    serializer = AcceptScheduleToDriverSerializer(accepted_assigns, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticatedOrReadOnly])
+def assign_to_driver(request):
+    serializer = AssignScheduleToDriverSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(driver=request.user, )
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticatedOrReadOnly])
+def get_all_assigned_ride(request):
+    assigns = AssignScheduleToDriver.objects.all().order_by('-date_assigned')
+    serializer = AssignScheduleToDriverSerializer(assigns, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticatedOrReadOnly])
+def cancel_schedule(request):
+    serializer = CancelledScheduledRideSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(passenger=request.user, )
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticatedOrReadOnly])
+def get_all_cancelled_ride(request):
+    cancelled = CancelScheduledRide.objects.all().order_by('-date_cancelled')
+    serializer = CancelledScheduledRideSerializer(cancelled, many=True)
+    return Response(serializer.data)
 
 
 @api_view(['GET'])
@@ -32,7 +107,6 @@ def get_driver_inventory(request, driver_id):
     return Response(serializer.data)
 
 
-# messages
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticatedOrReadOnly])
 def create_drivers_inventory(request, ):

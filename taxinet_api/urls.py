@@ -55,4 +55,13 @@ urlpatterns = [
     path("get_all_drivers_inventories/", views.get_all_drivers_inventories),
     path("add_drivers_inventories/", views.create_drivers_inventory),
 
+    path('add_to_assigned_rejected/', views.add_to_assigned_rejected),
+    path('get_all_rejected_assigned_ride/', views.get_all_rejected_assigned_ride),
+    path('add_to_assigned_accepted/', views.add_to_assigned_accepted),
+    path('get_all_accepted_assigned_ride/', views.get_all_accepted_assigned_ride),
+    path('assign_to_driver/', views.assign_to_driver),
+    path('get_all_assigned_ride/', views.get_all_assigned_ride),
+    path('cancel_schedule/', views.cancel_schedule),
+    path('get_all_cancelled_ride/', views.get_all_cancelled_ride),
+
 ]
