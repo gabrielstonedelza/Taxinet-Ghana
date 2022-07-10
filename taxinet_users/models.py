@@ -27,6 +27,9 @@ class User(AbstractUser):
 class AdministratorsProfile(models.Model):
     user = models.OneToOneField(DeUser, on_delete=models.CASCADE, related_name="a_profile")
     profile_pic = models.ImageField(upload_to="profile_pics", default="default_user.png")
+    
+    def __str__(self):
+        return self.user.username
 
 
 class DriverProfile(models.Model):
