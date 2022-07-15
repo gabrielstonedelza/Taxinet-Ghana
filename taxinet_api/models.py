@@ -46,6 +46,7 @@ DRIVER_PAYMENT_CONFIRMATION = (
     ("Not Confirmed", "Not Confirmed"),
 )
 SCHEDULE_TYPES = (
+    ("Select Schedule Type", "Select Schedule Type"),
     ("One Time", "One Time"),
     ("Daily", "Daily"),
     ("Days", "Days"),
@@ -54,8 +55,14 @@ SCHEDULE_TYPES = (
 )
 
 SCHEDULE_PRIORITY = (
+    ("Select Schedule Priority", "Select Schedule Priority"),
     ("High", "High"),
     ("Low", "Low"),
+)
+
+RIDE_TYPE = (
+    ("Taxinet Ride", "Taxinet Ride"),
+    ("Taxinet Luxury", "Taxinet Luxury"),
 )
 
 INVENTORY_OPTIONS = (
@@ -72,11 +79,11 @@ class ScheduleRide(models.Model):
     schedule_type = models.CharField(max_length=255, default="One Time", choices=SCHEDULE_TYPES)
     schedule_priority = models.CharField(max_length=255, default="High", choices=SCHEDULE_PRIORITY)
     schedule_description = models.TextField(default="", )
-    ride_type = models.CharField(max_length=30, default="")
+    ride_type = models.CharField(max_length=50, default="Taxinet Ride", choices=RIDE_TYPE)
     pickup_location = models.CharField(max_length=255, blank=True, )
     drop_off_location = models.CharField(max_length=255, blank=True, )
     pick_up_time = models.CharField(max_length=100, blank=True, )
-    pick_up_date = models.CharField(max_length=100, blank=True, )
+    start_date = models.CharField(max_length=100, blank=True, )
     completed = models.BooleanField(default=False)
     active = models.BooleanField(default=False)
     price = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
