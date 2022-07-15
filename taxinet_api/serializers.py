@@ -137,7 +137,7 @@ class ScheduleRideSerializer(serializers.ModelSerializer):
         return username
 
     def get_admins_username(self, user):
-        admins_username = user.driver.username
+        admins_username = user.administrator.username
         return admins_username
 
 
