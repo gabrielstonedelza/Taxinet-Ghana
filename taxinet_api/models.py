@@ -74,7 +74,7 @@ INVENTORY_OPTIONS = (
 # working and functioning now models
 class ScheduleRide(models.Model):
     passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="passenger_scheduling_ride")
-    administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE)
+    administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1)
     schedule_title = models.CharField(max_length=255, default="")
     schedule_type = models.CharField(max_length=255, default="One Time", choices=SCHEDULE_TYPES)
     schedule_priority = models.CharField(max_length=255, default="High", choices=SCHEDULE_PRIORITY)
