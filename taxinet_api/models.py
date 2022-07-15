@@ -88,8 +88,8 @@ class ScheduleRide(models.Model):
     active = models.BooleanField(default=False)
     price = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
     initial_payment = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
-    date_scheduled = models.DateField(default=timezone.now)
-    time_scheduled = models.TimeField(default=timezone.now)
+    date_scheduled = models.DateField(auto_now_add=True)
+    time_scheduled = models.TimeField(auto_now_add=True)
 
     def __str__(self):
         return str(self.schedule_title)
