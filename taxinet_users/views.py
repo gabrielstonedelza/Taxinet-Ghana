@@ -4,10 +4,28 @@ from .serializers import UsersSerializer, DriverProfileSerializer, PassengerProf
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import viewsets, permissions, generics, status
 from rest_framework.response import Response
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+from django.views.decorators.vary import vary_on_cookie, vary_on_headers
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
 
 
 def taxinet_home(request):
     return render(request, "taxinet_users/taxinet_home.html")
+
+
+class AllPassengersView(generics.ListCreateAPIView):
+    queryset = User.objects.filter(user_type="Passenger")
+    serializer_class = UsersSerializer
+    permission_classes = [IsAuthenticated]
+
+    @method_decorator(cache_page(60 * 60 * 2))
+    def list(self, request):
+        # Note the use of `get_queryset()` instead of `self.queryset`
+        queryset = self.get_queryset()
+        serializer = UsersSerializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 @api_view(['GET'])

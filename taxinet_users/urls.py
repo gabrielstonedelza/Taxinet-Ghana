@@ -1,6 +1,7 @@
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from . import views
+from .views import AllPassengersView
 
 urlpatterns = [
     path('auth/', include('djoser.urls')),
@@ -13,6 +14,7 @@ urlpatterns = [
     path('get_passenger_details/<int:id>/', views.get_passenger_details),
     path('get_drivers_details/<int:id>/', views.get_drivers_details),
     path('all_passengers/', views.get_all_passengers),
+    path('get_all_passengers/', AllPassengersView.as_view()),
     path('all_drivers/', views.get_all_drivers),
     path('passenger-profile/', views.passenger_profile),
     path('update_driver_profile/', views.update_driver_profile),

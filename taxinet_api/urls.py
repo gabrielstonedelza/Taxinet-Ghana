@@ -63,5 +63,4 @@ urlpatterns = [
     path('get_all_assigned_ride/', views.get_all_assigned_ride),
     path('cancel_schedule/', views.cancel_schedule),
     path('get_all_cancelled_ride/', views.get_all_cancelled_ride),
-
 ]
