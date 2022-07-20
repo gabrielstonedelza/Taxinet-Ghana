@@ -267,6 +267,14 @@ def get_all_requests(request):
 
 
 @api_view(['GET'])
+@permission_classes([permissions.IsAuthenticatedOrReadOnly])
+def get_all_my_ride_requests(request):
+    all_ride_requests = ScheduleRide.objects.filter(passenger=request.user).order_by('-date_scheduled')
+    serializer = ScheduleRideSerializer(all_ride_requests, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def ride_detail(request, ride_id):
     ride = get_object_or_404(ScheduleRide, id=ride_id)
