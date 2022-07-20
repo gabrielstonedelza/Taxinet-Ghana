@@ -5,7 +5,7 @@ from . import views
 urlpatterns = [
     path('all_ride_requests/', views.get_all_requests),
     path('get_all_my_ride_requests/', views.get_all_my_ride_requests),
-    path('ride_requests/<int:ride_id>/', views.ride_detail),
+    path('ride_requests/<str:slug>/', views.ride_detail),
     path('passengers_requests_completed/', views.get_passengers_requests_completed),
     path('drivers_requests_completed/', views.get_drivers_requests_completed),
     path('passengers_requests_uncompleted/', views.get_passengers_requests_uncompleted),

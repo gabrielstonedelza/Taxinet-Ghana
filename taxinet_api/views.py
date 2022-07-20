@@ -276,8 +276,8 @@ def get_all_my_ride_requests(request):
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
-def ride_detail(request, ride_id):
-    ride = get_object_or_404(ScheduleRide, id=ride_id)
+def ride_detail(request, slug):
+    ride = get_object_or_404(ScheduleRide, id=slug)
     serializer = ScheduleRideSerializer(ride, many=False)
     return Response(serializer.data)
 
