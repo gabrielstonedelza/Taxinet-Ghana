@@ -4,7 +4,7 @@ from .models import (Complains,
                      AcceptedScheduledRides, RejectedScheduledRides, BidScheduleRide, CompletedBidOnScheduledRide,
                      CompletedScheduledRides, ScheduledNotifications, DriverVehicleInventory, Messages, ScheduleRide,
                      AssignScheduleToDriver, AcceptAssignedScheduled,
-                     RejectAssignedScheduled, CancelScheduledRide
+                     RejectAssignedScheduled, CancelScheduledRide, ContactUs
                      )
 
 
@@ -239,3 +239,9 @@ class DriverVehicleInventorySerializer(serializers.ModelSerializer):
     def get_username(self, user):
         username = user.driver.username
         return username
+
+
+class ContactUsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContactUs
+        fields = ['id', 'name', 'email', 'phone', 'message', 'date_sent']

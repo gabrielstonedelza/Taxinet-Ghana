@@ -11,9 +11,9 @@ from .models import (Complains,
                      DriversLocation, ConfirmDriverPayment, DriverVehicleInventory,
                      AcceptedScheduledRides, RejectedScheduledRides, BidScheduleRide, CompletedBidOnScheduledRide,
                      CompletedScheduledRides, ScheduledNotifications, Messages, ScheduleRide, AssignScheduleToDriver,
-                     AcceptAssignedScheduled,
+                     AcceptAssignedScheduled, ContactUs,
                      RejectAssignedScheduled, CancelScheduledRide)
-from .serializers import (ComplainsSerializer,
+from .serializers import (ComplainsSerializer, ContactUsSerializer,
                           ConfirmDriverPaymentSerializer, DriversLocationSerializer, ScheduleRideSerializer,
                           BidScheduleRideSerializer, AcceptedScheduledRidesSerializer, \
                           RejectedScheduledRidesSerializer, MessagesSerializer, DriverVehicleInventorySerializer,
@@ -21,6 +21,24 @@ from .serializers import (ComplainsSerializer,
                           CompletedBidOnScheduledRideSerializer, ScheduledNotificationSerializer,
                           CancelledScheduledRideSerializer, RejectScheduleToDriverSerializer,
                           AcceptScheduleToDriverSerializer, AssignScheduleToDriverSerializer)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticatedOrReadOnly])
+def send_to_contact(request):
+    serializer = ContactUsSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticatedOrReadOnly])
+def get_all_contact_us_messages(request):
+    messages = ContactUs.objects.all().order_by('-date_sent')
+    serializer = ContactUsSerializer(messages, many=True)
+    return Response(serializer.data)
 
 
 @api_view(['POST'])

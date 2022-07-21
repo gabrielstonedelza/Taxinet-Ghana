@@ -400,3 +400,14 @@ class ScheduledNotifications(models.Model):
             if my_passenger:
                 return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
             return ""
+
+
+class ContactUs(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField(max_length=100, blank=True)
+    phone = models.CharField(max_length=16, blank=True)
+    message = models.TextField()
+    date_sent = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
