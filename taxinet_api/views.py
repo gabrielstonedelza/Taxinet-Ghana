@@ -24,7 +24,7 @@ from .serializers import (ComplainsSerializer, ContactUsSerializer,
 
 
 @api_view(['POST'])
-@permission_classes([permissions.IsAuthenticatedOrReadOnly])
+@permission_classes([permissions.AllowAny])
 def send_to_contact(request):
     serializer = ContactUsSerializer(data=request.data)
     if serializer.is_valid():
@@ -34,7 +34,7 @@ def send_to_contact(request):
 
 
 @api_view(['GET'])
-@permission_classes([permissions.IsAuthenticatedOrReadOnly])
+@permission_classes([permissions.AllowAny])
 def get_all_contact_us_messages(request):
     messages = ContactUs.objects.all().order_by('-date_sent')
     serializer = ContactUsSerializer(messages, many=True)
