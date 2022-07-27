@@ -75,7 +75,7 @@ SCHEDULE_STATUS = (
     ("Pending", "Pending"),
     ("Reviewing", "Reviewing"),
     ("Active", "Active"),
-    ("Not Active", "Not Active"),
+    ("Cancelled", "Cancelled"),
 )
 
 

@@ -120,6 +120,70 @@ def admin_get_driver_inventory(request, driver_id):
     return Response(serializer.data)
 
 
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def admin_get_pending_schedules(request):
+    pending = ScheduleRide.objects.filter(status="Pending").order_by('-date_scheduled')
+    serializer = ScheduleRideSerializer(pending, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def admin_get_reviewing_schedules(request):
+    reviewing = ScheduleRide.objects.filter(status="Reviewing").order_by('-date_scheduled')
+    serializer = ScheduleRideSerializer(reviewing, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def admin_get_active_schedules(request):
+    active = ScheduleRide.objects.filter(status="Active").order_by('-date_scheduled')
+    serializer = ScheduleRideSerializer(active, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def admin_get_cancelled_schedules(request):
+    cancelled = ScheduleRide.objects.filter(status="Cancelled").order_by('-date_scheduled')
+    serializer = ScheduleRideSerializer(cancelled, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def admin_get_scheduled_for_one_time(request):
+    one_time_schedule = ScheduleRide.objects.filter(schedule_type="One Time").order_by('-date_scheduled')
+    serializer = ScheduleRideSerializer(one_time_schedule, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def admin_get_scheduled_for_daily(request):
+    daily_schedule = ScheduleRide.objects.filter(schedule_type="Daily").order_by('-date_scheduled')
+    serializer = ScheduleRideSerializer(daily_schedule, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def admin_get_scheduled_for_days(request):
+    days_schedule = ScheduleRide.objects.filter(schedule_type="Days").order_by('-date_scheduled')
+    serializer = ScheduleRideSerializer(days_schedule, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def admin_get_scheduled_for_weekly(request):
+    weekly_schedule = ScheduleRide.objects.filter(schedule_type="Weekly").order_by('-date_scheduled')
+    serializer = ScheduleRideSerializer(weekly_schedule, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 # admin gets,posts and updates
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
