@@ -71,6 +71,13 @@ INVENTORY_OPTIONS = (
     ("No", "No")
 )
 
+SCHEDULE_STATUS = (
+    ("Pending", "Pending"),
+    ("Reviewing", "Reviewing"),
+    ("Active", "Active"),
+    ("Not Active", "Not Active"),
+)
+
 
 # working and functioning now models
 class ScheduleRide(models.Model):
@@ -88,7 +95,7 @@ class ScheduleRide(models.Model):
     pick_up_time = models.CharField(max_length=100, blank=True, )
     start_date = models.CharField(max_length=100, blank=True, )
     completed = models.BooleanField(default=False)
-    active = models.BooleanField(default=False)
+    status = models.CharField(max_length=50, choices=SCHEDULE_STATUS, default="Pending")
     price = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
     initial_payment = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
     slug = models.SlugField(max_length=100, default='', blank=True)
