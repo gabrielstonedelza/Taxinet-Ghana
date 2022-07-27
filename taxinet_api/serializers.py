@@ -52,8 +52,7 @@ class AssignScheduleToDriverSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AssignScheduleToDriver
-        fields = ['id', 'username', 'ride', 'ride_accepted', 'date_assigned', 'time_assigned']
-        read_only_fields = ['driver']
+        fields = ['id', 'username', 'administrator',  'ride', 'ride_accepted', 'date_assigned', 'time_assigned']
 
     def get_username(self, user):
         username = user.driver.username
@@ -110,8 +109,8 @@ class CompletedBidOnScheduledRideSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CompletedBidOnScheduledRide
-        fields = ['id', 'scheduled_ride', 'username', 'driver', 'date_accepted']
-        read_only_fields = ['driver']
+        fields = ['id', 'scheduled_ride', 'username', 'administrator', 'date_accepted']
+        read_only_fields = ['scheduled_ride']
 
     def get_username(self, user):
         username = user.driver.username
@@ -131,6 +130,30 @@ class ScheduleRideSerializer(serializers.ModelSerializer):
                   'get_administrator_profile_pic', 'slug',
                   'get_passenger_profile_pic']
         read_only_fields = ['passenger']
+
+    def get_username(self, user):
+        username = user.passenger.username
+        return username
+
+    def get_admins_username(self, user):
+        admins_username = user.administrator.username
+        return admins_username
+
+
+class AdminScheduleRideSerializer(serializers.ModelSerializer):
+    username = serializers.SerializerMethodField('get_username')
+    admins_username = serializers.SerializerMethodField('get_admins_username')
+
+    class Meta:
+        model = ScheduleRide
+        fields = ['id', 'username', 'assigned_driver', 'passenger', 'admins_username', 'administrator',
+                  'schedule_title',
+                  'schedule_priority', 'ride_type',
+                  'schedule_type', 'schedule_description', 'pick_up_time', 'start_date', 'completed',
+                  'pickup_location', 'drop_off_location', 'active', 'price', 'date_scheduled', 'time_scheduled',
+                  'get_administrator_profile_pic', 'slug',
+                  'get_passenger_profile_pic']
+        read_only_fields = ['administrator']
 
     def get_username(self, user):
         username = user.passenger.username

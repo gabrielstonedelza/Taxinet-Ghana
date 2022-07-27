@@ -20,9 +20,107 @@ from .serializers import (ComplainsSerializer, ContactUsSerializer,
                           CompletedScheduledRidesSerializer, \
                           CompletedBidOnScheduledRideSerializer, ScheduledNotificationSerializer,
                           CancelledScheduledRideSerializer, RejectScheduleToDriverSerializer,
+                          AdminScheduleRideSerializer,
                           AcceptScheduleToDriverSerializer, AssignScheduleToDriverSerializer)
 
 
+# admin gets,posts and updates
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def admin_get_all_requests(request):
+    all_ride_requests = ScheduleRide.objects.all().order_by('-date_scheduled')
+    serializer = ScheduleRideSerializer(all_ride_requests, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def admin_ride_detail(request, slug):
+    ride = get_object_or_404(ScheduleRide, slug=slug)
+    serializer = ScheduleRideSerializer(ride, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['GET', 'PUT'])
+@permission_classes([permissions.AllowAny])
+def admin_update_requested_ride(request, slug):
+    ride = get_object_or_404(ScheduleRide, slug=slug)
+    serializer = AdminScheduleRideSerializer(ride, data=request.data)
+    if serializer.is_valid():
+        serializer.save(administrator=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def admin_send_message(request, slug):
+    ride = get_object_or_404(ScheduleRide, slug=slug)
+    serializer = MessagesSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(user=request.user, ride=ride)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def admin_get_ride_messages(request, slug):
+    ride = get_object_or_404(ScheduleRide, slug=slug)
+    messages = Messages.objects.filter(ride=ride).order_by('date_sent')
+    serializer = MessagesSerializer(messages, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def admin_assign_request_to_driver(request):
+    serializer = AssignScheduleToDriverSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def admin_bid_ride(request, slug):
+    ride = get_object_or_404(ScheduleRide, slug=slug)
+    serializer = BidScheduleRideSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(user=request.user, scheduled_ride=ride)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def admin_add_to_completed_bid_on_rides(request, slug):
+    ride = get_object_or_404(ScheduleRide, slug=slug)
+    serializer = CompletedBidOnScheduledRideSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(scheduled_ride=ride)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def admin_get_all_drivers_inventories(request):
+    inventories = DriverVehicleInventory.objects.all().order_by('-date_checked')
+    serializer = DriverVehicleInventorySerializer(inventories, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def admin_get_driver_inventory(request, driver_id):
+    driver_inventory = DriverVehicleInventory.objects.filter(driver=driver_id).order_by('-date_checked')
+    serializer = DriverVehicleInventorySerializer(driver_inventory, many=True)
+    return Response(serializer.data)
+
+
+# admin gets,posts and updates
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
 def send_to_contact(request):
@@ -82,7 +180,7 @@ def get_all_accepted_assigned_ride(request):
 def assign_to_driver(request):
     serializer = AssignScheduleToDriverSerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save(driver=request.user, )
+        serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -201,7 +299,7 @@ def get_all_completed_bid_on_rides(request):
 def add_to_completed_bid_on_rides(request):
     serializer = CompletedBidOnScheduledRideSerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save(driver=request.user)
+        serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

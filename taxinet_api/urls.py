@@ -3,6 +3,18 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    # admin urls
+    path("admin_get_all_requests", views.admin_get_all_requests),
+    path("admin_request_detail/<str:slug>/", views.admin_ride_detail),
+    path("admin_update_requested_ride/<str:slug>/", views.admin_update_requested_ride),
+    path("admin_send_message/<str:slug>/", views.admin_send_message),
+    path("admin_get_ride_messages/<str:slug>/", views.admin_get_ride_messages),
+    path("admin_assign_request_to_driver/", views.admin_assign_request_to_driver),
+    path("admin_bid_ride/<str:slug>/", views.admin_bid_ride),
+    path("admin_add_to_completed_bid_on_rides/<str:slug>/", views.admin_add_to_completed_bid_on_rides),
+    path("admin_get_all_drivers_inventories/", views.admin_get_all_drivers_inventories),
+    path("admin_get_driver_inventory/<int:driver_id>/", views.admin_get_driver_inventory),
+    # admin urls
     path('all_ride_requests/', views.get_all_requests),
     path('get_all_my_ride_requests/', views.get_all_my_ride_requests),
     path('ride_requests/<str:slug>/', views.ride_detail),

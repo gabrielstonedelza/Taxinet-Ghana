@@ -74,6 +74,8 @@ INVENTORY_OPTIONS = (
 
 # working and functioning now models
 class ScheduleRide(models.Model):
+    assigned_driver = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="driver_to_be_assigned",
+                                        null=True)
     passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="passenger_scheduling_ride")
     administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1)
     schedule_title = models.CharField(max_length=255, default="")
@@ -139,24 +141,6 @@ class Messages(models.Model):
             return ""
 
 
-class AcceptedScheduledRides(models.Model):
-    scheduled_ride = models.ForeignKey(ScheduleRide, on_delete=models.CASCADE)
-    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="driver_accepting_scheduled_ride")
-    date_accepted = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.driver} accepted ride {self.scheduled_ride.id}"
-
-
-class RejectedScheduledRides(models.Model):
-    scheduled_ride = models.ForeignKey(ScheduleRide, on_delete=models.CASCADE)
-    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="driver_rejecting_scheduled_ride")
-    date_rejected = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.driver} rejected ride {self.scheduled_ride.id}"
-
-
 class BidScheduleRide(models.Model):
     scheduled_ride = models.ForeignKey(ScheduleRide, on_delete=models.CASCADE, related_name="Scheduled_Ride_to_accept")
     user = models.ForeignKey(DeUser, on_delete=models.CASCADE)
@@ -184,7 +168,7 @@ class BidScheduleRide(models.Model):
 class CompletedBidOnScheduledRide(models.Model):
     scheduled_ride = models.ForeignKey(ScheduleRide, on_delete=models.CASCADE)
     administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE,
-                                      related_name="Administrator_completing_scheduled_ride")
+                                      related_name="Administrator_completing_scheduled_ride", default=1)
     date_accepted = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -192,6 +176,7 @@ class CompletedBidOnScheduledRide(models.Model):
 
 
 class AssignScheduleToDriver(models.Model):
+    administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1)
     ride = models.ForeignKey(ScheduleRide, on_delete=models.CASCADE)
     driver = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="Driver_receiving_scheduled_ride")
     ride_accepted = models.BooleanField(default=False)
@@ -220,6 +205,24 @@ class RejectAssignedScheduled(models.Model):
 
     def __str__(self):
         return f"{self.driver.username} rejected ride {self.assigned_to_driver.ride}"
+
+
+class AcceptedScheduledRides(models.Model):
+    scheduled_ride = models.ForeignKey(ScheduleRide, on_delete=models.CASCADE)
+    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="driver_accepting_scheduled_ride")
+    date_accepted = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.driver} accepted ride {self.scheduled_ride.id}"
+
+
+class RejectedScheduledRides(models.Model):
+    scheduled_ride = models.ForeignKey(ScheduleRide, on_delete=models.CASCADE)
+    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="driver_rejecting_scheduled_ride")
+    date_rejected = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.driver} rejected ride {self.scheduled_ride.id}"
 
 
 class CompletedScheduledRides(models.Model):
@@ -411,3 +414,12 @@ class ContactUs(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class ContactAdmin(models.Model):
+    user = models.ForeignKey(DeUser, on_delete=models.CASCADE)
+    message = models.TextField()
+    date_sent = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user.username
