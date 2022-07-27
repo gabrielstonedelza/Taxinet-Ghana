@@ -30,6 +30,14 @@ class AllPassengersView(generics.ListCreateAPIView):
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
+def get_all_user(request):
+    passengers = User.objects.all()
+    serializer = UsersSerializer(passengers, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
 def get_all_passengers(request):
     passengers = User.objects.filter(user_type="Passenger")
     serializer = UsersSerializer(passengers, many=True)
@@ -40,6 +48,14 @@ def get_all_passengers(request):
 @permission_classes([permissions.AllowAny])
 def get_all_drivers(request):
     drivers = User.objects.filter(user_type="Driver")
+    serializer = UsersSerializer(drivers, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_all_investors(request):
+    drivers = User.objects.filter(user_type="Investor")
     serializer = UsersSerializer(drivers, many=True)
     return Response(serializer.data)
 

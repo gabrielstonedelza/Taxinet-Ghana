@@ -16,6 +16,8 @@ urlpatterns = [
     path('all_passengers/', views.get_all_passengers),
     path('get_all_passengers/', AllPassengersView.as_view()),
     path('all_drivers/', views.get_all_drivers),
+    path('all_investors/', views.get_all_investors),
+    path('all_users/', views.get_all_user),
     path('passenger-profile/', views.passenger_profile),
     path('update_driver_profile/', views.update_driver_profile),
     path('update_passenger_profile/', views.update_passenger_profile),
