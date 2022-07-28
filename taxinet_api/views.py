@@ -27,6 +27,14 @@ from .serializers import (ComplainsSerializer, ContactUsSerializer,
 # admin gets,posts and updates
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
+def admin_get_five_requests(request):
+    all_ride_requests = ScheduleRide.objects.all().order_by('-date_scheduled')[:6]
+    serializer = ScheduleRideSerializer(all_ride_requests, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
 def admin_get_all_requests(request):
     all_ride_requests = ScheduleRide.objects.all().order_by('-date_scheduled')
     serializer = ScheduleRideSerializer(all_ride_requests, many=True)

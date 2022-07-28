@@ -5,6 +5,7 @@ from . import views
 urlpatterns = [
     # admin urls
     path("admin_get_all_requests/", views.admin_get_all_requests),
+    path("admin_get_five_requests/", views.admin_get_five_requests),
     path("admin_request_detail/<str:slug>/", views.admin_ride_detail),
     path("admin_update_requested_ride/<str:slug>/", views.admin_update_requested_ride),
     path("admin_send_message/<str:slug>/", views.admin_send_message),
