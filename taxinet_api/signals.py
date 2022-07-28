@@ -101,7 +101,7 @@ def alert_schedule(sender, created, instance, **kwargs):
     if created:
         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                               notification_message=message, notification_tag=notification_tag,
-                                              notification_from=instance.passenger, notification_to=admin_user,
+                                              notification_from=instance.passenger, notification_to=instance.administrator,
                                               schedule_ride_id=instance.id)
 
 
