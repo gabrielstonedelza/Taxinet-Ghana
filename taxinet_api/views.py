@@ -28,7 +28,7 @@ from .serializers import (ComplainsSerializer, ContactUsSerializer,
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def admin_get_all_user_notifications(request):
-    notifications = ScheduledNotifications.objects.filter(notification_to=1).order_by('-date_created')
+    notifications = ScheduledNotifications.objects.filter(notification_to=1).order_by('-date_created')[:6]
     serializer = ScheduledNotificationSerializer(notifications, many=True)
     return Response(serializer.data)
 
