@@ -103,7 +103,7 @@ class ScheduleRide(models.Model):
     time_scheduled = models.TimeField(auto_now_add=True)
 
     def __str__(self):
-        return str(self.schedule_title)
+        return self.pk
 
     def save(self, *args, **kwargs):
         value = self.schedule_title
