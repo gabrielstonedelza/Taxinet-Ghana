@@ -134,7 +134,7 @@ class Messages(models.Model):
     date_sent = models.DateField(default=timezone.now)
 
     def __str__(self):
-        return self.ride.schedule_title
+        return self.ride.id
 
     def get_profile_pic(self):
         de_user = User.objects.get(username=self.user.username)
