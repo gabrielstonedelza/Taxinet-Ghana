@@ -128,7 +128,7 @@ class ScheduleRideSerializer(serializers.ModelSerializer):
                   'schedule_type', 'schedule_description', 'pick_up_time', 'start_date', 'completed',
                   'pickup_location', 'drop_off_location', 'status', 'price', 'date_scheduled', 'time_scheduled',
                   'get_administrator_profile_pic', 'slug',
-                  'get_passenger_profile_pic']
+                  'get_passenger_profile_pic','get_passenger_name']
         read_only_fields = ['passenger']
 
     def get_username(self, user):

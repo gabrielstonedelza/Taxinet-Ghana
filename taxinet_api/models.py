@@ -122,6 +122,9 @@ class ScheduleRide(models.Model):
             return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
         return ""
 
+    def get_passenger_name(self):
+        return self.passenger.username
+
 
 class Messages(models.Model):
     ride = models.ForeignKey(ScheduleRide, on_delete=models.CASCADE, related_name="Ride_receiving_messages")
