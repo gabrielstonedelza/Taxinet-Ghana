@@ -91,7 +91,7 @@ class MessagesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Messages
         fields = ['id', 'user', 'username', 'ride', 'message', 'date_sent', 'time_sent', 'get_profile_pic']
-        read_only_fields = ['user', 'ride']
+        read_only_fields = ['ride']
 
     def get_username(self, user):
         username = user.user.username

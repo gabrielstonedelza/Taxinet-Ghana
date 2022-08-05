@@ -74,7 +74,7 @@ def admin_send_message(request, slug):
     ride = get_object_or_404(ScheduleRide, slug=slug)
     serializer = MessagesSerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save(user=request.user, ride=ride)
+        serializer.save(ride=ride)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
