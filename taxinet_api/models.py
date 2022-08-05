@@ -130,8 +130,8 @@ class Messages(models.Model):
     ride = models.ForeignKey(ScheduleRide, on_delete=models.CASCADE, related_name="Ride_receiving_messages")
     user = models.ForeignKey(DeUser, on_delete=models.CASCADE)
     message = models.TextField()
-    time_sent = models.TimeField(default=timezone.now)
-    date_sent = models.DateField(default=timezone.now)
+    time_sent = models.TimeField(auto_now_add=True)
+    date_sent = models.DateField(auto_now_add=True)
 
     def __str__(self):
         return self.ride.schedule_title
