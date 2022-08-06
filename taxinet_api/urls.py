@@ -4,15 +4,15 @@ from . import views
 
 urlpatterns = [
     # admin urls
+    path("admin_passengers_wallet/", views.admin_passengers_wallet),
+    path("admin_get_all_passengers_wallet/", views.admin_get_all_passengers_wallet),
+    path("admin_get_all_request_to_load_wallet/", views.admin_get_all_request_to_load_wallet),
     path("admin_get_all_requests/", views.admin_get_all_requests),
     path("admin_get_five_requests/", views.admin_get_five_requests),
     path("admin_request_detail/<str:slug>/", views.admin_ride_detail),
     path("admin_update_requested_ride/<str:slug>/", views.admin_update_requested_ride),
-    path("admin_send_message/<str:slug>/", views.admin_send_message),
-    path("admin_get_ride_messages/<str:slug>/", views.admin_get_ride_messages),
     path("admin_assign_request_to_driver/", views.admin_assign_request_to_driver),
-    path("admin_bid_ride/<str:slug>/", views.admin_bid_ride),
-    path("admin_add_to_completed_bid_on_rides/<str:slug>/", views.admin_add_to_completed_bid_on_rides),
+
     path("admin_get_all_drivers_inventories/", views.admin_get_all_drivers_inventories),
     path("admin_get_driver_inventory/<int:driver_id>/", views.admin_get_driver_inventory),
     path("admin_get_pending_schedules/", views.admin_get_pending_schedules),
@@ -33,10 +33,6 @@ urlpatterns = [
     path('passengers_requests_uncompleted/', views.get_passengers_requests_uncompleted),
     path('drivers_requests_uncompleted/', views.get_drivers_requests_uncompleted),
     path('request_ride/new/', views.request_ride),
-    path('bid_ride/<int:ride_id>/', views.bid_ride),
-    path('send_message/<int:ride_id>/', views.send_message),
-    path('all_bids/<int:ride_id>/', views.get_all_bids),
-    path('all_driver_passenger_messages/<int:ride_id>/', views.get_driver_passenger_messages),
     path('update_requested_ride/<int:ride_id>/', views.update_requested_ride),
     path('delete_requested_ride/<int:ride_id>/', views.delete_requested_ride),
     path('get_all_rejected_rides/', views.get_all_rejected_rides),
@@ -46,9 +42,6 @@ urlpatterns = [
 
     path('get_all_completed_rides/', views.get_all_completed_rides),
     path('add_to_completed_rides/', views.add_to_completed_rides),
-
-    path('get_all_completed_bid_on_rides/', views.get_all_completed_bid_on_rides),
-    path('add_to_completed_bid_on_rides/', views.add_to_completed_bid_on_rides),
 
     path('one_time_schedule/', views.get_scheduled_for_one_time),
     path('daily_schedules/', views.get_scheduled_for_daily),
@@ -89,4 +82,8 @@ urlpatterns = [
 
     path("post_to_contact/", views.send_to_contact),
     path("get_all_contact_us_messages/", views.get_all_contact_us_messages),
+
+    #     wallets
+    path("request_to_load_wallet/", views.request_to_load_wallet),
+    path("get_my_wallet/", views.get_my_wallet),
 ]

@@ -1,10 +1,10 @@
 from rest_framework import serializers
 from .models import (Complains,
                      DriversLocation, ConfirmDriverPayment,
-                     AcceptedScheduledRides, RejectedScheduledRides, BidScheduleRide, CompletedBidOnScheduledRide,
-                     CompletedScheduledRides, ScheduledNotifications, DriverVehicleInventory, Messages, ScheduleRide,
+                     AcceptedScheduledRides, RejectedScheduledRides,
+                     CompletedScheduledRidesToday, ScheduledNotifications, DriverVehicleInventory, ScheduleRide,
                      AssignScheduleToDriver, AcceptAssignedScheduled,
-                     RejectAssignedScheduled, CancelScheduledRide, ContactUs
+                     RejectAssignedScheduled, CancelScheduledRide, ContactUs, PassengersWallet, AskToLoadWallet
                      )
 
 
@@ -52,7 +52,7 @@ class AssignScheduleToDriverSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AssignScheduleToDriver
-        fields = ['id', 'username', 'administrator',  'ride', 'ride_accepted', 'date_assigned', 'time_assigned']
+        fields = ['id', 'username', 'administrator', 'ride', 'ride_accepted', 'date_assigned', 'time_assigned']
 
     def get_username(self, user):
         username = user.driver.username
@@ -85,36 +85,11 @@ class RejectedScheduledRidesSerializer(serializers.ModelSerializer):
         return username
 
 
-class MessagesSerializer(serializers.ModelSerializer):
-    username = serializers.SerializerMethodField('get_username')
-
-    class Meta:
-        model = Messages
-        fields = ['id', 'user', 'username', 'ride', 'message', 'date_sent', 'time_sent', 'get_profile_pic']
-        read_only_fields = ['ride']
-
-    def get_username(self, user):
-        username = user.user.username
-        return username
-
-
 class CompletedScheduledRidesSerializer(serializers.ModelSerializer):
     class Meta:
-        model = CompletedScheduledRides
-        fields = ['id', 'scheduled_ride', 'date_accepted']
-
-
-class CompletedBidOnScheduledRideSerializer(serializers.ModelSerializer):
-    username = serializers.SerializerMethodField('get_username')
-
-    class Meta:
-        model = CompletedBidOnScheduledRide
-        fields = ['id', 'scheduled_ride', 'username', 'administrator', 'date_accepted']
-        read_only_fields = ['scheduled_ride']
-
-    def get_username(self, user):
-        username = user.driver.username
-        return username
+        model = CompletedScheduledRidesToday
+        fields = ['id', 'scheduled_ride', 'amount', 'date_accepted', 'get_passenger_username', 'get_amount',
+                  'assigned_driver']
 
 
 class ScheduleRideSerializer(serializers.ModelSerializer):
@@ -128,7 +103,7 @@ class ScheduleRideSerializer(serializers.ModelSerializer):
                   'schedule_type', 'schedule_description', 'pick_up_time', 'start_date', 'completed',
                   'pickup_location', 'drop_off_location', 'status', 'price', 'date_scheduled', 'time_scheduled',
                   'get_administrator_profile_pic', 'slug',
-                  'get_passenger_profile_pic','get_passenger_name']
+                  'get_passenger_profile_pic', 'get_passenger_name']
         read_only_fields = ['passenger']
 
     def get_username(self, user):
@@ -162,19 +137,6 @@ class AdminScheduleRideSerializer(serializers.ModelSerializer):
     def get_admins_username(self, user):
         admins_username = user.administrator.username
         return admins_username
-
-
-class BidScheduleRideSerializer(serializers.ModelSerializer):
-    username = serializers.SerializerMethodField('get_username')
-
-    class Meta:
-        model = BidScheduleRide
-        fields = ['id', 'username', 'scheduled_ride', 'user', 'bid', 'date_accepted', 'get_profile_pic']
-        read_only_fields = ['user', 'scheduled_ride']
-
-    def get_username(self, user):
-        username = user.user.username
-        return username
 
 
 class ScheduledNotificationSerializer(serializers.ModelSerializer):
@@ -268,3 +230,16 @@ class ContactUsSerializer(serializers.ModelSerializer):
     class Meta:
         model = ContactUs
         fields = ['id', 'name', 'email', 'phone', 'message', 'date_sent']
+
+
+class PassengerWalletSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PassengersWallet
+        fields = ['id', 'passenger', 'amount', 'date_loaded', 'get_passengers_name', 'get_amount']
+
+
+class AskToLoadWalletSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AskToLoadWallet
+        fields = ['id', 'passenger', 'amount', 'date_requested', 'get_passengers_name', 'get_amount']
+        read_only_fields = ['passenger']

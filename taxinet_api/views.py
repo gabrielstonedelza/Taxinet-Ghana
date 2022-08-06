@@ -9,22 +9,50 @@ from rest_framework.views import APIView
 
 from .models import (Complains,
                      DriversLocation, ConfirmDriverPayment, DriverVehicleInventory,
-                     AcceptedScheduledRides, RejectedScheduledRides, BidScheduleRide, CompletedBidOnScheduledRide,
-                     CompletedScheduledRides, ScheduledNotifications, Messages, ScheduleRide, AssignScheduleToDriver,
+                     AcceptedScheduledRides, RejectedScheduledRides,
+                     CompletedScheduledRidesToday, ScheduledNotifications, ScheduleRide, AssignScheduleToDriver,
                      AcceptAssignedScheduled, ContactUs,
-                     RejectAssignedScheduled, CancelScheduledRide)
+                     RejectAssignedScheduled, CancelScheduledRide, PassengersWallet, AskToLoadWallet)
 from .serializers import (ComplainsSerializer, ContactUsSerializer,
                           ConfirmDriverPaymentSerializer, DriversLocationSerializer, ScheduleRideSerializer,
-                          BidScheduleRideSerializer, AcceptedScheduledRidesSerializer, \
-                          RejectedScheduledRidesSerializer, MessagesSerializer, DriverVehicleInventorySerializer,
+                          AcceptedScheduledRidesSerializer, \
+                          RejectedScheduledRidesSerializer, DriverVehicleInventorySerializer,
                           CompletedScheduledRidesSerializer, \
-                          CompletedBidOnScheduledRideSerializer, ScheduledNotificationSerializer,
+                          ScheduledNotificationSerializer,
                           CancelledScheduledRideSerializer, RejectScheduleToDriverSerializer,
                           AdminScheduleRideSerializer,
-                          AcceptScheduleToDriverSerializer, AssignScheduleToDriverSerializer)
+                          AcceptScheduleToDriverSerializer, AssignScheduleToDriverSerializer, PassengerWalletSerializer,
+                          AskToLoadWalletSerializer)
 
 
 # admin gets,posts and updates
+
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def admin_passengers_wallet(request):
+    serializer = PassengerWalletSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def admin_get_all_passengers_wallet(request):
+    wallets = PassengersWallet.objects.filter(notification_to=1).order_by('-date_loaded')
+    serializer = PassengerWalletSerializer(wallets, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def admin_get_all_request_to_load_wallet(request):
+    wallets = AskToLoadWallet.objects.filter(notification_to=1).order_by('-date_requested')
+    serializer = AskToLoadWalletSerializer(wallets, many=True)
+    return Response(serializer.data)
+
+
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def admin_get_all_user_notifications(request):
@@ -70,52 +98,10 @@ def admin_update_requested_ride(request, slug):
 
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
-def admin_send_message(request, slug):
-    ride = get_object_or_404(ScheduleRide, slug=slug)
-    serializer = MessagesSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save(ride=ride)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-@api_view(['GET'])
-@permission_classes([permissions.AllowAny])
-def admin_get_ride_messages(request, slug):
-    ride = get_object_or_404(ScheduleRide, slug=slug)
-    messages = Messages.objects.filter(ride=ride).order_by('date_sent')
-    serializer = MessagesSerializer(messages, many=True)
-    return Response(serializer.data)
-
-
-@api_view(['POST'])
-@permission_classes([permissions.AllowAny])
 def admin_assign_request_to_driver(request):
     serializer = AssignScheduleToDriverSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-@api_view(['POST'])
-@permission_classes([permissions.AllowAny])
-def admin_bid_ride(request, slug):
-    ride = get_object_or_404(ScheduleRide, slug=slug)
-    serializer = BidScheduleRideSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save(user=request.user, scheduled_ride=ride)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-@api_view(['POST'])
-@permission_classes([permissions.AllowAny])
-def admin_add_to_completed_bid_on_rides(request, slug):
-    ride = get_object_or_404(ScheduleRide, slug=slug)
-    serializer = CompletedBidOnScheduledRideSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save(scheduled_ride=ride)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -201,6 +187,25 @@ def admin_get_scheduled_for_weekly(request):
 
 
 # admin gets,posts and updates
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_my_wallet(request):
+    wallet = PassengersWallet.objects.filter(passengers=request.user).order_by('-date_loaded')
+    serializer = PassengerWalletSerializer(wallet, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def request_to_load_wallet(request):
+    serializer = AskToLoadWallet(data=request.data)
+    if serializer.is_valid():
+        serializer.save(passenger=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
 def send_to_contact(request):
@@ -325,32 +330,11 @@ def get_driver_location(request, driver_id):
     return Response(serializer.data)
 
 
-# messages
-@api_view(['POST'])
-@permission_classes([permissions.IsAuthenticatedOrReadOnly])
-def send_message(request, ride_id):
-    ride = get_object_or_404(ScheduleRide, id=ride_id)
-    serializer = MessagesSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save(user=request.user, ride=ride)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-@api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
-def get_driver_passenger_messages(request, ride_id):
-    ride = get_object_or_404(ScheduleRide, id=ride_id)
-    messages = Messages.objects.filter(ride=ride).order_by('date_sent')
-    serializer = BidScheduleRideSerializer(messages, many=True)
-    return Response(serializer.data)
-
-
 # completed rides
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticatedOrReadOnly])
 def get_all_completed_rides(request):
-    completed_rides = CompletedScheduledRides.objects.all().order_by('-date_completed')
+    completed_rides = CompletedScheduledRidesToday.objects.all().order_by('-date_completed')
     serializer = CompletedScheduledRidesSerializer(completed_rides, many=True)
     return Response(serializer.data)
 
@@ -361,25 +345,6 @@ def add_to_completed_rides(request):
     serializer = CompletedScheduledRidesSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save(driver=request.user)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-# completed bid on rides
-@api_view(['GET'])
-@permission_classes([permissions.IsAuthenticatedOrReadOnly])
-def get_all_completed_bid_on_rides(request):
-    completed_bid_rides = CompletedBidOnScheduledRide.objects.all().order_by('-date_completed')
-    serializer = CompletedBidOnScheduledRideSerializer(completed_bid_rides, many=True)
-    return Response(serializer.data)
-
-
-@api_view(['POST'])
-@permission_classes([permissions.IsAuthenticatedOrReadOnly])
-def add_to_completed_bid_on_rides(request):
-    serializer = CompletedBidOnScheduledRideSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -544,27 +509,6 @@ def delete_requested_ride(request, ride_id):
     except ScheduleRide.DoesNotExist:
         return Response(status=status.HTTP_204_NO_CONTENT)
     return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-# accept requested ride functions
-@api_view(['POST'])
-@permission_classes([permissions.IsAuthenticated])
-def bid_ride(request, ride_id):
-    ride = get_object_or_404(ScheduleRide, id=ride_id)
-    serializer = BidScheduleRideSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save(user=request.user, scheduled_ride=ride)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-@api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
-def get_all_bids(request, ride_id):
-    ride = get_object_or_404(ScheduleRide, id=ride_id)
-    bids = BidScheduleRide.objects.filter(scheduled_ride=ride).order_by('date_accepted')
-    serializer = BidScheduleRideSerializer(bids, many=True)
-    return Response(serializer.data)
 
 
 @api_view(['GET'])

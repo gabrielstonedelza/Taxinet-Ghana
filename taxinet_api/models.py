@@ -126,65 +126,6 @@ class ScheduleRide(models.Model):
         return self.passenger.username
 
 
-class Messages(models.Model):
-    ride = models.ForeignKey(ScheduleRide, on_delete=models.CASCADE, related_name="Ride_receiving_messages")
-    user = models.ForeignKey(DeUser, on_delete=models.CASCADE)
-    message = models.TextField()
-    time_sent = models.TimeField(auto_now_add=True)
-    date_sent = models.DateField(auto_now_add=True)
-
-    def __str__(self):
-        return self.ride.schedule_title
-
-    def get_profile_pic(self):
-        de_user = User.objects.get(username=self.user.username)
-        if de_user.user_type == 'Passenger':
-            my_passenger = PassengerProfile.objects.get(user=self.ride.passenger)
-            if my_passenger:
-                return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
-            return ""
-
-        if de_user.user_type == 'Administrator':
-            my_driver = AdministratorsProfile.objects.get(user=self.ride.administrator)
-            if my_driver:
-                return "https://taxinetghana.xyz" + my_driver.profile_pic.url
-            return ""
-
-
-class BidScheduleRide(models.Model):
-    scheduled_ride = models.ForeignKey(ScheduleRide, on_delete=models.CASCADE, related_name="Scheduled_Ride_to_accept")
-    user = models.ForeignKey(DeUser, on_delete=models.CASCADE)
-    bid = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
-    date_accepted = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return str(self.bid)
-
-    def get_profile_pic(self):
-        deUser = User.objects.get(username=self.user.username)
-        if deUser.user_type == 'Passenger':
-            my_passenger = PassengerProfile.objects.get(user=self.scheduled_ride.passenger)
-            if my_passenger:
-                return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
-            return ""
-
-        if deUser.user_type == 'Administrator':
-            my_admin = AdministratorsProfile.objects.get(user=self.scheduled_ride.administrator)
-            if my_admin:
-                return "https://taxinetghana.xyz" + my_admin.profile_pic.url
-            return ""
-
-
-class CompletedBidOnScheduledRide(models.Model):
-    scheduled_ride = models.ForeignKey(ScheduleRide, on_delete=models.CASCADE)
-    administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE,
-                                      related_name="Administrator_completing_scheduled_ride", default=1)
-    date_accepted = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"Bid on ride {self.scheduled_ride.id} is complete"
-
-
 class AssignScheduleToDriver(models.Model):
     administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1)
     ride = models.ForeignKey(ScheduleRide, on_delete=models.CASCADE)
@@ -235,12 +176,22 @@ class RejectedScheduledRides(models.Model):
         return f"{self.driver} rejected ride {self.scheduled_ride.id}"
 
 
-class CompletedScheduledRides(models.Model):
+class CompletedScheduledRidesToday(models.Model):
     scheduled_ride = models.ForeignKey(ScheduleRide, on_delete=models.CASCADE)
+    amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
     date_completed = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Ride {self.scheduled_ride.id} is complete"
+        return f"Ride {self.scheduled_ride.id} for today is complete"
+
+    def get_passenger_username(self):
+        return self.scheduled_ride.passenger.username
+
+    def get_amount(self):
+        return self.amount
+
+    def assigned_driver(self):
+        return self.scheduled_ride.assigned_driver.username
 
 
 class CancelScheduledRide(models.Model):
@@ -433,3 +384,35 @@ class ContactAdmin(models.Model):
 
     def __str__(self):
         return self.user.username
+
+
+class PassengersWallet(models.Model):
+    administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1,related_name="administrator_for_wallet")
+    passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="passengers_wallet")
+    amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
+    date_loaded = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.amount
+
+    def get_passengers_name(self):
+        return self.passenger.username
+
+    def get_amount(self):
+        return self.amount
+
+
+class AskToLoadWallet(models.Model):
+    administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1, related_name="administrator")
+    passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE)
+    amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
+    date_requested = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.amount
+
+    def get_passengers_name(self):
+        return self.passenger.username
+
+    def get_amount(self):
+        return self.amount

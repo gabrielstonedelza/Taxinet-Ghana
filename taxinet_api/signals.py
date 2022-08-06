@@ -1,10 +1,11 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from .models import (ScheduleRide, BidScheduleRide, Complains, ConfirmDriverPayment, Messages, AcceptedScheduledRides,
-                     RejectedScheduledRides, BidScheduleRide, CompletedBidOnScheduledRide, DriverVehicleInventory,
-                     CompletedScheduledRides, ScheduledNotifications, AssignScheduleToDriver, AcceptAssignedScheduled,
-                     RejectAssignedScheduled, CancelScheduledRide)
+from .models import (ScheduleRide, Complains, ConfirmDriverPayment, AcceptedScheduledRides,
+                     RejectedScheduledRides, DriverVehicleInventory,
+                     CompletedScheduledRidesToday, ScheduledNotifications, AssignScheduleToDriver,
+                     AcceptAssignedScheduled,
+                     RejectAssignedScheduled, CancelScheduledRide, PassengersWallet, AskToLoadWallet)
 from django.conf import settings
 
 User = settings.AUTH_USER_MODEL
@@ -37,25 +38,7 @@ def alert_rejected_ride(sender, created, instance, **kwargs):
                                               ride_id=instance.ride.id)
 
 
-@receiver(post_save, sender=CompletedBidOnScheduledRide)
-def alert_completed_bid_on_ride(sender, created, instance, **kwargs):
-    if created:
-        title = "Bidding Accepted"
-        notification_tag = "Bid Completed"
-        message = f"{instance.administrator.username} accepted bid and now complete."
-        ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
-                                              notification_tag=notification_tag, notification_message=message,
-                                              notification_from=instance.ride.administrator,
-                                              notification_to=instance.ride.passenger,
-                                              drivers_lat=instance.drivers_lat, drivers_lng=instance.drivers_lng,
-                                              ride_id=instance.ride.id, passengers_pickup=instance.ride.pick_up,
-                                              pick_up_place_id=instance.ride.passengers_pick_up_place_id,
-                                              passengers_lat=instance.ride.passengers_lat,
-                                              passengers_lng=instance.ride.passengers_lng
-                                              )
-
-
-@receiver(post_save, sender=CompletedScheduledRides)
+@receiver(post_save, sender=CompletedScheduledRidesToday)
 def alert_completed_ride(sender, created, instance, **kwargs):
     if created:
         title = "Your trip is completed"
@@ -66,19 +49,6 @@ def alert_completed_ride(sender, created, instance, **kwargs):
                                               notification_from=instance.ride.administrator,
                                               notification_to=instance.ride.passenger,
                                               ride_id=instance.ride.id)
-
-
-@receiver(post_save, sender=Messages)
-def alert_received_message(sender, created, instance, **kwargs):
-    if created and instance.ride.passenger == instance.user:
-        title = "New message"
-        notification_tag = "Messaging"
-        message = f"{instance.user.username} sent you a message"
-        ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
-                                              notification_message=message, notification_tag=notification_tag,
-                                              notification_from=instance.ride.passenger,
-                                              notification_to=instance.ride.administrator,
-                                              message_id=instance.id)
 
     if created and instance.ride.administrator == instance.user:
         title = "New message"
@@ -101,21 +71,9 @@ def alert_schedule(sender, created, instance, **kwargs):
     if created:
         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                               notification_message=message, notification_tag=notification_tag,
-                                              notification_from=instance.passenger, notification_to=instance.administrator,
+                                              notification_from=instance.passenger,
+                                              notification_to=instance.administrator,
                                               schedule_ride_id=instance.id)
-
-
-@receiver(post_save, sender=BidScheduleRide)
-def alert_bidding(sender, created, instance, **kwargs):
-    if created and instance.scheduled_ride.passenger == instance.user:
-        title = "New bid on price"
-        notification_tag = "Bidding"
-        message = f"{instance.user.username} has offered to pay {instance.bid}"
-        ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
-                                              notification_message=message, notification_tag=notification_tag,
-                                              notification_from=instance.scheduled_ride.passenger,
-                                              notification_to=instance.scheduled_ride.administrator,
-                                              schedule_accepted_id=instance.id)
 
         if created and instance.scheduled_ride.administrator == instance.user:
             title = "New bid on price"
@@ -191,3 +149,25 @@ def alert_cancelled_ride(sender, created, instance, **kwargs):
                                           notification_message=message, notification_tag=notification_tag,
                                           notification_from=instance.passenger,
                                           notification_to=admin_user)
+
+
+@receiver(post_save, sender=PassengersWallet)
+def alert_loaded_wallet(sender, created, instance, **kwargs):
+    title = "Wallet Loaded"
+    notification_tag = "Wallet Loaded"
+    message = f"{instance.passenger.username}, your wallet has been loaded with the amount of GHS{instance.amount}"
+    ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                          notification_message=message, notification_tag=notification_tag,
+                                          notification_from=instance.administrator,
+                                          notification_to=instance.passenger)
+
+
+@receiver(post_save, sender=AskToLoadWallet)
+def alert_request_to_load_wallet(sender, created, instance, **kwargs):
+    title = "Wants to load wallet"
+    notification_tag = "Wants to load wallet"
+    message = f"{instance.passenger.username} wants to load their wallet with the amount of GHS{instance.amount}"
+    ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                          notification_message=message, notification_tag=notification_tag,
+                                          notification_from=instance.passenger,
+                                          notification_to=instance.adminstrator)
