@@ -91,7 +91,7 @@ def admin_update_requested_ride(request, slug):
     ride = get_object_or_404(ScheduleRide, slug=slug)
     serializer = AdminScheduleRideSerializer(ride, data=request.data)
     if serializer.is_valid():
-        serializer.save(administrator=request.user)
+        serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

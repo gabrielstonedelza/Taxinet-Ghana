@@ -128,7 +128,6 @@ class AdminScheduleRideSerializer(serializers.ModelSerializer):
                   'pickup_location', 'drop_off_location', 'price', 'date_scheduled', 'time_scheduled',
                   'get_administrator_profile_pic', 'slug',
                   'get_passenger_profile_pic']
-        read_only_fields = ['administrator']
 
     def get_username(self, user):
         username = user.passenger.username
