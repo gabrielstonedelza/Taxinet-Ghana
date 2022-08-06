@@ -101,7 +101,7 @@ class ScheduleRideSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'passenger', 'admins_username', 'administrator', 'schedule_title',
                   'schedule_priority', 'ride_type',
                   'schedule_type', 'schedule_description', 'pick_up_time', 'start_date', 'completed',
-                  'pickup_location', 'drop_off_location', 'status', 'price', 'date_scheduled', 'time_scheduled',
+                  'pickup_location', 'drop_off_location', 'status', 'price', 'initial_payment', 'date_scheduled', 'time_scheduled',
                   'get_administrator_profile_pic', 'slug',
                   'get_passenger_profile_pic', 'get_passenger_name']
         read_only_fields = ['passenger']
