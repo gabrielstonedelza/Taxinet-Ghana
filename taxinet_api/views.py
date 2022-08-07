@@ -124,6 +124,14 @@ def admin_get_driver_inventory(request, driver_id):
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
+def admin_get_inventory_detail(request, id):
+    driver_inventory = DriverVehicleInventory.objects.filter(id=id).order_by('-date_checked')
+    serializer = DriverVehicleInventorySerializer(driver_inventory, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
 def admin_get_pending_schedules(request):
     pending = ScheduleRide.objects.filter(status="Pending").order_by('-date_scheduled')
     serializer = ScheduleRideSerializer(pending, many=True)
