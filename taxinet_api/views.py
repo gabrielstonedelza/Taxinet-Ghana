@@ -599,6 +599,14 @@ def read_notification(request, id):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def notification_detail(request, id):
+    notification = get_object_or_404(ScheduledNotifications, id=id)
+    serializer = ScheduledNotificationSerializer(notification, many=False)
+    return Response(serializer.data)
+
+
 # Complains
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])

@@ -55,6 +55,7 @@ urlpatterns = [
     path('user_notifications/', views.get_user_notifications),
     path('user_triggerd_notifications/', views.get_triggered_notifications),
     path('user_read_notifications/<int:id>/', views.read_notification),
+    path("notification/<int:id>/", views.notification_detail),
 
     #     Complains
     path('complains/new/', views.post_complain),
