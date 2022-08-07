@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, AbstractBaseUser
 from django.conf import settings
+from django.utils import timezone
 
 DeUser = settings.AUTH_USER_MODEL
 APP_TYPE = (
@@ -51,9 +52,13 @@ class DriverProfile(models.Model):
     next_of_kin_number = models.CharField(max_length=100, blank=True)
     taxinet_number = models.CharField(max_length=100, default=0)
     verified = models.BooleanField(default=False)
+    date_created = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.user.username
+
+    def get_user_type(self):
+        return self.user.user_type
 
     def get_front_side_ghana_card(self):
         if self.front_side_ghana_card:
@@ -95,9 +100,13 @@ class PassengerProfile(models.Model):
     next_of_kin_number = models.CharField(max_length=100, blank=True)
     referral = models.CharField(max_length=100, blank=True)
     verified = models.BooleanField(default=False)
+    date_created = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.user.username
+
+    def get_user_type(self):
+        return self.user.user_type
 
     def get_front_side_ghana_card(self):
         if self.front_side_ghana_card:

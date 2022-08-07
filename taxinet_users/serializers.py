@@ -28,7 +28,7 @@ class DriverProfileSerializer(serializers.ModelSerializer):
                   'next_of_kin', 'next_of_kin_number', 'driver_profile_pic', 'get_drivers_license',
                   'taxinet_number', 'verified', 'get_front_side_ghana_card', 'get_back_side_ghana_card',
                   'get_drivers_email',
-                  'get_drivers_phone_number', ]
+                  'get_drivers_phone_number', 'get_user_type']
         read_only_fields = ['user']
 
     def get_username(self, user):
@@ -47,7 +47,7 @@ class PassengerProfileSerializer(serializers.ModelSerializer):
                   'verified',
                   'next_of_kin', 'next_of_kin_number', 'get_passengers_email',
                   'get_passengers_phone_number', 'get_front_side_ghana_card', 'get_back_side_ghana_card',
-                  'get_passengers_full_name']
+                  'get_passengers_full_name', 'get_user_type']
         read_only_fields = ['user']
 
     def get_username(self, user):

@@ -8,7 +8,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie, vary_on_headers
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated,AllowAny
 
 
 def taxinet_home(request):
@@ -27,6 +27,31 @@ class AllPassengersView(generics.ListCreateAPIView):
         serializer = UsersSerializer(queryset, many=True)
         return Response(serializer.data)
 
+
+class AllPassengersProfileView(generics.ListCreateAPIView):
+    queryset = PassengerProfile.objects.all().order_by("-date_created")
+    serializer_class = PassengerProfileSerializer
+    permission_classes = [AllowAny]
+
+    @method_decorator(cache_page(60 * 60 * 2))
+    def list(self, request):
+        # Note the use of `get_queryset()` instead of `self.queryset`
+        queryset = self.get_queryset()
+        serializer = PassengerProfileSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+class AllDriversProfileView(generics.ListCreateAPIView):
+    queryset = DriverProfile.objects.all().order_by("-date_created")
+    serializer_class = DriverProfileSerializer
+    permission_classes = [AllowAny]
+
+    @method_decorator(cache_page(60 * 60 * 2))
+    def list(self, request):
+        # Note the use of `get_queryset()` instead of `self.queryset`
+        queryset = self.get_queryset()
+        serializer = DriverProfileSerializer(queryset, many=True)
+        return Response(serializer.data)
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
