@@ -324,6 +324,15 @@ class DriverVehicleInventory(models.Model):
     def __str__(self):
         return f"{self.driver.username} has check car today"
 
+    def get_drivers_name(self):
+        return self.driver.username
+
+    def get_driver_profile_pic(self):
+        my_driver = DriverProfile.objects.get(user=self.driver)
+        if my_driver:
+            return "https://taxinetghana.xyz" + my_driver.profile_pic.url
+        return ""
+
 
 class ScheduledNotifications(models.Model):
     notification_id = models.CharField(max_length=100, blank=True, default="")
