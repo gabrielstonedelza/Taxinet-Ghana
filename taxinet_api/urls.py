@@ -14,6 +14,7 @@ urlpatterns = [
     path("admin_assign_request_to_driver/", views.admin_assign_request_to_driver),
 
     path("admin_get_all_drivers_inventories/", views.admin_get_all_drivers_inventories),
+    path("admin_get_inventories_today/", views.admin_get_inventories_today),
     path("admin_get_driver_inventory/<int:driver_id>/", views.admin_get_driver_inventory),
     path("admin_get_driver_inventory_detail/<int:id>/", views.admin_get_inventory_detail),
     path("admin_get_pending_schedules/", views.admin_get_pending_schedules),

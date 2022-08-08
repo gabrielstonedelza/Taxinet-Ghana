@@ -6,6 +6,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie, vary_on_headers
 from rest_framework.views import APIView
+from datetime import datetime, date, time, timedelta
 
 from .models import (Complains,
                      DriversLocation, ConfirmDriverPayment, DriverVehicleInventory,
@@ -110,6 +111,15 @@ def admin_assign_request_to_driver(request):
 @permission_classes([permissions.AllowAny])
 def admin_get_all_drivers_inventories(request):
     inventories = DriverVehicleInventory.objects.all().order_by('-date_checked')
+    serializer = DriverVehicleInventorySerializer(inventories, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def admin_get_inventories_today(request):
+    my_date_tim = datetime.now()
+    inventories = DriverVehicleInventory.objects.filter(date_checked=my_date_tim.today()).order_by('-date_checked')
     serializer = DriverVehicleInventorySerializer(inventories, many=True)
     return Response(serializer.data)
 
