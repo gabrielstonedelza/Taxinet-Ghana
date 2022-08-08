@@ -125,8 +125,8 @@ def admin_get_driver_inventory(request, driver_id):
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def admin_get_inventory_detail(request, id):
-    driver_inventory = DriverVehicleInventory.objects.filter(id=id).order_by('-date_checked')
-    serializer = DriverVehicleInventorySerializer(driver_inventory, many=True)
+    driver_inventory = get_object_or_404(DriverVehicleInventory, id=id)
+    serializer = DriverVehicleInventorySerializer(driver_inventory, many=False)
     return Response(serializer.data)
 
 
