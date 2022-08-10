@@ -8,7 +8,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie, vary_on_headers
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated,AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 
 def taxinet_home(request):
@@ -52,6 +52,7 @@ class AllDriversProfileView(generics.ListCreateAPIView):
         queryset = self.get_queryset()
         serializer = DriverProfileSerializer(queryset, many=True)
         return Response(serializer.data)
+
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
