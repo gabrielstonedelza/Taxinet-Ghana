@@ -12,6 +12,7 @@ urlpatterns = [
     path("admin_request_detail/<str:slug>/", views.admin_ride_detail),
     path("admin_update_requested_ride/<str:slug>/", views.admin_update_requested_ride),
     path("admin_assign_request_to_driver/", views.admin_assign_request_to_driver),
+    path("admin_get_all_assigned_drivers/", views.admin_get_all_assigned_drivers),
 
     path("admin_get_all_drivers_inventories/", views.admin_get_all_drivers_inventories),
     path("admin_get_inventories_today/", views.admin_get_inventories_today),

@@ -109,6 +109,14 @@ def admin_assign_request_to_driver(request):
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
+def admin_get_all_assigned_drivers(request):
+    all_assigned_drivers = AssignScheduleToDriver.objects.all().order_by('-date_assigned')
+    serializer = AssignScheduleToDriverSerializer(all_assigned_drivers, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
 def admin_get_all_drivers_inventories(request):
     inventories = DriverVehicleInventory.objects.all().order_by('-date_checked')
     serializer = DriverVehicleInventorySerializer(inventories, many=True)
