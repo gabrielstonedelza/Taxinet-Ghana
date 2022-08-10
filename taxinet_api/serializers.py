@@ -52,7 +52,7 @@ class AssignScheduleToDriverSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AssignScheduleToDriver
-        fields = ['id', 'username', 'administrator', 'ride', 'ride_accepted', 'date_assigned', 'time_assigned']
+        fields = ['id', 'username', 'administrator', 'ride', 'driver', 'ride_accepted', 'date_assigned', 'time_assigned']
 
     def get_username(self, user):
         username = user.driver.username
