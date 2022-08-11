@@ -52,7 +52,8 @@ class AssignScheduleToDriverSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AssignScheduleToDriver
-        fields = ['id', 'username', 'administrator', 'ride', 'driver', 'ride_accepted', 'date_assigned', 'time_assigned']
+        fields = ['id', 'username', 'administrator', 'ride', 'driver', 'ride_accepted', 'date_assigned',
+                  'time_assigned']
 
     def get_username(self, user):
         username = user.driver.username
@@ -98,13 +99,14 @@ class ScheduleRideSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ScheduleRide
-        fields = ['id', 'username', 'passenger', 'admins_username', 'administrator', 'schedule_title',
+        fields = ['id', 'username', 'assigned_driver', 'passenger', 'admins_username', 'administrator',
+                  'schedule_title',
                   'schedule_priority', 'ride_type',
                   'schedule_type', 'schedule_description', 'pick_up_time', 'start_date', 'completed',
                   'pickup_location', 'drop_off_location', 'status', 'price', 'initial_payment', 'date_scheduled',
                   'time_scheduled',
                   'get_administrator_profile_pic', 'slug',
-                  'get_passenger_profile_pic', 'get_passenger_name']
+                  'get_passenger_profile_pic', 'get_passenger_name', 'get_assigned_driver_name']
         read_only_fields = ['passenger']
 
     def get_username(self, user):
