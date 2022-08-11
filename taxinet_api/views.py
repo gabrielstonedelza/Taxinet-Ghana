@@ -24,9 +24,20 @@ from .serializers import (ComplainsSerializer, ContactUsSerializer,
                           AdminScheduleRideSerializer,
                           AcceptScheduleToDriverSerializer, AssignScheduleToDriverSerializer, PassengerWalletSerializer,
                           AskToLoadWalletSerializer)
+from django.http import Http404
 
 
 # admin gets,posts and updates
+@api_view(['GET', 'DELETE'])
+@permission_classes([permissions.AllowAny])
+def delete_assigned_driver(request, pk):
+    try:
+        assigned_driver = AssignScheduleToDriver.objects.get(pk=pk)
+        assigned_driver.delete()
+    except assigned_driver.DoesNotExist:
+        return Http404
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])

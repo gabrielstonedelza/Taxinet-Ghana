@@ -4,6 +4,7 @@ from . import views
 
 urlpatterns = [
     # admin urls
+    path("delete_assigned_driver/<int:pk>/", views.delete_assigned_driver),
     path("admin_passengers_wallet/", views.admin_passengers_wallet),
     path("admin_get_all_passengers_wallet/", views.admin_get_all_passengers_wallet),
     path("admin_get_all_request_to_load_wallet/", views.admin_get_all_request_to_load_wallet),
