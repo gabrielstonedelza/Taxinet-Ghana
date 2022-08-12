@@ -52,7 +52,7 @@ def admin_load_passengers_wallet(request):
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def admin_get_all_passengers_wallet(request):
-    wallets = PassengersWallet.objects.filter(notification_to=1).order_by('-date_loaded')
+    wallets = PassengersWallet.objects.all().order_by('-date_loaded')
     serializer = PassengerWalletSerializer(wallets, many=True)
     return Response(serializer.data)
 
