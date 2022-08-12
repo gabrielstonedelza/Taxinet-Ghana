@@ -245,5 +245,5 @@ class PassengerWalletSerializer(serializers.ModelSerializer):
 class AskToLoadWalletSerializer(serializers.ModelSerializer):
     class Meta:
         model = AskToLoadWallet
-        fields = ['id', 'passenger', 'amount', 'date_requested', 'get_passengers_name', 'get_amount']
+        fields = ['id', 'passenger', 'amount', 'date_requested', 'get_passengers_name', 'get_amount','time_requested']
         read_only_fields = ['passenger']
