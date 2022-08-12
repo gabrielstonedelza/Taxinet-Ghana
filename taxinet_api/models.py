@@ -414,6 +414,12 @@ class PassengersWallet(models.Model):
     def get_amount(self):
         return str(self.amount)
 
+    def get_passenger_profile_pic(self):
+        my_passenger = PassengerProfile.objects.get(user=self.passenger)
+        if my_passenger:
+            return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
+        return ""
+
 
 class AskToLoadWallet(models.Model):
     administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1, related_name="administrator")
