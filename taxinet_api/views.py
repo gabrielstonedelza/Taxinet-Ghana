@@ -41,7 +41,7 @@ def delete_assigned_driver(request, pk):
 
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
-def admin_passengers_wallet(request):
+def admin_load_passengers_wallet(request):
     serializer = PassengerWalletSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()

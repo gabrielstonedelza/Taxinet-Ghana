@@ -406,13 +406,13 @@ class PassengersWallet(models.Model):
     date_loaded = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.amount
+        return str(self.amount)
 
     def get_passengers_name(self):
         return self.passenger.username
 
     def get_amount(self):
-        return self.amount
+        return str(self.amount)
 
 
 class AskToLoadWallet(models.Model):
