@@ -170,4 +170,4 @@ def alert_request_to_load_wallet(sender, created, instance, **kwargs):
     ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                           notification_message=message, notification_tag=notification_tag,
                                           notification_from=instance.passenger,
-                                          notification_to=instance.adminstrator)
+                                          notification_to=instance.administrator)
