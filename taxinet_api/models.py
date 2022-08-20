@@ -434,7 +434,7 @@ class AskToLoadWallet(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return str(self.amount)
+        return self.title
 
     def get_passengers_name(self):
         return self.passenger.username
