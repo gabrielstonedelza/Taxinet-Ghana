@@ -239,11 +239,13 @@ class ContactUsSerializer(serializers.ModelSerializer):
 class PassengerWalletSerializer(serializers.ModelSerializer):
     class Meta:
         model = PassengersWallet
-        fields = ['id', 'passenger', 'amount', 'date_loaded', 'get_passengers_name', 'get_amount', 'get_passenger_profile_pic']
+        fields = ['id', 'passenger', 'amount', 'date_loaded', 'get_passengers_name', 'get_amount',
+                  'get_passenger_profile_pic']
 
 
 class AskToLoadWalletSerializer(serializers.ModelSerializer):
     class Meta:
         model = AskToLoadWallet
-        fields = ['id', 'passenger', 'amount', 'date_requested', 'get_passengers_name', 'get_amount','time_requested']
+        fields = ['id', 'passenger', 'amount', 'date_requested', 'get_passengers_name', 'get_amount', 'time_requested',
+                  'title']
         read_only_fields = ['passenger']
