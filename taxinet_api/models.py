@@ -420,7 +420,7 @@ class PassengersWallet(models.Model):
         return self.passenger.username
 
     def get_amount(self):
-        return str(self.amount)
+        return self.passenger.username
 
     def get_passenger_profile_pic(self):
         my_passenger = PassengerProfile.objects.get(user=self.passenger)
@@ -432,7 +432,7 @@ class PassengersWallet(models.Model):
 class AskToLoadWallet(models.Model):
     administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1, related_name="administrator")
     title = models.CharField(max_length=200, default="Wants to load wallet")
-    passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE)
+    passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE,unique=True)
     amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
     date_requested = models.DateField(default=timezone.now)
     time_requested = models.TimeField(default=timezone.now)
