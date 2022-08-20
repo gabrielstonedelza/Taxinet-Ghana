@@ -7,6 +7,8 @@ urlpatterns = [
     path("delete_assigned_driver/<int:pk>/", views.delete_assigned_driver),
     path("admin_load_passengers_wallet/", views.admin_load_passengers_wallet),
     path("admin_get_all_passengers_wallet/", views.admin_get_all_passengers_wallet),
+    path("wallet_detail/<int:id>/", views.wallet_detail),
+    path("update_wallet/<int:id>/", views.update_wallet),
     path("admin_get_all_request_to_load_wallet/", views.admin_get_all_request_to_load_wallet),
     path("admin_get_all_requests/", views.admin_get_all_requests),
     path("admin_get_five_requests/", views.admin_get_five_requests),
