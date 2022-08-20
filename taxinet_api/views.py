@@ -91,7 +91,7 @@ def load_wallet_detail(request, id):
     if wallet:
         wallet.read = "Read"
         wallet.save()
-    serializer = PassengerWalletSerializer(wallet, many=False)
+    serializer = AskToLoadWalletSerializer(wallet, many=False)
     return Response(serializer.data)
 
 
