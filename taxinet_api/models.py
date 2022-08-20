@@ -450,3 +450,9 @@ class AskToLoadWallet(models.Model):
 
     def get_amount(self):
         return str(self.amount)
+
+    def get_passenger_profile_pic(self):
+        my_passenger = PassengerProfile.objects.get(user=self.passenger)
+        if my_passenger:
+            return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
+        return ""
