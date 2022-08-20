@@ -9,6 +9,10 @@ from django.utils.text import slugify
 
 DeUser = settings.AUTH_USER_MODEL
 # Create your models here.
+READ_STATUS = (
+    ("Read", "Read"),
+    ("Not Read", "Not Read"),
+)
 
 NOTIFICATIONS_STATUS = (
     ("Read", "Read"),
@@ -101,6 +105,7 @@ class ScheduleRide(models.Model):
     slug = models.SlugField(max_length=100, default='', blank=True)
     date_scheduled = models.DateField(auto_now_add=True)
     time_scheduled = models.TimeField(auto_now_add=True)
+    read = models.CharField(max_length=10, choices=READ_STATUS, default="Not Read")
 
     def __str__(self):
         return str(self.pk)
@@ -211,8 +216,8 @@ class Complains(models.Model):
     complainant = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="user_making_complain")
     offender = models.ForeignKey(DeUser, on_delete=models.CASCADE)
     complain = models.TextField(blank=True)
-    read = models.BooleanField(default=False)
     date_posted = models.DateTimeField(auto_now_add=True)
+    read = models.CharField(max_length=10, choices=READ_STATUS, default="Not Read")
 
     def __str__(self):
         return f"{self.complainant.username} just posted a complain"
@@ -323,6 +328,7 @@ class DriverVehicleInventory(models.Model):
     checked_today = models.BooleanField(default=False)
     date_checked = models.DateField(auto_now_add=True)
     time_checked = models.TimeField(auto_now_add=True)
+    read = models.CharField(max_length=10, choices=READ_STATUS, default="Not Read")
 
     def __str__(self):
         return f"{self.driver.username} has check car today"
@@ -384,6 +390,7 @@ class ContactUs(models.Model):
     phone = models.CharField(max_length=16, blank=True)
     message = models.TextField()
     date_sent = models.DateTimeField(auto_now_add=True)
+    read = models.CharField(max_length=10, choices=READ_STATUS, default="Not Read")
 
     def __str__(self):
         return self.name
@@ -393,6 +400,7 @@ class ContactAdmin(models.Model):
     user = models.ForeignKey(DeUser, on_delete=models.CASCADE)
     message = models.TextField()
     date_sent = models.DateTimeField(auto_now_add=True)
+    read = models.CharField(max_length=10, choices=READ_STATUS, default="Not Read")
 
     def __str__(self):
         return self.user.username
@@ -428,6 +436,7 @@ class AskToLoadWallet(models.Model):
     amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
     date_requested = models.DateField(default=timezone.now)
     time_requested = models.TimeField(default=timezone.now)
+    read = models.CharField(max_length=10, choices=READ_STATUS, default="Not Read")
 
     def save(self, *args, **kwargs):
         self.title = f"{self.passenger.username} wants to load wallet"

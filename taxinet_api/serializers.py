@@ -172,7 +172,7 @@ class ComplainsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Complains
-        fields = ['id', 'username', 'complainant', 'offender', 'complain', 'read', 'date_posted']
+        fields = ['id', 'username', 'complainant', 'offender', 'complain', 'read', 'date_posted', 'read']
         read_only_fields = ['complainant']
 
     def get_username(self, user):
@@ -247,5 +247,5 @@ class AskToLoadWalletSerializer(serializers.ModelSerializer):
     class Meta:
         model = AskToLoadWallet
         fields = ['id', 'passenger', 'amount', 'date_requested', 'get_passengers_name', 'get_amount', 'time_requested',
-                  'title']
+                  'title', 'read']
         read_only_fields = ['passenger']

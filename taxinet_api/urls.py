@@ -9,6 +9,7 @@ urlpatterns = [
     path("admin_get_all_passengers_wallet/", views.admin_get_all_passengers_wallet),
     path("wallet_detail/<int:id>/", views.wallet_detail),
     path("update_wallet/<int:id>/", views.update_wallet),
+    path("load_wallet_detail/<int:id>/", views.load_wallet_detail),
     path("admin_get_all_request_to_load_wallet/", views.admin_get_all_request_to_load_wallet),
     path("admin_get_all_requests/", views.admin_get_all_requests),
     path("admin_get_five_requests/", views.admin_get_five_requests),

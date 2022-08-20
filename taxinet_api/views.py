@@ -86,6 +86,17 @@ def admin_get_all_request_to_load_wallet(request):
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
+def load_wallet_detail(request, id):
+    wallet = get_object_or_404(AskToLoadWallet, id=id)
+    if wallet:
+        wallet.read = "Read"
+        wallet.save()
+    serializer = PassengerWalletSerializer(wallet, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
 def admin_get_all_user_notifications(request):
     notifications = ScheduledNotifications.objects.filter(notification_to=1).order_by('-date_created')[:6]
     serializer = ScheduledNotificationSerializer(notifications, many=True)
@@ -112,6 +123,9 @@ def admin_get_all_requests(request):
 @permission_classes([permissions.AllowAny])
 def admin_ride_detail(request, slug):
     ride = get_object_or_404(ScheduleRide, slug=slug)
+    if ride:
+        ride.read = "Read"
+        ride.save()
     serializer = ScheduleRideSerializer(ride, many=False)
     return Response(serializer.data)
 
@@ -174,6 +188,9 @@ def admin_get_driver_inventory(request, driver_id):
 @permission_classes([permissions.AllowAny])
 def admin_get_inventory_detail(request, id):
     driver_inventory = get_object_or_404(DriverVehicleInventory, id=id)
+    if driver_inventory:
+        driver_inventory.read = "Read"
+        driver_inventory.save()
     serializer = DriverVehicleInventorySerializer(driver_inventory, many=False)
     return Response(serializer.data)
 
