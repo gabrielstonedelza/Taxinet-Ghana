@@ -190,6 +190,7 @@ def admin_get_inventory_detail(request, id):
     driver_inventory = get_object_or_404(DriverVehicleInventory, id=id)
     if driver_inventory:
         driver_inventory.read = "Read"
+        driver_inventory.checked_today = True
         driver_inventory.save()
     serializer = DriverVehicleInventorySerializer(driver_inventory, many=False)
     return Response(serializer.data)
