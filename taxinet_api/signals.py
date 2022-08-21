@@ -75,16 +75,6 @@ def alert_schedule(sender, created, instance, **kwargs):
                                               notification_to=instance.administrator,
                                               schedule_ride_id=instance.id)
 
-        if created and instance.scheduled_ride.administrator == instance.user:
-            title = "New bid on price"
-            notification_tag = "Bidding"
-            message = f"{instance.user.username} wants you to pay {instance.bid}"
-            ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
-                                                  notification_message=message, notification_tag=notification_tag,
-                                                  notification_from=instance.scheduled_ride.administrator,
-                                                  notification_to=instance.scheduled_ride.passenger,
-                                                  schedule_ride_accepted_id=instance.id)
-
 
 @receiver(post_save, sender=DriverVehicleInventory)
 def alert_driver_inventory_today(sender, created, instance, **kwargs):
