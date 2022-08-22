@@ -170,3 +170,7 @@ class InvestorsProfile(models.Model):
 
     def get_investors_full_name(self):
         return self.user.full_name
+
+
+class MyName(models.Model):
+    name = models.CharField(max_length=255)
