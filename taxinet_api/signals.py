@@ -50,16 +50,6 @@ def alert_completed_ride(sender, created, instance, **kwargs):
                                               notification_to=instance.ride.passenger,
                                               ride_id=instance.ride.id)
 
-    if created and instance.ride.administrator == instance.user:
-        title = "New message"
-        notification_tag = "Messaging"
-        message = f"{instance.user.username} sent you a message"
-        ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
-                                              notification_message=message, notification_tag=notification_tag,
-                                              notification_from=instance.ride.administrator,
-                                              notification_to=instance.ride.passenger,
-                                              message_id=instance.id)
-
 
 @receiver(post_save, sender=ScheduleRide)
 def alert_schedule(sender, created, instance, **kwargs):
@@ -98,8 +88,8 @@ def alert_assigned_scheduled_to_driver(sender, created, instance, **kwargs):
     admin_user = User.objects.get(id=1)
     ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                           notification_message=message, notification_tag=notification_tag,
-                                          notification_from=instance.driver,
-                                          notification_to=admin_user,
+                                          notification_from=instance.administrator,
+                                          notification_to=instance.driver, notification_to_passenger=instance.ride.passenger,
                                           assigned_scheduled_id=instance.id)
 
 

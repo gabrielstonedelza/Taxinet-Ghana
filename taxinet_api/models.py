@@ -354,6 +354,9 @@ class ScheduledNotifications(models.Model):
     notification_from = models.ForeignKey(DeUser, on_delete=models.CASCADE, null=True)
     notification_to = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="DeUser_receiving_notification",
                                         null=True)
+    notification_to_passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE,
+                                                  related_name="Passenger_receiving_notification",
+                                                  null=True)
     passengers_pickup = models.CharField(max_length=255, null=True, blank=True)
     passengers_dropOff = models.CharField(max_length=255, null=True, blank=True)
     schedule_ride_id = models.CharField(max_length=255, blank=True)
