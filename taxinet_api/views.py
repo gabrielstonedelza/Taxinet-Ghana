@@ -737,7 +737,7 @@ def get_all_driver_payments(request):
 
 
 @api_view(['GET'])
-@permission_classes([permissions.AllowAny])
+@permission_classes([permissions.IsAuthenticated])
 def get_my_wallet(request):
     wallet = PassengersWallet.objects.filter(passenger=request.user.id).order_by('-date_loaded')
     serializer = PassengerWalletSerializer(wallet, many=True)
