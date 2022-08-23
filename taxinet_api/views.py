@@ -263,18 +263,18 @@ def admin_get_scheduled_for_weekly(request):
 
 # admin gets,posts and updates
 
-@api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
-def get_my_wallet(request):
-    wallet = PassengersWallet.objects.filter(passengers=request.user).order_by('-date_loaded')
-    serializer = PassengerWalletSerializer(wallet, many=True)
-    return Response(serializer.data)
+# @api_view(['GET'])
+# @permission_classes([permissions.IsAuthenticated])
+# def get_my_wallet(request):
+#     wallet = PassengersWallet.objects.filter(passengers=request.user).order_by('-date_loaded')
+#     serializer = PassengerWalletSerializer(wallet, many=True)
+#     return Response(serializer.data)
 
 
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
 def request_to_load_wallet(request):
-    serializer = AskToLoadWallet(data=request.data)
+    serializer = AskToLoadWalletSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save(passenger=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
