@@ -94,4 +94,7 @@ urlpatterns = [
     #     wallets
     path("request_to_load_wallet/", views.request_to_load_wallet),
     path("get_my_wallet/", views.get_my_wallet),
+
+    #     passengers schedules
+    path("get_my_active_schedules/", views.get_my_active_schedules)
 ]

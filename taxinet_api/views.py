@@ -742,3 +742,12 @@ def get_my_wallet(request):
     wallet = PassengersWallet.objects.filter(passenger=request.user.id).order_by('-date_loaded')
     serializer = PassengerWalletSerializer(wallet, many=True)
     return Response(serializer.data)
+
+
+# passengers schedules categorized
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_my_active_schedules(request):
+    active_schedule = ScheduleRide.objects.filter(passenger=request.user).filter(status="Active").order_by('-date_scheduled')
+    serializer = ScheduleRideSerializer(active_schedule, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
