@@ -437,8 +437,8 @@ class AskToLoadWallet(models.Model):
     title = models.CharField(max_length=200, default="Wants to load wallet")
     passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE)
     amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
-    date_requested = models.DateField(default=timezone.now)
-    time_requested = models.TimeField(default=timezone.now)
+    date_requested = models.DateField(auto_now_add=True)
+    time_requested = models.TimeField(auto_now_add=True)
     read = models.CharField(max_length=10, choices=READ_STATUS, default="Not Read")
 
     def save(self, *args, **kwargs):
