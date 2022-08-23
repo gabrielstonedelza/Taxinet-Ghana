@@ -171,7 +171,8 @@ def admin_get_all_drivers_inventories(request):
 @permission_classes([permissions.AllowAny])
 def admin_get_inventories_today(request):
     my_date_tim = datetime.now()
-    inventories = DriverVehicleInventory.objects.filter(date_checked=my_date_tim.today()).filter(read="Not Read").order_by('-date_checked')
+    inventories = DriverVehicleInventory.objects.filter(date_checked=my_date_tim.today()).filter(
+        read="Not Read").order_by('-date_checked')
     serializer = DriverVehicleInventorySerializer(inventories, many=True)
     return Response(serializer.data)
 
@@ -732,4 +733,12 @@ def post_payment(request):
 def get_all_driver_payments(request):
     payments = ConfirmDriverPayment.objects.filter(driver=request.user).order_by('-date_confirmed')
     serializer = ConfirmDriverPaymentSerializer(payments, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_my_wallet(request):
+    wallets = PassengersWallet.objects.filter(passenger=request.user)
+    serializer = PassengerWalletSerializer(wallets, many=True)
     return Response(serializer.data)
