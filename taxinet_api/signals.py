@@ -21,8 +21,10 @@ def alert_accepted_ride(sender, created, instance, **kwargs):
         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                               notification_tag=notification_tag, notification_message=message,
                                               notification_from=instance.scheduled_ride.administrator,
-                                              notification_to=instance.scheduled_ride.passenger,
-                                              schedule_ride_id=instance.scheduled_ride.id, )
+                                              notification_to_passenger=instance.scheduled_ride.passenger,
+                                              schedule_ride_id=instance.scheduled_ride.id,
+                                              schedule_ride_slug=instance.scheduled_ride.slug,
+                                              schedule_ride_title=instance.scheduled_ride.schedule_title, )
 
 
 @receiver(post_save, sender=RejectedScheduledRides)
@@ -34,8 +36,9 @@ def alert_rejected_ride(sender, created, instance, **kwargs):
         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                               notification_tag=notification_tag, notification_message=message,
                                               notification_from=instance.ride.administrator,
-                                              notification_to=instance.ride.passenger,
-                                              ride_id=instance.ride.id)
+                                              notification_to_passenger=instance.ride.passenger,
+                                              ride_id=instance.ride.id, schedule_ride_slug=instance.ride.slug,
+                                              schedule_ride_title=instance.scheduled_ride.schedule_title)
 
 
 @receiver(post_save, sender=CompletedScheduledRidesToday)
@@ -47,7 +50,7 @@ def alert_completed_ride(sender, created, instance, **kwargs):
         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                               notification_tag=notification_tag, notification_message=message,
                                               notification_from=instance.ride.administrator,
-                                              notification_to=instance.ride.passenger,
+                                              notification_to_passenger=instance.ride.passenger,
                                               ride_id=instance.ride.id)
 
 
@@ -63,7 +66,8 @@ def alert_schedule(sender, created, instance, **kwargs):
                                               notification_message=message, notification_tag=notification_tag,
                                               notification_from=instance.passenger,
                                               notification_to=instance.administrator,
-                                              schedule_ride_id=instance.id)
+                                              schedule_ride_id=instance.id, schedule_ride_slug=instance.slug,
+                                              schedule_ride_title=instance.schedule_title, )
 
 
 @receiver(post_save, sender=DriverVehicleInventory)
@@ -84,13 +88,13 @@ def alert_driver_inventory_today(sender, created, instance, **kwargs):
 def alert_assigned_scheduled_to_driver(sender, created, instance, **kwargs):
     title = "New ride assigned"
     notification_tag = "Ride Assigned"
-    message = f"{instance.ride.administrator.username} has assigned you to ride {instance.ride.schedule_title}"
-    admin_user = User.objects.get(id=1)
+    message = f"'{instance.ride.schedule_title}' has been assigned to {instance.driver.username} "
     ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                           notification_message=message, notification_tag=notification_tag,
                                           notification_from=instance.administrator,
-                                          notification_to=instance.driver, notification_to_passenger=instance.ride.passenger,
-                                          assigned_scheduled_id=instance.id)
+                                          notification_to=instance.driver,
+                                          notification_to_passenger=instance.ride.passenger,
+                                          assigned_scheduled_id=instance.id, schedule_ride_slug=instance.ride.slug, schedule_ride_title=instance.ride.schedule_title,)
 
 
 @receiver(post_save, sender=AcceptAssignedScheduled)
@@ -139,7 +143,7 @@ def alert_loaded_wallet(sender, created, instance, **kwargs):
     ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                           notification_message=message, notification_tag=notification_tag,
                                           notification_from=instance.administrator,
-                                          notification_to=instance.passenger)
+                                          notification_to_passenger=instance.passenger)
 
 
 @receiver(post_save, sender=AskToLoadWallet)
