@@ -128,10 +128,17 @@ class ScheduleRide(models.Model):
         return ""
 
     def get_assigned_driver_profile_pic(self):
-        assingeddriver = DriverProfile.objects.get(user=self.assigned_driver)
-        if assingeddriver:
-            return "https://taxinetghana.xyz" + assingeddriver.profile_pic.url
-        return ""
+        driver = User.objects.get(user=self.assigned_driver)
+        if driver.user_type == "Administrator":
+            de_driver = AdministratorsProfile.objects.get(user=self.assigned_driver)
+            if de_driver:
+                return "https://taxinetghana.xyz" + de_driver.profile_pic.url
+            return ""
+        elif driver.user_type == "Driver":
+            de_driver = DriverProfile.objects.get(user=self.assigned_driver)
+            if de_driver:
+                return "https://taxinetghana.xyz" + de_driver.profile_pic.url
+            return ""
 
     def get_passenger_name(self):
         return self.passenger.username
