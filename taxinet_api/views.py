@@ -638,7 +638,7 @@ def get_scheduled_by_driver(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_all_user_notifications(request):
-    notifications = ScheduledNotifications.objects.filter(notification_to=request.user).order_by('-date_created')
+    notifications = ScheduledNotifications.objects.filter(notification_to=request.user).filter(notification_to_passenger=request.user).order_by('-date_created')
     serializer = ScheduledNotificationSerializer(notifications, many=True)
     return Response(serializer.data)
 
