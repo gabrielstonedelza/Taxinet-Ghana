@@ -8,7 +8,7 @@ from django.views.decorators.vary import vary_on_cookie, vary_on_headers
 from rest_framework.views import APIView
 from datetime import datetime, date, time, timedelta
 
-from .models import (Complains,
+from .models import (Complains, AddToUpdatedWallets,
                      DriversLocation, ConfirmDriverPayment, DriverVehicleInventory,
                      AcceptedScheduledRides, RejectedScheduledRides,
                      CompletedScheduledRidesToday, ScheduledNotifications, ScheduleRide, AssignScheduleToDriver,
@@ -23,11 +23,21 @@ from .serializers import (ComplainsSerializer, ContactUsSerializer,
                           CancelledScheduledRideSerializer, RejectScheduleToDriverSerializer,
                           AdminScheduleRideSerializer,
                           AcceptScheduleToDriverSerializer, AssignScheduleToDriverSerializer, PassengerWalletSerializer,
-                          AskToLoadWalletSerializer)
+                          AskToLoadWalletSerializer, AddToUpdatedWalletsSerializer)
 from django.http import Http404
 
 
 # admin gets,posts and updates
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def add_to_updated_wallets(request):
+    serializer = AddToUpdatedWalletsSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 @api_view(['GET', 'DELETE'])
 @permission_classes([permissions.AllowAny])
 def delete_assigned_driver(request, pk):
@@ -638,7 +648,8 @@ def get_scheduled_by_driver(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_all_user_notifications(request):
-    notifications = ScheduledNotifications.objects.filter(notification_to_passenger=request.user).order_by('-date_created')
+    notifications = ScheduledNotifications.objects.filter(notification_to_passenger=request.user).order_by(
+        '-date_created')
     serializer = ScheduledNotificationSerializer(notifications, many=True)
     return Response(serializer.data)
 
@@ -748,6 +759,7 @@ def get_my_wallet(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_my_active_schedules(request):
-    active_schedule = ScheduleRide.objects.filter(passenger=request.user).filter(status="Active").order_by('-date_scheduled')
+    active_schedule = ScheduleRide.objects.filter(passenger=request.user).filter(status="Active").order_by(
+        '-date_scheduled')
     serializer = ScheduleRideSerializer(active_schedule, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)

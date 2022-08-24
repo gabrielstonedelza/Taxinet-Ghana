@@ -4,7 +4,7 @@ from django.dispatch import receiver
 from .models import (ScheduleRide, Complains, ConfirmDriverPayment, AcceptedScheduledRides,
                      RejectedScheduledRides, DriverVehicleInventory,
                      CompletedScheduledRidesToday, ScheduledNotifications, AssignScheduleToDriver,
-                     AcceptAssignedScheduled,
+                     AcceptAssignedScheduled, AddToUpdatedWallets,
                      RejectAssignedScheduled, CancelScheduledRide, PassengersWallet, AskToLoadWallet)
 from django.conf import settings
 
@@ -94,7 +94,8 @@ def alert_assigned_scheduled_to_driver(sender, created, instance, **kwargs):
                                           notification_from=instance.administrator,
                                           notification_to=instance.driver,
                                           notification_to_passenger=instance.ride.passenger,
-                                          assigned_scheduled_id=instance.id, schedule_ride_slug=instance.ride.slug, schedule_ride_title=instance.ride.schedule_title,)
+                                          assigned_scheduled_id=instance.id, schedule_ride_slug=instance.ride.slug,
+                                          schedule_ride_title=instance.ride.schedule_title, )
 
 
 @receiver(post_save, sender=AcceptAssignedScheduled)
@@ -155,3 +156,14 @@ def alert_request_to_load_wallet(sender, created, instance, **kwargs):
                                           notification_message=message, notification_tag=notification_tag,
                                           notification_from=instance.passenger,
                                           notification_to=instance.administrator)
+
+
+@receiver(post_save, sender=AddToUpdatedWallets)
+def alert_updated_wallet(sender, created, instance, **kwargs):
+    title = "Wallet Updated"
+    notification_tag = "Wallet Updated"
+    message = f"{instance.passenger.username}, your wallet was updated with GHS {instance.wallet.amount}"
+    ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                          notification_message=message, notification_tag=notification_tag,
+                                          notification_from=instance.administrator,
+                                          notification_to_passenger=instance.wallet.passenger)

@@ -472,3 +472,11 @@ class AskToLoadWallet(models.Model):
         if my_passenger:
             return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
         return ""
+
+
+class AddToUpdatedWallets(models.Model):
+    wallet = models.ForeignKey(PassengersWallet, on_delete=models.CASCADE)
+    date_updated = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.wallet.passenger.username}'s wallet was updated."

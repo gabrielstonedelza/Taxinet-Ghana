@@ -4,8 +4,15 @@ from .models import (Complains,
                      AcceptedScheduledRides, RejectedScheduledRides,
                      CompletedScheduledRidesToday, ScheduledNotifications, DriverVehicleInventory, ScheduleRide,
                      AssignScheduleToDriver, AcceptAssignedScheduled,
-                     RejectAssignedScheduled, CancelScheduledRide, ContactUs, PassengersWallet, AskToLoadWallet
+                     RejectAssignedScheduled, CancelScheduledRide, ContactUs, PassengersWallet, AskToLoadWallet,
+                     AddToUpdatedWallets
                      )
+
+
+class AddToUpdatedWalletsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AddToUpdatedWallets
+        fields = ['id', 'wallet', 'date_updated']
 
 
 class CancelledScheduledRideSerializer(serializers.ModelSerializer):
@@ -106,7 +113,8 @@ class ScheduleRideSerializer(serializers.ModelSerializer):
                   'pickup_location', 'drop_off_location', 'status', 'price', 'initial_payment', 'date_scheduled',
                   'time_scheduled',
                   'get_administrator_profile_pic', 'slug',
-                  'get_passenger_profile_pic', 'get_passenger_name', 'get_assigned_driver_name','read', 'get_assigned_driver_profile_pic']
+                  'get_passenger_profile_pic', 'get_passenger_name', 'get_assigned_driver_name', 'read',
+                  'get_assigned_driver_profile_pic']
         read_only_fields = ['passenger']
 
     def get_username(self, user):
@@ -156,7 +164,7 @@ class ScheduledNotificationSerializer(serializers.ModelSerializer):
                   'complain_id', 'reply_id', 'review_id', 'rating_id', 'payment_confirmed_id',
                   'date_created',
                   'passengers_pickup', 'passengers_dropOff', 'get_passengers_notification_from_pic',
-                  'drivers_inventory_id',]
+                  'drivers_inventory_id', ]
 
     def get_username(self, notification):
         passengers_username = notification.notification_from.username
@@ -222,7 +230,7 @@ class DriverVehicleInventorySerializer(serializers.ModelSerializer):
                   'tail_rear_lights', 'reverse_lights', 'interior_lights', 'engine_noise', 'excessive_smoke',
                   'foot_break', 'hand_break', 'wheel_bearing_noise', 'warning_triangle', 'fire_extinguisher',
                   'first_aid_box', 'checked_today', 'date_checked', 'time_checked', 'get_drivers_name',
-                  'get_driver_profile_pic','read']
+                  'get_driver_profile_pic', 'read']
         read_only_fields = ['driver']
 
     def get_username(self, user):
