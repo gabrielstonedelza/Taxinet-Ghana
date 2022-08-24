@@ -156,7 +156,7 @@ class ScheduledNotificationSerializer(serializers.ModelSerializer):
                   'complain_id', 'reply_id', 'review_id', 'rating_id', 'payment_confirmed_id',
                   'date_created',
                   'passengers_pickup', 'passengers_dropOff', 'get_passengers_notification_from_pic',
-                  'drivers_inventory_id']
+                  'drivers_inventory_id', 'get_assigned_driver_profile_pic']
 
     def get_username(self, notification):
         passengers_username = notification.notification_from.username

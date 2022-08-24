@@ -127,6 +127,12 @@ class ScheduleRide(models.Model):
             return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
         return ""
 
+    def get_assigned_driver_profile_pic(self):
+        assingeddriver = DriverProfile.objects.get(user=self.assigned_driver)
+        if assingeddriver:
+            return "https://taxinetghana.xyz" + assingeddriver.profile_pic.url
+        return ""
+
     def get_passenger_name(self):
         return self.passenger.username
 
