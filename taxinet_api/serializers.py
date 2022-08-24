@@ -106,7 +106,7 @@ class ScheduleRideSerializer(serializers.ModelSerializer):
                   'pickup_location', 'drop_off_location', 'status', 'price', 'initial_payment', 'date_scheduled',
                   'time_scheduled',
                   'get_administrator_profile_pic', 'slug',
-                  'get_passenger_profile_pic', 'get_passenger_name', 'get_assigned_driver_name','read']
+                  'get_passenger_profile_pic', 'get_passenger_name', 'get_assigned_driver_name','read', 'get_assigned_driver_profile_pic']
         read_only_fields = ['passenger']
 
     def get_username(self, user):
@@ -131,7 +131,7 @@ class AdminScheduleRideSerializer(serializers.ModelSerializer):
                   'pickup_location', 'drop_off_location', 'status', 'price', 'initial_payment', 'date_scheduled',
                   'time_scheduled',
                   'get_administrator_profile_pic', 'slug',
-                  'get_passenger_profile_pic']
+                  'get_passenger_profile_pic',''get_assigned_driver_profile_pic'']
 
     def get_username(self, user):
         username = user.passenger.username
@@ -156,7 +156,7 @@ class ScheduledNotificationSerializer(serializers.ModelSerializer):
                   'complain_id', 'reply_id', 'review_id', 'rating_id', 'payment_confirmed_id',
                   'date_created',
                   'passengers_pickup', 'passengers_dropOff', 'get_passengers_notification_from_pic',
-                  'drivers_inventory_id', 'get_assigned_driver_profile_pic']
+                  'drivers_inventory_id',]
 
     def get_username(self, notification):
         passengers_username = notification.notification_from.username
