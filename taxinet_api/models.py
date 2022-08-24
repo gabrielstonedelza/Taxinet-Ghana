@@ -128,7 +128,7 @@ class ScheduleRide(models.Model):
         return ""
 
     def get_assigned_driver_profile_pic(self):
-        driver = User.objects.get(user=self.assigned_driver)
+        driver = User.objects.get(username=self.assigned_driver.username)
         if driver.user_type == "Administrator":
             de_driver = AdministratorsProfile.objects.get(user=self.assigned_driver)
             if de_driver:
