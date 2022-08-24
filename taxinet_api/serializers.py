@@ -131,7 +131,7 @@ class AdminScheduleRideSerializer(serializers.ModelSerializer):
                   'pickup_location', 'drop_off_location', 'status', 'price', 'initial_payment', 'date_scheduled',
                   'time_scheduled',
                   'get_administrator_profile_pic', 'slug',
-                  'get_passenger_profile_pic',''get_assigned_driver_profile_pic'']
+                  'get_passenger_profile_pic', 'get_assigned_driver_profile_pic']
 
     def get_username(self, user):
         username = user.passenger.username
