@@ -177,7 +177,7 @@ class AddToVerified(models.Model):
     date_verified = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.user.username} is verified"
+        return f"{self.user.get_passengers_full_name} is verified"
 
     def get_passenger_pic(self):
         if self.user.profile_pic:
