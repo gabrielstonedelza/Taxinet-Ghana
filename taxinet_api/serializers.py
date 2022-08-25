@@ -248,7 +248,7 @@ class PassengerWalletSerializer(serializers.ModelSerializer):
     class Meta:
         model = PassengersWallet
         fields = ['id', 'passenger', 'amount', 'date_loaded', 'get_passengers_name', 'get_amount',
-                  ]
+                  'get_passengers_profile_picture']
 
 
 class AskToLoadWalletSerializer(serializers.ModelSerializer):
