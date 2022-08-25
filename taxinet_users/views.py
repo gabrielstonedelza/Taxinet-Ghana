@@ -153,7 +153,7 @@ def get_passenger_profile(request, id):
 
 
 @api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 def get_drivers_profile(request, id):
     drivers_profile = DriverProfile.objects.filter(id=id)
     serializer = DriverProfileSerializer(drivers_profile, many=True)
