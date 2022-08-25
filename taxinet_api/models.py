@@ -436,7 +436,7 @@ class PassengersWallet(models.Model):
     def get_amount(self):
         return self.amount
 
-    def get_passengers_profile_picture(self):
+    def get_passenger_profile_pic(self):
         return "https://taxinetghana.xyz" + self.passenger.profile_pic.url
 
 
