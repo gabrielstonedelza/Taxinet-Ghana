@@ -65,3 +65,21 @@ class AddCardsUploadedSerializer(serializers.ModelSerializer):
     class Meta:
         model = AddCardsUploaded
         fields = ['id', 'user', 'date_uploaded', 'get_passenger_pic']
+
+
+class AdminPassengerProfileSerializer(serializers.ModelSerializer):
+    username = serializers.SerializerMethodField('get_username')
+
+    class Meta:
+        model = PassengerProfile
+        fields = ['id', 'username', 'user', 'profile_pic', 'passenger_profile_pic', 'front_side_ghana_card',
+                  'back_side_ghana_card',
+                  'name_on_ghana_card', 'next_of_kin', 'next_of_kin_number', 'referral',
+                  'verified',
+                  'next_of_kin', 'next_of_kin_number', 'get_passengers_email',
+                  'get_passengers_phone_number', 'get_front_side_ghana_card', 'get_back_side_ghana_card',
+                  'get_passengers_full_name', 'get_user_type']
+
+    def get_username(self, user):
+        username = user.user.username
+        return username

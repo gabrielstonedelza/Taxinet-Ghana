@@ -23,6 +23,7 @@ urlpatterns = [
     path('passenger-profile/', views.passenger_profile),
     path('update_driver_profile/', views.update_driver_profile),
     path('update_passenger_profile/', views.update_passenger_profile),
+    path('admin_update_passenger_profile/', views.admin_update_passenger_profile),
     path('update_username/', views.update_username),
     path('password-reset/', auth_views.PasswordResetView.as_view(
         template_name='taxinet_users/password_reset.html'), name='password_reset'),

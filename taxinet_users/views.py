@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from .models import User, DriverProfile, PassengerProfile, AddToVerified, AddCardsUploaded
 from .serializers import UsersSerializer, DriverProfileSerializer, PassengerProfileSerializer, AddToVerifiedSerializer, \
-    AddCardsUploadedSerializer
+    AddCardsUploadedSerializer, AdminPassengerProfileSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import viewsets, permissions, generics, status
 from rest_framework.response import Response
@@ -129,6 +129,17 @@ def update_passenger_profile(request):
     serializer = PassengerProfileSerializer(my_profile, data=request.data)
     if serializer.is_valid():
         serializer.save(user=request.user)
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'PUT'])
+@permission_classes([permissions.AllowAny])
+def admin_update_passenger_profile(request):
+    my_profile = PassengerProfile.objects.get(user=request.user)
+    serializer = AdminPassengerProfileSerializer(my_profile, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
