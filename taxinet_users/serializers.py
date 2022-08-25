@@ -1,7 +1,7 @@
 from djoser.serializers import UserCreateSerializer
 from rest_framework import serializers
 
-from .models import User, DriverProfile, PassengerProfile
+from .models import User, DriverProfile, PassengerProfile, AddToVerified
 
 
 class UserCreateSerializer(UserCreateSerializer):
@@ -53,3 +53,9 @@ class PassengerProfileSerializer(serializers.ModelSerializer):
     def get_username(self, user):
         username = user.user.username
         return username
+
+
+class AddToVerifiedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AddToVerified
+        fields = ['id', 'user', 'date_verified']

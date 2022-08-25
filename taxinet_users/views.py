@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
-from .models import User, DriverProfile, PassengerProfile
-from .serializers import UsersSerializer, DriverProfileSerializer, PassengerProfileSerializer
+from .models import User, DriverProfile, PassengerProfile,AddToVerified
+from .serializers import UsersSerializer, DriverProfileSerializer, PassengerProfileSerializer, AddToVerifiedSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import viewsets, permissions, generics, status
 from rest_framework.response import Response
@@ -146,8 +146,8 @@ def update_username(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_passenger_profile(request, id):
-    passenger_profile = PassengerProfile.objects.filter(id=id)
-    serializer = PassengerProfileSerializer(passenger_profile, many=True)
+    passenger = PassengerProfile.objects.filter(id=id)
+    serializer = PassengerProfileSerializer(passenger, many=True)
     return Response(serializer.data)
 
 

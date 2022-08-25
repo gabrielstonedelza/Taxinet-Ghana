@@ -9,7 +9,7 @@ from .models import (ScheduleRide, Complains, ConfirmDriverPayment, AcceptedSche
 from django.conf import settings
 
 User = settings.AUTH_USER_MODEL
-from taxinet_users.models import User
+from taxinet_users.models import User, AddToVerified
 
 
 @receiver(post_save, sender=AcceptedScheduledRides)
@@ -167,3 +167,13 @@ def alert_updated_wallet(sender, created, instance, **kwargs):
                                           notification_message=message, notification_tag=notification_tag,
                                           notification_from=instance.administrator,
                                           notification_to_passenger=instance.wallet.passenger)
+
+
+@receiver(post_save, sender=AddToVerified)
+def alert_added_to_verified(sender, created, instance, **kwargs):
+    title = "Profile Verified"
+    notification_tag = "Profile Verified"
+    message = f"Hi {instance.user.username}, your account is verified successfully."
+    ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                          notification_message=message, notification_tag=notification_tag,
+                                          notification_to_passenger=instance.user)

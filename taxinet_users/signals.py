@@ -1,6 +1,6 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from .models import DriverProfile, PassengerProfile, AdministratorsProfile, InvestorsProfile
+from .models import DriverProfile, PassengerProfile, AdministratorsProfile, InvestorsProfile, AddToVerified
 from django.conf import settings
 
 User = settings.AUTH_USER_MODEL
