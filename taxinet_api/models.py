@@ -431,7 +431,7 @@ class PassengersWallet(models.Model):
         return str(self.amount)
 
     def get_passengers_name(self):
-        return self.passenger.username
+        return self.passenger.user.username
 
     def get_amount(self):
         return self.amount
