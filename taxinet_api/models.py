@@ -434,7 +434,7 @@ class PassengersWallet(models.Model):
         return self.passenger.username
 
     def get_amount(self):
-        return self.passenger.username
+        return self.amount
 
     # def get_passenger_profile_pic(self):
     #     my_passenger = get_object_or_404(PassengerProfile, user=self.passenger)
