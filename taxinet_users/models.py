@@ -190,7 +190,7 @@ class AddCardsUploaded(models.Model):
     date_uploaded = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.user.username} has uploaded card"
+        return f"{self.user.user.username} has uploaded card"
 
     def get_passenger_pic(self):
         if self.user.profile_pic:

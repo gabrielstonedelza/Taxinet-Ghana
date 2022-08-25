@@ -183,7 +183,7 @@ def alert_added_to_verified(sender, created, instance, **kwargs):
 def alert_added_to_verified(sender, created, instance, **kwargs):
     title = "Cards Uploaded"
     notification_tag = "Cards Uploaded"
-    message = f"{instance.user.username} has uploaded Ghana card."
+    message = f"{instance.user.user.username} has uploaded Ghana card."
     admin_user = User.objects.get(id=1)
     ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                           notification_message=message, notification_tag=notification_tag,
