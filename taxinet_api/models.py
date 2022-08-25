@@ -472,3 +472,26 @@ class AddToUpdatedWallets(models.Model):
 
     def __str__(self):
         return f"{self.wallet.passenger.username}'s wallet was updated."
+
+
+class DriverStartTrip(models.Model):
+    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
+    passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="passenger_enjoying_trip")
+    ride = models.ForeignKey(ScheduleRide, on_delete=models.CASCADE, related_name="trip_ride")
+    date_started = models.DateField(auto_now_add=True)
+    time_started = models.TimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.driver.username} started trip"
+
+
+class DriverEndTrip(models.Model):
+    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
+    passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="passenger_enjoying_trip_to_end")
+    ride = models.ForeignKey(ScheduleRide, on_delete=models.CASCADE, related_name="trip_ride_end")
+    price = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
+    date_stopped = models.DateField(auto_now_add=True)
+    time_stopped = models.TimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.driver.username} ended trip"

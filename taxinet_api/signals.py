@@ -5,7 +5,8 @@ from .models import (ScheduleRide, Complains, ConfirmDriverPayment, AcceptedSche
                      RejectedScheduledRides, DriverVehicleInventory,
                      CompletedScheduledRidesToday, ScheduledNotifications, AssignScheduleToDriver,
                      AcceptAssignedScheduled, AddToUpdatedWallets,
-                     RejectAssignedScheduled, CancelScheduledRide, PassengersWallet, AskToLoadWallet)
+                     RejectAssignedScheduled, CancelScheduledRide, PassengersWallet, AskToLoadWallet, DriverStartTrip,
+                     DriverEndTrip)
 from django.conf import settings
 
 User = settings.AUTH_USER_MODEL
@@ -188,3 +189,23 @@ def alert_added_to_verified(sender, created, instance, **kwargs):
     ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                           notification_message=message, notification_tag=notification_tag,
                                           notification_to=admin_user)
+
+
+@receiver(post_save, sender=DriverStartTrip)
+def alert_driver_start_trip(sender, created, instance, **kwargs):
+    title = "Trip Started"
+    notification_tag = "Trip Started"
+    message = f"{instance.driver.username} has started trip"
+    ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                          notification_message=message, notification_tag=notification_tag,
+                                          notification_to_passenger=instance.passenger)
+
+
+@receiver(post_save, sender=DriverEndTrip)
+def alert_driver_end_trip(sender, created, instance, **kwargs):
+    title = "Trip Ended"
+    notification_tag = "Trip Ended"
+    message = f"{instance.driver.username} has ended trip"
+    ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                          notification_message=message, notification_tag=notification_tag,
+                                          notification_to_passenger=instance.passenger)

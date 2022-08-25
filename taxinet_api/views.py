@@ -13,7 +13,8 @@ from .models import (Complains, AddToUpdatedWallets,
                      AcceptedScheduledRides, RejectedScheduledRides,
                      CompletedScheduledRidesToday, ScheduledNotifications, ScheduleRide, AssignScheduleToDriver,
                      AcceptAssignedScheduled, ContactUs,
-                     RejectAssignedScheduled, CancelScheduledRide, PassengersWallet, AskToLoadWallet)
+                     RejectAssignedScheduled, CancelScheduledRide, PassengersWallet, AskToLoadWallet, DriverStartTrip,
+                     DriverEndTrip)
 from .serializers import (ComplainsSerializer, ContactUsSerializer,
                           ConfirmDriverPaymentSerializer, DriversLocationSerializer, ScheduleRideSerializer,
                           AcceptedScheduledRidesSerializer, \
@@ -23,7 +24,8 @@ from .serializers import (ComplainsSerializer, ContactUsSerializer,
                           CancelledScheduledRideSerializer, RejectScheduleToDriverSerializer,
                           AdminScheduleRideSerializer,
                           AcceptScheduleToDriverSerializer, AssignScheduleToDriverSerializer, PassengerWalletSerializer,
-                          AskToLoadWalletSerializer, AddToUpdatedWalletsSerializer)
+                          AskToLoadWalletSerializer, AddToUpdatedWalletsSerializer, DriverStartTripSerializer,
+                          DriverEndTripSerializer)
 from django.http import Http404
 
 
@@ -763,3 +765,26 @@ def get_my_active_schedules(request):
         '-date_scheduled')
     serializer = ScheduleRideSerializer(active_schedule, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+# start and end trip
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def driver_start_trip(request, ride_id):
+    ride = get_object_or_404(ScheduleRide, id=ride_id)
+    serializer = DriverStartTripSerializer(ride, data=request.data)
+    if serializer.is_valid():
+        serializer.save(driver=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def driver_end_trip(request, ride_id):
+    ride = get_object_or_404(ScheduleRide, id=ride_id)
+    serializer = DriverEndTripSerializer(ride, data=request.data)
+    if serializer.is_valid():
+        serializer.save(driver=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

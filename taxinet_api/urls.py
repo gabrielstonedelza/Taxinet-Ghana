@@ -97,5 +97,9 @@ urlpatterns = [
     path("get_my_wallet/", views.get_my_wallet),
 
     #     passengers schedules
-    path("get_my_active_schedules/", views.get_my_active_schedules)
+    path("get_my_active_schedules/", views.get_my_active_schedules),
+
+    #     driver start and end trips
+    path('driver_start_trip/<int:ride_id>/', views.driver_start_trip),
+    path('driver_end_trip/<int:ride_id>/', views.driver_end_trip),
 ]
