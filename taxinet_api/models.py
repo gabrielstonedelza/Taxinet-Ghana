@@ -436,11 +436,11 @@ class PassengersWallet(models.Model):
     def get_amount(self):
         return self.passenger.username
 
-    def get_passenger_profile_pic(self):
-        my_passenger = get_object_or_404(PassengerProfile, user=self.passenger)
-        if my_passenger:
-            return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
-        return ""
+    # def get_passenger_profile_pic(self):
+    #     my_passenger = get_object_or_404(PassengerProfile, user=self.passenger)
+    #     if my_passenger:
+    #         return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
+    #     return ""
 
 
 class AskToLoadWallet(models.Model):
