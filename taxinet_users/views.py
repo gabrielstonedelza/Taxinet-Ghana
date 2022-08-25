@@ -147,8 +147,8 @@ def update_username(request):
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def get_passenger_profile(request, id):
-    passenger = get_object_or_404(PassengerProfile,id=id)
-    serializer = PassengerProfileSerializer(passenger, many=True)
+    passenger = get_object_or_404(PassengerProfile, id=id)
+    serializer = PassengerProfileSerializer(passenger, many=False)
     return Response(serializer.data)
 
 
