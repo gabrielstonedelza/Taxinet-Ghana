@@ -1,6 +1,4 @@
-from email.policy import default
-from random import choices
-
+from django.shortcuts import get_object_or_404
 from django.db import models
 from django.conf import settings
 from taxinet_users.models import DriverProfile, PassengerProfile, User, InvestorsProfile, AdministratorsProfile
@@ -439,7 +437,7 @@ class PassengersWallet(models.Model):
         return self.passenger.username
 
     def get_passenger_profile_pic(self):
-        my_passenger = PassengerProfile.objects.get(user=self.passenger)
+        my_passenger = get_object_or_404(PassengerProfile, user=self.passenger)
         if my_passenger:
             return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
         return ""
