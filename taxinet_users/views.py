@@ -162,7 +162,7 @@ def get_drivers_profile(request, id):
 
 # user details
 @api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 def get_passenger_details(request, id):
     passenger = User.objects.filter(id=id)
     serializer = UsersSerializer(passenger, many=True)
