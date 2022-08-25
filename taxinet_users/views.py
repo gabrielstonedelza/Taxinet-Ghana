@@ -135,8 +135,8 @@ def update_passenger_profile(request):
 
 @api_view(['GET', 'PUT'])
 @permission_classes([permissions.AllowAny])
-def admin_update_passenger_profile(request):
-    my_profile = PassengerProfile.objects.get(user=request.user)
+def admin_update_passenger_profile(request,id):
+    my_profile = get_object_or_404(PassengerProfile,id=id)
     serializer = AdminPassengerProfileSerializer(my_profile, data=request.data)
     if serializer.is_valid():
         serializer.save()
