@@ -173,7 +173,7 @@ def alert_updated_wallet(sender, created, instance, **kwargs):
 def alert_added_to_verified(sender, created, instance, **kwargs):
     title = "Profile Verified"
     notification_tag = "Profile Verified"
-    message = f"Hi {instance.user.get_passengers_full_name}, your account is verified successfully."
+    message = f"Hi {instance.user.user.username}, your account is verified successfully."
     ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                           notification_message=message, notification_tag=notification_tag,
                                           notification_to_passenger=instance.user)
