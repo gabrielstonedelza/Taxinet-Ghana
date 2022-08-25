@@ -176,7 +176,7 @@ def alert_added_to_verified(sender, created, instance, **kwargs):
     message = f"Hi {instance.user.user.username}, your account is verified successfully."
     ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                           notification_message=message, notification_tag=notification_tag,
-                                          notification_to_passenger=instance.user)
+                                          notification_to_passenger=instance.user.user)
 
 
 @receiver(post_save, sender=AddCardsUploaded)
