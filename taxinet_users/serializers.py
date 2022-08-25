@@ -1,7 +1,7 @@
 from djoser.serializers import UserCreateSerializer
 from rest_framework import serializers
 
-from .models import User, DriverProfile, PassengerProfile, AddToVerified
+from .models import User, DriverProfile, PassengerProfile, AddToVerified, AddCardsUploaded
 
 
 class UserCreateSerializer(UserCreateSerializer):
@@ -58,4 +58,10 @@ class PassengerProfileSerializer(serializers.ModelSerializer):
 class AddToVerifiedSerializer(serializers.ModelSerializer):
     class Meta:
         model = AddToVerified
-        fields = ['id', 'user', 'date_verified']
+        fields = ['id', 'user', 'date_verified', 'get_passenger_pic']
+
+
+class AddCardsUploadedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AddCardsUploaded
+        fields = ['id', 'user', 'date_uploaded', 'get_passenger_pic']

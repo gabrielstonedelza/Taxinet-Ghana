@@ -173,9 +173,26 @@ class InvestorsProfile(models.Model):
 
 
 class AddToVerified(models.Model):
-    user = models.OneToOneField(DeUser, on_delete=models.CASCADE, related_name="verified_profile")
+    user = models.ForeignKey(PassengerProfile, on_delete=models.CASCADE, related_name="verified_profile")
     date_verified = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.user.username} is verified"
 
+    def get_passenger_pic(self):
+        if self.user.profile_pic:
+            return "https://taxinetghana.xyz" + self.user.profile_pic.url
+        return ''
+
+
+class AddCardsUploaded(models.Model):
+    user = models.ForeignKey(PassengerProfile, on_delete=models.CASCADE, related_name="added_cards_profile")
+    date_uploaded = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} has uploaded card"
+
+    def get_passenger_pic(self):
+        if self.user.profile_pic:
+            return "https://taxinetghana.xyz" + self.user.profile_pic.url
+        return ''

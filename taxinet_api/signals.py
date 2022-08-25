@@ -9,7 +9,7 @@ from .models import (ScheduleRide, Complains, ConfirmDriverPayment, AcceptedSche
 from django.conf import settings
 
 User = settings.AUTH_USER_MODEL
-from taxinet_users.models import User, AddToVerified
+from taxinet_users.models import User, AddToVerified, AddCardsUploaded
 
 
 @receiver(post_save, sender=AcceptedScheduledRides)
@@ -177,3 +177,14 @@ def alert_added_to_verified(sender, created, instance, **kwargs):
     ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                           notification_message=message, notification_tag=notification_tag,
                                           notification_to_passenger=instance.user)
+
+
+@receiver(post_save, sender=AddToVerified)
+def alert_added_to_verified(sender, created, instance, **kwargs):
+    title = "Cards Uploaded"
+    notification_tag = "Cards Uploaded"
+    message = f"{instance.user.username} has uploaded Ghana card."
+    admin_user = User.objects.get(id=1)
+    ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                          notification_message=message, notification_tag=notification_tag,
+                                          notification_to=admin_user)
