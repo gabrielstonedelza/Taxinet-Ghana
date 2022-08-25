@@ -179,7 +179,7 @@ def alert_added_to_verified(sender, created, instance, **kwargs):
                                           notification_to_passenger=instance.user)
 
 
-@receiver(post_save, sender=AddToVerified)
+@receiver(post_save, sender=AddCardsUploaded)
 def alert_added_to_verified(sender, created, instance, **kwargs):
     title = "Cards Uploaded"
     notification_tag = "Cards Uploaded"

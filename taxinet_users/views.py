@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
-from .models import User, DriverProfile, PassengerProfile,AddToVerified
-from .serializers import UsersSerializer, DriverProfileSerializer, PassengerProfileSerializer, AddToVerifiedSerializer
+from .models import User, DriverProfile, PassengerProfile, AddToVerified, AddCardsUploaded
+from .serializers import UsersSerializer, DriverProfileSerializer, PassengerProfileSerializer, AddToVerifiedSerializer, \
+    AddCardsUploadedSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import viewsets, permissions, generics, status
 from rest_framework.response import Response
@@ -163,8 +164,8 @@ def get_drivers_profile(request, id):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_passenger_details(request, id):
-    passenger_detaisl = User.objects.filter(id=id)
-    serializer = UsersSerializer(passenger_detaisl, many=True)
+    passenger = User.objects.filter(id=id)
+    serializer = UsersSerializer(passenger, many=True)
     return Response(serializer.data)
 
 
@@ -174,3 +175,23 @@ def get_drivers_details(request, id):
     driver_details = User.objects.filter(id=id)
     serializer = UsersSerializer(driver_details, many=True)
     return Response(serializer.data)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def add_to_verified_profile(request):
+    serializer = AddToVerifiedSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def add_to_uploaded_cards(request):
+    serializer = AddCardsUploadedSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
