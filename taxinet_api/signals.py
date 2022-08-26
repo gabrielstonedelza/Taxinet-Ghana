@@ -141,7 +141,7 @@ def alert_cancelled_ride(sender, created, instance, **kwargs):
 def alert_loaded_wallet(sender, created, instance, **kwargs):
     title = "Wallet Loaded"
     notification_tag = "Wallet Loaded"
-    message = f"{instance.passenger.username}, your wallet has been loaded with the amount of GHS{instance.amount}"
+    message = f"{instance.passenger.user.username}, your wallet has been loaded with the amount of GHS{instance.amount}"
     ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                           notification_message=message, notification_tag=notification_tag,
                                           notification_from=instance.administrator,
