@@ -119,7 +119,7 @@ def admin_get_all_user_notifications(request):
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def admin_get_five_requests(request):
-    all_ride_requests = ScheduleRide.objects.all().order_by('-date_scheduled')[:6]
+    all_ride_requests = ScheduleRide.objects.all().order_by('date_scheduled')[:6]
     serializer = ScheduleRideSerializer(all_ride_requests, many=True)
     return Response(serializer.data)
 
@@ -127,7 +127,7 @@ def admin_get_five_requests(request):
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def admin_get_all_requests(request):
-    all_ride_requests = ScheduleRide.objects.all().order_by('-date_scheduled')
+    all_ride_requests = ScheduleRide.objects.all().order_by('date_scheduled')
     serializer = ScheduleRideSerializer(all_ride_requests, many=True)
     return Response(serializer.data)
 
@@ -185,7 +185,7 @@ def admin_get_all_drivers_inventories(request):
 def admin_get_inventories_today(request):
     my_date_tim = datetime.now()
     inventories = DriverVehicleInventory.objects.filter(date_checked=my_date_tim.today()).filter(
-        read="Not Read").order_by('-date_checked')
+        read="Not Read").order_by('date_checked')
     serializer = DriverVehicleInventorySerializer(inventories, many=True)
     return Response(serializer.data)
 
