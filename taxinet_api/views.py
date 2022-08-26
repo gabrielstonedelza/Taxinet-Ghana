@@ -175,7 +175,7 @@ def admin_get_all_assigned_drivers(request):
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def admin_get_all_drivers_inventories(request):
-    inventories = DriverVehicleInventory.objects.all().order_by('-date_checked')
+    inventories = DriverVehicleInventory.objects.all().order_by('date_checked')
     serializer = DriverVehicleInventorySerializer(inventories, many=True)
     return Response(serializer.data)
 
