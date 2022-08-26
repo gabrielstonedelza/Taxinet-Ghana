@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, AbstractBaseUser
 from django.conf import settings
 from django.utils import timezone
+from django.shortcuts import get_object_or_404
 
 DeUser = settings.AUTH_USER_MODEL
 APP_TYPE = (
@@ -173,15 +174,16 @@ class InvestorsProfile(models.Model):
 
 
 class AddToVerified(models.Model):
-    user = models.ForeignKey(PassengerProfile, on_delete=models.CASCADE, related_name="verified_profile")
+    user = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="verified_profile")
     date_verified = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.user.user.username} is verified"
+        return f"{self.user.username} is verified"
 
     def get_passenger_pic(self):
-        if self.user.profile_pic:
-            return "https://taxinetghana.xyz" + self.user.profile_pic.url
+        my_user = get_object_or_404(PassengerProfile,user=self.user)
+        if my_user:
+            return "https://taxinetghana.xyz" + my_user.profile_pic.url
         return ''
 
 
