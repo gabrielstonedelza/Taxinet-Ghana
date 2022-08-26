@@ -157,7 +157,6 @@ class ScheduledNotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = ScheduledNotifications
         fields = ['id', 'notification_id', 'notification_tag', 'notification_title', 'notification_message',
-                  'passengers_username', 'drivers_username',
                   'notification_trigger', 'read', 'notification_from', 'notification_to', 'schedule_ride_id',
                   'schedule_ride_accepted_id',
                   'schedule_ride_rejected_id', 'completed_schedule_ride_id',
@@ -165,14 +164,6 @@ class ScheduledNotificationSerializer(serializers.ModelSerializer):
                   'date_created',
                   'passengers_pickup', 'passengers_dropOff', 'get_passengers_notification_from_pic',
                   'drivers_inventory_id', ]
-
-    def get_username(self, user):
-        passengers_username = user.notification_from.user.username
-        return passengers_username
-
-    def get_driver_username(self, user):
-        drivers_username = user.notification_to.user.username
-        return drivers_username
 
 
 class ComplainsSerializer(serializers.ModelSerializer):

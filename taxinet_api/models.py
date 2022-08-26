@@ -390,6 +390,8 @@ class ScheduledNotifications(models.Model):
     def __str__(self):
         return self.notification_title
 
+
+
     def get_passengers_notification_from_pic(self):
         my_user = User.objects.get(username=self.notification_from.username)
         if my_user.user_type == "Passenger":
