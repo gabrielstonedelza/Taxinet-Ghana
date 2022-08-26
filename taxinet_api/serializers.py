@@ -167,11 +167,11 @@ class ScheduledNotificationSerializer(serializers.ModelSerializer):
                   'drivers_inventory_id', ]
 
     def get_username(self, user):
-        passengers_username = user.notification_from.username
+        passengers_username = user.notification_from.user.username
         return passengers_username
 
     def get_driver_username(self, user):
-        drivers_username = user.notification_to.username
+        drivers_username = user.notification_to.user.username
         return drivers_username
 
 
