@@ -152,7 +152,7 @@ def alert_loaded_wallet(sender, created, instance, **kwargs):
 def alert_request_to_load_wallet(sender, created, instance, **kwargs):
     title = "Wants to load wallet"
     notification_tag = "Wants to load wallet"
-    message = f"{instance.passenger.username} wants to load their wallet with the amount of GHS{instance.amount}"
+    message = f"{instance.passenger.user.username} wants to load their wallet with the amount of GHS{instance.amount}"
     ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                           notification_message=message, notification_tag=notification_tag,
                                           notification_from=instance.passenger,
