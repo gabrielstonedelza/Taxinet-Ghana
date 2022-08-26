@@ -458,7 +458,7 @@ class AskToLoadWallet(models.Model):
         return self.title
 
     def get_passengers_name(self):
-        return self.passenger.user.username
+        return self.passenger.username
 
     def get_amount(self):
         return str(self.amount)
