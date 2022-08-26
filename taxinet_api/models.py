@@ -371,6 +371,7 @@ class ScheduledNotifications(models.Model):
     passengers_pickup = models.CharField(max_length=255, null=True, blank=True)
     passengers_dropOff = models.CharField(max_length=255, null=True, blank=True)
     schedule_ride_slug = models.CharField(max_length=255, blank=True)
+    schedule_ride_id = models.CharField(max_length=255, blank=True)
     schedule_ride_title = models.CharField(max_length=255, blank=True)
     schedule_ride_accepted_id = models.CharField(max_length=255, blank=True)
     schedule_ride_rejected_id = models.CharField(max_length=255, blank=True)
