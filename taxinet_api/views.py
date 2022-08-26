@@ -14,7 +14,7 @@ from .models import (Complains, AddToUpdatedWallets,
                      CompletedScheduledRidesToday, ScheduledNotifications, ScheduleRide, AssignScheduleToDriver,
                      AcceptAssignedScheduled, ContactUs,
                      RejectAssignedScheduled, CancelScheduledRide, PassengersWallet, AskToLoadWallet, DriverStartTrip,
-                     DriverEndTrip)
+                     DriverEndTrip, DriverAlertArrival)
 from .serializers import (ComplainsSerializer, ContactUsSerializer,
                           ConfirmDriverPaymentSerializer, DriversLocationSerializer, ScheduleRideSerializer,
                           AcceptedScheduledRidesSerializer, \
@@ -25,7 +25,7 @@ from .serializers import (ComplainsSerializer, ContactUsSerializer,
                           AdminScheduleRideSerializer,
                           AcceptScheduleToDriverSerializer, AssignScheduleToDriverSerializer, PassengerWalletSerializer,
                           AskToLoadWalletSerializer, AddToUpdatedWalletsSerializer, DriverStartTripSerializer,
-                          DriverEndTripSerializer)
+                          DriverEndTripSerializer, DriverAlertArrivalSerializer)
 from django.http import Http404
 
 
@@ -784,6 +784,16 @@ def driver_start_trip(request, ride_id):
 def driver_end_trip(request, ride_id):
     ride = get_object_or_404(ScheduleRide, id=ride_id)
     serializer = DriverEndTripSerializer(ride, data=request.data)
+    if serializer.is_valid():
+        serializer.save(driver=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def driver_alert_passenger(request):
+    serializer = DriverAlertArrivalSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save(driver=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)

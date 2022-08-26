@@ -5,7 +5,7 @@ from .models import (Complains,
                      CompletedScheduledRidesToday, ScheduledNotifications, DriverVehicleInventory, ScheduleRide,
                      AssignScheduleToDriver, AcceptAssignedScheduled,
                      RejectAssignedScheduled, CancelScheduledRide, ContactUs, PassengersWallet, AskToLoadWallet,
-                     AddToUpdatedWallets, DriverStartTrip, DriverEndTrip
+                     AddToUpdatedWallets, DriverStartTrip, DriverEndTrip, DriverAlertArrival
                      )
 
 
@@ -270,4 +270,11 @@ class DriverEndTripSerializer(serializers.ModelSerializer):
     class Meta:
         model = DriverEndTrip
         fields = ['id', 'driver', 'passenger', 'ride', 'date_stopped', 'time_stopped', 'price']
+        read_only_fields = ['driver']
+
+
+class DriverAlertArrivalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DriverAlertArrival
+        fields = ['id', 'driver', 'passenger', 'date_alerted', 'time_alerted']
         read_only_fields = ['driver']

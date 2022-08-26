@@ -3,7 +3,7 @@ from django.contrib import admin
 from .models import (ScheduleRide, Complains, ConfirmDriverPayment, AcceptedScheduledRides,
                      RejectedScheduledRides, DriverVehicleInventory,
                      CompletedScheduledRidesToday, ScheduledNotifications, AssignScheduleToDriver, AcceptAssignedScheduled,
-                     RejectAssignedScheduled, CancelScheduledRide, ContactUs, ContactAdmin, PassengersWallet, AskToLoadWallet, AddToUpdatedWallets, DriverStartTrip, DriverEndTrip)
+                     RejectAssignedScheduled, CancelScheduledRide, ContactUs, ContactAdmin, PassengersWallet, AskToLoadWallet, AddToUpdatedWallets, DriverStartTrip, DriverEndTrip, DriverAlertArrival)
 
 admin.site.register(DriverVehicleInventory)
 admin.site.register(ScheduleRide)
@@ -24,3 +24,4 @@ admin.site.register(AskToLoadWallet)
 admin.site.register(AddToUpdatedWallets)
 admin.site.register(DriverStartTrip)
 admin.site.register(DriverEndTrip)
+admin.site.register(DriverAlertArrival)

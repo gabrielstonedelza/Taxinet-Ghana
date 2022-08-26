@@ -6,7 +6,7 @@ from .models import (ScheduleRide, Complains, ConfirmDriverPayment, AcceptedSche
                      CompletedScheduledRidesToday, ScheduledNotifications, AssignScheduleToDriver,
                      AcceptAssignedScheduled, AddToUpdatedWallets,
                      RejectAssignedScheduled, CancelScheduledRide, PassengersWallet, AskToLoadWallet, DriverStartTrip,
-                     DriverEndTrip)
+                     DriverEndTrip, DriverAlertArrival)
 from django.conf import settings
 
 User = settings.AUTH_USER_MODEL
@@ -206,6 +206,16 @@ def alert_driver_end_trip(sender, created, instance, **kwargs):
     title = "Trip Ended"
     notification_tag = "Trip Ended"
     message = f"{instance.driver.username} has ended trip"
+    ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                          notification_message=message, notification_tag=notification_tag,
+                                          notification_to_passenger=instance.passenger)
+
+
+@receiver(post_save, sender=DriverAlertArrival)
+def driver_alert_arrival(sender, created, instance, **kwargs):
+    title = "Driver Arrived"
+    notification_tag = "Driver Arrived"
+    message = f"{instance.driver.username} has arrived"
     ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                           notification_message=message, notification_tag=notification_tag,
                                           notification_to_passenger=instance.passenger)

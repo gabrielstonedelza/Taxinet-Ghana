@@ -495,3 +495,13 @@ class DriverEndTrip(models.Model):
 
     def __str__(self):
         return f"{self.driver.username} ended trip"
+
+
+class DriverAlertArrival(models.Model):
+    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
+    passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="passenger_being_alerted")
+    date_alerted = models.DateField(auto_now_add=True)
+    time_alerted = models.TimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.driver.username} has arrived"
