@@ -181,7 +181,7 @@ def alert_added_to_verified(sender, created, instance, **kwargs):
 
 
 @receiver(post_save, sender=AddCardsUploaded)
-def alert_added_to_verified(sender, created, instance, **kwargs):
+def alert_cards_uploaded(sender, created, instance, **kwargs):
     title = "Cards Uploaded"
     notification_tag = "Cards Uploaded"
     message = f"{instance.user.user.username} has uploaded Ghana card."
