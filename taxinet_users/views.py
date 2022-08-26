@@ -167,7 +167,7 @@ def get_passenger_profile(request, id):
 @permission_classes([permissions.AllowAny])
 def get_drivers_profile(request, id):
     driver = get_object_or_404(DriverProfile, id=id)
-    serializer = DriverProfileSerializer(driver, many=True)
+    serializer = DriverProfileSerializer(driver, many=False)
     return Response(serializer.data)
 
 
