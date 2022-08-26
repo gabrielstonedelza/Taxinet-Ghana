@@ -444,7 +444,7 @@ class PassengersWallet(models.Model):
 class AskToLoadWallet(models.Model):
     administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1, related_name="administrator")
     title = models.CharField(max_length=200, default="Wants to load wallet")
-    passenger = models.ForeignKey(PassengerProfile, on_delete=models.CASCADE)
+    passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE)
     amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
     date_requested = models.DateField(auto_now_add=True)
     time_requested = models.TimeField(auto_now_add=True)
