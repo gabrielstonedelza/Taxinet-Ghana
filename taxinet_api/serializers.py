@@ -151,8 +151,6 @@ class AdminScheduleRideSerializer(serializers.ModelSerializer):
 
 
 class ScheduledNotificationSerializer(serializers.ModelSerializer):
-    passengers_username = serializers.SerializerMethodField('get_username')
-    drivers_username = serializers.SerializerMethodField('get_driver_username')
 
     class Meta:
         model = ScheduledNotifications
