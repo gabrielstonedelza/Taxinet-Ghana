@@ -451,7 +451,7 @@ class AskToLoadWallet(models.Model):
     read = models.CharField(max_length=10, choices=READ_STATUS, default="Not Read")
 
     def save(self, *args, **kwargs):
-        self.title = f"{self.passenger.user.username} wants to load wallet"
+        self.title = f"{self.passenger.username} wants to load wallet"
         super().save(*args, **kwargs)
 
     def __str__(self):
