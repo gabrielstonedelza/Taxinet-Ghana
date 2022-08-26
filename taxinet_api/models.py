@@ -424,7 +424,7 @@ class ContactAdmin(models.Model):
 class PassengersWallet(models.Model):
     administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1,
                                       related_name="administrator_for_wallet")
-    passenger = models.OneToOneField(PassengerProfile, on_delete=models.CASCADE, related_name="passenger_only_profile")
+    passenger = models.OneToOneField(DeUser, on_delete=models.CASCADE, related_name="passenger_only_profile")
     amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
     date_loaded = models.DateTimeField(auto_now_add=True)
 
@@ -432,13 +432,16 @@ class PassengersWallet(models.Model):
         return str(self.amount)
 
     def get_passengers_name(self):
-        return self.passenger.user.username
+        return self.passenger.username
 
     def get_amount(self):
         return self.amount
 
     def get_passenger_profile_pic(self):
-        return "https://taxinetghana.xyz" + self.passenger.profile_pic.url
+        my_passenger = User.objects.get(username=self.passenger.username)
+        if my_passenger:
+            return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
+        return ""
 
 
 class AskToLoadWallet(models.Model):
