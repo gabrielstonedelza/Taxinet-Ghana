@@ -8,6 +8,7 @@ from django.views.decorators.vary import vary_on_cookie, vary_on_headers
 from rest_framework.views import APIView
 from datetime import datetime, date, time, timedelta
 
+from taxinet_users.models import PassengerProfile
 from .models import (Complains, AddToUpdatedWallets,
                      DriversLocation, ConfirmDriverPayment, DriverVehicleInventory,
                      AcceptedScheduledRides, RejectedScheduledRides,
@@ -287,8 +288,9 @@ def admin_get_scheduled_for_weekly(request):
 @permission_classes([permissions.IsAuthenticated])
 def request_to_load_wallet(request):
     serializer = AskToLoadWalletSerializer(data=request.data)
+    user = get_object_or_404(PassengerProfile, user=request.user)
     if serializer.is_valid():
-        serializer.save(passenger=request.user)
+        serializer.save(passenger=user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
