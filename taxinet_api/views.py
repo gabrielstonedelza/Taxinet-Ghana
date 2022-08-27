@@ -182,6 +182,14 @@ def admin_get_all_drivers_inventories(request):
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
+def admin_get_all_drivers_inventories_by_date(request, inventory_date):
+    inventories = DriverVehicleInventory.objects.filter(date_checked=inventory_date).order_by('-date_checked')
+    serializer = DriverVehicleInventorySerializer(inventories, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
 def admin_get_inventories_today(request):
     my_date_tim = datetime.now()
     inventories = DriverVehicleInventory.objects.filter(date_checked=my_date_tim.today()).filter(
