@@ -134,6 +134,14 @@ def admin_get_all_requests(request):
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
+def admin_get_all_requests_by_date(request, request_date):
+    all_ride_requests = ScheduleRide.objects.filter(date_scheduled=request_date).order_by('-date_scheduled')
+    serializer = ScheduleRideSerializer(all_ride_requests, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
 def admin_ride_detail(request, slug):
     ride = get_object_or_404(ScheduleRide, slug=slug)
     if ride:

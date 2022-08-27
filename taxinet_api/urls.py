@@ -12,6 +12,7 @@ urlpatterns = [
     path("load_wallet_detail/<int:id>/", views.load_wallet_detail),
     path("admin_get_all_request_to_load_wallet/", views.admin_get_all_request_to_load_wallet),
     path("admin_get_all_requests/", views.admin_get_all_requests),
+    path("admin_get_all_requests_by_date/<str:request_date>/", views.admin_get_all_requests_by_date),
     path("admin_get_five_requests/", views.admin_get_five_requests),
     path("admin_request_detail/<str:slug>/", views.admin_ride_detail),
     path("admin_update_requested_ride/<str:slug>/", views.admin_update_requested_ride),
