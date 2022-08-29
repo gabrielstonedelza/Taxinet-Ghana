@@ -151,7 +151,6 @@ class AdminScheduleRideSerializer(serializers.ModelSerializer):
 
 
 class ScheduledNotificationSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = ScheduledNotifications
         fields = ['id', 'notification_id', 'notification_tag', 'notification_title', 'notification_message',
@@ -252,14 +251,14 @@ class DriverStartTripSerializer(serializers.ModelSerializer):
     class Meta:
         model = DriverStartTrip
         fields = ['id', 'driver', 'passenger', 'ride', 'date_started', 'time_started']
-        read_only_fields = ['driver']
+        read_only_fields = ['driver', 'ride']
 
 
 class DriverEndTripSerializer(serializers.ModelSerializer):
     class Meta:
         model = DriverEndTrip
         fields = ['id', 'driver', 'passenger', 'ride', 'date_stopped', 'time_stopped', 'price']
-        read_only_fields = ['driver']
+        read_only_fields = ['driver', 'ride']
 
 
 class DriverAlertArrivalSerializer(serializers.ModelSerializer):
