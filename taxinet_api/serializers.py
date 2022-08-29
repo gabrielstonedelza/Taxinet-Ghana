@@ -111,7 +111,7 @@ class ScheduleRideSerializer(serializers.ModelSerializer):
                   'schedule_priority', 'ride_type',
                   'schedule_type', 'schedule_description', 'pick_up_time', 'start_date', 'completed',
                   'pickup_location', 'drop_off_location', 'status', 'price', 'charge', 'date_scheduled',
-                  'time_scheduled',
+                  'time_scheduled', 'get_passenger_number',
                   'get_administrator_profile_pic', 'slug',
                   'get_passenger_profile_pic', 'get_passenger_name', 'get_assigned_driver_name', 'read',
                   'get_assigned_driver_profile_pic']
@@ -137,7 +137,7 @@ class AdminScheduleRideSerializer(serializers.ModelSerializer):
                   'schedule_priority', 'ride_type',
                   'schedule_type', 'schedule_description', 'pick_up_time', 'start_date', 'completed',
                   'pickup_location', 'drop_off_location', 'status', 'price', 'charge', 'date_scheduled',
-                  'time_scheduled',
+                  'time_scheduled', 'get_passenger_number',
                   'get_administrator_profile_pic', 'slug',
                   'get_passenger_profile_pic', 'get_assigned_driver_profile_pic']
 

@@ -141,6 +141,9 @@ class ScheduleRide(models.Model):
     def get_passenger_name(self):
         return self.passenger.username
 
+    def get_passenger_number(self):
+        return self.passenger.phone_number
+
     def get_assigned_driver_name(self):
         return self.assigned_driver.username
 
