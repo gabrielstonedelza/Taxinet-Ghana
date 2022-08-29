@@ -250,8 +250,8 @@ class AskToLoadWalletSerializer(serializers.ModelSerializer):
 class DriverStartTripSerializer(serializers.ModelSerializer):
     class Meta:
         model = DriverStartTrip
-        fields = ['id', 'driver', 'passenger', 'ride', 'date_started', 'time_started']
-        read_only_fields = ['driver', 'ride']
+        fields = ['id', 'driver', 'passenger', 'date_started', 'time_started']
+        read_only_fields = ['driver']
 
 
 class DriverEndTripSerializer(serializers.ModelSerializer):

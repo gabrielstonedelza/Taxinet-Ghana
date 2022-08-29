@@ -813,11 +813,11 @@ def get_drives_assigned_and_active_schedules(request):
 
 
 # start and end trip
-@api_view(['GET', 'POST'])
+@api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
-def driver_start_trip(request, ride_id):
-    ride = get_object_or_404(ScheduleRide, id=ride_id)
-    serializer = DriverStartTripSerializer(ride, data=request.data)
+def driver_start_trip(request):
+
+    serializer = DriverStartTripSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save(driver=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)

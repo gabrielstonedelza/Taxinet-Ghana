@@ -104,7 +104,7 @@ urlpatterns = [
     path("get_my_active_schedules/", views.get_my_active_schedules),
 
     #     driver start and end trips
-    path('driver_start_trip/<int:ride_id>/', views.driver_start_trip),
+    path('driver_start_trip/', views.driver_start_trip),
     path('driver_end_trip/<int:ride_id>/', views.driver_end_trip),
 
     #     driver alert arrrival
