@@ -813,7 +813,7 @@ def get_drives_assigned_and_active_schedules(request):
 
 
 # start and end trip
-@api_view(['POST'])
+@api_view(['GET', 'POST'])
 @permission_classes([permissions.IsAuthenticated])
 def driver_start_trip(request, ride_id):
     ride = get_object_or_404(ScheduleRide, id=ride_id)
@@ -824,7 +824,7 @@ def driver_start_trip(request, ride_id):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['POST'])
+@api_view(['GET', 'POST'])
 @permission_classes([permissions.IsAuthenticated])
 def driver_end_trip(request, ride_id):
     ride = get_object_or_404(ScheduleRide, id=ride_id)
