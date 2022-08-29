@@ -99,7 +99,7 @@ class ScheduleRide(models.Model):
     completed = models.BooleanField(default=False)
     status = models.CharField(max_length=50, choices=SCHEDULE_STATUS, default="Pending")
     price = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
-    initial_payment = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
+    charge = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
     slug = models.SlugField(max_length=100, default='', blank=True)
     date_scheduled = models.DateField(auto_now_add=True)
     time_scheduled = models.TimeField(auto_now_add=True)
