@@ -880,3 +880,33 @@ def get_driver_scheduled_for_weekly(request):
         '-date_scheduled')
     serializer = ScheduleRideSerializer(weekly_schedule, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+# passenger notifications
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_all_passenger_notifications(request):
+    notifications = ScheduledNotifications.objects.filter(notification_to_passenger=request.user).order_by(
+        '-date_created')
+    serializer = ScheduledNotificationSerializer(notifications, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_passenger_notifications(request):
+    notifications = ScheduledNotifications.objects.filter(notification_to_passenger=request.user).filter(
+        read="Not Read").order_by(
+        '-date_created')
+    serializer = ScheduledNotificationSerializer(notifications, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_passengers_triggered_notifications(request):
+    notifications = ScheduledNotifications.objects.filter(notification_to_passenger=request.user).filter(
+        notification_trigger="Triggered").filter(
+        read="Not Read").order_by('-date_created')
+    serializer = ScheduledNotificationSerializer(notifications, many=True)
+    return Response(serializer.data)

@@ -62,7 +62,7 @@ urlpatterns = [
     path('drivers_schedules/', views.get_scheduled_by_driver),
 
     #     notifications
-    path('notifications/', views.get_all_user_notifications),
+
     path('get_all_driver_notifications/', views.get_all_driver_notifications),
     path('user_notifications/', views.get_user_notifications),
     path('user_triggerd_notifications/', views.get_triggered_notifications),
@@ -118,5 +118,10 @@ urlpatterns = [
     path('get_driver_scheduled_for_daily/', views.get_driver_scheduled_for_daily),
     path('get_driver_scheduled_for_days/', views.get_driver_scheduled_for_days),
     path('get_driver_scheduled_for_weekly/', views.get_driver_scheduled_for_weekly),
+
+    #     passengers notifications
+    path('passengers_notifications/', views.get_all_passenger_notifications),
+    path('get_passenger_notifications/', views.get_passenger_notifications),
+    path('get_passengers_triggered_notifications/', views.get_passengers_triggered_notifications),
 
 ]
