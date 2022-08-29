@@ -676,6 +676,15 @@ def get_all_user_notifications(request):
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
+def get_all_driver_notifications(request):
+    notifications = ScheduledNotifications.objects.filter(notification_to=request.user).order_by(
+        '-date_created')
+    serializer = ScheduledNotificationSerializer(notifications, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
 def get_user_notifications(request):
     notifications = ScheduledNotifications.objects.filter(notification_to=request.user).filter(
         read="Not Read").order_by(
@@ -840,7 +849,8 @@ def driver_alert_passenger(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_driver_scheduled_for_one_time(request):
-    one_time_schedule = ScheduleRide.objects.filter(schedule_type="One Time").filter(assigned_driver=request.user).order_by('-date_scheduled')
+    one_time_schedule = ScheduleRide.objects.filter(schedule_type="One Time").filter(
+        assigned_driver=request.user).order_by('-date_scheduled')
     serializer = ScheduleRideSerializer(one_time_schedule, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -848,7 +858,8 @@ def get_driver_scheduled_for_one_time(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_driver_scheduled_for_daily(request):
-    daily_schedule = ScheduleRide.objects.filter(schedule_type="Daily").filter(assigned_driver=request.user).order_by('-date_scheduled')
+    daily_schedule = ScheduleRide.objects.filter(schedule_type="Daily").filter(assigned_driver=request.user).order_by(
+        '-date_scheduled')
     serializer = ScheduleRideSerializer(daily_schedule, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -856,7 +867,8 @@ def get_driver_scheduled_for_daily(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_driver_scheduled_for_days(request):
-    days_schedule = ScheduleRide.objects.filter(schedule_type="Days").filter(assigned_driver=request.user).order_by('-date_scheduled')
+    days_schedule = ScheduleRide.objects.filter(schedule_type="Days").filter(assigned_driver=request.user).order_by(
+        '-date_scheduled')
     serializer = ScheduleRideSerializer(days_schedule, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -864,6 +876,7 @@ def get_driver_scheduled_for_days(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_driver_scheduled_for_weekly(request):
-    weekly_schedule = ScheduleRide.objects.filter(schedule_type="Weekly").filter(assigned_driver=request.user).order_by('-date_scheduled')
+    weekly_schedule = ScheduleRide.objects.filter(schedule_type="Weekly").filter(assigned_driver=request.user).order_by(
+        '-date_scheduled')
     serializer = ScheduleRideSerializer(weekly_schedule, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
