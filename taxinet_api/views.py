@@ -785,6 +785,24 @@ def get_my_active_schedules(request):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_drives_assigned_schedules(request):
+    assigned_schedules = ScheduleRide.objects.filter(assigned_driver=request.user).order_by(
+        '-date_scheduled')
+    serializer = ScheduleRideSerializer(assigned_schedules, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_drives_assigned_and_active_schedules(request):
+    assigned_schedules = ScheduleRide.objects.filter(assigned_driver=request.user).filter(status="Active").order_by(
+        '-date_scheduled')
+    serializer = ScheduleRideSerializer(assigned_schedules, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 # start and end trip
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
