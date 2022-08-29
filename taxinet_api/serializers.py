@@ -257,8 +257,8 @@ class DriverStartTripSerializer(serializers.ModelSerializer):
 class DriverEndTripSerializer(serializers.ModelSerializer):
     class Meta:
         model = DriverEndTrip
-        fields = ['id', 'driver', 'passenger', 'ride', 'date_stopped', 'time_stopped', 'price']
-        read_only_fields = ['driver', 'ride']
+        fields = ['id', 'driver', 'passenger', 'date_stopped', 'time_stopped', 'price']
+        read_only_fields = ['driver']
 
 
 class DriverAlertArrivalSerializer(serializers.ModelSerializer):

@@ -105,7 +105,7 @@ urlpatterns = [
 
     #     driver start and end trips
     path('driver_start_trip/', views.driver_start_trip),
-    path('driver_end_trip/<int:ride_id>/', views.driver_end_trip),
+    path('driver_end_trip/', views.driver_end_trip),
 
     #     driver alert arrrival
     path("driver_alert_passenger/", views.driver_alert_passenger),

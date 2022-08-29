@@ -496,7 +496,7 @@ class DriverStartTrip(models.Model):
 class DriverEndTrip(models.Model):
     driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
     passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="passenger_enjoying_trip_to_end")
-    ride = models.ForeignKey(ScheduleRide, on_delete=models.CASCADE, related_name="trip_ride_end")
+    # ride = models.ForeignKey(ScheduleRide, on_delete=models.CASCADE, related_name="trip_ride_end")
     price = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
     date_stopped = models.DateField(auto_now_add=True)
     time_stopped = models.TimeField(auto_now_add=True)

@@ -824,11 +824,10 @@ def driver_start_trip(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET', 'POST'])
+@api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
-def driver_end_trip(request, ride_id):
-    ride = get_object_or_404(ScheduleRide, id=ride_id)
-    serializer = DriverEndTripSerializer(ride, data=request.data)
+def driver_end_trip(request):
+    serializer = DriverEndTripSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save(driver=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
