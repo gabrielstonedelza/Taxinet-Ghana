@@ -21,7 +21,8 @@ urlpatterns = [
     path("add_to_updated_wallets/", views.add_to_updated_wallets),
 
     path("admin_get_all_drivers_inventories/", views.admin_get_all_drivers_inventories),
-    path("admin_get_all_drivers_inventories_by_date/<str:inventory_date>/", views.admin_get_all_drivers_inventories_by_date),
+    path("admin_get_all_drivers_inventories_by_date/<str:inventory_date>/",
+         views.admin_get_all_drivers_inventories_by_date),
     path("admin_get_inventories_today/", views.admin_get_inventories_today),
     path("admin_get_driver_inventory/<int:driver_id>/", views.admin_get_driver_inventory),
     path("admin_get_driver_inventory_detail/<int:id>/", views.admin_get_inventory_detail),
@@ -107,7 +108,14 @@ urlpatterns = [
 
     #     driver alert arrrival
     path("driver_alert_passenger/", views.driver_alert_passenger),
-#
+    #
     path("get_drives_assigned_schedules/", views.get_drives_assigned_schedules),
     path("get_drives_assigned_and_active_schedules/", views.get_drives_assigned_and_active_schedules),
+
+    #     driver get schedule types
+    path('get_driver_scheduled_for_one_time/', views.get_driver_scheduled_for_one_time),
+    path('get_driver_scheduled_for_daily/', views.get_driver_scheduled_for_daily),
+    path('get_driver_scheduled_for_days/', views.get_driver_scheduled_for_days),
+    path('get_driver_scheduled_for_weekly/', views.get_driver_scheduled_for_weekly),
+
 ]

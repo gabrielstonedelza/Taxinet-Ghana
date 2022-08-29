@@ -834,3 +834,36 @@ def driver_alert_passenger(request):
         serializer.save(driver=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# get schedule types and driver
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_driver_scheduled_for_one_time(request):
+    one_time_schedule = ScheduleRide.objects.filter(schedule_type="One Time").filter(assigned_driver=request.user).order_by('-date_scheduled')
+    serializer = ScheduleRideSerializer(one_time_schedule, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_driver_scheduled_for_daily(request):
+    daily_schedule = ScheduleRide.objects.filter(schedule_type="Daily").filter(assigned_driver=request.user).order_by('-date_scheduled')
+    serializer = ScheduleRideSerializer(daily_schedule, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_driver_scheduled_for_days(request):
+    days_schedule = ScheduleRide.objects.filter(schedule_type="Days").filter(assigned_driver=request.user).order_by('-date_scheduled')
+    serializer = ScheduleRideSerializer(days_schedule, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_driver_scheduled_for_weekly(request):
+    weekly_schedule = ScheduleRide.objects.filter(schedule_type="Weekly").filter(assigned_driver=request.user).order_by('-date_scheduled')
+    serializer = ScheduleRideSerializer(weekly_schedule, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
