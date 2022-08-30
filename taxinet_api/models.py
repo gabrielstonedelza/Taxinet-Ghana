@@ -1,3 +1,5 @@
+from email.policy import default
+
 from django.shortcuts import get_object_or_404
 from django.db import models
 from django.conf import settings
@@ -308,6 +310,10 @@ class DriversLocation(models.Model):
 
 class DriverVehicleInventory(models.Model):
     driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
+    registration_number = models.CharField(max_length=255, default="")
+    unique_number = models.CharField(max_length=30, default="")
+    vehicle_brand = models.CharField(max_length=255, default="")
+    millage = models.CharField(max_length=255,default="")
     windscreen = models.CharField(max_length=10, choices=INVENTORY_OPTIONS, default="No")
     side_mirror = models.CharField(max_length=10, choices=INVENTORY_OPTIONS, default="No")
     registration_plate = models.CharField(max_length=10, choices=INVENTORY_OPTIONS, default="No")
@@ -485,7 +491,7 @@ class AddToUpdatedWallets(models.Model):
 class DriverStartTrip(models.Model):
     driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
     passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="passenger_enjoying_trip")
-    # ride = models.ForeignKey(ScheduleRide, on_delete=models.CASCADE, related_name="trip_ride")
+    ride = models.CharField(max_length=255, default="", )
     date_started = models.DateField(auto_now_add=True)
     time_started = models.TimeField(auto_now_add=True)
 
@@ -496,7 +502,7 @@ class DriverStartTrip(models.Model):
 class DriverEndTrip(models.Model):
     driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
     passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="passenger_enjoying_trip_to_end")
-    # ride = models.ForeignKey(ScheduleRide, on_delete=models.CASCADE, related_name="trip_ride_end")
+    ride = models.CharField(max_length=255, default="", )
     price = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
     date_stopped = models.DateField(auto_now_add=True)
     time_stopped = models.TimeField(auto_now_add=True)
@@ -513,3 +519,61 @@ class DriverAlertArrival(models.Model):
 
     def __str__(self):
         return f"{self.driver.username} has arrived"
+
+
+class DriversWallet(models.Model):
+    administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1,
+                                      related_name="drivers_administrator_for_wallet")
+    driver = models.OneToOneField(DeUser, on_delete=models.CASCADE, related_name="driver_only_profile")
+    amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
+    date_loaded = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return str(self.amount)
+
+    def get_drivers_name(self):
+        return self.driver.username
+
+    def get_amount(self):
+        return self.amount
+
+    def get_drivers_profile_pic(self):
+        my_driver = User.objects.get(username=self.driver.username)
+        de_pass = DriverProfile.objects.get(user=my_driver)
+        if de_pass:
+            return "https://taxinetghana.xyz" + de_pass.profile_pic.url
+        return ""
+
+
+class DriverAskToLoadWallet(models.Model):
+    administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1, related_name="administrator_loadWallet")
+    title = models.CharField(max_length=200, default="Wants to load wallet")
+    driver = models.ForeignKey(PassengerProfile, on_delete=models.CASCADE)
+    amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
+    date_requested = models.DateField(auto_now_add=True)
+    time_requested = models.TimeField(auto_now_add=True)
+    read = models.CharField(max_length=10, choices=READ_STATUS, default="Not Read")
+
+    def save(self, *args, **kwargs):
+        self.title = f"{self.driver.user.username} wants to load wallet"
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
+
+    def get_drivers_name(self):
+        return self.driver.user.username
+
+    def get_amount(self):
+        return str(self.amount)
+
+    def get_drivers_profile_pic(self):
+        return "https://taxinetghana.xyz" + self.driver.profile_pic.url
+
+
+class DriverAddToUpdatedWallets(models.Model):
+    wallet = models.ForeignKey(DriversWallet, on_delete=models.CASCADE)
+    date_updated = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.wallet.driver.username}'s wallet was updated."

@@ -10,6 +10,7 @@ from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie, vary_on_headers
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework import filters
 
 
 def taxinet_home(request):
@@ -206,3 +207,12 @@ def add_to_uploaded_cards(request):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# search functioning
+class GetAllUsers(generics.ListAPIView):
+    permission_classes = [permissions.AllowAny]
+    queryset = User.objects.all()
+    serializer_class = UsersSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['username', 'full_name', 'phone_number']

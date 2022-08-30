@@ -5,7 +5,8 @@ from .models import (Complains,
                      CompletedScheduledRidesToday, ScheduledNotifications, DriverVehicleInventory, ScheduleRide,
                      AssignScheduleToDriver, AcceptAssignedScheduled,
                      RejectAssignedScheduled, CancelScheduledRide, ContactUs, PassengersWallet, AskToLoadWallet,
-                     AddToUpdatedWallets, DriverStartTrip, DriverEndTrip, DriverAlertArrival
+                     AddToUpdatedWallets, DriverStartTrip, DriverEndTrip, DriverAlertArrival, DriversWallet,
+                     DriverAddToUpdatedWallets, DriverAskToLoadWallet
                      )
 
 
@@ -218,7 +219,7 @@ class DriverVehicleInventorySerializer(serializers.ModelSerializer):
                   'tail_rear_lights', 'reverse_lights', 'interior_lights', 'engine_noise', 'excessive_smoke',
                   'foot_break', 'hand_break', 'wheel_bearing_noise', 'warning_triangle', 'fire_extinguisher',
                   'first_aid_box', 'checked_today', 'date_checked', 'time_checked', 'get_drivers_name',
-                  'get_driver_profile_pic', 'read']
+                  'get_driver_profile_pic', 'read', 'registration_number', 'unique_number', 'vehicle_brand', 'millage']
         read_only_fields = ['driver']
 
     def get_username(self, user):
@@ -250,14 +251,14 @@ class AskToLoadWalletSerializer(serializers.ModelSerializer):
 class DriverStartTripSerializer(serializers.ModelSerializer):
     class Meta:
         model = DriverStartTrip
-        fields = ['id', 'driver', 'passenger', 'date_started', 'time_started']
+        fields = ['id', 'driver', 'passenger', 'ride', 'date_started', 'time_started']
         read_only_fields = ['driver']
 
 
 class DriverEndTripSerializer(serializers.ModelSerializer):
     class Meta:
         model = DriverEndTrip
-        fields = ['id', 'driver', 'passenger', 'date_stopped', 'time_stopped', 'price']
+        fields = ['id', 'driver', 'passenger', 'ride', 'date_stopped', 'time_stopped', 'price']
         read_only_fields = ['driver']
 
 
@@ -265,4 +266,26 @@ class DriverAlertArrivalSerializer(serializers.ModelSerializer):
     class Meta:
         model = DriverAlertArrival
         fields = ['id', 'driver', 'passenger', 'date_alerted', 'time_alerted']
+        read_only_fields = ['driver']
+
+
+# drivers
+class DriverAddToUpdatedWalletsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DriverAddToUpdatedWallets
+        fields = ['id', 'wallet', 'date_updated']
+
+
+class DriversWalletSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DriversWallet
+        fields = ['id', 'driver', 'amount', 'date_loaded', 'get_drivers_name', 'get_amount',
+                  'get_drivers_profile_pic']
+
+
+class DriverAskToLoadWalletSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DriverAskToLoadWallet
+        fields = ['id', 'driver', 'amount', 'date_requested', 'get_drivers_name', 'get_amount', 'time_requested',
+                  'title', 'read', 'get_drivers_profile_pic']
         read_only_fields = ['driver']

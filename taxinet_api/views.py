@@ -8,14 +8,15 @@ from django.views.decorators.vary import vary_on_cookie, vary_on_headers
 from rest_framework.views import APIView
 from datetime import datetime, date, time, timedelta
 
-from taxinet_users.models import PassengerProfile
+from taxinet_users.models import PassengerProfile, DriverProfile
 from .models import (Complains, AddToUpdatedWallets,
                      DriversLocation, ConfirmDriverPayment, DriverVehicleInventory,
                      AcceptedScheduledRides, RejectedScheduledRides,
                      CompletedScheduledRidesToday, ScheduledNotifications, ScheduleRide, AssignScheduleToDriver,
                      AcceptAssignedScheduled, ContactUs,
                      RejectAssignedScheduled, CancelScheduledRide, PassengersWallet, AskToLoadWallet, DriverStartTrip,
-                     DriverEndTrip, DriverAlertArrival)
+                     DriverEndTrip, DriverAlertArrival, DriversWallet,
+                     DriverAddToUpdatedWallets, DriverAskToLoadWallet)
 from .serializers import (ComplainsSerializer, ContactUsSerializer,
                           ConfirmDriverPaymentSerializer, DriversLocationSerializer, ScheduleRideSerializer,
                           AcceptedScheduledRidesSerializer, \
@@ -26,7 +27,8 @@ from .serializers import (ComplainsSerializer, ContactUsSerializer,
                           AdminScheduleRideSerializer,
                           AcceptScheduleToDriverSerializer, AssignScheduleToDriverSerializer, PassengerWalletSerializer,
                           AskToLoadWalletSerializer, AddToUpdatedWalletsSerializer, DriverStartTripSerializer,
-                          DriverEndTripSerializer, DriverAlertArrivalSerializer)
+                          DriverEndTripSerializer, DriverAlertArrivalSerializer, DriversWalletSerializer,
+                          DriverAddToUpdatedWalletsSerializer, DriverAskToLoadWalletSerializer)
 from django.http import Http404
 
 
@@ -286,6 +288,14 @@ def admin_get_scheduled_for_days(request):
 @permission_classes([permissions.AllowAny])
 def admin_get_scheduled_for_weekly(request):
     weekly_schedule = ScheduleRide.objects.filter(schedule_type="Weekly").order_by('-date_scheduled')
+    serializer = ScheduleRideSerializer(weekly_schedule, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def admin_get_scheduled_for_monthly(request):
+    weekly_schedule = ScheduleRide.objects.filter(schedule_type="Monthly").order_by('-date_scheduled')
     serializer = ScheduleRideSerializer(weekly_schedule, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -816,7 +826,6 @@ def get_drives_assigned_and_active_schedules(request):
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
 def driver_start_trip(request):
-
     serializer = DriverStartTripSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save(driver=request.user)
@@ -881,6 +890,16 @@ def get_driver_scheduled_for_weekly(request):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_driver_scheduled_for_monthly(request):
+    weekly_schedule = ScheduleRide.objects.filter(schedule_type="Monthly").filter(
+        assigned_driver=request.user).order_by(
+        '-date_scheduled')
+    serializer = ScheduleRideSerializer(weekly_schedule, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 # passenger notifications
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
@@ -909,3 +928,97 @@ def get_passengers_triggered_notifications(request):
         read="Not Read").order_by('-date_created')
     serializer = ScheduledNotificationSerializer(notifications, many=True)
     return Response(serializer.data)
+
+
+# drivers wallet
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def add_to_drivers_updated_wallets(request):
+    serializer = DriverAddToUpdatedWalletsSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def admin_load_drivers_wallet(request):
+    serializer = DriversWalletSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def admin_get_all_drivers_wallet(request):
+    wallets = DriversWallet.objects.all().order_by('-date_loaded')
+    serializer = DriversWalletSerializer(wallets, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def drivers_wallet_detail(request, id):
+    wallet = get_object_or_404(DriversWallet, id=id)
+    serializer = DriversWalletSerializer(wallet, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['GET', 'PUT'])
+@permission_classes([permissions.AllowAny])
+def update_drivers_wallet(request, id):
+    wallet = get_object_or_404(DriversWallet, id=id)
+    serializer = DriversWalletSerializer(wallet, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def admin_get_all_drivers_request_to_load_wallet(request):
+    wallets = DriverAskToLoadWallet.objects.all().order_by('-date_requested')
+    serializer = DriverAskToLoadWalletSerializer(wallets, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def load_drivers_wallet_detail(request, id):
+    wallet = get_object_or_404(DriverAskToLoadWallet, id=id)
+    if wallet:
+        wallet.read = "Read"
+        wallet.save()
+    serializer = DriverAskToLoadWalletSerializer(wallet, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_drivers_wallet(request):
+    wallet = DriversWallet.objects.filter(driver=request.user).order_by('-date_loaded')
+    serializer = DriversWalletSerializer(wallet, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def admin_get_scheduled_for_monthly(request):
+    weekly_schedule = ScheduleRide.objects.filter(schedule_type="Monthly").order_by('-date_scheduled')
+    serializer = ScheduleRideSerializer(weekly_schedule, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def request_to_load_drivers_wallet(request):
+    serializer = DriverAskToLoadWalletSerializer(data=request.data)
+    user = get_object_or_404(DriverProfile, user=request.user)
+    if serializer.is_valid():
+        serializer.save(driver=user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

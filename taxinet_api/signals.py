@@ -6,7 +6,8 @@ from .models import (ScheduleRide, Complains, ConfirmDriverPayment, AcceptedSche
                      CompletedScheduledRidesToday, ScheduledNotifications, AssignScheduleToDriver,
                      AcceptAssignedScheduled, AddToUpdatedWallets,
                      RejectAssignedScheduled, CancelScheduledRide, PassengersWallet, AskToLoadWallet, DriverStartTrip,
-                     DriverEndTrip, DriverAlertArrival)
+                     DriverEndTrip, DriverAlertArrival, DriversWallet,
+                     DriverAddToUpdatedWallets, DriverAskToLoadWallet)
 from django.conf import settings
 
 User = settings.AUTH_USER_MODEL
@@ -219,3 +220,36 @@ def driver_alert_arrival(sender, created, instance, **kwargs):
     ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                           notification_message=message, notification_tag=notification_tag,
                                           notification_to_passenger=instance.passenger)
+
+
+@receiver(post_save, sender=DriversWallet)
+def alert_drivers_loaded_wallet(sender, created, instance, **kwargs):
+    title = "Wallet Loaded"
+    notification_tag = "Wallet Loaded"
+    message = f"{instance.driver.username}, your wallet has been loaded with the amount of GHS{instance.amount}"
+    ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                          notification_message=message, notification_tag=notification_tag,
+                                          notification_from=instance.administrator,
+                                          notification_to=instance.driver)
+
+
+@receiver(post_save, sender=DriverAskToLoadWallet)
+def alert_drivers_request_to_load_wallet(sender, created, instance, **kwargs):
+    title = "Wants to load wallet"
+    notification_tag = "Wants to load wallet"
+    message = f"{instance.driver.user.username} wants to load their wallet with the amount of GHS{instance.amount}"
+    ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                          notification_message=message, notification_tag=notification_tag,
+                                          notification_from=instance.driver.user,
+                                          notification_to=instance.administrator)
+
+
+@receiver(post_save, sender=DriverAddToUpdatedWallets)
+def alert_driver_updated_wallet(sender, created, instance, **kwargs):
+    title = "Wallet Updated"
+    notification_tag = "Wallet Updated"
+    message = f"{instance.driver.username}, your wallet was updated with GHS {instance.wallet.amount}"
+    ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                          notification_message=message, notification_tag=notification_tag,
+                                          notification_from=instance.administrator,
+                                          notification_to=instance.wallet.driver)

@@ -118,10 +118,22 @@ urlpatterns = [
     path('get_driver_scheduled_for_daily/', views.get_driver_scheduled_for_daily),
     path('get_driver_scheduled_for_days/', views.get_driver_scheduled_for_days),
     path('get_driver_scheduled_for_weekly/', views.get_driver_scheduled_for_weekly),
+    path('get_driver_scheduled_for_monthly/', views.get_driver_scheduled_for_monthly),
 
     #     passengers notifications
     path('passengers_notifications/', views.get_all_passenger_notifications),
     path('get_passenger_notifications/', views.get_passenger_notifications),
     path('get_passengers_triggered_notifications/', views.get_passengers_triggered_notifications),
+
+    #     drivers wallet
+    path('add_to_drivers_updated_wallets/', views.add_to_drivers_updated_wallets),
+    path('admin_load_drivers_wallet/', views.admin_load_drivers_wallet),
+    path('admin_get_all_drivers_wallet/', views.admin_get_all_drivers_wallet),
+    path('get_drivers_wallet/', views.get_drivers_wallet),
+    path('request_to_load_drivers_wallet/', views.request_to_load_drivers_wallet),
+    path('admin_get_all_drivers_request_to_load_wallet/', views.admin_get_all_drivers_request_to_load_wallet),
+    path('drivers_wallet_detail/<int:id>/', views.drivers_wallet_detail),
+    path('update_drivers_wallet/<int:id>/', views.update_drivers_wallet),
+    path('load_drivers_wallet_detail/<int:id>/', views.load_drivers_wallet_detail),
 
 ]
