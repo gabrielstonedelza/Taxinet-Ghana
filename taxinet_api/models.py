@@ -580,7 +580,7 @@ class PassengersWallet(models.Model):
         return self.amount
 
     def get_passenger_profile_pic(self):
-        my_passenger = get_object_or_404(User, username=self.passenger.username)
+        my_passenger = User.objects.get(username=self.passenger.username)
         de_pass = PassengerProfile.objects.get(user=my_passenger)
         if de_pass:
             return "https://taxinetghana.xyz" + de_pass.profile_pic.url
@@ -745,6 +745,7 @@ class RegisterVehicle(models.Model):
         if self.picture:
             return "https://taxinetghana.xyz" + self.picture.url
         return ""
+
 
 # def myDateToday():
 #     my_date = datetime.now()
