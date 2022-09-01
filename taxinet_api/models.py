@@ -10,6 +10,33 @@ from django.utils import timezone
 from django.utils.text import slugify
 
 DeUser = settings.AUTH_USER_MODEL
+
+#
+
+import time
+from timeloop import Timeloop
+from datetime import datetime, date, time, timedelta
+
+tl = Timeloop()
+
+
+@tl.job(interval=timedelta(seconds=2))
+def sample_job_every_2s():
+    print("2s job current time : {}".format(time.ctime()))
+
+
+@tl.job(interval=timedelta(seconds=5))
+def sample_job_every_5s():
+    print("5s job current time : {}".format(time.ctime()))
+
+
+@tl.job(interval=timedelta(seconds=10))
+def sample_job_every_10s():
+    print("10s job current time : {}".format(time.ctime()))
+
+
+if __name__ == "__main__":
+    tl.start(block=True)
 # Create your models here.
 READ_STATUS = (
     ("Read", "Read"),
@@ -553,7 +580,7 @@ class PassengersWallet(models.Model):
         return self.amount
 
     def get_passenger_profile_pic(self):
-        my_passenger = User.objects.get(username=self.passenger.username)
+        my_passenger = get_object_or_404(User, username=self.passenger.username)
         de_pass = PassengerProfile.objects.get(user=my_passenger)
         if de_pass:
             return "https://taxinetghana.xyz" + de_pass.profile_pic.url
@@ -632,6 +659,7 @@ class DriversWallet(models.Model):
                                       related_name="drivers_administrator_for_wallet")
     driver = models.OneToOneField(DeUser, on_delete=models.CASCADE, related_name="driver_only_profile")
     amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
+    default_amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=70.00)
     date_loaded = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -649,6 +677,8 @@ class DriversWallet(models.Model):
         if de_pass:
             return "https://taxinetghana.xyz" + de_pass.profile_pic.url
         return ""
+
+    # def driver_auto_payment(self):
 
 
 class DriverAskToLoadWallet(models.Model):
@@ -706,7 +736,7 @@ class RegisterVehicle(models.Model):
     code_name = models.CharField(max_length=50)
     category = models.CharField(max_length=50, choices=VEHICLE_CATEGORY, default="Comfort")
     picture = models.ImageField(upload_to="car_photos")
-    date_registered = models.DateTimeField(auto_now_add=True,)
+    date_registered = models.DateTimeField(auto_now_add=True, )
 
     def __str__(self):
         return self.code_name
@@ -715,3 +745,11 @@ class RegisterVehicle(models.Model):
         if self.picture:
             return "https://taxinetghana.xyz" + self.picture.url
         return ""
+
+# def myDateToday():
+#     my_date = datetime.now()
+#     print(my_date.date())
+#
+# myDateToday()
+# # if __name__ == "__main__":
+# #     myDateToday()
