@@ -546,7 +546,7 @@ class PassengersWallet(models.Model):
     administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1,
                                       related_name="administrator_for_wallet")
     passenger = models.OneToOneField(DeUser, on_delete=models.CASCADE, related_name="passenger_only_profile")
-    de_passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1,
+    de_passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE,
                                      related_name="passengerloadingwallet")
     amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
     date_loaded = models.DateTimeField(auto_now_add=True)
