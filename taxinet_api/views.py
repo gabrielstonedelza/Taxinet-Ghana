@@ -15,10 +15,12 @@ from .models import (Complains, AddToUpdatedWallets,
                      CompletedScheduledRidesToday, ScheduledNotifications, ScheduleRide, AssignScheduleToDriver,
                      AcceptAssignedScheduled, ContactUs,
                      RejectAssignedScheduled, CancelScheduledRide, PassengersWallet, AskToLoadWallet, DriverStartTrip,
+                     RegisterVehicle,
                      DriverEndTrip, DriverAlertArrival, DriversWallet,
                      DriverAddToUpdatedWallets, DriverAskToLoadWallet)
 from .serializers import (ComplainsSerializer, ContactUsSerializer,
                           ConfirmDriverPaymentSerializer, DriversLocationSerializer, ScheduleRideSerializer,
+                          RegisterVehicleSerializer,
                           AcceptedScheduledRidesSerializer, \
                           RejectedScheduledRidesSerializer, DriverVehicleInventorySerializer,
                           CompletedScheduledRidesSerializer, \
@@ -32,7 +34,46 @@ from .serializers import (ComplainsSerializer, ContactUsSerializer,
 from django.http import Http404
 
 
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def admin_register_vehicle(request):
+    serializer = RegisterVehicleSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def admin_get_all_registered_vehicles(request):
+    vehicles = RegisterVehicle.objects.all().order_by('-date_registered')
+    serializer = RegisterVehicleSerializer(vehicles, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET', 'PUT'])
+@permission_classes([permissions.AllowAny])
+def update_vehicle(request, id):
+    vehicle = get_object_or_404(RegisterVehicle, id=id)
+    serializer = RegisterVehicleSerializer(vehicle, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def vehicle_detail(request, id):
+    vehicle = get_object_or_404(RegisterVehicle, id=id)
+    serializer = RegisterVehicleSerializer(vehicle, many=False)
+    return Response(serializer.data)
+
+
 # admin gets,posts and updates
+
+
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
 def add_to_updated_wallets(request):

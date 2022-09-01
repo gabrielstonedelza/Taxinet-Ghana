@@ -1,4 +1,6 @@
 from email.policy import default
+from random import choices
+from sre_constants import CATEGORY
 
 from django.shortcuts import get_object_or_404
 from django.db import models
@@ -80,6 +82,110 @@ SCHEDULE_STATUS = (
     ("Reviewing", "Reviewing"),
     ("Active", "Active"),
     ("Cancelled", "Cancelled"),
+)
+VEHICLE_STATUS = (
+    ("Active", "Active"),
+    ("In Active", "In Active"),
+    ("Inspection", "Inspection"),
+    ("In the shop", "In the shop"),
+    ("Stolen", "Stolen"),
+    ("In Garage", "In Garage"),
+)
+
+VEHICLE_BRANDS = (
+    ("Audi", "Audi"),
+    ("Alfa Romeo", "Alfa Romeo"),
+    ("Acura", "Acura"),
+    ("Aston Martin", "Aston Martin"),
+    ("BMW", "BMW"),
+    ("Bentley", "Bentley"),
+    ("Chevrolet", "Chevrolet"),
+    ("Citroen", "Citroen"),
+    ("Chrysler", "Chrysler"),
+    ("Dodge", "Dodge"),
+    ("Daewoo", "Daewoo"),
+    ("Daewoo", "Daewoo"),
+    ("Eagle", "Eagle"),
+    ("Edsel", "Edsel"),
+    ("Englon", "Englon"),
+    ("Ford", "Ford"),
+    ("Fiat", "Fiat"),
+    ("Foton", "Foton"),
+    ("GMC", "GMC"),
+    ("Genesis", "Genesis"),
+    ("Honda", "Honda"),
+    ("Hyundai", "Hyundai"),
+    ("Infinity", "Infinity"),
+    ("Isuzu", "Isuzu"),
+    ("Jeep", "Jeep"),
+    ("Jetta", "Jetta"),
+    ("Kia", "Kia"),
+    ("Kenworth", "Kenworth"),
+    ("Lexus", "Lexus"),
+    ("Land Rover", "Land Rover"),
+    ("Maserati", "Maserati"),
+    ("Mazda", "Mazda"),
+    ("Mazda", "Mazda"),
+    ("Mitsubishi", "Mitsubishi"),
+    ("Nissan", "Nissan"),
+    ("Opel", "Opel"),
+    ("Peugeot", "Peugeot"),
+    ("Renault", "Renault"),
+    ("Suzuki", "Suzuki"),
+    ("Saturn", "Saturn"),
+    ("Tesla", "Tesla"),
+    ("Toyota", "Toyota"),
+    ("Volkswagen", "Volkswagen"),
+    ("Volvo", "Volvo"),
+)
+
+COLOR_CHOICES = (
+    ("Yellow", "Yellow"),
+    ("White", "White"),
+    ("Black", "Black"),
+    ("Gray", "Gray"),
+    ("Red", "Red"),
+    ("Dark Blue", "Dark Blue"),
+    ("Light Blue", "Light Blue"),
+    ("Brown", "Brown"),
+    ("Green", "Green"),
+    ("Pink", "Pink"),
+    ("Orange", "Orange"),
+    ("Purple", "Purple"),
+    ("Beige", "Beige"),
+)
+
+VEHICLE_TRANSMISSION = (
+    ("Mechanical", "Mechanical"),
+    ("Authomatic", "Authomatic"),
+    ("Robotized", "Robotized"),
+    ("Variator", "Variator"),
+)
+
+BOOSTERS = (
+    ("0", "0"),
+    ("1", "1"),
+    ("2", "2"),
+    ("3", "3"),
+)
+
+SAFETY_SEATS = (
+    ("0", "0"),
+    ("1", "1"),
+    ("2", "2"),
+    ("3", "3"),
+)
+FLEET_CAR = (
+    ("Unselected", "Unselected"),
+    ("Yes", "Yes"),
+    ("No", "No"),
+)
+
+VEHICLE_CATEGORY = (
+    ("Comfort", "Comfort"),
+    ("Courier", "Courier"),
+    ("Economy", "Economy"),
+    ("Delivery", "Delivery"),
 )
 
 
@@ -313,7 +419,7 @@ class DriverVehicleInventory(models.Model):
     registration_number = models.CharField(max_length=255, default="")
     unique_number = models.CharField(max_length=30, default="")
     vehicle_brand = models.CharField(max_length=255, default="")
-    millage = models.CharField(max_length=255,default="")
+    millage = models.CharField(max_length=255, default="")
     windscreen = models.CharField(max_length=10, choices=INVENTORY_OPTIONS, default="No")
     side_mirror = models.CharField(max_length=10, choices=INVENTORY_OPTIONS, default="No")
     registration_plate = models.CharField(max_length=10, choices=INVENTORY_OPTIONS, default="No")
@@ -546,7 +652,8 @@ class DriversWallet(models.Model):
 
 
 class DriverAskToLoadWallet(models.Model):
-    administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1, related_name="administrator_loadWallet")
+    administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1,
+                                      related_name="administrator_loadWallet")
     title = models.CharField(max_length=200, default="Wants to load wallet")
     driver = models.ForeignKey(PassengerProfile, on_delete=models.CASCADE)
     amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
@@ -577,3 +684,34 @@ class DriverAddToUpdatedWallets(models.Model):
 
     def __str__(self):
         return f"{self.wallet.driver.username}'s wallet was updated."
+
+
+class RegisterVehicle(models.Model):
+    status = models.CharField(max_length=255, choices=VEHICLE_STATUS, default="In Active")
+    brand = models.CharField(max_length=255, choices=VEHICLE_BRANDS, default="Toyota")
+    model = models.CharField(max_length=100, default="Yaris")
+    color = models.CharField(max_length=255, choices=COLOR_CHOICES, default="White")
+    year = models.CharField(max_length=5, default="2000")
+    license_plate_number = models.CharField(max_length=50)
+    vin = models.CharField(max_length=50)
+    body_number = models.CharField(max_length=50)
+    registration_certificate_number = models.CharField(max_length=50)
+    taxi_license_number = models.CharField(max_length=50)
+    transmission = models.CharField(max_length=30, choices=VEHICLE_TRANSMISSION, default="Automatic")
+    boosters = models.CharField(max_length=4, choices=BOOSTERS, default="0")
+    child_safety_seats = models.CharField(max_length=4, choices=SAFETY_SEATS, default="0")
+    branded_wrap = models.BooleanField(default=False)
+    light_box = models.BooleanField(default=False)
+    fleet_car = models.CharField(max_length=20, choices=FLEET_CAR, default="Unselected")
+    code_name = models.CharField(max_length=50)
+    category = models.CharField(max_length=50, choices=VEHICLE_CATEGORY, default="Comfort")
+    picture = models.ImageField(upload_to="car_photos")
+    date_registered = models.DateTimeField(auto_now_add=True,)
+
+    def __str__(self):
+        return self.code_name
+
+    def get_vehicle_photo(self):
+        if self.picture:
+            return "https://taxinetghana.xyz" + self.picture.url
+        return ""
