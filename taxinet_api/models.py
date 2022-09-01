@@ -561,10 +561,9 @@ class PassengersWallet(models.Model):
         return self.amount
 
     def get_passenger_profile_pic(self):
-        my_passenger = get_object_or_404(User, username=self.de_passenger.username)
-        de_pass = PassengerProfile.objects.get(user=my_passenger)
-        if de_pass:
-            return "https://taxinetghana.xyz" + de_pass.profile_pic.url
+        my_passenger = PassengerProfile.objects.get(user=self.de_passenger)
+        if my_passenger:
+            return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
         return ""
 
 
