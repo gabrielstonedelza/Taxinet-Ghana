@@ -741,7 +741,7 @@ class RegisterVehicle(models.Model):
     date_registered = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.code_name
+        return self.model
 
     def get_vehicle_photo(self):
         if self.picture:
