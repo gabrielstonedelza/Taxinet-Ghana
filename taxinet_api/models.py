@@ -635,7 +635,7 @@ class DriversWallet(models.Model):
     administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1,
                                       related_name="drivers_administrator_for_wallet")
     driver = models.OneToOneField(DeUser, on_delete=models.CASCADE, related_name="driver_only_profile")
-    de_driver = models.ForeignKey(DriverProfile, on_delete=models.CASCADE, related_name="driverswallet")
+    de_driver = models.ForeignKey(DriverProfile, on_delete=models.CASCADE, related_name="driverswallet", null=True)
     amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
     default_amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=70.00)
     date_loaded = models.DateTimeField(auto_now_add=True)
@@ -659,7 +659,7 @@ class DriverAskToLoadWallet(models.Model):
     administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1,
                                       related_name="administrator_loadWallet")
     title = models.CharField(max_length=200, default="Wants to load wallet")
-    driver = models.ForeignKey(PassengerProfile, on_delete=models.CASCADE)
+    driver = models.ForeignKey(DriverProfile, on_delete=models.CASCADE)
     amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
     date_requested = models.DateField(auto_now_add=True)
     time_requested = models.TimeField(auto_now_add=True)
