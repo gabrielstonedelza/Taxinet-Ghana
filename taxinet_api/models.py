@@ -635,6 +635,7 @@ class DriversWallet(models.Model):
     administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1,
                                       related_name="drivers_administrator_for_wallet")
     driver = models.OneToOneField(DeUser, on_delete=models.CASCADE, related_name="driver_only_profile")
+    de_driver = models.ForeignKey(DriverProfile, on_delete=models.CASCADE, related_name="driverswallet")
     amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
     default_amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=70.00)
     date_loaded = models.DateTimeField(auto_now_add=True)
@@ -649,11 +650,7 @@ class DriversWallet(models.Model):
         return self.amount
 
     def get_drivers_profile_pic(self):
-        my_driver = User.objects.get(username=self.driver.username)
-        de_pass = DriverProfile.objects.get(user=my_driver)
-        if de_pass:
-            return "https://taxinetghana.xyz" + de_pass.profile_pic.url
-        return ""
+        return "https://taxinetghana.xyz" + self.de_driver.profile_pic.url
 
     # def driver_auto_payment(self):
 
