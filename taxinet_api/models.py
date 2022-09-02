@@ -194,6 +194,34 @@ VEHICLE_CATEGORY = (
     ("Delivery", "Delivery"),
 )
 
+TOYOTA_BRANDS = (
+    ("Avalon", "Avalon"),
+    ("BELTA", "BELTA"),
+    ("CAMRY", "CAMRY"),
+    ("CENTURY", "CENTURY"),
+    ("ALLION", "ALLION"),
+    ("LEVIN GT", "LEVIN GT"),
+    ("CROWN", "CROWN"),
+    ("ETIOS", "ETIOS"),
+    ("MIRAI", "MIRAI"),
+    ("PRIUS", "PRIUS"),
+    ("AGYA/WIGO", "AGYA/WIGO"),
+    ("AQUA", "AQUA"),
+    ("COROLLA", "COROLLA"),
+    ("GR COROLLA", "GR COROLLA"),
+    ("ETIOS", "ETIOS"),
+    ("GLANZA", "GLANZA"),
+    ("PASSO", "PASSO"),
+    ("YARIS", "YARIS"),
+    ("4RUNNER", "4RUNNER"),
+    ("VENZA", "VENZA"),
+    ("HIGHLANDER", "HIGHLANDER"),
+    ("LAND CRUISER", "LAND CRUISER"),
+    ("RAV4", "RAV4"),
+    ("RUSH", "RUSH"),
+    ("Vitz", "Vitz"),
+)
+
 
 # working and functioning now models
 class ScheduleRide(models.Model):
@@ -424,7 +452,7 @@ class DriverVehicleInventory(models.Model):
     driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
     registration_number = models.CharField(max_length=255, default="")
     unique_number = models.CharField(max_length=30, default="")
-    vehicle_brand = models.CharField(max_length=255, default="")
+    vehicle_brand = models.CharField(max_length=255, default="Vitz", choices=TOYOTA_BRANDS)
     millage = models.CharField(max_length=255, default="")
     windscreen = models.CharField(max_length=10, choices=INVENTORY_OPTIONS, default="No")
     side_mirror = models.CharField(max_length=10, choices=INVENTORY_OPTIONS, default="No")
