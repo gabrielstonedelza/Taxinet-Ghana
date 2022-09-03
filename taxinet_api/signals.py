@@ -226,7 +226,7 @@ def driver_alert_arrival(sender, created, instance, **kwargs):
 def alert_drivers_loaded_wallet(sender, created, instance, **kwargs):
     title = "Wallet Loaded"
     notification_tag = "Wallet Loaded"
-    message = f"{instance.driver.username}, your wallet has been loaded with the amount of GHS{instance.amount}"
+    message = f"{instance.driver.username}, your wallet has been updated.Wallet is now GHS{instance.amount}"
     ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                           notification_message=message, notification_tag=notification_tag,
                                           notification_from=instance.administrator,
