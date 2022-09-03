@@ -79,8 +79,9 @@ RIDE_TYPE = (
 )
 
 INVENTORY_OPTIONS = (
-    ("Okay", "Okay"),
-    ("No", "No")
+    ("Select Option", "Select Option"),
+    ("okay", "okay"),
+    ("no", "no")
 )
 
 SCHEDULE_STATUS = (
