@@ -1080,9 +1080,8 @@ def request_to_load_drivers_wallet(request):
 @permission_classes([permissions.IsAuthenticated])
 def add_to_drivers_payment_today(request):
     serializer = AddToPaymentTodaySerializer(data=request.data)
-    user = get_object_or_404(DriverProfile, user=request.user)
     if serializer.is_valid():
-        serializer.save(driver=user)
+        serializer.save(driver=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
