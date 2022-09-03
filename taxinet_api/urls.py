@@ -87,6 +87,7 @@ urlpatterns = [
     path("get_driver_inventory/", views.get_driver_inventory),
     path("get_all_drivers_inventories/", views.get_all_drivers_inventories),
     path("add_drivers_inventories/", views.create_drivers_inventory),
+    path("driver_inventory_details/<int:id>/", views.drivers_inventory_detail),
 
     path('add_to_assigned_rejected/', views.add_to_assigned_rejected),
     path('get_all_rejected_assigned_ride/', views.get_all_rejected_assigned_ride),

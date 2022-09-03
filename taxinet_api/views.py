@@ -452,8 +452,17 @@ def get_all_cancelled_ride(request):
     return Response(serializer.data)
 
 
+# drivers inventories
 @api_view(['GET'])
-@permission_classes([permissions.IsAuthenticatedOrReadOnly])
+@permission_classes([permissions.AllowAny])
+def drivers_inventory_detail(request, id):
+    inventory = get_object_or_404(DriverVehicleInventory, id=id)
+    serializer = DriverVehicleInventorySerializer(inventory, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
 def get_all_drivers_inventories(request):
     inventories = DriverVehicleInventory.objects.all().order_by('-date_checked')
     serializer = DriverVehicleInventorySerializer(inventories, many=True)
@@ -461,9 +470,9 @@ def get_all_drivers_inventories(request):
 
 
 @api_view(['GET'])
-@permission_classes([permissions.IsAuthenticatedOrReadOnly])
-def get_driver_inventory(request, driver_id):
-    driver_inventory = DriverVehicleInventory.objects.filter(driver=driver_id).order_by('-date_checked')
+@permission_classes([permissions.IsAuthenticated])
+def get_driver_inventory(request):
+    driver_inventory = DriverVehicleInventory.objects.filter(driver=request.user).order_by('-date_checked')
     serializer = DriverVehicleInventorySerializer(driver_inventory, many=True)
     return Response(serializer.data)
 
