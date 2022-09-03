@@ -6,7 +6,7 @@ from .models import (Complains,
                      AssignScheduleToDriver, AcceptAssignedScheduled,
                      RejectAssignedScheduled, CancelScheduledRide, ContactUs, PassengersWallet, AskToLoadWallet,
                      AddToUpdatedWallets, DriverStartTrip, DriverEndTrip, DriverAlertArrival, DriversWallet,
-                     DriverAddToUpdatedWallets, DriverAskToLoadWallet, RegisterVehicle
+                     DriverAddToUpdatedWallets, DriverAskToLoadWallet, RegisterVehicle, AddToPaymentToday
                      )
 
 
@@ -296,4 +296,12 @@ class RegisterVehicleSerializer(serializers.ModelSerializer):
         model = RegisterVehicle
         fields = ['id', 'status', 'brand', 'model', 'color', 'year', 'license_plate_number', 'vin', 'body_number',
                   'registration_certificate_number', 'taxi_license_number', 'transmission', 'boosters',
-                  'child_safety_seats', 'branded_wrap', 'light_box', 'fleet_car', 'code_name', 'category', 'picture', 'date_registered']
+                  'child_safety_seats', 'branded_wrap', 'light_box', 'fleet_car', 'code_name', 'category', 'picture',
+                  'date_registered']
+
+
+class AddToPaymentTodaySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AddToPaymentToday
+        fields = ['id', 'driver', 'amount', 'date_paid', 'time_paid']
+        read_only_fields = ['driver']

@@ -7,7 +7,7 @@ from .models import (ScheduleRide, Complains, ConfirmDriverPayment, AcceptedSche
                      AcceptAssignedScheduled, AddToUpdatedWallets,
                      RejectAssignedScheduled, CancelScheduledRide, PassengersWallet, AskToLoadWallet, DriverStartTrip,
                      DriverEndTrip, DriverAlertArrival, DriversWallet,
-                     DriverAddToUpdatedWallets, DriverAskToLoadWallet)
+                     DriverAddToUpdatedWallets, DriverAskToLoadWallet, AddToPaymentToday)
 from django.conf import settings
 
 User = settings.AUTH_USER_MODEL
@@ -253,3 +253,13 @@ def alert_driver_updated_wallet(sender, created, instance, **kwargs):
                                           notification_message=message, notification_tag=notification_tag,
                                           notification_from=instance.administrator,
                                           notification_to=instance.wallet.driver)
+
+
+@receiver(post_save, sender=AddToPaymentToday)
+def alert_driver_payment_Today(sender, created, instance, **kwargs):
+    title = "Payment Today"
+    notification_tag = "Payment Today"
+    message = f"70 GHS was deducted from your wallet.Your wallet is now {instance.amount}"
+    ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                          notification_message=message, notification_tag=notification_tag,
+                                          notification_to=instance.driver)

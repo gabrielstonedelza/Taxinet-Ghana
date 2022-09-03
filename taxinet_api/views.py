@@ -17,7 +17,7 @@ from .models import (Complains, AddToUpdatedWallets,
                      RejectAssignedScheduled, CancelScheduledRide, PassengersWallet, AskToLoadWallet, DriverStartTrip,
                      RegisterVehicle,
                      DriverEndTrip, DriverAlertArrival, DriversWallet,
-                     DriverAddToUpdatedWallets, DriverAskToLoadWallet)
+                     DriverAddToUpdatedWallets, DriverAskToLoadWallet, AddToPaymentToday)
 from .serializers import (ComplainsSerializer, ContactUsSerializer,
                           ConfirmDriverPaymentSerializer, DriversLocationSerializer, ScheduleRideSerializer,
                           RegisterVehicleSerializer,
@@ -30,7 +30,8 @@ from .serializers import (ComplainsSerializer, ContactUsSerializer,
                           AcceptScheduleToDriverSerializer, AssignScheduleToDriverSerializer, PassengerWalletSerializer,
                           AskToLoadWalletSerializer, AddToUpdatedWalletsSerializer, DriverStartTripSerializer,
                           DriverEndTripSerializer, DriverAlertArrivalSerializer, DriversWalletSerializer,
-                          DriverAddToUpdatedWalletsSerializer, DriverAskToLoadWalletSerializer)
+                          DriverAddToUpdatedWalletsSerializer, DriverAskToLoadWalletSerializer,
+                          AddToPaymentTodaySerializer)
 from django.http import Http404
 
 
@@ -1072,3 +1073,23 @@ def request_to_load_drivers_wallet(request):
         serializer.save(driver=user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# drivers payments todays
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def add_to_drivers_payment_today(request):
+    serializer = AddToPaymentTodaySerializer(data=request.data)
+    user = get_object_or_404(DriverProfile, user=request.user)
+    if serializer.is_valid():
+        serializer.save(driver=user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_all_payments_today(request):
+    payments_today = AddToPaymentToday.objects.all().order_by('-date_paid')
+    serializer = AddToPaymentTodaySerializer(payments_today, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
