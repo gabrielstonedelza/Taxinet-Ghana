@@ -56,6 +56,19 @@ class AllDriversProfileView(generics.ListCreateAPIView):
         return Response(serializer.data)
 
 
+class AllUsers(generics.ListCreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UsersSerializer
+    permission_classes = [AllowAny]
+
+    @method_decorator(cache_page(60 * 60 * 2))
+    def list(self, request):
+        # Note the use of `get_queryset()` instead of `self.queryset`
+        queryset = self.get_queryset()
+        serializer = UsersSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def get_all_user(request):
