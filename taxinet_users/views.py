@@ -59,8 +59,8 @@ class AllDriversProfileView(generics.ListCreateAPIView):
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def get_all_user(request):
-    passengers = User.objects.all()
-    serializer = UsersSerializer(passengers, many=True)
+    users = User.objects.all()
+    serializer = UsersSerializer(users, many=True)
     return Response(serializer.data)
 
 
