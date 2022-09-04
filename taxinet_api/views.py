@@ -12,7 +12,7 @@ from taxinet_users.models import PassengerProfile, DriverProfile
 from .models import (Complains, AddToUpdatedWallets,
                      DriversLocation, ConfirmDriverPayment, DriverVehicleInventory,
                      AcceptedScheduledRides, RejectedScheduledRides,
-                     CompletedScheduledRidesToday, ScheduledNotifications, ScheduleRide, AssignScheduleToDriver,
+                     CompletedScheduledRides, ScheduledNotifications, ScheduleRide, AssignScheduleToDriver,
                      AcceptAssignedScheduled, ContactUs,
                      RejectAssignedScheduled, CancelScheduledRide, PassengersWallet, AskToLoadWallet, DriverStartTrip,
                      RegisterVehicle,
@@ -500,7 +500,7 @@ def get_driver_location(request, driver_id):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticatedOrReadOnly])
 def get_all_completed_rides(request):
-    completed_rides = CompletedScheduledRidesToday.objects.all().order_by('-date_completed')
+    completed_rides = CompletedScheduledRides.objects.all().order_by('-date_completed')
     serializer = CompletedScheduledRidesSerializer(completed_rides, many=True)
     return Response(serializer.data)
 
@@ -1092,3 +1092,4 @@ def get_all_payments_today(request):
     payments_today = AddToPaymentToday.objects.all().order_by('-date_paid')
     serializer = AddToPaymentTodaySerializer(payments_today, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
+

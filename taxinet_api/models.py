@@ -317,9 +317,8 @@ class RejectedScheduledRides(models.Model):
         return f"{self.driver} rejected ride {self.scheduled_ride.id}"
 
 
-class CompletedScheduledRidesToday(models.Model):
+class CompletedScheduledRides(models.Model):
     scheduled_ride = models.ForeignKey(ScheduleRide, on_delete=models.CASCADE)
-    amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
     date_completed = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -327,9 +326,6 @@ class CompletedScheduledRidesToday(models.Model):
 
     def get_passenger_username(self):
         return self.scheduled_ride.passenger.username
-
-    def get_amount(self):
-        return self.amount
 
     def assigned_driver(self):
         return self.scheduled_ride.assigned_driver.username

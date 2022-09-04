@@ -2,7 +2,7 @@ from rest_framework import serializers
 from .models import (Complains,
                      DriversLocation, ConfirmDriverPayment,
                      AcceptedScheduledRides, RejectedScheduledRides,
-                     CompletedScheduledRidesToday, ScheduledNotifications, DriverVehicleInventory, ScheduleRide,
+                     CompletedScheduledRides, ScheduledNotifications, DriverVehicleInventory, ScheduleRide,
                      AssignScheduleToDriver, AcceptAssignedScheduled,
                      RejectAssignedScheduled, CancelScheduledRide, ContactUs, PassengersWallet, AskToLoadWallet,
                      AddToUpdatedWallets, DriverStartTrip, DriverEndTrip, DriverAlertArrival, DriversWallet,
@@ -96,8 +96,8 @@ class RejectedScheduledRidesSerializer(serializers.ModelSerializer):
 
 class CompletedScheduledRidesSerializer(serializers.ModelSerializer):
     class Meta:
-        model = CompletedScheduledRidesToday
-        fields = ['id', 'scheduled_ride', 'amount', 'date_accepted', 'get_passenger_username', 'get_amount',
+        model = CompletedScheduledRides
+        fields = ['id', 'scheduled_ride', 'date_accepted', 'get_passenger_username',
                   'assigned_driver']
 
 

@@ -3,7 +3,7 @@ from django.dispatch import receiver
 
 from .models import (ScheduleRide, Complains, ConfirmDriverPayment, AcceptedScheduledRides,
                      RejectedScheduledRides, DriverVehicleInventory,
-                     CompletedScheduledRidesToday, ScheduledNotifications, AssignScheduleToDriver,
+                     CompletedScheduledRides, ScheduledNotifications, AssignScheduleToDriver,
                      AcceptAssignedScheduled, AddToUpdatedWallets,
                      RejectAssignedScheduled, CancelScheduledRide, PassengersWallet, AskToLoadWallet, DriverStartTrip,
                      DriverEndTrip, DriverAlertArrival, DriversWallet,
@@ -43,17 +43,17 @@ def alert_rejected_ride(sender, created, instance, **kwargs):
                                               schedule_ride_title=instance.scheduled_ride.schedule_title)
 
 
-@receiver(post_save, sender=CompletedScheduledRidesToday)
+@receiver(post_save, sender=CompletedScheduledRides)
 def alert_completed_ride(sender, created, instance, **kwargs):
     if created:
         title = "Your trip is completed"
         notification_tag = "Ride Completed"
-        message = f"Your trip from {instance.pick_up} to {instance.drop_off} is now completed."
+        message = f"Your trip from {instance.scheduled_ride.pick_up} to {instance.scheduled_ride.drop_off} is now completed."
         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                               notification_tag=notification_tag, notification_message=message,
-                                              notification_from=instance.ride.administrator,
-                                              notification_to_passenger=instance.ride.passenger,
-                                              ride_id=instance.ride.id)
+                                              notification_from=instance.scheduled_ride.administrator,
+                                              notification_to_passenger=instance.scheduled_ride.passenger,
+                                              ride_id=instance.ride.id, notification_to=instance.scheduled_ride.assigned_driver)
 
 
 @receiver(post_save, sender=ScheduleRide)
@@ -224,8 +224,8 @@ def driver_alert_arrival(sender, created, instance, **kwargs):
 
 @receiver(post_save, sender=DriversWallet)
 def alert_drivers_loaded_wallet(sender, created, instance, **kwargs):
-    title = "Wallet Loaded"
-    notification_tag = "Wallet Loaded"
+    title = "Wallet Updated"
+    notification_tag = "Wallet Updated"
     message = f"{instance.driver.username}, your wallet has been updated.Wallet is now GHS{instance.amount}"
     ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                           notification_message=message, notification_tag=notification_tag,
