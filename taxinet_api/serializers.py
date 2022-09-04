@@ -160,7 +160,7 @@ class ScheduledNotificationSerializer(serializers.ModelSerializer):
                   'schedule_ride_rejected_id', 'completed_schedule_ride_id',
                   'complain_id', 'reply_id', 'review_id', 'rating_id', 'payment_confirmed_id',
                   'date_created',
-                  'passengers_pickup', 'passengers_dropOff', 'get_passengers_notification_from_pic',
+                  'passengers_pickup', 'passengers_dropOff',
                   'drivers_inventory_id', ]
 
 
