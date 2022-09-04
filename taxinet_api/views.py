@@ -909,7 +909,7 @@ def driver_alert_passenger(request):
 @permission_classes([permissions.IsAuthenticated])
 def get_driver_scheduled_for_one_time(request):
     one_time_schedule = ScheduleRide.objects.filter(schedule_type="One Time").filter(
-        assigned_driver=request.user).order_by('-date_scheduled')
+        assigned_driver=request.user).filter(completed=False).order_by('-date_scheduled')
     serializer = ScheduleRideSerializer(one_time_schedule, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
