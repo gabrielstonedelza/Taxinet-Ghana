@@ -7,7 +7,7 @@ from .models import (ScheduleRide, Complains, ConfirmDriverPayment, AcceptedSche
                      AcceptAssignedScheduled, AddToUpdatedWallets,
                      RejectAssignedScheduled, CancelScheduledRide, PassengersWallet, AskToLoadWallet, DriverStartTrip,
                      DriverEndTrip, DriverAlertArrival, DriversWallet,
-                     DriverAddToUpdatedWallets, DriverAskToLoadWallet, AddToPaymentToday)
+                     DriverAddToUpdatedWallets, DriverAskToLoadWallet, AddToPaymentToday, OtherWallet)
 from django.conf import settings
 
 User = settings.AUTH_USER_MODEL
@@ -53,7 +53,8 @@ def alert_completed_ride(sender, created, instance, **kwargs):
                                               notification_tag=notification_tag, notification_message=message,
                                               notification_from=instance.scheduled_ride.administrator,
                                               notification_to_passenger=instance.scheduled_ride.passenger,
-                                              ride_id=instance.ride.id, notification_to=instance.scheduled_ride.assigned_driver)
+                                              ride_id=instance.ride.id,
+                                              notification_to=instance.scheduled_ride.assigned_driver)
 
 
 @receiver(post_save, sender=ScheduleRide)
@@ -262,4 +263,15 @@ def alert_driver_payment_Today(sender, created, instance, **kwargs):
     message = f"70 GHS was deducted from your wallet.Your wallet is now {instance.amount}"
     ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                           notification_message=message, notification_tag=notification_tag,
-                                          notification_to=instance.driver)
+                                          notification_to=instance.driver) @ receiver(post_save,
+                                                                                      sender=AddToPaymentToday)
+
+
+@receiver(post_save, sender=OtherWallet)
+def alert_wallet_transfer(sender, created, instance, **kwargs):
+    title = "Wallet Received"
+    notification_tag = "Wallet Received"
+    message = f"{instance.sender.username} just sent GHS{instance.amount} to your wallet"
+    ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                          notification_message=message, notification_tag=notification_tag,
+                                          notification_to=instance.receiver,)

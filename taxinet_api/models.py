@@ -199,6 +199,11 @@ TOYOTA_BRANDS = (
     ("Vitz", "Vitz"),
 )
 
+PAYMENT_METHODS = (
+    ("Wallet", "Wallet"),
+    ("Cash", "Cash"),
+)
+
 
 # working and functioning now models
 class ScheduleRide(models.Model):
@@ -211,8 +216,8 @@ class ScheduleRide(models.Model):
     schedule_priority = models.CharField(max_length=255, default="High", choices=SCHEDULE_PRIORITY)
     schedule_description = models.TextField(default="", )
     ride_type = models.CharField(max_length=50, default="Taxinet Ride", choices=RIDE_TYPE)
-    pickup_location = models.CharField(max_length=255, blank=True, )
-    drop_off_location = models.CharField(max_length=255, blank=True, )
+    pickup_location = models.CharField(max_length=255, blank=True, default="")
+    drop_off_location = models.CharField(max_length=255, blank=True, default="")
     pick_up_time = models.CharField(max_length=100, blank=True, )
     start_date = models.CharField(max_length=100, blank=True, )
     completed = models.BooleanField(default=False)
@@ -615,11 +620,38 @@ class DriverEndTrip(models.Model):
     passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="passenger_enjoying_trip_to_end")
     ride = models.CharField(max_length=255, default="", )
     price = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
+    payment_method = models.CharField(max_length=20, default="Wallet")
     date_stopped = models.DateField(auto_now_add=True)
     time_stopped = models.TimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.driver.username} ended trip"
+
+
+class OtherWallet(models.Model):
+    sender = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="user_sending_wallet")
+    receiver = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="user_receiving_wallet")
+    amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
+    date_transferred = models.DateField(auto_now_add=True)
+    time_transferred = models.TimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.sender.username} sent GHS{self.amount} to {self.receiver.username}"
+
+    def get_profile_pic(self):
+        sender = User.objects.get(username=self.sender.username)
+
+        if sender.user_type == "Driver":
+            de_driver = DriverProfile.objects.get(user=self.assigned_driver)
+            if de_driver:
+                return "https://taxinetghana.xyz" + de_driver.profile_pic.url
+            return ""
+
+        if sender.user_type == "Passenger":
+            de_passenger = PassengerProfile.objects.get(user=self.assigned_driver)
+            if de_passenger:
+                return "https://taxinetghana.xyz" + de_passenger.profile_pic.url
+            return ""
 
 
 class DriverAlertArrival(models.Model):
@@ -731,10 +763,29 @@ class AddToPaymentToday(models.Model):
     def __str__(self):
         return f"{self.driver.username} has made payment today"
 
-# def myDateToday():
-#     my_date = datetime.now()
-#     print(my_date.date())
-#
-# myDateToday()
-# # if __name__ == "__main__":
-# #     myDateToday()
+
+class WorkAndPay(models.Model):
+    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
+    amount_to_pay = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
+    amount_paid = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
+    years = models.IntegerField(default=2)
+    start_date = models.CharField(max_length=20, blank=True)
+    end_date = models.CharField(max_length=20, blank=True)
+    fully_paid = models.BooleanField(default=False)
+    date_started = models.DateField(auto_now_add=True)
+    time_started = models.TimeField(auto_now_add=True)
+
+    def __srt__(self):
+        return f"{self.driver.username} has been added to work and pay system"
+
+    def get_assigned_driver_profile_pic(self):
+        driver = User.objects.get(username=self.assigned_driver.username)
+
+        if driver.user_type == "Driver":
+            de_driver = DriverProfile.objects.get(user=self.assigned_driver)
+            if de_driver:
+                return "https://taxinetghana.xyz" + de_driver.profile_pic.url
+            return ""
+
+    def get_driver_username(self):
+        return self.driver.username

@@ -6,7 +6,8 @@ from .models import (Complains,
                      AssignScheduleToDriver, AcceptAssignedScheduled,
                      RejectAssignedScheduled, CancelScheduledRide, ContactUs, PassengersWallet, AskToLoadWallet,
                      AddToUpdatedWallets, DriverStartTrip, DriverEndTrip, DriverAlertArrival, DriversWallet,
-                     DriverAddToUpdatedWallets, DriverAskToLoadWallet, RegisterVehicle, AddToPaymentToday
+                     DriverAddToUpdatedWallets, DriverAskToLoadWallet, RegisterVehicle, AddToPaymentToday, WorkAndPay,
+                     OtherWallet
                      )
 
 
@@ -115,7 +116,7 @@ class ScheduleRideSerializer(serializers.ModelSerializer):
                   'time_scheduled', 'get_passenger_number',
                   'get_administrator_profile_pic', 'slug',
                   'get_passenger_profile_pic', 'get_passenger_name', 'get_assigned_driver_name', 'read',
-                  'get_assigned_driver_profile_pic']
+                  'get_assigned_driver_profile_pic', ]
         read_only_fields = ['passenger']
 
     def get_username(self, user):
@@ -140,7 +141,7 @@ class AdminScheduleRideSerializer(serializers.ModelSerializer):
                   'pickup_location', 'drop_off_location', 'status', 'price', 'charge', 'date_scheduled',
                   'time_scheduled', 'get_passenger_number',
                   'get_administrator_profile_pic', 'slug',
-                  'get_passenger_profile_pic', 'get_assigned_driver_profile_pic']
+                  'get_passenger_profile_pic', 'get_assigned_driver_profile_pic', ]
 
     def get_username(self, user):
         username = user.passenger.username
@@ -258,7 +259,7 @@ class DriverStartTripSerializer(serializers.ModelSerializer):
 class DriverEndTripSerializer(serializers.ModelSerializer):
     class Meta:
         model = DriverEndTrip
-        fields = ['id', 'driver', 'passenger', 'ride', 'date_stopped', 'time_stopped', 'price']
+        fields = ['id', 'driver', 'passenger', 'ride', 'date_stopped', 'time_stopped', 'price', 'payment_method']
         read_only_fields = ['driver']
 
 
@@ -305,3 +306,17 @@ class AddToPaymentTodaySerializer(serializers.ModelSerializer):
         model = AddToPaymentToday
         fields = ['id', 'driver', 'amount', 'date_paid', 'time_paid']
         read_only_fields = ['driver']
+
+
+class WorkAndPaySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WorkAndPay
+        fields = ['id', 'driver', 'amount_to_pay', 'amount_paid', 'start_date', 'end_date', 'years', 'fully_paid',
+                  'date_started', 'time_started', 'get_assigned_driver_profile_pic', 'get_driver_username']
+
+
+class OtherWalletSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OtherWallet
+        fields = ['id', 'sender', 'receiver', 'amount', 'date_transferred', 'time_transferred', 'get_profile_pic']
+        read_only_fields = ['sender']

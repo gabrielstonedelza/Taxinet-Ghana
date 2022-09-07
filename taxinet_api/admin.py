@@ -6,7 +6,7 @@ from .models import (ScheduleRide, Complains, ConfirmDriverPayment, AcceptedSche
                      AcceptAssignedScheduled,
                      RejectAssignedScheduled, CancelScheduledRide, ContactUs, ContactAdmin, PassengersWallet,
                      AskToLoadWallet, AddToUpdatedWallets, DriverStartTrip, DriverEndTrip, DriverAlertArrival,
-                     DriversWallet, DriverAddToUpdatedWallets, DriverAskToLoadWallet, RegisterVehicle, AddToPaymentToday)
+                     DriversWallet, DriverAddToUpdatedWallets, DriverAskToLoadWallet, RegisterVehicle, AddToPaymentToday, WorkAndPay, OtherWallet)
 
 admin.site.register(DriverVehicleInventory)
 admin.site.register(DriversWallet)
@@ -33,3 +33,5 @@ admin.site.register(DriverEndTrip)
 admin.site.register(DriverAlertArrival)
 admin.site.register(RegisterVehicle)
 admin.site.register(AddToPaymentToday)
+admin.site.register(WorkAndPay)
+admin.site.register(OtherWallet)

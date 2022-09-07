@@ -4,6 +4,9 @@ from . import views
 
 urlpatterns = [
     # admin urls
+    path("admin_add_driver_to_work_and_pay/", views.admin_add_driver_to_work_and_pay),
+    path("admin_get_all_work_and_pay/", views.admin_get_all_work_and_pay),
+    path("work_and_pay_detail/<int:id>/", views.work_and_pay_detail),
     path("get_all_payments_today/", views.get_all_payments_today),
     path("vehicle_detail/<int:id>/", views.vehicle_detail),
     path("vehicle_update/<int:id>/", views.update_vehicle),
@@ -144,5 +147,8 @@ urlpatterns = [
 
     #     drivers payments_today
     path("add_to_drivers_payment_today/", views.add_to_drivers_payment_today),
+
+    #     drivers work and pay
+    path("get_my_work_and_pay/", views.get_my_work_and_pay),
 
 ]

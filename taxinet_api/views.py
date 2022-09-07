@@ -15,7 +15,7 @@ from .models import (Complains, AddToUpdatedWallets,
                      CompletedScheduledRides, ScheduledNotifications, ScheduleRide, AssignScheduleToDriver,
                      AcceptAssignedScheduled, ContactUs,
                      RejectAssignedScheduled, CancelScheduledRide, PassengersWallet, AskToLoadWallet, DriverStartTrip,
-                     RegisterVehicle,
+                     RegisterVehicle, WorkAndPay, OtherWallet,
                      DriverEndTrip, DriverAlertArrival, DriversWallet,
                      DriverAddToUpdatedWallets, DriverAskToLoadWallet, AddToPaymentToday)
 from .serializers import (ComplainsSerializer, ContactUsSerializer,
@@ -31,8 +31,34 @@ from .serializers import (ComplainsSerializer, ContactUsSerializer,
                           AskToLoadWalletSerializer, AddToUpdatedWalletsSerializer, DriverStartTripSerializer,
                           DriverEndTripSerializer, DriverAlertArrivalSerializer, DriversWalletSerializer,
                           DriverAddToUpdatedWalletsSerializer, DriverAskToLoadWalletSerializer,
-                          AddToPaymentTodaySerializer)
+                          AddToPaymentTodaySerializer, WorkAndPaySerializer, OtherWalletSerializer)
 from django.http import Http404
+
+
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def admin_add_driver_to_work_and_pay(request):
+    serializer = WorkAndPaySerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def admin_get_all_work_and_pay(request):
+    vehicles = WorkAndPay.objects.all().order_by('-date_started')
+    serializer = WorkAndPaySerializer(vehicles, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def work_and_pay_detail(request, id):
+    wallet = get_object_or_404(WorkAndPay, id=id)
+    serializer = WorkAndPaySerializer(wallet, many=False)
+    return Response(serializer.data)
 
 
 @api_view(['POST'])
@@ -1093,3 +1119,60 @@ def get_all_payments_today(request):
     serializer = AddToPaymentTodaySerializer(payments_today, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_my_work_and_pay(request):
+    work_and_pay = WorkAndPay.objects.filter(driver=request.user).order_by('-date_started')
+    serializer = WorkAndPaySerializer(work_and_pay, many=True)
+    return Response(serializer.data)
+
+
+# wallet transfer
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def transfer_to_wallet(request):
+    serializer = OtherWalletSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(sender=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_my_wallet_transfers(request):
+    transfers = OtherWallet.objects.filter(driver=request.user).order_by('-date_transferred')
+    serializer = OtherWalletSerializer(transfers, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def wallet_transfer_detail(request, id):
+    transfer = get_object_or_404(OtherWallet, id=id)
+    serializer = OtherWalletSerializer(transfer, many=False)
+    return Response(serializer.data)
+
+
+# update drivers wallet by username
+@api_view(['GET', 'PUT'])
+@permission_classes([permissions.AllowAny])
+def update_drivers_wallet_with_username(request, user):
+    wallet = get_object_or_404(DriversWallet, driver=user)
+    serializer = DriversWalletSerializer(wallet, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'PUT'])
+@permission_classes([permissions.AllowAny])
+def update_passengers_wallet(request, user):
+    wallet = get_object_or_404(PassengersWallet, passenger=user)
+    serializer = PassengerWalletSerializer(wallet, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
