@@ -150,5 +150,6 @@ urlpatterns = [
 
     #     drivers work and pay
     path("get_my_work_and_pay/", views.get_my_work_and_pay),
+    path("get_work_and_pay_detail/<int:id>/", views.get_work_and_pay_detail),
 
 ]

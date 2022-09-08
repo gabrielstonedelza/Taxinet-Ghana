@@ -7,7 +7,7 @@ from .models import (ScheduleRide, Complains, ConfirmDriverPayment, AcceptedSche
                      AcceptAssignedScheduled, AddToUpdatedWallets,
                      RejectAssignedScheduled, CancelScheduledRide, PassengersWallet, AskToLoadWallet, DriverStartTrip,
                      DriverEndTrip, DriverAlertArrival, DriversWallet,
-                     DriverAddToUpdatedWallets, DriverAskToLoadWallet, AddToPaymentToday, OtherWallet)
+                     DriverAddToUpdatedWallets, DriverAskToLoadWallet, AddToPaymentToday, OtherWallet, WorkAndPay)
 from django.conf import settings
 
 User = settings.AUTH_USER_MODEL
@@ -269,9 +269,19 @@ def alert_driver_payment_Today(sender, created, instance, **kwargs):
 
 @receiver(post_save, sender=OtherWallet)
 def alert_wallet_transfer(sender, created, instance, **kwargs):
-    title = "Wallet Received"
-    notification_tag = "Wallet Received"
+    title = "Wallet Updated"
+    notification_tag = "Wallet Updated"
     message = f"{instance.sender.username} just sent GHS{instance.amount} to your wallet"
     ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                           notification_message=message, notification_tag=notification_tag,
-                                          notification_to=instance.receiver,)
+                                          notification_to=instance.receiver, )
+
+
+@receiver(post_save, sender=WorkAndPay)
+def alert_added_to_work_and_pay(sender, created, instance, **kwargs):
+    title = "Added to work and pay"
+    notification_tag = "Added to work and pay"
+    message = f"You have been added to work and pay system"
+    ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                          notification_message=message, notification_tag=notification_tag,
+                                          notification_to=instance.driver, )

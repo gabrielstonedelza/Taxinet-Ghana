@@ -1128,6 +1128,14 @@ def get_my_work_and_pay(request):
     return Response(serializer.data)
 
 
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_work_and_pay_detail(request, id):
+    wallet = get_object_or_404(WorkAndPay, id=id)
+    serializer = WorkAndPaySerializer(wallet, many=False)
+    return Response(serializer.data)
+
+
 # wallet transfer
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])

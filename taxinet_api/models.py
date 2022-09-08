@@ -200,6 +200,7 @@ TOYOTA_BRANDS = (
 )
 
 PAYMENT_METHODS = (
+    ("Select payment method", "Select payment method"),
     ("Wallet", "Wallet"),
     ("Cash", "Cash"),
 )
@@ -620,7 +621,7 @@ class DriverEndTrip(models.Model):
     passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="passenger_enjoying_trip_to_end")
     ride = models.CharField(max_length=255, default="", )
     price = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
-    payment_method = models.CharField(max_length=20, default="Wallet")
+    payment_method = models.CharField(max_length=30, choices=PAYMENT_METHODS, default="Wallet")
     date_stopped = models.DateField(auto_now_add=True)
     time_stopped = models.TimeField(auto_now_add=True)
 
