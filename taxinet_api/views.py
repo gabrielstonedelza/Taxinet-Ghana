@@ -1115,9 +1115,17 @@ def add_to_drivers_payment_today(request):
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def get_all_payments_today(request):
-    payments_today = AddToPaymentToday.objects.all().order_by('-date_paid')
-    serializer = AddToPaymentTodaySerializer(payments_today, many=True)
+    payments = AddToPaymentToday.objects.all().order_by('-date_paid')
+    serializer = AddToPaymentTodaySerializer(payments, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def admin_get_all_drivers_payments_by_date(request, payment_date):
+    payments = AddToPaymentToday.objects.filter(date_paid=payment_date).order_by('-date_paid')
+    serializer = AddToPaymentTodaySerializer(payments, many=True)
+    return Response(serializer.data)
 
 
 @api_view(['GET'])

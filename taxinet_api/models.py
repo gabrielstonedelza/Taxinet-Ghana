@@ -773,6 +773,17 @@ class AddToPaymentToday(models.Model):
         self.title = value
         super().save(*args, **kwargs)
 
+    def get_driver_profile_pic(self):
+        driver = User.objects.get(username=self.assigned_driver.username)
+        if driver.user_type == "Driver":
+            de_driver = DriverProfile.objects.get(user=self.assigned_driver)
+            if de_driver:
+                return "https://taxinetghana.xyz" + de_driver.profile_pic.url
+            return ""
+
+    def get_drivers_full_name(self):
+        return self.driver.full_name
+
 
 class WorkAndPay(models.Model):
     driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)

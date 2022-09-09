@@ -9,6 +9,8 @@ urlpatterns = [
     path("work_and_pay_detail/<int:id>/", views.work_and_pay_detail),
     path("get_all_payments_today/", views.get_all_payments_today),
     path("admin_get_payment_detail/<int:id>/", views.admin_get_payment_detail),
+    path("admin_get_all_drivers_payments_by_date/<str:payment_date>/",
+         views.admin_get_all_drivers_payments_by_date),
     path("vehicle_detail/<int:id>/", views.vehicle_detail),
     path("vehicle_update/<int:id>/", views.update_vehicle),
     path("all_vehicles/", views.admin_get_all_registered_vehicles),

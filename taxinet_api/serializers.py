@@ -304,7 +304,8 @@ class RegisterVehicleSerializer(serializers.ModelSerializer):
 class AddToPaymentTodaySerializer(serializers.ModelSerializer):
     class Meta:
         model = AddToPaymentToday
-        fields = ['id', 'driver', 'amount', 'title', 'read', 'date_paid', 'time_paid']
+        fields = ['id', 'driver', 'amount', 'title', 'read', 'date_paid', 'time_paid', 'get_driver_profile_pic',
+                  'get_drivers_full_name']
         read_only_fields = ['driver']
 
 
