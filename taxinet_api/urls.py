@@ -155,8 +155,11 @@ urlpatterns = [
     path("get_my_work_and_pay/", views.get_my_work_and_pay),
     path("get_work_and_pay_detail/<int:id>/", views.get_work_and_pay_detail),
 
-#     drivers daily payments
+    #     drivers daily payments
     path("payment_today/", views.payments_today),
     path("payment_detail<int:id>/", views.payment_detail),
+
+    #     other wallet transfers
+    path("transfer_to_wallet/", views.transfer_to_wallet),
 
 ]
