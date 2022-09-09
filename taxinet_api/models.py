@@ -774,9 +774,9 @@ class AddToPaymentToday(models.Model):
         super().save(*args, **kwargs)
 
     def get_driver_profile_pic(self):
-        driver = User.objects.get(username=self.assigned_driver.username)
+        driver = User.objects.get(username=self.driver.username)
         if driver.user_type == "Driver":
-            de_driver = DriverProfile.objects.get(user=self.assigned_driver)
+            de_driver = DriverProfile.objects.get(user=self.driver)
             if de_driver:
                 return "https://taxinetghana.xyz" + de_driver.profile_pic.url
             return ""
