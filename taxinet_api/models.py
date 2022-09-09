@@ -645,13 +645,13 @@ class OtherWallet(models.Model):
         sender = User.objects.get(username=self.sender.username)
 
         if sender.user_type == "Driver":
-            de_driver = DriverProfile.objects.get(user=self.assigned_driver)
+            de_driver = DriverProfile.objects.get(user=self.sender)
             if de_driver:
                 return "https://taxinetghana.xyz" + de_driver.profile_pic.url
             return ""
 
         if sender.user_type == "Passenger":
-            de_passenger = PassengerProfile.objects.get(user=self.assigned_driver)
+            de_passenger = PassengerProfile.objects.get(user=self.sender)
             if de_passenger:
                 return "https://taxinetghana.xyz" + de_passenger.profile_pic.url
             return ""
