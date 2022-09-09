@@ -8,6 +8,7 @@ urlpatterns = [
     path("admin_get_all_work_and_pay/", views.admin_get_all_work_and_pay),
     path("work_and_pay_detail/<int:id>/", views.work_and_pay_detail),
     path("get_all_payments_today/", views.get_all_payments_today),
+    path("admin_get_payment_detail/<int:id>/", views.admin_get_payment_detail),
     path("vehicle_detail/<int:id>/", views.vehicle_detail),
     path("vehicle_update/<int:id>/", views.update_vehicle),
     path("all_vehicles/", views.admin_get_all_registered_vehicles),
@@ -151,5 +152,9 @@ urlpatterns = [
     #     drivers work and pay
     path("get_my_work_and_pay/", views.get_my_work_and_pay),
     path("get_work_and_pay_detail/<int:id>/", views.get_work_and_pay_detail),
+
+#     drivers daily payments
+    path("payment_today/", views.payments_today),
+    path("payment_detail<int:id>/", views.payment_detail),
 
 ]

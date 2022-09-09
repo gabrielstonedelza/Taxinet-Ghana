@@ -760,11 +760,18 @@ class RegisterVehicle(models.Model):
 class AddToPaymentToday(models.Model):
     driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
     amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
+    title = models.CharField(max_length=255, default="Payment Today")
+    read = models.CharField(max_length=10, choices=READ_STATUS, default="Not Read")
     date_paid = models.DateField(auto_now_add=True)
     time_paid = models.TimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.driver.username} has made payment today"
+
+    def save(self, *args, **kwargs):
+        value = f"{self.driver.username} has made payment today"
+        self.title = value
+        super().save(*args, **kwargs)
 
 
 class WorkAndPay(models.Model):

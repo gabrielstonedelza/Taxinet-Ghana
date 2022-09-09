@@ -1121,6 +1121,17 @@ def get_all_payments_today(request):
 
 
 @api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def admin_get_payment_detail(request, id):
+    payment = get_object_or_404(AddToPaymentToday, id=id)
+    if payment:
+        payment.read = "Read"
+        payment.save()
+    serializer = RegisterVehicleSerializer(payment, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_my_work_and_pay(request):
     work_and_pay = WorkAndPay.objects.filter(driver=request.user).order_by('-date_started')
@@ -1184,3 +1195,20 @@ def update_passengers_wallet(request, user):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# get drivers payment and details
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def payments_today(request):
+    payments = AddToPaymentToday.objects.all().order_by('-date_paid')
+    serializer = AddToPaymentTodaySerializer(payments, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def payment_detail(request, id):
+    payment = get_object_or_404(AddToPaymentToday, id=id)
+    serializer = RegisterVehicleSerializer(payment, many=False)
+    return Response(serializer.data, status=status.HTTP_200_OK)
