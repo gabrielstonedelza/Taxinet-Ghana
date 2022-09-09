@@ -263,8 +263,7 @@ def alert_driver_payment_Today(sender, created, instance, **kwargs):
     message = f"70 GHS was deducted from your wallet.Your wallet is now {instance.amount}"
     ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                           notification_message=message, notification_tag=notification_tag,
-                                          notification_to=instance.driver) @ receiver(post_save,
-                                                                                      sender=AddToPaymentToday)
+                                          notification_to=instance.driver) 
 
 
 @receiver(post_save, sender=OtherWallet)
