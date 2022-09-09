@@ -1135,7 +1135,7 @@ def admin_get_payment_detail(request, id):
     if payment:
         payment.read = "Read"
         payment.save()
-    serializer = RegisterVehicleSerializer(payment, many=False)
+    serializer = AddToPaymentTodaySerializer(payment, many=False)
     return Response(serializer.data)
 
 
