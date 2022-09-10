@@ -26,7 +26,7 @@ class DriverProfileSerializer(serializers.ModelSerializer):
                   'car_model', 'front_side_ghana_card', 'get_drivers_full_name',
                   'back_side_ghana_card', 'name_on_ghana_card', 'ghana_card_number', 'digital_address',
                   'next_of_kin', 'next_of_kin_number', 'driver_profile_pic', 'get_drivers_license',
-                  'taxinet_number', 'verified', 'get_front_side_ghana_card', 'get_back_side_ghana_card',
+                  'taxinet_number', 'unique_code', 'verified', 'get_front_side_ghana_card', 'get_back_side_ghana_card',
                   'get_drivers_email',
                   'get_drivers_phone_number', 'get_user_type']
         read_only_fields = ['user']

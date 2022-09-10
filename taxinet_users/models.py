@@ -52,6 +52,7 @@ class DriverProfile(models.Model):
     next_of_kin = models.CharField(max_length=100, blank=True)
     next_of_kin_number = models.CharField(max_length=100, blank=True)
     taxinet_number = models.CharField(max_length=100, default=0)
+    unique_code = models.IntegerField(default=2,)
     verified = models.BooleanField(default=False)
     date_created = models.DateTimeField(default=timezone.now)
 
