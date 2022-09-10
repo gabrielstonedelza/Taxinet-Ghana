@@ -173,5 +173,6 @@ urlpatterns = [
     path("user_request_to_load_wallet/", views.user_request_to_load_wallet),
     path("get_user_wallet/", views.get_user_wallet),
     path("user_update_wallet/<int:user>/", views.user_update_wallet),
+    path("get_wallet_by_user/<int:user_id>/", views.get_wallet_by_user),
 
 ]

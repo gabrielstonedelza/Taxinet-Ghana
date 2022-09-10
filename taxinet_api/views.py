@@ -1318,3 +1318,12 @@ def user_update_wallet(request, user):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# get wallet by user
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_wallet_by_user(request, user_id):
+    wallet = get_object_or_404(Wallets, user=user_id)
+    serializer = WalletsSerializer(wallet, many=False)
+    return Response(serializer.data)
