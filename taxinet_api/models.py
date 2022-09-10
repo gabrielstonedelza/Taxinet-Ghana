@@ -810,3 +810,81 @@ class WorkAndPay(models.Model):
 
     def get_driver_username(self):
         return self.driver.username
+
+
+# new wallets
+class Wallets(models.Model):
+    user = models.OneToOneField(DeUser, on_delete=models.CASCADE, related_name="user_only_profile")
+    amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
+    date_loaded = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} wallet is loaded with GHS{self.amount}"
+
+    def get_username(self):
+        return self.user.username
+
+    def get_full_name(self):
+        return self.user.full_name
+
+    def get_profile_pic(self):
+        user = User.objects.get(username=self.user.username)
+        if user.user_type == "Driver":
+            de_driver = DriverProfile.objects.get(user=self.user)
+            if de_driver:
+                return "https://taxinetghana.xyz" + de_driver.profile_pic.url
+            return ""
+        elif user.user_type == "Passenger":
+            de_passenger = PassengerProfile.objects.get(user=self.user)
+            if de_passenger:
+                return "https://taxinetghana.xyz" + de_passenger.profile_pic.url
+            return ""
+
+    def get_user_type(self):
+        return self.user.user_type
+
+
+class LoadWallet(models.Model):
+    user = models.ForeignKey(DeUser, on_delete=models.CASCADE)
+    title = models.CharField(max_length=200, default="Wants to load wallet")
+    amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
+    date_requested = models.DateField(auto_now_add=True)
+    time_requested = models.TimeField(auto_now_add=True)
+    read = models.CharField(max_length=10, choices=READ_STATUS, default="Not Read")
+
+    def save(self, *args, **kwargs):
+        self.title = f"{self.user.username} wants to load wallet"
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
+
+    def get_profile_pic(self):
+        user = User.objects.get(username=self.user.username)
+        if user.user_type == "Driver":
+            de_driver = DriverProfile.objects.get(user=self.user)
+            if de_driver:
+                return "https://taxinetghana.xyz" + de_driver.profile_pic.url
+            return ""
+        elif user.user_type == "Passenger":
+            de_passenger = PassengerProfile.objects.get(user=self.user)
+            if de_passenger:
+                return "https://taxinetghana.xyz" + de_passenger.profile_pic.url
+            return ""
+
+    def get_username(self):
+        return self.user.username
+
+    def get_full_name(self):
+        return self.user.full_name
+
+    def get_user_type(self):
+        return self.user.user_type
+
+
+class UpdatedWallets(models.Model):
+    wallet = models.ForeignKey(Wallets, on_delete=models.CASCADE)
+    date_updated = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.wallet.user.username}'s wallet was updated."

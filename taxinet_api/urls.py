@@ -162,4 +162,16 @@ urlpatterns = [
     #     other wallet transfers
     path("transfer_to_wallet/", views.transfer_to_wallet),
 
+    #     new wallet system
+    path("admin_load_users_wallet/", views.admin_load_users_wallet),
+    path("admin_get_all_users_wallet/", views.admin_get_all_users_wallet),
+    path("user_wallet_detail/<int:id>/", views.user_wallet_detail),
+    path("admin_update_wallet/<int:id>/", views.admin_update_wallet),
+    path("admin_get_load_wallet_requests_detail/<int:id>/", views.admin_get_load_wallet_requests_detail),
+    path("get_all_request_to_load_wallet/", views.get_all_request_to_load_wallet),
+    path("admin_add_to_updated_wallets/", views.admin_add_to_updated_wallets),
+    path("user_request_to_load_wallet/", views.user_request_to_load_wallet),
+    path("get_user_wallet/", views.get_user_wallet),
+    path("user_update_wallet/<int:user>/", views.user_update_wallet),
+
 ]

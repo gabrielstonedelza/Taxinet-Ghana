@@ -6,8 +6,10 @@ from .models import (ScheduleRide, Complains, ConfirmDriverPayment, AcceptedSche
                      AcceptAssignedScheduled,
                      RejectAssignedScheduled, CancelScheduledRide, ContactUs, ContactAdmin, PassengersWallet,
                      AskToLoadWallet, AddToUpdatedWallets, DriverStartTrip, DriverEndTrip, DriverAlertArrival,
-                     DriversWallet, DriverAddToUpdatedWallets, DriverAskToLoadWallet, RegisterVehicle, AddToPaymentToday, WorkAndPay, OtherWallet)
+                     DriversWallet, DriverAddToUpdatedWallets, DriverAskToLoadWallet, RegisterVehicle, AddToPaymentToday, WorkAndPay, OtherWallet, Wallets, LoadWallet,UpdatedWallets)
 
+admin.site.register(LoadWallet)
+admin.site.register(UpdatedWallets)
 admin.site.register(DriverVehicleInventory)
 admin.site.register(DriversWallet)
 admin.site.register(DriverAddToUpdatedWallets)
@@ -35,3 +37,4 @@ admin.site.register(RegisterVehicle)
 admin.site.register(AddToPaymentToday)
 admin.site.register(WorkAndPay)
 admin.site.register(OtherWallet)
+admin.site.register(Wallets)

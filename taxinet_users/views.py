@@ -192,6 +192,7 @@ def get_drivers_profile_by_unique_code(request, unique_code):
     serializer = DriverProfileSerializer(driver, many=False)
     return Response(serializer.data)
 
+
 # user details
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])

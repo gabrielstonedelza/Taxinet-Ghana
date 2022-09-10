@@ -1,3 +1,5 @@
+from pyexpat import model
+
 from rest_framework import serializers
 from .models import (Complains,
                      DriversLocation, ConfirmDriverPayment,
@@ -7,7 +9,7 @@ from .models import (Complains,
                      RejectAssignedScheduled, CancelScheduledRide, ContactUs, PassengersWallet, AskToLoadWallet,
                      AddToUpdatedWallets, DriverStartTrip, DriverEndTrip, DriverAlertArrival, DriversWallet,
                      DriverAddToUpdatedWallets, DriverAskToLoadWallet, RegisterVehicle, AddToPaymentToday, WorkAndPay,
-                     OtherWallet
+                     OtherWallet, Wallets, LoadWallet, UpdatedWallets
                      )
 
 
@@ -321,3 +323,25 @@ class OtherWalletSerializer(serializers.ModelSerializer):
         model = OtherWallet
         fields = ['id', 'sender', 'receiver', 'amount', 'date_transferred', 'time_transferred', 'get_profile_pic']
         read_only_fields = ['sender']
+
+
+# new wallet system
+class WalletsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Wallets
+        fields = ['id', 'user', 'amount', 'date_loaded', 'get_profile_pic', 'get_username', 'get_full_name']
+        read_only_fields = ['user']
+
+
+class LoadWalletSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LoadWallet
+        fields = ['id', 'user', 'title', 'amount', 'date_requested', 'time_requested', 'read', 'get_profile_pic',
+                  'get_username', 'get_full_name']
+        read_only_fields = ['user']
+
+
+class UpdatedWalletsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UpdatedWallets
+        fields = ['id', 'wallet', 'date_updated']
