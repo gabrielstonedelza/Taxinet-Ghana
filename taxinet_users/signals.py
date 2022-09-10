@@ -2,6 +2,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from .models import DriverProfile, PassengerProfile, AdministratorsProfile, InvestorsProfile, AddToVerified
 from django.conf import settings
+from taxinet_api.models import Wallets
 
 User = settings.AUTH_USER_MODEL
 
@@ -19,3 +20,6 @@ def create_profile(sender, created, instance, **kwargs):
 
     if created and instance.user_type == "Administrator":
         AdministratorsProfile.objects.create(user=instance)
+
+    if created:
+        Wallets.objects.create(user=instance)
