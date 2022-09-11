@@ -72,14 +72,6 @@ urlpatterns = [
     path('passengers_schedules/', views.get_scheduled_by_passenger),
     path('drivers_schedules/', views.get_scheduled_by_driver),
 
-    #     notifications
-
-    path('get_all_driver_notifications/', views.get_all_driver_notifications),
-    path('user_notifications/', views.get_user_notifications),
-    path('user_triggerd_notifications/', views.get_triggered_notifications),
-    path('user_read_notifications/<int:id>/', views.read_notification),
-    path("notification/<int:id>/", views.notification_detail),
-
     #     Complains
     path('complains/new/', views.post_complain),
     path('all_complains/', views.get_all_complains),
@@ -136,6 +128,14 @@ urlpatterns = [
     path('passengers_notifications/', views.get_all_passenger_notifications),
     path('get_passenger_notifications/', views.get_passenger_notifications),
     path('get_passengers_triggered_notifications/', views.get_passengers_triggered_notifications),
+
+    #     notifications
+
+    path('get_all_driver_notifications/', views.get_all_driver_notifications),
+    path('user_notifications/', views.get_user_notifications),
+    path('user_triggerd_notifications/', views.get_triggered_notifications),
+    path('user_read_notifications/<int:id>/', views.read_notification),
+    path("notification/<int:id>/", views.notification_detail),
 
     #     drivers wallet
     path('add_to_drivers_updated_wallets/', views.add_to_drivers_updated_wallets),
