@@ -193,6 +193,14 @@ def get_drivers_profile_by_unique_code(request, unique_code):
     return Response(serializer.data)
 
 
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_passengers_profile_by_unique_code(request, unique_code):
+    passenger = get_object_or_404(PassengerProfile, unique_code=unique_code)
+    serializer = PassengerProfileSerializer(passenger, many=False)
+    return Response(serializer.data)
+
+
 # user details
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])

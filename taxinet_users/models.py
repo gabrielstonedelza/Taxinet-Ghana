@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser, AbstractBaseUser
 from django.conf import settings
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
+import random
 
 DeUser = settings.AUTH_USER_MODEL
 APP_TYPE = (
@@ -52,7 +53,7 @@ class DriverProfile(models.Model):
     next_of_kin = models.CharField(max_length=100, blank=True)
     next_of_kin_number = models.CharField(max_length=100, blank=True)
     taxinet_number = models.CharField(max_length=100, default=0)
-    unique_code = models.IntegerField(default=2,)
+    unique_code = models.IntegerField(default=000000, )
     verified = models.BooleanField(default=False)
     date_created = models.DateTimeField(default=timezone.now)
 
@@ -102,10 +103,15 @@ class PassengerProfile(models.Model):
     next_of_kin_number = models.CharField(max_length=100, blank=True)
     referral = models.CharField(max_length=100, blank=True)
     verified = models.BooleanField(default=False)
+    unique_code = models.CharField(max_length=200, default='')
     date_created = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.user.username
+
+    def save(self, *args, **kwargs):
+        self.unique_code = self.user.username[:5] + str(random.randint(2, 200))
+        super().save(*args, **kwargs)
 
     def get_user_type(self):
         return self.user.user_type
@@ -182,7 +188,7 @@ class AddToVerified(models.Model):
         return f"{self.user.username} is verified"
 
     def get_passenger_pic(self):
-        my_user = get_object_or_404(PassengerProfile,user=self.user)
+        my_user = get_object_or_404(PassengerProfile, user=self.user)
         if my_user:
             return "https://taxinetghana.xyz" + my_user.profile_pic.url
         return ''

@@ -12,6 +12,7 @@ urlpatterns = [
     path('get_passenger_profile/<int:id>/', views.get_passenger_profile),
     path('get_drivers_profile/<int:id>/', views.get_drivers_profile),
     path('get_drivers_profile_by_unique_code/<int:unique_code>/', views.get_drivers_profile_by_unique_code),
+    path('get_passengers_profile_by_unique_code/<int:unique_code>/', views.get_passengers_profile_by_unique_code),
     path('get_passenger_details/<int:id>/', views.get_passenger_details),
     path('get_drivers_details/<int:id>/', views.get_drivers_details),
     path('all_passengers/', views.get_all_passengers),
