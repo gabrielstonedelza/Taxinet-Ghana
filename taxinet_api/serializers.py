@@ -330,7 +330,6 @@ class WalletsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Wallets
         fields = ['id', 'user', 'amount', 'date_loaded', 'get_profile_pic', 'get_username', 'get_full_name']
-        read_only_fields = ['user']
 
 
 class LoadWalletSerializer(serializers.ModelSerializer):
