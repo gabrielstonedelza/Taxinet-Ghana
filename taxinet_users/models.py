@@ -61,7 +61,7 @@ class DriverProfile(models.Model):
         return self.user.username
 
     def save(self, *args, **kwargs):
-        self.unique_code = self.user.username[:5] + str(random.randint(2, 500))
+        self.unique_code = self.user.username[:5] + str(random.randint(20, 500))
         super().save(*args, **kwargs)
 
     def get_user_type(self):
@@ -114,7 +114,7 @@ class PassengerProfile(models.Model):
         return self.user.username
 
     def save(self, *args, **kwargs):
-        self.unique_code = self.user.username[:5] + str(random.randint(2, 500))
+        self.unique_code = self.user.username[:5] + str(random.randint(20, 500))
         super().save(*args, **kwargs)
 
     def get_user_type(self):
