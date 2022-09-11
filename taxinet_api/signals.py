@@ -142,8 +142,8 @@ def alert_cancelled_ride(sender, created, instance, **kwargs):
 
 @receiver(post_save, sender=Wallets)
 def alert_loaded_wallet(sender, created, instance, **kwargs):
-    title = "Wallet Loaded"
-    notification_tag = "Wallet Loaded"
+    title = "Wallet Updated"
+    notification_tag = "Wallet Updated"
     message = f"{instance.user.username}, your wallet has been loaded with the amount of GHS{instance.amount}"
 
     if instance.user.user_type == "Driver":
