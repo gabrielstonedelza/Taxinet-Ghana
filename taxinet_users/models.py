@@ -53,12 +53,16 @@ class DriverProfile(models.Model):
     next_of_kin = models.CharField(max_length=100, blank=True)
     next_of_kin_number = models.CharField(max_length=100, blank=True)
     taxinet_number = models.CharField(max_length=100, default=0)
-    unique_code = models.IntegerField(default=000000, )
+    unique_code = models.CharField(max_length=500, default='')
     verified = models.BooleanField(default=False)
     date_created = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.user.username
+
+    def save(self, *args, **kwargs):
+        self.unique_code = self.user.username[:5] + str(random.randint(2, 500))
+        super().save(*args, **kwargs)
 
     def get_user_type(self):
         return self.user.user_type
@@ -103,14 +107,14 @@ class PassengerProfile(models.Model):
     next_of_kin_number = models.CharField(max_length=100, blank=True)
     referral = models.CharField(max_length=100, blank=True)
     verified = models.BooleanField(default=False)
-    unique_code = models.CharField(max_length=200, default='')
+    unique_code = models.CharField(max_length=500, default='')
     date_created = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.user.username
 
     def save(self, *args, **kwargs):
-        self.unique_code = self.user.username[:5] + str(random.randint(2, 200))
+        self.unique_code = self.user.username[:5] + str(random.randint(2, 500))
         super().save(*args, **kwargs)
 
     def get_user_type(self):
