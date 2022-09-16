@@ -893,7 +893,8 @@ class UpdatedWallets(models.Model):
 
 class RideMessages(models.Model):
     ride = models.ForeignKey(ScheduleRide, on_delete=models.CASCADE)
-    user = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="user_sending_message")
+    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="driver_sending_message", null=True)
+    passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="passenger_sending_message", null=True)
     message = models.TextField()
     read = models.BooleanField(default=False)
     date_sent = models.DateField(auto_now_add=True)
@@ -904,21 +905,23 @@ class RideMessages(models.Model):
 
     def get_profile_pic(self):
         # get driver profile
-        user = User.objects.get(username=self.user.username)
-        if user.user_type == "Driver":
-            de_driver = DriverProfile.objects.get(user=self.user)
+        driver = User.objects.get(username=self.driver.username)
+        passenger = User.objects.get(username=self.passenger.username)
+        if driver.user_type == "Driver":
+            de_driver = DriverProfile.objects.get(user=self.driver)
             if de_driver:
                 return "https://taxinetghana.xyz" + de_driver.profile_pic.url
             return ""
-        elif user.user_type == "Passenger":
-            de_passenger = PassengerProfile.objects.get(user=self.user)
+        elif passenger.user_type == "Passenger":
+            de_passenger = PassengerProfile.objects.get(user=self.passenger)
             if de_passenger:
                 return "https://taxinetghana.xyz" + de_passenger.profile_pic.url
             return ""
 
-    def get_username(self):
-        return self.user.username
+    def get_driver_username(self):
+        return self.driver.username
 
-    def get_user_type(self):
-        return self.user.user_type
+    def get_passenger_username(self):
+        return self.passenger.username
+
 

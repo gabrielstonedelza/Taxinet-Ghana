@@ -385,14 +385,14 @@ def alert_ride_message(sender, created, instance, **kwargs):
     if created:
         title = 'New ride message'
         notification_tag = "New ride message"
-        message = f"Got new message for ride {instance.ride.schedule_title} from {instance.user.username}"
+        message = f"Got new message for ride {instance.ride.schedule_title}"
 
-        if instance.user.user_type == "Driver":
+        if instance.driver:
             ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                                   notification_message=message, notification_tag=notification_tag,
                                                   notification_to_passenger=instance.user,
-                                                  notification_from=instance.user)
-        if instance.user.user_type == "Passenger":
+                                                  notification_from=instance.driver)
+        if instance.passenger:
             ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                                   notification_message=message, notification_tag=notification_tag,
-                                                  notification_to=instance.user, notification_from=instance.user)
+                                                  notification_to=instance.driver, notification_from=instance.passenger)
