@@ -9,7 +9,7 @@ from .models import (Complains,
                      RejectAssignedScheduled, CancelScheduledRide, ContactUs, PassengersWallet, AskToLoadWallet,
                      AddToUpdatedWallets, DriverStartTrip, DriverEndTrip, DriverAlertArrival, DriversWallet,
                      DriverAddToUpdatedWallets, DriverAskToLoadWallet, RegisterVehicle, AddToPaymentToday, WorkAndPay,
-                     OtherWallet, Wallets, LoadWallet, UpdatedWallets
+                     OtherWallet, Wallets, LoadWallet, UpdatedWallets, RideMessages
                      )
 
 
@@ -164,7 +164,7 @@ class ScheduledNotificationSerializer(serializers.ModelSerializer):
                   'complain_id', 'reply_id', 'review_id', 'rating_id', 'payment_confirmed_id',
                   'date_created',
                   'passengers_pickup', 'passengers_dropOff',
-                  'drivers_inventory_id', ]
+                  'drivers_inventory_id', 'notification_to_passenger']
 
 
 class ComplainsSerializer(serializers.ModelSerializer):
@@ -261,7 +261,8 @@ class DriverStartTripSerializer(serializers.ModelSerializer):
 class DriverEndTripSerializer(serializers.ModelSerializer):
     class Meta:
         model = DriverEndTrip
-        fields = ['id', 'driver', 'passenger', 'ride', 'date_stopped', 'time_stopped', 'price', 'payment_method']
+        fields = ['id', 'driver', 'passenger', 'ride', 'time_elapsed', 'date_stopped', 'time_stopped', 'price',
+                  'payment_method']
         read_only_fields = ['driver']
 
 
@@ -329,7 +330,8 @@ class OtherWalletSerializer(serializers.ModelSerializer):
 class WalletsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Wallets
-        fields = ['id', 'user', 'amount', 'date_loaded', 'get_profile_pic', 'get_username', 'get_full_name','get_user_type']
+        fields = ['id', 'user', 'amount', 'date_loaded', 'get_profile_pic', 'get_username', 'get_full_name',
+                  'get_user_type']
 
 
 class LoadWalletSerializer(serializers.ModelSerializer):
@@ -344,3 +346,9 @@ class UpdatedWalletsSerializer(serializers.ModelSerializer):
     class Meta:
         model = UpdatedWallets
         fields = ['id', 'wallet', 'date_updated']
+
+
+class RideMessagesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RideMessages
+        fields = ['id', 'ride', 'user', 'message', 'read', 'date_sent', 'time_sent', 'get_profile_pic', 'get_username']

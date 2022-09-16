@@ -624,6 +624,7 @@ class DriverEndTrip(models.Model):
     ride = models.CharField(max_length=255, default="", )
     price = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
     payment_method = models.CharField(max_length=30, choices=PAYMENT_METHODS, default="Wallet")
+    time_elapsed = models.CharField(max_length=225, default="00:00:00")
     date_stopped = models.DateField(auto_now_add=True)
     time_stopped = models.TimeField(auto_now_add=True)
 
@@ -888,3 +889,33 @@ class UpdatedWallets(models.Model):
 
     def __str__(self):
         return f"{self.wallet.user.username}'s wallet was updated."
+
+
+class RideMessages(models.Model):
+    ride = models.ForeignKey(ScheduleRide, on_delete=models.CASCADE)
+    user = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="user_sending_message")
+    message = models.TextField()
+    read = models.BooleanField(default=False)
+    date_sent = models.DateField(auto_now_add=True)
+    time_sent = models.TimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.ride.schedule_title} got a message"
+
+    def get_profile_pic(self):
+        # get driver profile
+        user = User.objects.get(username=self.user.username)
+        if user.user_type == "Driver":
+            de_driver = DriverProfile.objects.get(user=self.user)
+            if de_driver:
+                return "https://taxinetghana.xyz" + de_driver.profile_pic.url
+            return ""
+        elif user.user_type == "Passenger":
+            de_passenger = PassengerProfile.objects.get(user=self.user)
+            if de_passenger:
+                return "https://taxinetghana.xyz" + de_passenger.profile_pic.url
+            return ""
+
+    def get_username(self):
+        return self.user.username
+

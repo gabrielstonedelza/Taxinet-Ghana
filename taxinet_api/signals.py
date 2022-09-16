@@ -8,7 +8,7 @@ from .models import (ScheduleRide, Complains, ConfirmDriverPayment, AcceptedSche
                      RejectAssignedScheduled, CancelScheduledRide, PassengersWallet, AskToLoadWallet, DriverStartTrip,
                      DriverEndTrip, DriverAlertArrival, DriversWallet,
                      DriverAddToUpdatedWallets, DriverAskToLoadWallet, AddToPaymentToday, OtherWallet, WorkAndPay,
-                     Wallets, LoadWallet, UpdatedWallets)
+                     Wallets, LoadWallet, UpdatedWallets, RideMessages)
 from django.conf import settings
 
 User = settings.AUTH_USER_MODEL
@@ -331,3 +331,22 @@ def alert_added_to_work_and_pay(sender, created, instance, **kwargs):
     ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                           notification_message=message, notification_tag=notification_tag,
                                           notification_to=instance.driver, )
+
+
+@receiver(post_save, sender=RideMessages)
+def alert_ride_message(sender, created, instance, **kwargs):
+    title = 'New ride message'
+    notification_tag = "New ride message"
+    message = f"Got new message for ride {instance.ride.schedule_title}"
+
+    if created:
+        if instance.user.user_type == "Driver":
+            ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                                  notification_message=message, notification_tag=notification_tag,
+                                                  notification_to_passenger=instance.user)
+        if instance.user.user_type == "Passenger":
+            ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                                  notification_message=message, notification_tag=notification_tag,
+                                                  notification_to=instance.user)
+
+

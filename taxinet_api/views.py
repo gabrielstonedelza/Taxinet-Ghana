@@ -15,7 +15,7 @@ from .models import (Complains, AddToUpdatedWallets,
                      CompletedScheduledRides, ScheduledNotifications, ScheduleRide, AssignScheduleToDriver,
                      AcceptAssignedScheduled, ContactUs,
                      RejectAssignedScheduled, CancelScheduledRide, PassengersWallet, AskToLoadWallet, DriverStartTrip,
-                     Wallets,
+                     Wallets, RideMessages,
                      RegisterVehicle, WorkAndPay, OtherWallet,
                      DriverEndTrip, DriverAlertArrival, DriversWallet, LoadWallet, UpdatedWallets,
                      DriverAddToUpdatedWallets, DriverAskToLoadWallet, AddToPaymentToday)
@@ -33,7 +33,7 @@ from .serializers import (ComplainsSerializer, ContactUsSerializer,
                           DriverEndTripSerializer, DriverAlertArrivalSerializer, DriversWalletSerializer,
                           DriverAddToUpdatedWalletsSerializer, LoadWalletSerializer,
                           AddToPaymentTodaySerializer, WorkAndPaySerializer, OtherWalletSerializer, WalletsSerializer,
-                          LoadWalletSerializer, UpdatedWalletsSerializer)
+                          LoadWalletSerializer, UpdatedWalletsSerializer, RideMessagesSerializer)
 from django.http import Http404
 
 
@@ -1326,4 +1326,24 @@ def user_update_wallet(request, user):
 def get_wallet_by_user(request, user_id):
     wallet = get_object_or_404(Wallets, user=user_id)
     serializer = WalletsSerializer(wallet, many=False)
+    return Response(serializer.data)
+
+
+# ride messages
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def send_message(request, slug):
+    ride = get_object_or_404(ScheduleRide, slug=slug)
+    serializer = RideMessagesSerializer(ride, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_all_ride_messages(request, slug):
+    ride = get_object_or_404(ScheduleRide, slug=slug)
+    serializer = RideMessagesSerializer(ride, many=False)
     return Response(serializer.data)
