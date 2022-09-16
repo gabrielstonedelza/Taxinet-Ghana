@@ -1343,16 +1343,8 @@ def send_message(request, slug):
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
-def get_all_ride_messages(request, slug):
-    messages = RideMessages.objects.filter(ride=slug).order_by('-date_sent')
+def get_all_ride_messages(request, id):
+    messages = RideMessages.objects.filter(ride=id).order_by('-date_sent')
     # ride = get_object_or_404(ScheduleRide, slug=slug)
     serializer = RideMessagesSerializer(messages, many=True)
-    return Response(serializer.data)
-
-
-@api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
-def ride_detail(request, slug):
-    ride = get_object_or_404(ScheduleRide, slug=slug)
-    serializer = ScheduleRideSerializer(ride, many=False)
     return Response(serializer.data)

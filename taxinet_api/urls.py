@@ -177,6 +177,6 @@ urlpatterns = [
 
     #     driver and passenger messages on ride
     path("send_message/<str:slug>/", views.send_message),
-    path("get_all_ride_messages/<str:slug>/", views.get_all_ride_messages),
+    path("get_all_ride_messages/<int:id>/", views.get_all_ride_messages),
 
 ]
