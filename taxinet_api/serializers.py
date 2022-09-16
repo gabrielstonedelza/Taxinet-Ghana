@@ -351,5 +351,4 @@ class UpdatedWalletsSerializer(serializers.ModelSerializer):
 class RideMessagesSerializer(serializers.ModelSerializer):
     class Meta:
         model = RideMessages
-        fields = ['id', 'ride', 'user', 'message', 'read', 'date_sent', 'time_sent', 'get_profile_pic', 'get_username',
-                  'get_user_type']
+        fields = ['id', 'ride', 'driver', 'passenger', 'message', 'read', 'date_sent', 'time_sent', 'get_profile_pic', 'get_driver_username', 'get_passenger_username']
