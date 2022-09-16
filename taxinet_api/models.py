@@ -904,18 +904,25 @@ class RideMessages(models.Model):
         return f"{self.ride.schedule_title} got a message"
 
     def get_passenger_profile_pic(self):
-        my_passenger = PassengerProfile.objects.get(user=self.passenger)
-        if my_passenger:
-            return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
-        return ""
+        my_passenger = User.objects.get(username=self.passenger.username)
+        if my_passenger.user_type == "Passenger":
+            my_passenger = PassengerProfile.objects.get(user=self.passenger)
+            if my_passenger:
+                return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
+            return ""
 
     def get_assigned_driver_profile_pic(self):
         driver = User.objects.get(username=self.driver.username)
-    
-        de_driver = DriverProfile.objects.get(user=self.driver)
-        if de_driver:
-            return "https://taxinetghana.xyz" + de_driver.profile_pic.url
-        return ""
+        if driver.user_type == "Administrator":
+            de_driver = AdministratorsProfile.objects.get(user=self.driver)
+            if de_driver:
+                return "https://taxinetghana.xyz" + de_driver.profile_pic.url
+            return ""
+        elif driver.user_type == "Driver":
+            de_driver = DriverProfile.objects.get(user=self.driver)
+            if de_driver:
+                return "https://taxinetghana.xyz" + de_driver.profile_pic.url
+            return ""
 
     def get_driver_username(self):
         return self.driver.username
