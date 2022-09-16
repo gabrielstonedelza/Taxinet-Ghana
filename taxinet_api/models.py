@@ -912,13 +912,13 @@ class RideMessages(models.Model):
             return ""
 
     def get_assigned_driver_profile_pic(self):
-        driver = User.objects.get(username=self.driver.username)
-        if driver.user_type == "Administrator":
+        ddriver = User.objects.get(username=self.driver.username)
+        if ddriver.user_type == "Administrator":
             de_driver = AdministratorsProfile.objects.get(user=self.driver)
             if de_driver:
                 return "https://taxinetghana.xyz" + de_driver.profile_pic.url
             return ""
-        elif driver.user_type == "Driver":
+        elif ddriver.user_type == "Driver":
             de_driver = DriverProfile.objects.get(user=self.driver)
             if de_driver:
                 return "https://taxinetghana.xyz" + de_driver.profile_pic.url
