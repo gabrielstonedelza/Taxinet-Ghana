@@ -337,7 +337,7 @@ def alert_added_to_work_and_pay(sender, created, instance, **kwargs):
 def alert_ride_message(sender, created, instance, **kwargs):
     title = 'New ride message'
     notification_tag = "New ride message"
-    message = f"Got new message for ride {instance.ride.schedule_title}"
+    message = f"Got new message for ride {instance.ride.schedule_title} from {instance.user.username}"
 
     if created:
         if instance.user.user_type == "Driver":
