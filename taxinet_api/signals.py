@@ -343,10 +343,9 @@ def alert_ride_message(sender, created, instance, **kwargs):
         if instance.user.user_type == "Driver":
             ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                                   notification_message=message, notification_tag=notification_tag,
-                                                  notification_to_passenger=instance.user)
+                                                  notification_to_passenger=instance.user,
+                                                  notification_from=instance.user)
         if instance.user.user_type == "Passenger":
             ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                                   notification_message=message, notification_tag=notification_tag,
-                                                  notification_to=instance.user)
-
-
+                                                  notification_to=instance.user, notification_from=instance.user)
