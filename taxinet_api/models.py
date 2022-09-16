@@ -893,8 +893,8 @@ class UpdatedWallets(models.Model):
 
 class RideMessages(models.Model):
     ride = models.ForeignKey(ScheduleRide, on_delete=models.CASCADE)
-    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="driver_sending_message", null=True)
-    passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="passenger_sending_message",null=True)
+    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="driver_sending_message", )
+    passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="passenger_sending_message",)
     message = models.TextField()
     read = models.BooleanField(default=False)
     date_sent = models.DateField(auto_now_add=True)
