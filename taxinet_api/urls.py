@@ -176,7 +176,7 @@ urlpatterns = [
     path("get_wallet_by_user/<int:user_id>/", views.get_wallet_by_user),
 
     #     driver and passenger messages on ride
-    path("send_message/<str:slug>/", views.send_message),
+    path("send_message/<id:id>/", views.send_message),
     path("get_all_ride_messages/<int:id>/", views.get_all_ride_messages),
 
 ]
