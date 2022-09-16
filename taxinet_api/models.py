@@ -919,3 +919,6 @@ class RideMessages(models.Model):
     def get_username(self):
         return self.user.username
 
+    def get_user_type(self):
+        return self.user.user_type
+
