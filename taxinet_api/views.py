@@ -1336,7 +1336,7 @@ def send_message(request, id):
     ride = get_object_or_404(ScheduleRide, id=id)
     serializer = RideMessagesSerializer(ride, data=request.data)
     if serializer.is_valid():
-        serializer.save()
+        serializer.save(ride=ride)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

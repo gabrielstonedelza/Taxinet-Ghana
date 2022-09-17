@@ -353,3 +353,4 @@ class RideMessagesSerializer(serializers.ModelSerializer):
         model = RideMessages
         fields = ['id', 'ride', 'user', 'message', 'read', 'date_sent', 'time_sent', 'get_profile_pic', 'get_username',
                   'get_user_type']
+        read_only_fields = ['ride']
