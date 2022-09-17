@@ -387,12 +387,8 @@ def alert_ride_message(sender, created, instance, **kwargs):
         notification_tag = "New ride message"
         message = f"Got new message for ride {instance.ride.schedule_title}"
 
-        if instance.driver:
-            ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
-                                                  notification_message=message, notification_tag=notification_tag,
-                                                  notification_to_passenger=instance.user,
-                                                  notification_from=instance.user)
-        if instance.passenger:
-            ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
-                                                  notification_message=message, notification_tag=notification_tag,
-                                                  notification_to=instance.user, notification_from=instance.user)
+        ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                              notification_message=message, notification_tag=notification_tag,
+                                              notification_to_passenger=instance.user,
+                                              notification_from=instance.user,notification_to=instance.user)
+
