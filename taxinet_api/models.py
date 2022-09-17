@@ -893,8 +893,7 @@ class UpdatedWallets(models.Model):
 
 class RideMessages(models.Model):
     ride = models.ForeignKey(ScheduleRide, on_delete=models.CASCADE)
-    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="driver_sending_message", )
-    passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="passenger_sending_message",)
+    user = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="user_sending_message")
     message = models.TextField()
     read = models.BooleanField(default=False)
     date_sent = models.DateField(auto_now_add=True)
@@ -903,26 +902,23 @@ class RideMessages(models.Model):
     def __str__(self):
         return f"{self.ride.schedule_title} got a message"
 
-    def get_passenger_profile_pic(self):
-        my_passenger = User.objects.get(username=self.passenger.username)
-        if my_passenger.user_type == "Passenger":
-            my_passenger = PassengerProfile.objects.get(user=self.passenger)
-            if my_passenger:
-                return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
-            return ""
-
-    def get_assigned_driver_profile_pic(self):
-        ddriver = User.objects.get(username=self.driver.username)
-        if ddriver.user_type == "Driver":
-            de_driver = DriverProfile.objects.get(user=self.driver)
+    def get_profile_pic(self):
+        # get driver profile
+        user = User.objects.get(username=self.user.username)
+        if user.user_type == "Driver":
+            de_driver = DriverProfile.objects.get(user=self.user)
             if de_driver:
                 return "https://taxinetghana.xyz" + de_driver.profile_pic.url
             return ""
+        elif user.user_type == "Passenger":
+            de_passenger = PassengerProfile.objects.get(user=self.user)
+            if de_passenger:
+                return "https://taxinetghana.xyz" + de_passenger.profile_pic.url
+            return ""
 
-    def get_driver_username(self):
-        return self.driver.username
+    def get_username(self):
+        return self.user.username
 
-    def get_passenger_username(self):
-        return self.passenger.username
-
+    def get_user_type(self):
+        return self.user.user_type
 
