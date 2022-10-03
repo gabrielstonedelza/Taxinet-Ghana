@@ -800,7 +800,7 @@ def read_notification(request):
     for i in notifications:
         if i.read == "Not Read":
             var = i.read == "Read"
-            var.save()
+        
     serializer = ScheduledNotificationSerializer(notifications, many=True)
     return Response(serializer.data)
 
