@@ -796,7 +796,6 @@ def get_triggered_notifications(request):
 @permission_classes([permissions.IsAuthenticated])
 def read_notification(request):
     notifications = ScheduledNotifications.objects.filter(notification_to=request.user).filter(
-        notification_trigger="Triggered").filter(
         read="Not Read").order_by('-date_created')
     for i in notifications:
         if i.read == "Not Read":
