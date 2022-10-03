@@ -799,6 +799,7 @@ def read_notification(request):
         read="Not Read").order_by('-date_created')
     for i in notifications:
         i.read == "Not Read"
+        i.save()
 
     serializer = ScheduledNotificationSerializer(notifications, many=True)
     return Response(serializer.data)
