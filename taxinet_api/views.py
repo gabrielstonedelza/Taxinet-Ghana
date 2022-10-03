@@ -983,7 +983,7 @@ def get_driver_scheduled_for_monthly(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_all_passenger_notifications(request):
-    notifications = ScheduledNotifications.objects.filter(notification_to_passenger=request.user).order_by(
+    notifications = ScheduledNotifications.objects.filter(notification_to=request.user).order_by(
         '-date_created')
     serializer = ScheduledNotificationSerializer(notifications, many=True)
     return Response(serializer.data)
@@ -992,7 +992,7 @@ def get_all_passenger_notifications(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_passenger_notifications(request):
-    notifications = ScheduledNotifications.objects.filter(notification_to_passenger=request.user).filter(
+    notifications = ScheduledNotifications.objects.filter(notification_to=request.user).filter(
         read="Not Read").order_by(
         '-date_created')
     serializer = ScheduledNotificationSerializer(notifications, many=True)
@@ -1002,7 +1002,7 @@ def get_passenger_notifications(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_passengers_triggered_notifications(request):
-    notifications = ScheduledNotifications.objects.filter(notification_to_passenger=request.user).filter(
+    notifications = ScheduledNotifications.objects.filter(notification_to=request.user).filter(
         notification_trigger="Triggered").filter(
         read="Not Read").order_by('-date_created')
     serializer = ScheduledNotificationSerializer(notifications, many=True)

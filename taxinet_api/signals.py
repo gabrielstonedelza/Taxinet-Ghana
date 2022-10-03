@@ -24,7 +24,7 @@ def alert_accepted_ride(sender, created, instance, **kwargs):
         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                               notification_tag=notification_tag, notification_message=message,
                                               notification_from=instance.scheduled_ride.administrator,
-                                              notification_to_passenger=instance.scheduled_ride.passenger,
+                                              notification_to=instance.scheduled_ride.passenger,
                                               schedule_ride_id=instance.scheduled_ride.id,
                                               schedule_ride_slug=instance.scheduled_ride.slug,
                                               schedule_ride_title=instance.scheduled_ride.schedule_title, )
@@ -39,7 +39,7 @@ def alert_rejected_ride(sender, created, instance, **kwargs):
         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                               notification_tag=notification_tag, notification_message=message,
                                               notification_from=instance.ride.administrator,
-                                              notification_to_passenger=instance.ride.passenger,
+                                              notification_to=instance.ride.passenger,
                                               ride_id=instance.ride.id, schedule_ride_slug=instance.ride.slug,
                                               schedule_ride_title=instance.scheduled_ride.schedule_title)
 
@@ -53,9 +53,8 @@ def alert_completed_ride(sender, created, instance, **kwargs):
         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                               notification_tag=notification_tag, notification_message=message,
                                               notification_from=instance.scheduled_ride.administrator,
-                                              notification_to_passenger=instance.scheduled_ride.passenger,
-                                              ride_id=instance.ride.id,
-                                              notification_to=instance.scheduled_ride.assigned_driver)
+                                              notification_to=[instance.scheduled_ride.passenger,instance.scheduled_ride.assigned_driver],
+                                              ride_id=instance.ride.id)
 
 
 @receiver(post_save, sender=ScheduleRide)
@@ -98,8 +97,7 @@ def alert_assigned_scheduled_to_driver(sender, created, instance, **kwargs):
         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                               notification_message=message, notification_tag=notification_tag,
                                               notification_from=instance.administrator,
-                                              notification_to=instance.driver,
-                                              notification_to_passenger=instance.ride.passenger,
+                                              notification_to=[instance.driver, instance.passenger],
                                               assigned_scheduled_id=instance.id, schedule_ride_slug=instance.ride.slug,
                                               schedule_ride_title=instance.ride.schedule_title, )
 
@@ -162,7 +160,7 @@ def alert_loaded_wallet(sender, created, instance, **kwargs):
         if instance.user.user_type == "Passenger":
             ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                                   notification_message=message, notification_tag=notification_tag,
-                                                  notification_to_passenger=instance.user)
+                                                  notification_to=instance.user)
 
 
 @receiver(post_save, sender=LoadWallet)
@@ -179,7 +177,7 @@ def request_to_load_wallet(sender, created, instance, **kwargs):
         if instance.user.user_type == "Passenger":
             ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                                   notification_message=message, notification_tag=notification_tag,
-                                                  notification_to_passenger=instance.user)
+                                                  notification_to=instance.user)
 
 
 @receiver(post_save, sender=UpdatedWallets)
@@ -196,7 +194,7 @@ def updated_wallet(sender, created, instance, **kwargs):
         if instance.user.user_type == "Passenger":
             ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                                   notification_message=message, notification_tag=notification_tag,
-                                                  notification_to_passenger=instance.user)
+                                                  notification_to=instance.user)
 
 
 @receiver(post_save, sender=PassengersWallet)
@@ -209,7 +207,7 @@ def alert_loaded_wallet(sender, created, instance, **kwargs):
         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                               notification_message=message, notification_tag=notification_tag,
                                               notification_from=instance.administrator,
-                                              notification_to_passenger=instance.passenger)
+                                              notification_to=instance.passenger)
 
 
 @receiver(post_save, sender=AskToLoadWallet)
@@ -232,11 +230,10 @@ def alert_updated_wallet(sender, created, instance, **kwargs):
     message = f"{instance.passenger.username}, your wallet was updated with GHS {instance.wallet.amount}"
 
     if created:
-
         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                               notification_message=message, notification_tag=notification_tag,
                                               notification_from=instance.administrator,
-                                              notification_to_passenger=instance.wallet.passenger)
+                                              notification_to=instance.wallet.passenger)
 
 
 @receiver(post_save, sender=AddToVerified)
@@ -248,7 +245,7 @@ def alert_added_to_verified(sender, created, instance, **kwargs):
     if created:
         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                               notification_message=message, notification_tag=notification_tag,
-                                              notification_to_passenger=instance.user.user)
+                                              notification_to=instance.user.user)
 
 
 @receiver(post_save, sender=AddCardsUploaded)
@@ -273,7 +270,7 @@ def alert_driver_start_trip(sender, created, instance, **kwargs):
     if created:
         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                               notification_message=message, notification_tag=notification_tag,
-                                              notification_to_passenger=instance.passenger)
+                                              notification_to=instance.passenger)
 
 
 @receiver(post_save, sender=DriverEndTrip)
@@ -283,10 +280,9 @@ def alert_driver_end_trip(sender, created, instance, **kwargs):
     message = f"{instance.driver.username} has ended trip"
 
     if created:
-
         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                               notification_message=message, notification_tag=notification_tag,
-                                              notification_to_passenger=instance.passenger)
+                                              notification_to=instance.passenger)
 
 
 @receiver(post_save, sender=DriverAlertArrival)
@@ -298,7 +294,7 @@ def driver_alert_arrival(sender, created, instance, **kwargs):
     if created:
         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                               notification_message=message, notification_tag=notification_tag,
-                                              notification_to_passenger=instance.passenger)
+                                              notification_to=instance.passenger)
 
 
 @receiver(post_save, sender=DriversWallet)
@@ -321,7 +317,6 @@ def alert_drivers_request_to_load_wallet(sender, created, instance, **kwargs):
     message = f"{instance.driver.user.username} wants to load their wallet with the amount of GHS{instance.amount}"
 
     if created:
-
         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                               notification_message=message, notification_tag=notification_tag,
                                               notification_from=instance.driver.user,
@@ -335,7 +330,6 @@ def alert_driver_updated_wallet(sender, created, instance, **kwargs):
     message = f"{instance.driver.username}, your wallet was updated with GHS {instance.wallet.amount}"
 
     if created:
-
         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                               notification_message=message, notification_tag=notification_tag,
                                               notification_from=instance.administrator,
@@ -349,7 +343,6 @@ def alert_driver_payment_Today(sender, created, instance, **kwargs):
     message = f"70 GHS was deducted from your wallet.Your wallet is now {instance.amount}"
 
     if created:
-
         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                               notification_message=message, notification_tag=notification_tag,
                                               notification_to=instance.driver)
@@ -362,7 +355,6 @@ def alert_wallet_transfer(sender, created, instance, **kwargs):
     message = f"{instance.sender.username} just sent GHS{instance.amount} to your wallet"
 
     if created:
-
         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                               notification_message=message, notification_tag=notification_tag,
                                               notification_to=instance.receiver, )
@@ -379,16 +371,14 @@ def alert_added_to_work_and_pay(sender, created, instance, **kwargs):
                                               notification_message=message, notification_tag=notification_tag,
                                               notification_to=instance.driver, )
 
-
-@receiver(post_save, sender=RideMessages)
-def alert_ride_message(sender, created, instance, **kwargs):
-    if created:
-        title = 'New ride message'
-        notification_tag = "New ride message"
-        message = f"Got new message for ride {instance.ride.schedule_title}"
-
-        ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
-                                              notification_message=message, notification_tag=notification_tag,
-                                              notification_to_passenger=instance.user,
-                                              notification_from=instance.user,notification_to=instance.user)
-
+# @receiver(post_save, sender=RideMessages)
+# def alert_ride_message(sender, created, instance, **kwargs):
+#     if created:
+#         title = 'New ride message'
+#         notification_tag = "New ride message"
+#         message = f"Got new message for ride {instance.ride.schedule_title}"
+#
+#         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+#                                               notification_message=message, notification_tag=notification_tag,
+#                                               notification_to_passenger=instance.user,
+#                                               notification_from=instance.user, notification_to=instance.user)
