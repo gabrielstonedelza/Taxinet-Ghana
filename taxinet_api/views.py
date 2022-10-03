@@ -798,8 +798,10 @@ def read_notification(request):
     notifications = ScheduledNotifications.objects.filter(notification_to=request.user).filter(
         read="Not Read").order_by('-date_created')
     for i in notifications:
-        var = i.read == "Read"
-        var.save()
+        # ... do stuff
+        # i.update(field="value")
+        i.read = "Read"
+        i.save()
 
     serializer = ScheduledNotificationSerializer(notifications, many=True)
     return Response(serializer.data)
