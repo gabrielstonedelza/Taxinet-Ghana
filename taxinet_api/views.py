@@ -792,15 +792,18 @@ def get_triggered_notifications(request):
     return Response(serializer.data)
 
 
-@api_view(['GET', 'PUT'])
+@api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
-def read_notification(request, id):
-    notification = get_object_or_404(ScheduledNotifications, id=id)
-    serializer = ScheduledNotificationSerializer(notification, data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+def read_notification(request):
+    notifications = ScheduledNotifications.objects.filter(notification_to=request.user).filter(
+        notification_trigger="Triggered").filter(
+        read="Not Read").order_by('-date_created')
+    for i in notifications:
+        if i.read == "Not Read":
+            var = i.read == "Read"
+            var.save()
+    serializer = ScheduledNotificationSerializer(notifications, many=True)
+    return Response(serializer.data)
 
 
 @api_view(['GET'])

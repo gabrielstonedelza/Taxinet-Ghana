@@ -134,7 +134,7 @@ urlpatterns = [
     path('get_all_driver_notifications/', views.get_all_driver_notifications),
     path('user_notifications/', views.get_user_notifications),
     path('user_triggerd_notifications/', views.get_triggered_notifications),
-    path('user_read_notifications/<int:id>/', views.read_notification),
+    path('user_read_notifications/', views.read_notification),
     path("notification/<int:id>/", views.notification_detail),
 
     #     drivers wallet
