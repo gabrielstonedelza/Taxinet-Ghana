@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
-from .models import User, DriverProfile, PassengerProfile, AddToVerified, AddCardsUploaded
-from .serializers import UsersSerializer, DriverProfileSerializer, PassengerProfileSerializer, AddToVerifiedSerializer, \
-    AddCardsUploadedSerializer, AdminPassengerProfileSerializer
+from .models import User, DriverProfile, PassengerProfile, AddToVerified, AddCardsUploaded, InvestorsProfile
+from .serializers import (UsersSerializer, DriverProfileSerializer, PassengerProfileSerializer, AddToVerifiedSerializer, \
+                          AddCardsUploadedSerializer, AdminPassengerProfileSerializer, InvestorsProfileSerializer)
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import viewsets, permissions, generics, status
 from rest_framework.response import Response
@@ -245,3 +245,16 @@ class GetAllUsers(generics.ListAPIView):
     serializer_class = UsersSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['username', 'full_name', 'phone_number']
+
+
+class AllInvestorsProfileView(generics.ListCreateAPIView):
+    queryset = InvestorsProfile.objects.all()
+    serializer_class = InvestorsProfileSerializer
+    permission_classes = [AllowAny]
+
+    @method_decorator(cache_page(60 * 60 * 2))
+    def list(self, request):
+        # Note the use of `get_queryset()` instead of `self.queryset`
+        queryset = self.get_queryset()
+        serializer = InvestorsProfileSerializer(queryset, many=True)
+        return Response(serializer.data)

@@ -1,7 +1,7 @@
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from . import views
-from .views import AllPassengersView, AllPassengersProfileView, AllDriversProfileView
+from .views import AllPassengersView, AllPassengersProfileView, AllDriversProfileView, AllInvestorsProfileView
 
 urlpatterns = [
     path('auth/', include('djoser.urls')),
@@ -18,6 +18,7 @@ urlpatterns = [
     path('all_passengers/', views.get_all_passengers),
     path('get_all_passengers/', AllPassengersView.as_view()),
     path('all_passengers_profile/', AllPassengersProfileView.as_view()),
+    path('all_investors_profile/', AllInvestorsProfileView.as_view()),
     path('all_drivers_profile/', AllDriversProfileView.as_view()),
     path('all_drivers/', views.get_all_drivers),
     path('all_investors/', views.get_all_investors),

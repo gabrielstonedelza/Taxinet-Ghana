@@ -2,7 +2,7 @@ from djoser.serializers import UserCreateSerializer
 from rest_framework import serializers
 
 from .models import User, DriverProfile, PassengerProfile, AddToVerified, AddCardsUploaded, BigTrucksAdminProfile, \
-    RideAdminProfile, PromoterProfile, AccountsProfile
+    RideAdminProfile, PromoterProfile, AccountsProfile, InvestorsProfile
 
 
 class UserCreateSerializer(UserCreateSerializer):
@@ -117,4 +117,14 @@ class BigTrucksAdminProfileSerializer(serializers.ModelSerializer):
         model = BigTrucksAdminProfile
         fields = ['id', 'get_username', 'user', 'profile_pic', 'passenger_profile_pic',
                   'get_user_type']
+        read_only_fields = ['user']
+
+
+class InvestorsProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InvestorsProfile
+        fields = ['id', 'username', 'user', 'profile_pic',  'front_side_ghana_card',
+                  'back_side_ghana_card',
+                  'name_on_ghana_card', 'next_of_kin', 'next_of_kin_number', 'referral',
+                  'verified', 'investors_profile_pic', 'get_investors_email', 'get_investors_phone_number', 'get_investors_full_name']
         read_only_fields = ['user']

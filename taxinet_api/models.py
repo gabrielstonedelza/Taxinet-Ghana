@@ -208,8 +208,7 @@ PAYMENT_METHODS = (
 
 # working and functioning now models
 class ScheduleRide(models.Model):
-    assigned_driver = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="driver_to_be_assigned_schedule",
-                                        default=1)
+    assigned_driver = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="driver_to_be_assigned_schedule", default=1)
     passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="passenger_scheduling_ride")
     administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1)
     schedule_title = models.CharField(max_length=255, default="", unique=True)

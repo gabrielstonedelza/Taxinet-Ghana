@@ -9,6 +9,17 @@ from .models import (ScheduleRide, Complains, ConfirmDriverPayment, AcceptedSche
                      DriversWallet, DriverAddToUpdatedWallets, DriverAskToLoadWallet, RegisterVehicle,
                      AddToPaymentToday, WorkAndPay, OtherWallet, Wallets, LoadWallet, UpdatedWallets, RideMessages)
 
+
+class AdminScheduleRide(admin.ModelAdmin):
+    list_display = ['id', 'assigned_driver', 'passenger', 'schedule_title', 'schedule_type', 'schedule_priority',
+                    'schedule_description', 'ride_type', 'pickup_location', 'drop_off_location', 'pick_up_time',
+                    'start_date', 'status', 'price', 'charge', 'date_scheduled']
+    search_fields = ['id', 'passenger', 'assigned_driver']
+
+    class Meta:
+        model = ScheduleRide
+
+
 admin.site.register(RideMessages)
 admin.site.register(LoadWallet)
 admin.site.register(UpdatedWallets)
@@ -16,7 +27,7 @@ admin.site.register(DriverVehicleInventory)
 admin.site.register(DriversWallet)
 admin.site.register(DriverAddToUpdatedWallets)
 admin.site.register(DriverAskToLoadWallet)
-admin.site.register(ScheduleRide)
+admin.site.register(ScheduleRide, AdminScheduleRide)
 admin.site.register(AssignScheduleToDriver)
 admin.site.register(AcceptAssignedScheduled)
 admin.site.register(RejectAssignedScheduled)
