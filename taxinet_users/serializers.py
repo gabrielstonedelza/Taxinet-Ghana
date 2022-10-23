@@ -1,7 +1,8 @@
 from djoser.serializers import UserCreateSerializer
 from rest_framework import serializers
 
-from .models import User, DriverProfile, PassengerProfile, AddToVerified, AddCardsUploaded
+from .models import User, DriverProfile, PassengerProfile, AddToVerified, AddCardsUploaded, BigTrucksAdminProfile, \
+    RideAdminProfile, PromoterProfile, AccountsProfile
 
 
 class UserCreateSerializer(UserCreateSerializer):
@@ -83,3 +84,37 @@ class AdminPassengerProfileSerializer(serializers.ModelSerializer):
     def get_username(self, user):
         username = user.user.username
         return username
+
+
+# other serializers
+
+class AccountsProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AccountsProfile
+        fields = ['id', 'get_username', 'user', 'profile_pic', 'passenger_profile_pic',
+                  'get_user_type']
+        read_only_fields = ['user']
+
+
+class PromoterProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PromoterProfile
+        fields = ['id', 'get_username', 'user', 'profile_pic', 'passenger_profile_pic',
+                  'get_user_type']
+        read_only_fields = ['user']
+
+
+class RideAdminProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RideAdminProfile
+        fields = ['id', 'get_username', 'user', 'profile_pic', 'passenger_profile_pic',
+                  'get_user_type']
+        read_only_fields = ['user']
+
+
+class BigTrucksAdminProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BigTrucksAdminProfile
+        fields = ['id', 'get_username', 'user', 'profile_pic', 'passenger_profile_pic',
+                  'get_user_type']
+        read_only_fields = ['user']

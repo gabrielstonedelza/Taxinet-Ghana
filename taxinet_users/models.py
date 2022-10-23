@@ -11,6 +11,10 @@ APP_TYPE = (
     ("Driver", "Driver"),
     ("Investor", "Investor"),
     ("Administrator", "Administrator"),
+    ("Accounts", "Accounts"),
+    ("Promoter", "Promoter"),
+    ("RideAdmin", "RideAdmin"),
+    ("BigTrucksAdmin", "BigTrucksAdmin"),
 )
 
 
@@ -209,3 +213,84 @@ class AddCardsUploaded(models.Model):
         if self.user.profile_pic:
             return "https://taxinetghana.xyz" + self.user.profile_pic.url
         return ''
+
+
+# other profiles
+class AccountsProfile(models.Model):
+    user = models.OneToOneField(DeUser, on_delete=models.CASCADE, related_name="accounts_profile")
+    profile_pic = models.ImageField(upload_to="accounts_profile_pics", default="default_user.png")
+    date_created = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.user.username
+
+    def get_user_type(self):
+        return self.user.user_type
+
+    def passenger_profile_pic(self):
+        if self.profile_pic:
+            return "https://taxinetghana.xyz" + self.profile_pic.url
+        return ''
+
+    def get_username(self):
+        return self.user.username
+
+
+class PromoterProfile(models.Model):
+    user = models.OneToOneField(DeUser, on_delete=models.CASCADE, related_name="promoter_profile")
+    profile_pic = models.ImageField(upload_to="promoter_profile_pics", default="default_user.png")
+    date_created = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.user.username
+
+    def get_user_type(self):
+        return self.user.user_type
+
+    def passenger_profile_pic(self):
+        if self.profile_pic:
+            return "https://taxinetghana.xyz" + self.profile_pic.url
+        return ''
+
+    def get_username(self):
+        return self.user.username
+
+
+class RideAdminProfile(models.Model):
+    user = models.OneToOneField(DeUser, on_delete=models.CASCADE, related_name="ridesadmin_profile")
+    profile_pic = models.ImageField(upload_to="ridesadmin_profile_pics", default="default_user.png")
+    date_created = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.user.username
+
+    def get_user_type(self):
+        return self.user.user_type
+
+    def passenger_profile_pic(self):
+        if self.profile_pic:
+            return "https://taxinetghana.xyz" + self.profile_pic.url
+        return ''
+
+    def get_username(self):
+        return self.user.username
+
+
+class BigTrucksAdminProfile(models.Model):
+    user = models.OneToOneField(DeUser, on_delete=models.CASCADE, related_name="bigtruck_profile")
+    profile_pic = models.ImageField(upload_to="bigtrucksadmin_profile_pics", default="default_user.png")
+    date_created = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.user.username
+
+    def get_user_type(self):
+        return self.user.user_type
+
+    def passenger_profile_pic(self):
+        if self.profile_pic:
+            return "https://taxinetghana.xyz" + self.profile_pic.url
+        return ''
+
+    def get_username(self):
+        return self.user.username
