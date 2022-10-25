@@ -270,7 +270,8 @@ def alert_driver_start_trip(sender, created, instance, **kwargs):
     if created:
         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                               notification_message=message, notification_tag=notification_tag,
-                                              notification_to=instance.passenger, notification_to_admin=instance.administrator)
+                                              notification_to=instance.passenger,
+                                              notification_to_admin=instance.administrator)
 
 
 @receiver(post_save, sender=DriverEndTrip)
@@ -282,7 +283,8 @@ def alert_driver_end_trip(sender, created, instance, **kwargs):
     if created:
         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                               notification_message=message, notification_tag=notification_tag,
-                                              notification_to=instance.passenger, notification_to_admin=instance.administrator)
+                                              notification_to=instance.passenger,
+                                              notification_to_admin=instance.administrator)
 
 
 @receiver(post_save, sender=DriverAlertArrival)
@@ -345,7 +347,8 @@ def alert_driver_payment_Today(sender, created, instance, **kwargs):
     if created:
         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                               notification_message=message, notification_tag=notification_tag,
-                                              notification_to=instance.driver, notification_to_admin=instance.administrator)
+                                              notification_to=instance.driver,
+                                              notification_to_admin=instance.administrator)
 
 
 @receiver(post_save, sender=OtherWallet)

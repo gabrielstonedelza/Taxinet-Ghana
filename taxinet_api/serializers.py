@@ -131,27 +131,17 @@ class ScheduleRideSerializer(serializers.ModelSerializer):
 
 
 class AdminScheduleRideSerializer(serializers.ModelSerializer):
-    username = serializers.SerializerMethodField('get_username')
-    admins_username = serializers.SerializerMethodField('get_admins_username')
 
     class Meta:
         model = ScheduleRide
-        fields = ['id', 'username', 'assigned_driver', 'passenger', 'admins_username', 'administrator',
+        fields = ['id', 'assigned_driver', 'passenger', 'get_assigned_driver_name', 'administrator',
                   'schedule_title',
                   'schedule_priority', 'ride_type',
                   'schedule_type', 'schedule_description', 'pick_up_time', 'start_date', 'completed',
                   'pickup_location', 'drop_off_location', 'status', 'price', 'charge', 'date_scheduled',
                   'time_scheduled', 'get_passenger_number',
-                  'get_administrator_profile_pic', 'slug',
+                  'get_administrator_profile_pic', 'slug', 'get_passenger_name',
                   'get_passenger_profile_pic', 'get_assigned_driver_profile_pic', ]
-
-    def get_username(self, user):
-        username = user.passenger.username
-        return username
-
-    def get_admins_username(self, user):
-        admins_username = user.administrator.username
-        return admins_username
 
 
 class ScheduledNotificationSerializer(serializers.ModelSerializer):
