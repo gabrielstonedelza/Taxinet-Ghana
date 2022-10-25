@@ -46,6 +46,7 @@ urlpatterns = [
     path("admin_get_scheduled_for_daily/", views.admin_get_scheduled_for_daily),
     path("admin_get_scheduled_for_one_time/", views.admin_get_scheduled_for_one_time),
     path("admin_get_all_user_notifications/", views.admin_get_all_user_notifications),
+
     # admin urls
     path('all_ride_requests/', views.get_all_requests),
     path('get_all_my_ride_requests/', views.get_all_my_ride_requests),

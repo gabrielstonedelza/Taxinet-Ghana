@@ -76,6 +76,10 @@ SCHEDULE_PRIORITY = (
 RIDE_TYPE = (
     ("Taxinet Ride", "Taxinet Ride"),
     ("Taxinet Luxury", "Taxinet Luxury"),
+    # ("Taxinet Bus", "Taxinet Bus"),
+    # ("Taxinet Truck", "Taxinet Truck"),
+    # ("Taxinet Delivery", "Taxinet Delivery"),
+    # ("Taxinet Tickets", "Taxinet Tickets"),
 )
 
 INVENTORY_OPTIONS = (
@@ -205,10 +209,16 @@ PAYMENT_METHODS = (
     ("Cash", "Cash"),
 )
 
+REQUEST_STATUS = (
+    ("Approved", "Approved"),
+    ("Pending", "Pending")
+)
+
 
 # working and functioning now models
 class ScheduleRide(models.Model):
-    assigned_driver = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="driver_to_be_assigned_schedule", default=1)
+    assigned_driver = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="driver_to_be_assigned_schedule",
+                                        default=1)
     passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="passenger_scheduling_ride")
     administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1)
     schedule_title = models.CharField(max_length=255, default="", unique=True)
@@ -349,8 +359,9 @@ class CancelScheduledRide(models.Model):
 
 
 class Complains(models.Model):
+    administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1, related_name="complains")
     complainant = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="user_making_complain")
-    offender = models.ForeignKey(DeUser, on_delete=models.CASCADE)
+    offender = models.ForeignKey(DeUser, on_delete=models.CASCADE,related_name="offender")
     complain = models.TextField(blank=True)
     date_posted = models.DateTimeField(auto_now_add=True)
     read = models.CharField(max_length=10, choices=READ_STATUS, default="Not Read")
@@ -429,6 +440,7 @@ class DriversLocation(models.Model):
 
 
 class DriverVehicleInventory(models.Model):
+    administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1, related_name="inventory")
     driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
     registration_number = models.CharField(max_length=255, default="")
     unique_number = models.CharField(max_length=30, default="")
@@ -494,6 +506,9 @@ class ScheduledNotifications(models.Model):
     notification_from = models.ForeignKey(DeUser, on_delete=models.CASCADE, null=True)
     notification_to = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="DeUser_receiving_notification",
                                         null=True)
+    notification_to_admin = models.ForeignKey(DeUser, on_delete=models.CASCADE,
+                                              related_name="admin_receiving_notification",
+                                              null=True)
     notification_to_passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE,
                                                   related_name="Passenger_receiving_notification",
                                                   null=True)
@@ -607,6 +622,7 @@ class AddToUpdatedWallets(models.Model):
 
 
 class DriverStartTrip(models.Model):
+    administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1, related_name="start_trip")
     driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
     passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="passenger_enjoying_trip")
     ride = models.CharField(max_length=255, default="", )
@@ -618,6 +634,7 @@ class DriverStartTrip(models.Model):
 
 
 class DriverEndTrip(models.Model):
+    administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1, related_name="end_trip")
     driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
     passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="passenger_enjoying_trip_to_end")
     ride = models.CharField(max_length=255, default="", )
@@ -758,6 +775,7 @@ class RegisterVehicle(models.Model):
 
 
 class AddToPaymentToday(models.Model):
+    administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1, related_name="payment_admin")
     driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
     amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
     title = models.CharField(max_length=255, default="Payment Today")
@@ -845,6 +863,7 @@ class Wallets(models.Model):
 
 
 class LoadWallet(models.Model):
+    administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1, related_name="loadwallet_admin")
     user = models.ForeignKey(DeUser, on_delete=models.CASCADE)
     title = models.CharField(max_length=200, default="Wants to load wallet")
     amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
@@ -921,3 +940,15 @@ class RideMessages(models.Model):
     def get_user_type(self):
         return self.user.user_type
 
+
+class ExpensesRequest(models.Model):
+    guarantor = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_requesting_expense_cash")
+    amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
+    reason = models.TextField(default="")
+    request_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
+    date_requested = models.DateField(auto_now_add=True)
+    time_requested = models.TimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Expense request made for {self.amount} by {self.user.username}"

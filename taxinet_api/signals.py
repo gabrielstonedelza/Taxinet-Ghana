@@ -53,7 +53,8 @@ def alert_completed_ride(sender, created, instance, **kwargs):
         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                               notification_tag=notification_tag, notification_message=message,
                                               notification_from=instance.scheduled_ride.administrator,
-                                              notification_to=[instance.scheduled_ride.passenger,instance.scheduled_ride.assigned_driver],
+                                              notification_to=[instance.scheduled_ride.passenger,
+                                                               instance.scheduled_ride.assigned_driver],
                                               ride_id=instance.ride.id)
 
 
@@ -77,13 +78,12 @@ def alert_driver_inventory_today(sender, created, instance, **kwargs):
     title = "New driver inventory"
     notification_tag = "Inventory Check"
     message = f"{instance.driver.username} send his car's inventory for today"
-    admin_user = User.objects.get(id=1)
 
     if created:
         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                               notification_message=message, notification_tag=notification_tag,
                                               notification_from=instance.driver,
-                                              notification_to=admin_user,
+                                              notification_to=instance.administrator,
                                               drivers_inventory_id=instance.id)
 
 
@@ -265,24 +265,24 @@ def alert_cards_uploaded(sender, created, instance, **kwargs):
 def alert_driver_start_trip(sender, created, instance, **kwargs):
     title = "Trip Started"
     notification_tag = "Trip Started"
-    message = f"{instance.driver.username} has started trip"
+    message = f"{instance.driver.username} has started trip {instance.ride}"
 
     if created:
         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                               notification_message=message, notification_tag=notification_tag,
-                                              notification_to=instance.passenger)
+                                              notification_to=instance.passenger, notification_to_admin=instance.administrator)
 
 
 @receiver(post_save, sender=DriverEndTrip)
 def alert_driver_end_trip(sender, created, instance, **kwargs):
     title = "Trip Ended"
     notification_tag = "Trip Ended"
-    message = f"{instance.driver.username} has ended trip"
+    message = f"{instance.driver.username} has ended trip {instance.ride}"
 
     if created:
         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                               notification_message=message, notification_tag=notification_tag,
-                                              notification_to=instance.passenger)
+                                              notification_to=instance.passenger, notification_to_admin=instance.administrator)
 
 
 @receiver(post_save, sender=DriverAlertArrival)
@@ -345,7 +345,7 @@ def alert_driver_payment_Today(sender, created, instance, **kwargs):
     if created:
         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                               notification_message=message, notification_tag=notification_tag,
-                                              notification_to=instance.driver)
+                                              notification_to=instance.driver, notification_to_admin=instance.administrator)
 
 
 @receiver(post_save, sender=OtherWallet)
