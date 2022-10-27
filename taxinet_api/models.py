@@ -286,7 +286,7 @@ class ScheduleRide(models.Model):
 
 class AssignScheduleToDriver(models.Model):
     administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1)
-    ride = models.ForeignKey(ScheduleRide, on_delete=models.CASCADE)
+    ride = models.OneToOneField(ScheduleRide, on_delete=models.CASCADE)
     driver = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="Driver_receiving_scheduled_ride")
     ride_accepted = models.BooleanField(default=False)
     date_assigned = models.DateField(auto_now_add=True)
@@ -361,7 +361,7 @@ class CancelScheduledRide(models.Model):
 class Complains(models.Model):
     administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1, related_name="complains")
     complainant = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="user_making_complain")
-    offender = models.ForeignKey(DeUser, on_delete=models.CASCADE,related_name="offender")
+    offender = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="offender")
     complain = models.TextField(blank=True)
     date_posted = models.DateTimeField(auto_now_add=True)
     read = models.CharField(max_length=10, choices=READ_STATUS, default="Not Read")
