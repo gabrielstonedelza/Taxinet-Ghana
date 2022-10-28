@@ -187,6 +187,9 @@ class InvestorsProfile(models.Model):
     def get_investors_full_name(self):
         return self.user.full_name
 
+    def get_investor_username(self):
+        return self.user.username
+
 
 class AddToVerified(models.Model):
     user = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="verified_profile")

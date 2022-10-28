@@ -123,7 +123,7 @@ class BigTrucksAdminProfileSerializer(serializers.ModelSerializer):
 class InvestorsProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = InvestorsProfile
-        fields = ['id', 'username', 'user', 'profile_pic',  'front_side_ghana_card',
+        fields = ['id', 'get_investor_username', 'user', 'profile_pic',  'front_side_ghana_card',
                   'back_side_ghana_card',
                   'name_on_ghana_card', 'next_of_kin', 'next_of_kin_number', 'referral',
                   'verified', 'investors_profile_pic', 'get_investors_email', 'get_investors_phone_number', 'get_investors_full_name']
