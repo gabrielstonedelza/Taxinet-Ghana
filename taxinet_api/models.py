@@ -76,10 +76,6 @@ SCHEDULE_PRIORITY = (
 RIDE_TYPE = (
     ("Taxinet Ride", "Taxinet Ride"),
     ("Taxinet Luxury", "Taxinet Luxury"),
-    # ("Taxinet Bus", "Taxinet Bus"),
-    # ("Taxinet Truck", "Taxinet Truck"),
-    # ("Taxinet Delivery", "Taxinet Delivery"),
-    # ("Taxinet Tickets", "Taxinet Tickets"),
 )
 
 INVENTORY_OPTIONS = (
@@ -96,7 +92,7 @@ SCHEDULE_STATUS = (
 )
 VEHICLE_STATUS = (
     ("Active", "Active"),
-    ("In Active", "In Active"),
+    ("Inactive", "Inactive"),
     ("Inspection", "Inspection"),
     ("In the shop", "In the shop"),
     ("Stolen", "Stolen"),
@@ -144,7 +140,7 @@ COLOR_CHOICES = (
 
 VEHICLE_TRANSMISSION = (
     ("Mechanical", "Mechanical"),
-    ("Authomatic", "Authomatic"),
+    ("Automatic", "Automatic"),
     ("Robotized", "Robotized"),
     ("Variator", "Variator"),
 )
@@ -176,7 +172,6 @@ VEHICLE_CATEGORY = (
 )
 
 TOYOTA_BRANDS = (
-    ("Select a brand", "Select a brand"),
     ("Avalon", "Avalon"),
     ("BELTA", "BELTA"),
     ("CAMRY", "CAMRY"),
@@ -757,9 +752,9 @@ class RegisterVehicle(models.Model):
     transmission = models.CharField(max_length=30, choices=VEHICLE_TRANSMISSION, default="Automatic")
     boosters = models.CharField(max_length=4, choices=BOOSTERS, default="0")
     child_safety_seats = models.CharField(max_length=4, choices=SAFETY_SEATS, default="0")
-    branded_wrap = models.BooleanField(default=False)
-    light_box = models.BooleanField(default=False)
-    fleet_car = models.CharField(max_length=20, choices=FLEET_CAR, default="Unselected", blank=True)
+    # branded_wrap = models.BooleanField(default=False)
+    # light_box = models.BooleanField(default=False)
+    # fleet_car = models.CharField(max_length=20, choices=FLEET_CAR, default="Unselected", blank=True)
     code_name = models.CharField(max_length=50, blank=True)
     category = models.CharField(max_length=50, choices=VEHICLE_CATEGORY, default="Comfort")
     picture = models.ImageField(upload_to="car_photos", blank=True)

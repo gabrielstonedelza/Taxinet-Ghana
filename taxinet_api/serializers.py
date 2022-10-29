@@ -290,7 +290,7 @@ class RegisterVehicleSerializer(serializers.ModelSerializer):
         model = RegisterVehicle
         fields = ['id', 'status', 'brand', 'model', 'color', 'year', 'license_plate_number', 'vin', 'body_number',
                   'registration_certificate_number', 'taxi_license_number', 'transmission', 'boosters', 'get_vehicle_photo',
-                  'child_safety_seats', 'branded_wrap', 'light_box', 'fleet_car', 'code_name', 'category', 'picture',
+                  'child_safety_seats', 'code_name', 'category', 'picture',
                   'date_registered']
 
 
