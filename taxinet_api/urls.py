@@ -12,10 +12,12 @@ urlpatterns = [
     path("admin_get_payment_detail/<int:id>/", views.admin_get_payment_detail),
     path("admin_get_all_drivers_payments_by_date/<str:payment_date>/",
          views.admin_get_all_drivers_payments_by_date),
+    # vehicles
     path("vehicle_detail/<int:id>/", views.vehicle_detail),
     path("vehicle_update/<int:id>/", views.update_vehicle),
     path("all_vehicles/", views.admin_get_all_registered_vehicles),
     path("admin_register_vehicle/", views.admin_register_vehicle),
+    #
     path("delete_assigned_driver/<int:pk>/", views.delete_assigned_driver),
     path("admin_load_passengers_wallet/", views.admin_load_passengers_wallet),
     path("admin_get_all_passengers_wallet/", views.admin_get_all_passengers_wallet),
