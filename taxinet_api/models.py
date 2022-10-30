@@ -743,7 +743,7 @@ class RegisterVehicle(models.Model):
     brand = models.CharField(max_length=255, choices=VEHICLE_BRANDS, default="Toyota")
     model = models.CharField(max_length=100, default="Yaris")
     color = models.CharField(max_length=255, choices=COLOR_CHOICES, default="White")
-    year = models.CharField(max_length=5, default="2000")
+    year = models.CharField(max_length=20, default="2000")
     license_plate_number = models.CharField(max_length=50, blank=True)
     vin = models.CharField(max_length=50, blank=True)
     body_number = models.CharField(max_length=50, blank=True)
