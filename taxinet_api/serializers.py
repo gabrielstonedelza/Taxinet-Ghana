@@ -289,7 +289,7 @@ class RegisterVehicleSerializer(serializers.ModelSerializer):
     class Meta:
         model = RegisterVehicle
         fields = ['id', 'status', 'brand', 'model', 'color', 'year', 'license_plate_number', 'vin', 'body_number',
-                  'registration_certificate_number', 'taxi_license_number', 'transmission', 'boosters', 'get_vehicle_photo',
+                  'registration_certificate_number', 'taxi_license_number', 'transmission', 'boosters',
                   'child_safety_seats', 'code_name', 'category',
                   'date_registered']
 
