@@ -828,8 +828,8 @@ class WorkAndPay(models.Model):
 # new wallets
 class Wallets(models.Model):
     user = models.OneToOneField(DeUser, on_delete=models.CASCADE, related_name="user_only_profile")
-    username = models.CharField(max_length=100, default="")
-    phone = models.CharField(max_length=100, default="")
+    username = models.CharField(max_length=100, default="", blank=True,)
+    phone = models.CharField(max_length=100, default="", blank=True)
     amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
     date_loaded = models.DateTimeField(auto_now_add=True)
 
