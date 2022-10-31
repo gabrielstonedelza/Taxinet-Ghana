@@ -1421,7 +1421,7 @@ class SearchScheduleRequest(generics.ListAPIView):
     queryset = ScheduleRide.objects.all()
     serializer_class = ScheduleRideSerializer
     filter_backends = [filters.SearchFilter]
-    search_fields = ['passenger_username', 'passenger_phone', 'driver_username', 'driver_phone']
+    search_fields = ['passenger_username', 'passenger_phone', 'driver_username', 'driver_phone','schedule_title']
 
 
 class SearchDriver(generics.ListAPIView):
