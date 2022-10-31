@@ -828,8 +828,15 @@ class WorkAndPay(models.Model):
 # new wallets
 class Wallets(models.Model):
     user = models.OneToOneField(DeUser, on_delete=models.CASCADE, related_name="user_only_profile")
+    username = models.CharField(max_length=100, default="")
+    phone = models.CharField(max_length=100, default="")
     amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
     date_loaded = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        self.username = self.user.username
+        self.phone = self.user.phone_number
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.user.username} wallet is loaded with GHS{self.amount}"

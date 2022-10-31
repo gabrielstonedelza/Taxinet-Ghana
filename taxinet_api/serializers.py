@@ -325,7 +325,7 @@ class WalletsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Wallets
         fields = ['id', 'user', 'amount', 'date_loaded', 'get_profile_pic', 'get_username', 'get_full_name',
-                  'get_user_type']
+                  'get_user_type', 'username', 'phone']
 
 
 class LoadWalletSerializer(serializers.ModelSerializer):

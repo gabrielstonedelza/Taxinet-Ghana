@@ -1405,3 +1405,12 @@ def get_expenses_get_by_date(request, expense_date):
     payments = ExpensesRequest.objects.filter(date_requested=expense_date).order_by('-date_requested')
     serializer = ExpensesRequestSerializer(payments, many=True)
     return Response(serializer.data)
+
+
+# searches
+class SearchWallet(generics.ListAPIView):
+    permission_classes = [permissions.AllowAny]
+    queryset = Wallets.objects.all()
+    serializer_class = WalletsSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['username', 'full_name', 'phone_number']
