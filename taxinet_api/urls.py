@@ -190,4 +190,7 @@ urlpatterns = [
     path("expense_detail/<int:id>/", views.expense_detail),
     path("get_expenses_get_by_date/<str:expense_date>/", views.get_expenses_get_by_date),
 
+    #     searches
+    path("search_wallet/", views.SearchWallet.as_view())
+
 ]

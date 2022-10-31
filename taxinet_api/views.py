@@ -1413,4 +1413,4 @@ class SearchWallet(generics.ListAPIView):
     queryset = Wallets.objects.all()
     serializer_class = WalletsSerializer
     filter_backends = [filters.SearchFilter]
-    search_fields = ['username', 'full_name', 'phone_number']
+    search_fields = ['username', 'phone']
