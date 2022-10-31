@@ -191,6 +191,11 @@ urlpatterns = [
     path("get_expenses_get_by_date/<str:expense_date>/", views.get_expenses_get_by_date),
 
     #     searches
-    path("search_wallet/", views.SearchWallet.as_view())
+    path("search_wallet/", views.SearchWallet.as_view()),
+    path("search_ride_request/", views.SearchScheduleRequest.as_view()),
+    path("search_driver/", views.SearchDriver.as_view()),
+    path("search_passenger/", views.SearchPassenger.as_view()),
+    path("search_investor/", views.SearchInvestor.as_view()),
+    path("search_payments/", views.SearchPayments.as_view()),
 
 ]

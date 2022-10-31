@@ -11,7 +11,7 @@ from rest_framework import filters
 
 from taxinet_users.models import PassengerProfile, DriverProfile, InvestorsProfile
 from taxinet_users.serializers import AdminPassengerProfileSerializer, InvestorsProfileSerializer, \
-    DriverProfileSerializer, UsersSerializer
+    DriverProfileSerializer, UsersSerializer, PassengerProfileSerializer
 from .models import (Complains, AddToUpdatedWallets,
                      DriversLocation, ConfirmDriverPayment, DriverVehicleInventory,
                      AcceptedScheduledRides, RejectedScheduledRides,
@@ -1412,5 +1412,45 @@ class SearchWallet(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]
     queryset = Wallets.objects.all()
     serializer_class = WalletsSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['username', 'phone']
+
+
+class SearchScheduleRequest(generics.ListAPIView):
+    permission_classes = [permissions.AllowAny]
+    queryset = ScheduleRide.objects.all()
+    serializer_class = ScheduleRideSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['passenger_username', 'passenger_phone', 'driver_username', 'driver_phone']
+
+
+class SearchDriver(generics.ListAPIView):
+    permission_classes = [permissions.AllowAny]
+    queryset = DriverProfile.objects.all()
+    serializer_class = DriverProfileSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['username', 'phone']
+
+
+class SearchPassenger(generics.ListAPIView):
+    permission_classes = [permissions.AllowAny]
+    queryset = PassengerProfile.objects.all()
+    serializer_class = PassengerProfileSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['username', 'phone']
+
+
+class SearchInvestor(generics.ListAPIView):
+    permission_classes = [permissions.AllowAny]
+    queryset = InvestorsProfile.objects.all()
+    serializer_class = InvestorsProfileSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['username', 'phone']
+
+
+class SearchPayments(generics.ListAPIView):
+    permission_classes = [permissions.AllowAny]
+    queryset = AddToPaymentToday.objects.all()
+    serializer_class = AddToPaymentTodaySerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['username', 'phone']

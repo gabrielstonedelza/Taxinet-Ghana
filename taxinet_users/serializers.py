@@ -29,7 +29,7 @@ class DriverProfileSerializer(serializers.ModelSerializer):
                   'next_of_kin', 'next_of_kin_number', 'driver_profile_pic', 'get_drivers_license',
                   'taxinet_number', 'unique_code', 'verified', 'get_front_side_ghana_card', 'get_back_side_ghana_card',
                   'get_drivers_email',
-                  'get_drivers_phone_number', 'get_user_type']
+                  'get_drivers_phone_number', 'get_user_type', 'username', 'phone']
         read_only_fields = ['user']
 
     def get_username(self, user):
@@ -48,7 +48,7 @@ class PassengerProfileSerializer(serializers.ModelSerializer):
                   'verified',
                   'next_of_kin', 'next_of_kin_number', 'get_passengers_email',
                   'get_passengers_phone_number', 'get_front_side_ghana_card', 'get_back_side_ghana_card',
-                  'get_passengers_full_name', 'unique_code', 'get_user_type']
+                  'get_passengers_full_name', 'unique_code', 'get_user_type', 'username', 'phone']
         read_only_fields = ['user']
 
     def get_username(self, user):
@@ -126,5 +126,5 @@ class InvestorsProfileSerializer(serializers.ModelSerializer):
         fields = ['id', 'get_investor_username', 'user', 'profile_pic',  'front_side_ghana_card',
                   'back_side_ghana_card',
                   'name_on_ghana_card', 'next_of_kin', 'next_of_kin_number', 'referral',
-                  'verified', 'investors_profile_pic', 'get_investors_email', 'get_investors_phone_number', 'get_investors_full_name']
+                  'verified', 'investors_profile_pic', 'get_investors_email', 'get_investors_phone_number', 'get_investors_full_name', 'username', 'phone']
         read_only_fields = ['user']

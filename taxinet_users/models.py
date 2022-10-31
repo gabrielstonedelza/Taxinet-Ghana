@@ -60,11 +60,15 @@ class DriverProfile(models.Model):
     unique_code = models.CharField(max_length=500, default='')
     verified = models.BooleanField(default=False)
     date_created = models.DateTimeField(default=timezone.now)
+    username = models.CharField(max_length=100, default="", blank=True, )
+    phone = models.CharField(max_length=100, default="", blank=True)
 
     def __str__(self):
         return self.user.username
 
     def save(self, *args, **kwargs):
+        self.username = self.user.username
+        self.phone = self.user.phone_number
         self.unique_code = self.user.username[:5] + str(random.randint(20, 500))
         super().save(*args, **kwargs)
 
@@ -113,11 +117,15 @@ class PassengerProfile(models.Model):
     verified = models.BooleanField(default=False)
     unique_code = models.CharField(max_length=500, default='')
     date_created = models.DateTimeField(default=timezone.now)
+    username = models.CharField(max_length=100, default="", blank=True, )
+    phone = models.CharField(max_length=100, default="", blank=True)
 
     def __str__(self):
         return self.user.username
 
     def save(self, *args, **kwargs):
+        self.username = self.user.username
+        self.phone = self.user.phone_number
         self.unique_code = self.user.username[:5] + str(random.randint(20, 500))
         super().save(*args, **kwargs)
 
@@ -159,6 +167,14 @@ class InvestorsProfile(models.Model):
     next_of_kin_number = models.CharField(max_length=100, blank=True)
     referral = models.CharField(max_length=100, blank=True)
     verified = models.BooleanField(default=False)
+    username = models.CharField(max_length=100, default="", blank=True, )
+    phone = models.CharField(max_length=100, default="", blank=True)
+
+    def save(self, *args, **kwargs):
+        self.username = self.user.username
+        self.phone = self.user.phone_number
+        # self.unique_code = self.user.username[:5] + str(random.randint(20, 500))
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.user.username

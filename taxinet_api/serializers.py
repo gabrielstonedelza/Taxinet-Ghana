@@ -118,7 +118,8 @@ class ScheduleRideSerializer(serializers.ModelSerializer):
                   'time_scheduled', 'get_passenger_number',
                   'get_administrator_profile_pic', 'slug',
                   'get_passenger_profile_pic', 'get_passenger_name', 'get_assigned_driver_name', 'read',
-                  'get_assigned_driver_profile_pic', ]
+                  'get_assigned_driver_profile_pic', 'passenger_username',
+                  'passenger_phone', 'driver_username', 'driver_phone']
         read_only_fields = ['passenger']
 
     def get_username(self, user):
@@ -140,7 +141,8 @@ class AdminScheduleRideSerializer(serializers.ModelSerializer):
                   'pickup_location', 'drop_off_location', 'status', 'price', 'charge', 'date_scheduled',
                   'time_scheduled', 'get_passenger_number',
                   'get_administrator_profile_pic', 'slug', 'get_passenger_name',
-                  'get_passenger_profile_pic', 'get_assigned_driver_profile_pic', ]
+                  'get_passenger_profile_pic', 'get_assigned_driver_profile_pic', 'passenger_username',
+                  'passenger_phone', 'driver_username', 'driver_phone']
 
 
 class ScheduledNotificationSerializer(serializers.ModelSerializer):
@@ -302,7 +304,7 @@ class AddToPaymentTodaySerializer(serializers.ModelSerializer):
         model = AddToPaymentToday
         fields = ['id', 'driver', 'administrator', 'amount', 'title', 'read', 'date_paid', 'time_paid',
                   'get_driver_profile_pic',
-                  'get_drivers_full_name']
+                  'get_drivers_full_name', 'username', 'phone']
         read_only_fields = ['driver']
 
 

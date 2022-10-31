@@ -233,11 +233,19 @@ class ScheduleRide(models.Model):
     date_scheduled = models.DateField(auto_now_add=True)
     time_scheduled = models.TimeField(auto_now_add=True)
     read = models.CharField(max_length=10, choices=READ_STATUS, default="Not Read")
+    passenger_username = models.CharField(max_length=100, default="", blank=True, )
+    passenger_phone = models.CharField(max_length=100, default="", blank=True)
+    driver_username = models.CharField(max_length=100, default="", blank=True, )
+    driver_phone = models.CharField(max_length=100, default="", blank=True)
 
     def __str__(self):
         return str(self.pk)
 
     def save(self, *args, **kwargs):
+        self.passenger_username = self.passenger.username
+        self.driver_username = self.assigned_driver.username
+        self.passenger_phone = self.passenger.phone_number
+        self.driver_phone = self.assigned_driver.phone_number
         value = self.schedule_title
         self.slug = slugify(value, allow_unicode=True)
         super().save(*args, **kwargs)
@@ -777,11 +785,15 @@ class AddToPaymentToday(models.Model):
     read = models.CharField(max_length=10, choices=READ_STATUS, default="Not Read")
     date_paid = models.DateField(auto_now_add=True)
     time_paid = models.TimeField(auto_now_add=True)
+    username = models.CharField(max_length=100, default="", blank=True, )
+    phone = models.CharField(max_length=100, default="", blank=True)
 
     def __str__(self):
         return f"{self.driver.username} has made payment today"
 
     def save(self, *args, **kwargs):
+        self.username = self.driver.username
+        self.phone = self.driver.phone_number
         value = f"{self.driver.username} has made payment today"
         self.title = value
         super().save(*args, **kwargs)
