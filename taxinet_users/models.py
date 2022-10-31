@@ -119,6 +119,13 @@ class PassengerProfile(models.Model):
     date_created = models.DateTimeField(default=timezone.now)
     username = models.CharField(max_length=100, default="", blank=True, )
     phone = models.CharField(max_length=100, default="", blank=True)
+    promoter = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="user_registering_user", default=1)
+
+    def get_promoter_username(self):
+        return self.promoter.username
+
+    def get_promoter_phone(self):
+        return self.promoter.phone_number
 
     def __str__(self):
         return self.user.username

@@ -48,7 +48,8 @@ class PassengerProfileSerializer(serializers.ModelSerializer):
                   'verified',
                   'next_of_kin', 'next_of_kin_number', 'get_passengers_email',
                   'get_passengers_phone_number', 'get_front_side_ghana_card', 'get_back_side_ghana_card',
-                  'get_passengers_full_name', 'unique_code', 'get_user_type', 'username', 'phone']
+                  'get_passengers_full_name', 'unique_code', 'get_user_type', 'username', 'phone', 'promoter',
+                  'get_promoter_username', 'get_promoter_phone']
         read_only_fields = ['user']
 
     def get_username(self, user):
@@ -79,7 +80,8 @@ class AdminPassengerProfileSerializer(serializers.ModelSerializer):
                   'verified',
                   'next_of_kin', 'next_of_kin_number', 'get_passengers_email',
                   'get_passengers_phone_number', 'get_front_side_ghana_card', 'get_back_side_ghana_card',
-                  'get_passengers_full_name', 'get_user_type']
+                  'get_passengers_full_name', 'get_user_type', 'promoter', 'get_promoter_username',
+                  'get_promoter_phone']
 
     def get_username(self, user):
         username = user.user.username
@@ -123,8 +125,9 @@ class BigTrucksAdminProfileSerializer(serializers.ModelSerializer):
 class InvestorsProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = InvestorsProfile
-        fields = ['id', 'get_investor_username', 'user', 'profile_pic',  'front_side_ghana_card',
+        fields = ['id', 'get_investor_username', 'user', 'profile_pic', 'front_side_ghana_card',
                   'back_side_ghana_card',
                   'name_on_ghana_card', 'next_of_kin', 'next_of_kin_number', 'referral',
-                  'verified', 'investors_profile_pic', 'get_investors_email', 'get_investors_phone_number', 'get_investors_full_name', 'username', 'phone']
+                  'verified', 'investors_profile_pic', 'get_investors_email', 'get_investors_phone_number',
+                  'get_investors_full_name', 'username', 'phone']
         read_only_fields = ['user']
