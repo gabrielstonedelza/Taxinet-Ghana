@@ -183,4 +183,11 @@ urlpatterns = [
     path("send_message/<int:id>/", views.send_message),
     path("get_all_ride_messages/<int:id>/", views.get_all_ride_messages),
 
+    #     expenses
+    path("add_expenses/", views.add_expenses),
+    path("get_all_expenses/", views.get_all_expenses),
+    path("get_expenses_today/", views.get_expenses_today),
+    path("expense_detail/<int:id>/", views.expense_detail),
+    path("get_expenses_get_by_date/<str:expense_date>/", views.get_expenses_get_by_date),
+
 ]

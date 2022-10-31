@@ -947,3 +947,6 @@ class ExpensesRequest(models.Model):
 
     def __str__(self):
         return f"Expense request made for {self.amount} by {self.user.username}"
+
+    def get_username(self):
+        return self.user.username

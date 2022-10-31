@@ -8,7 +8,7 @@ from .models import (ScheduleRide, Complains, ConfirmDriverPayment, AcceptedSche
                      RejectAssignedScheduled, CancelScheduledRide, PassengersWallet, AskToLoadWallet, DriverStartTrip,
                      DriverEndTrip, DriverAlertArrival, DriversWallet,
                      DriverAddToUpdatedWallets, DriverAskToLoadWallet, AddToPaymentToday, OtherWallet, WorkAndPay,
-                     Wallets, LoadWallet, UpdatedWallets, RideMessages)
+                     Wallets, LoadWallet, UpdatedWallets, ExpensesRequest)
 from django.conf import settings
 
 User = settings.AUTH_USER_MODEL
@@ -71,6 +71,19 @@ def alert_schedule(sender, created, instance, **kwargs):
                                               notification_to=instance.administrator,
                                               schedule_ride_id=instance.id, schedule_ride_slug=instance.slug,
                                               schedule_ride_title=instance.schedule_title, )
+
+
+@receiver(post_save, sender=ExpensesRequest)
+def alert_expense_request(sender, created, instance, **kwargs):
+    title = "New Expense Request"
+    notification_tag = "Expense Request"
+    message = f"{instance.user.username} added a new expense report"
+
+    if created:
+        ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                              notification_message=message, notification_tag=notification_tag,
+                                              notification_from=instance.user,
+                                              notification_to=instance.guarantor,)
 
 
 @receiver(post_save, sender=DriverVehicleInventory)
@@ -270,8 +283,8 @@ def alert_driver_start_trip(sender, created, instance, **kwargs):
     if created:
         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                               notification_message=message, notification_tag=notification_tag,
-                                              notification_to=instance.passenger,
-                                              notification_to_admin=instance.administrator)
+                                              notification_to=[instance.administrator, instance.passenger],
+                                              )
 
 
 @receiver(post_save, sender=DriverEndTrip)
@@ -283,8 +296,8 @@ def alert_driver_end_trip(sender, created, instance, **kwargs):
     if created:
         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                               notification_message=message, notification_tag=notification_tag,
-                                              notification_to=instance.passenger,
-                                              notification_to_admin=instance.administrator)
+                                              notification_to=[instance.administrator, instance.passenger],
+                                              )
 
 
 @receiver(post_save, sender=DriverAlertArrival)
@@ -347,8 +360,8 @@ def alert_driver_payment_Today(sender, created, instance, **kwargs):
     if created:
         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                               notification_message=message, notification_tag=notification_tag,
-                                              notification_to=instance.driver,
-                                              notification_to_admin=instance.administrator)
+                                              notification_to=[instance.administrator, instance.driver],
+                                              )
 
 
 @receiver(post_save, sender=OtherWallet)
@@ -373,15 +386,3 @@ def alert_added_to_work_and_pay(sender, created, instance, **kwargs):
         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                               notification_message=message, notification_tag=notification_tag,
                                               notification_to=instance.driver, )
-
-# @receiver(post_save, sender=RideMessages)
-# def alert_ride_message(sender, created, instance, **kwargs):
-#     if created:
-#         title = 'New ride message'
-#         notification_tag = "New ride message"
-#         message = f"Got new message for ride {instance.ride.schedule_title}"
-#
-#         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
-#                                               notification_message=message, notification_tag=notification_tag,
-#                                               notification_to_passenger=instance.user,
-#                                               notification_from=instance.user, notification_to=instance.user)

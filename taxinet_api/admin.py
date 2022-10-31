@@ -7,7 +7,7 @@ from .models import (ScheduleRide, Complains, ConfirmDriverPayment, AcceptedSche
                      RejectAssignedScheduled, CancelScheduledRide, ContactUs, ContactAdmin, PassengersWallet,
                      AskToLoadWallet, AddToUpdatedWallets, DriverStartTrip, DriverEndTrip, DriverAlertArrival,
                      DriversWallet, DriverAddToUpdatedWallets, DriverAskToLoadWallet, RegisterVehicle,
-                     AddToPaymentToday, WorkAndPay, OtherWallet, Wallets, LoadWallet, UpdatedWallets, RideMessages)
+                     AddToPaymentToday, WorkAndPay, OtherWallet, Wallets, LoadWallet, UpdatedWallets, RideMessages,ExpensesRequest)
 
 
 class AdminScheduleRide(admin.ModelAdmin):
@@ -20,6 +20,7 @@ class AdminScheduleRide(admin.ModelAdmin):
         model = ScheduleRide
 
 
+admin.site.register(ExpensesRequest)
 admin.site.register(RideMessages)
 admin.site.register(LoadWallet)
 admin.site.register(UpdatedWallets)

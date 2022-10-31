@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import permissions, status
+from rest_framework import viewsets, permissions, generics, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from django.utils.decorators import method_decorator
@@ -7,21 +7,24 @@ from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie, vary_on_headers
 from rest_framework.views import APIView
 from datetime import datetime, date, time, timedelta
+from rest_framework import filters
 
-from taxinet_users.models import PassengerProfile, DriverProfile
+from taxinet_users.models import PassengerProfile, DriverProfile, InvestorsProfile
+from taxinet_users.serializers import AdminPassengerProfileSerializer, InvestorsProfileSerializer, \
+    DriverProfileSerializer, UsersSerializer
 from .models import (Complains, AddToUpdatedWallets,
                      DriversLocation, ConfirmDriverPayment, DriverVehicleInventory,
                      AcceptedScheduledRides, RejectedScheduledRides,
                      CompletedScheduledRides, ScheduledNotifications, ScheduleRide, AssignScheduleToDriver,
                      AcceptAssignedScheduled, ContactUs,
                      RejectAssignedScheduled, CancelScheduledRide, PassengersWallet, AskToLoadWallet, DriverStartTrip,
-                     Wallets, RideMessages,
+                     Wallets, RideMessages, ExpensesRequest,
                      RegisterVehicle, WorkAndPay, OtherWallet,
                      DriverEndTrip, DriverAlertArrival, DriversWallet, LoadWallet, UpdatedWallets,
                      DriverAddToUpdatedWallets, DriverAskToLoadWallet, AddToPaymentToday)
 from .serializers import (ComplainsSerializer, ContactUsSerializer,
                           ConfirmDriverPaymentSerializer, DriversLocationSerializer, ScheduleRideSerializer,
-                          RegisterVehicleSerializer,
+                          RegisterVehicleSerializer, ExpensesRequestSerializer,
                           AcceptedScheduledRidesSerializer, \
                           RejectedScheduledRidesSerializer, DriverVehicleInventorySerializer,
                           CompletedScheduledRidesSerializer, \
@@ -1357,4 +1360,48 @@ def send_message(request, id):
 def get_all_ride_messages(request, id):
     messages = RideMessages.objects.filter(ride=id).order_by('-date_sent')
     serializer = RideMessagesSerializer(messages, many=True)
+    return Response(serializer.data)
+
+
+# expenses
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def add_expenses(request):
+    serializer = ExpensesRequestSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_all_expenses(request):
+    vehicles = ExpensesRequest.objects.all().order_by('-date_requested')
+    serializer = ExpensesRequestSerializer(vehicles, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def expense_detail(request, id):
+    expense = get_object_or_404(ExpensesRequest, id=id)
+    serializer = ExpensesRequestSerializer(expense, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_expenses_today(request):
+    my_date = datetime.today()
+    expenses = ExpensesRequest.objects.filter(date_requested=my_date.date()).order_by('-date_requested')
+    serializer = ExpensesRequestSerializer(expenses, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_expenses_get_by_date(request, expense_date):
+    payments = ExpensesRequest.objects.filter(date_requested=expense_date).order_by('-date_requested')
+    serializer = ExpensesRequestSerializer(payments, many=True)
     return Response(serializer.data)
