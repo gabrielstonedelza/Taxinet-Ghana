@@ -1,7 +1,9 @@
 from django.shortcuts import render, get_object_or_404
-from .models import User, DriverProfile, PassengerProfile, AddToVerified, AddCardsUploaded, InvestorsProfile
+from .models import User, DriverProfile, PassengerProfile, AddToVerified, AddCardsUploaded, InvestorsProfile, \
+    PromoterProfile
 from .serializers import (UsersSerializer, DriverProfileSerializer, PassengerProfileSerializer, AddToVerifiedSerializer, \
-                          AddCardsUploadedSerializer, AdminPassengerProfileSerializer, InvestorsProfileSerializer)
+                          AddCardsUploadedSerializer, AdminPassengerProfileSerializer, InvestorsProfileSerializer,
+                          PromoterProfileSerializer)
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import viewsets, permissions, generics, status
 from rest_framework.response import Response
@@ -258,3 +260,24 @@ class AllInvestorsProfileView(generics.ListCreateAPIView):
         queryset = self.get_queryset()
         serializer = InvestorsProfileSerializer(queryset, many=True)
         return Response(serializer.data)
+
+
+class AllPromotersView(generics.ListCreateAPIView):
+    queryset = User.objects.filter(user_type="Promoter")
+    serializer_class = UsersSerializer
+    permission_classes = [AllowAny]
+
+    @method_decorator(cache_page(60 * 60 * 2))
+    def list(self, request):
+        # Note the use of `get_queryset()` instead of `self.queryset`
+        queryset = self.get_queryset()
+        serializer = UsersSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_all_my_passengers(request):
+    passengers = PassengerProfile.objects.filter(promoter=request.user)
+    serializer = PassengerProfileSerializer(passengers, many=True)
+    return Response(serializer.data)

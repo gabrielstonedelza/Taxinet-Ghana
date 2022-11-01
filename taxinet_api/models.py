@@ -810,37 +810,10 @@ class AddToPaymentToday(models.Model):
         return self.driver.full_name
 
 
-class WorkAndPay(models.Model):
-    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
-    amount_to_pay = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
-    amount_paid = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
-    years = models.IntegerField(default=2)
-    start_date = models.CharField(max_length=20, blank=True)
-    end_date = models.CharField(max_length=20, blank=True)
-    fully_paid = models.BooleanField(default=False)
-    date_started = models.DateField(auto_now_add=True)
-    time_started = models.TimeField(auto_now_add=True)
-
-    def __srt__(self):
-        return f"{self.driver.username} has been added to work and pay system"
-
-    def get_assigned_driver_profile_pic(self):
-        driver = User.objects.get(username=self.assigned_driver.username)
-
-        if driver.user_type == "Driver":
-            de_driver = DriverProfile.objects.get(user=self.assigned_driver)
-            if de_driver:
-                return "https://taxinetghana.xyz" + de_driver.profile_pic.url
-            return ""
-
-    def get_driver_username(self):
-        return self.driver.username
-
-
 # new wallets
 class Wallets(models.Model):
     user = models.OneToOneField(DeUser, on_delete=models.CASCADE, related_name="user_only_profile")
-    username = models.CharField(max_length=100, default="", blank=True,)
+    username = models.CharField(max_length=100, default="", blank=True, )
     phone = models.CharField(max_length=100, default="", blank=True)
     amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
     date_loaded = models.DateTimeField(auto_now_add=True)
@@ -957,6 +930,7 @@ class RideMessages(models.Model):
 
 class ExpensesRequest(models.Model):
     guarantor = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE, null=True, related_name="driver_making_expense")
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_requesting_expense_cash")
     amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
     reason = models.TextField(default="")
@@ -969,3 +943,33 @@ class ExpensesRequest(models.Model):
 
     def get_username(self):
         return self.user.username
+
+    def get_driver_username(self):
+        return self.driver.username
+
+
+class WorkAndPay(models.Model):
+    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
+    amount_to_pay = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
+    amount_paid = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
+    years = models.IntegerField(default=2)
+    start_date = models.CharField(max_length=20, blank=True)
+    end_date = models.CharField(max_length=20, blank=True)
+    fully_paid = models.BooleanField(default=False)
+    date_started = models.DateField(auto_now_add=True)
+    time_started = models.TimeField(auto_now_add=True)
+
+    def __srt__(self):
+        return f"{self.driver.username} has been added to work and pay system"
+
+    def get_assigned_driver_profile_pic(self):
+        driver = User.objects.get(username=self.assigned_driver.username)
+
+        if driver.user_type == "Driver":
+            de_driver = DriverProfile.objects.get(user=self.assigned_driver)
+            if de_driver:
+                return "https://taxinetghana.xyz" + de_driver.profile_pic.url
+            return ""
+
+    def get_driver_username(self):
+        return self.driver.username
