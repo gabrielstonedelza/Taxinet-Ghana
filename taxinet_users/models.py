@@ -125,9 +125,6 @@ class PassengerProfile(models.Model):
     def get_promoter_username(self):
         return self.promoter
 
-    def get_promoter_phone(self):
-        return self.promoter.phone_number
-
     def __str__(self):
         return self.user.username
 

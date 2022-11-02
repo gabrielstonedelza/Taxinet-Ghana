@@ -49,7 +49,7 @@ class PassengerProfileSerializer(serializers.ModelSerializer):
                   'next_of_kin', 'next_of_kin_number', 'get_passengers_email',
                   'get_passengers_phone_number', 'get_front_side_ghana_card', 'get_back_side_ghana_card',
                   'get_passengers_full_name', 'unique_code', 'get_user_type', 'username', 'phone', 'promoter',
-                  'get_promoter_username', 'get_promoter_phone']
+                  'get_promoter_username',]
         read_only_fields = ['user']
 
     def get_username(self, user):
