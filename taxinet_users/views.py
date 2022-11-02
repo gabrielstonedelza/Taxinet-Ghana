@@ -281,3 +281,11 @@ def get_all_my_passengers(request):
     passengers = PassengerProfile.objects.filter(promoter=request.user)
     serializer = PassengerProfileSerializer(passengers, many=True)
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def promoter_profile(request):
+    my_profile = PromoterProfile.objects.filter(user=request.user)
+    serializer = PromoterProfileSerializer(my_profile, many=True)
+    return Response(serializer.data)

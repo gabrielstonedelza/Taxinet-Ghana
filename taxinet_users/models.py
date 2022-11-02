@@ -273,7 +273,7 @@ class PromoterProfile(models.Model):
     def get_user_type(self):
         return self.user.user_type
 
-    def passenger_profile_pic(self):
+    def promoter_profile_pic(self):
         if self.profile_pic:
             return "https://taxinetghana.xyz" + self.profile_pic.url
         return ''
@@ -281,6 +281,14 @@ class PromoterProfile(models.Model):
     def get_username(self):
         return self.user.username
 
+    def get_email(self):
+        return self.user.email
+
+    def get_phone_number(self):
+        return self.user.phone_number
+
+    def get_full_name(self):
+        return self.user.full_name
 
 class RideAdminProfile(models.Model):
     user = models.OneToOneField(DeUser, on_delete=models.CASCADE, related_name="ridesadmin_profile")

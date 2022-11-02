@@ -101,8 +101,8 @@ class AccountsProfileSerializer(serializers.ModelSerializer):
 class PromoterProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = PromoterProfile
-        fields = ['id', 'get_username', 'user', 'profile_pic', 'passenger_profile_pic',
-                  'get_user_type']
+        fields = ['id', 'get_username', 'user', 'profile_pic', 'promoter_profile_pic',
+                  'get_user_type', 'get_email', 'get_phone_number', 'date_created', 'get_full_name']
         read_only_fields = ['user']
 
 

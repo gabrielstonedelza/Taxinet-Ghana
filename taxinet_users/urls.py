@@ -29,6 +29,7 @@ urlpatterns = [
     path('search_users/', views.GetAllUsers.as_view()),
     path('users/', views.AllUsers.as_view()),
     path('passenger-profile/', views.passenger_profile),
+    path('promoter_profile/', views.promoter_profile),
     path('update_driver_profile/', views.update_driver_profile),
     path('update_passenger_profile/', views.update_passenger_profile),
     path('admin_update_passenger_profile/<int:id>/', views.admin_update_passenger_profile),

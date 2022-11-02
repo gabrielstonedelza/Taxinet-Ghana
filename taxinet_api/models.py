@@ -973,3 +973,4 @@ class WorkAndPay(models.Model):
 
     def get_driver_username(self):
         return self.driver.username
+    
