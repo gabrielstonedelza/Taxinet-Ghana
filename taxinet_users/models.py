@@ -23,7 +23,7 @@ class User(AbstractUser):
     user_type = models.CharField(max_length=50, choices=APP_TYPE, default="Passenger")
     full_name = models.CharField(max_length=100, unique=True)
     phone_number = models.CharField(max_length=16, unique=True)
-    promoter = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="admin_user_registering_user",)
+    promoter = models.CharField(max_length=100, default="", blank=True)
 
     REQUIRED_FIELDS = ['user_type', 'email', 'full_name', 'phone_number', ]
     USERNAME_FIELD = 'username'
@@ -120,7 +120,7 @@ class PassengerProfile(models.Model):
     date_created = models.DateTimeField(default=timezone.now)
     username = models.CharField(max_length=100, default="", blank=True, )
     phone = models.CharField(max_length=100, default="", blank=True)
-    promoter = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="user_registering_user")
+    promoter = models.CharField(max_length=100, default="", blank=True)
 
     def get_promoter_username(self):
         return self.promoter.username
