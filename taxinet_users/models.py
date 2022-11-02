@@ -23,6 +23,7 @@ class User(AbstractUser):
     user_type = models.CharField(max_length=50, choices=APP_TYPE, default="Passenger")
     full_name = models.CharField(max_length=100, unique=True)
     phone_number = models.CharField(max_length=16, unique=True)
+    promoter = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="admin_user_registering_user", default=1)
 
     REQUIRED_FIELDS = ['user_type', 'email', 'full_name', 'phone_number', ]
     USERNAME_FIELD = 'username'
@@ -131,6 +132,7 @@ class PassengerProfile(models.Model):
         return self.user.username
 
     def save(self, *args, **kwargs):
+        self.promoter = self.user.promoter
         self.username = self.user.username
         self.phone = self.user.phone_number
         self.unique_code = self.user.username[:5] + str(random.randint(20, 500))
@@ -289,6 +291,7 @@ class PromoterProfile(models.Model):
 
     def get_full_name(self):
         return self.user.full_name
+
 
 class RideAdminProfile(models.Model):
     user = models.OneToOneField(DeUser, on_delete=models.CASCADE, related_name="ridesadmin_profile")
