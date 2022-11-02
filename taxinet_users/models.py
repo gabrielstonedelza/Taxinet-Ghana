@@ -123,7 +123,7 @@ class PassengerProfile(models.Model):
     promoter = models.CharField(max_length=100, default="", blank=True)
 
     def get_promoter_username(self):
-        return self.promoter.username
+        return self.promoter
 
     def get_promoter_phone(self):
         return self.promoter.phone_number
