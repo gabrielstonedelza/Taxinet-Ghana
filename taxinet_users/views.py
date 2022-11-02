@@ -277,8 +277,8 @@ class AllPromotersView(generics.ListCreateAPIView):
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
-def get_all_my_passengers(request):
-    passengers = PassengerProfile.objects.filter(promoter=request.user)
+def get_all_my_passengers(request, username):
+    passengers = PassengerProfile.objects.filter(promoter=username)
     serializer = PassengerProfileSerializer(passengers, many=True)
     return Response(serializer.data)
 

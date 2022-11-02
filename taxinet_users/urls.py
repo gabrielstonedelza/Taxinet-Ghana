@@ -17,7 +17,7 @@ urlpatterns = [
     path('get_passenger_details/<int:id>/', views.get_passenger_details),
     path('get_drivers_details/<int:id>/', views.get_drivers_details),
     path('all_passengers/', views.get_all_passengers),
-    path('get_all_my_passengers/', views.get_all_my_passengers),
+    path('get_all_my_passengers/<str:username>/', views.get_all_my_passengers),
     path('get_all_passengers/', AllPassengersView.as_view()),
     path('get_all_promoters/', AllPromotersView.as_view()),
     path('all_passengers_profile/', AllPassengersProfileView.as_view()),
