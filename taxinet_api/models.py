@@ -243,7 +243,7 @@ class ScheduleRide(models.Model):
         self.driver_username = self.assigned_driver.username
         self.passenger_phone = self.passenger.phone_number
         self.driver_phone = self.assigned_driver.phone_number
-        value = self.schedule_title
+        value = self.pk
         self.slug = slugify(value, allow_unicode=True)
         super().save(*args, **kwargs)
 
