@@ -236,7 +236,7 @@ class ScheduleRide(models.Model):
     driver_phone = models.CharField(max_length=100, default="", blank=True)
 
     def __str__(self):
-        return str(self.pk)
+        return str(self.passenger.username)
 
     def save(self, *args, **kwargs):
         self.passenger_username = self.passenger.username
