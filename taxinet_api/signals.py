@@ -279,12 +279,14 @@ def alert_driver_start_trip(sender, created, instance, **kwargs):
     title = "Trip Started"
     notification_tag = "Trip Started"
     message = f"{instance.driver.username} has started trip {instance.ride}"
+    users = [instance.administrator, instance.passenger]
 
     if created:
-        ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
-                                              notification_message=message, notification_tag=notification_tag,
-                                              notification_to=[instance.administrator, instance.passenger],
-                                              )
+        for i in users:
+            ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                                  notification_message=message, notification_tag=notification_tag,
+                                                  notification_to=i,
+                                                  )
 
 
 @receiver(post_save, sender=DriverEndTrip)
