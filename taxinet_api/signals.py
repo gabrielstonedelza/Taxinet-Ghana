@@ -27,7 +27,7 @@ def alert_accepted_ride(sender, created, instance, **kwargs):
                                               notification_to=instance.scheduled_ride.passenger,
                                               schedule_ride_id=instance.scheduled_ride.id,
                                               schedule_ride_slug=instance.scheduled_ride.slug,
-                                              schedule_ride_title=instance.scheduled_ride.schedule_title, )
+                                              )
 
 
 @receiver(post_save, sender=RejectedScheduledRides)
@@ -41,7 +41,7 @@ def alert_rejected_ride(sender, created, instance, **kwargs):
                                               notification_from=instance.ride.administrator,
                                               notification_to=instance.ride.passenger,
                                               ride_id=instance.ride.id, schedule_ride_slug=instance.ride.slug,
-                                              schedule_ride_title=instance.scheduled_ride.schedule_title)
+                                              )
 
 
 @receiver(post_save, sender=CompletedScheduledRides)
@@ -70,7 +70,7 @@ def alert_schedule(sender, created, instance, **kwargs):
                                               notification_from=instance.passenger,
                                               notification_to=instance.administrator,
                                               schedule_ride_id=instance.id, schedule_ride_slug=instance.slug,
-                                              schedule_ride_title=instance.schedule_title, )
+                                        )
 
 
 @receiver(post_save, sender=ExpensesRequest)
@@ -104,7 +104,7 @@ def alert_driver_inventory_today(sender, created, instance, **kwargs):
 def alert_assigned_scheduled_to_driver(sender, created, instance, **kwargs):
     title = "New ride assigned"
     notification_tag = "Ride Assigned"
-    message = f"'{instance.ride.schedule_title}' has been assigned to {instance.driver.username} "
+    message = f"'{instance.ride}' has been assigned to {instance.driver.username} "
 
     if created:
         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
@@ -112,14 +112,14 @@ def alert_assigned_scheduled_to_driver(sender, created, instance, **kwargs):
                                               notification_from=instance.administrator,
                                               notification_to=[instance.driver, instance.passenger],
                                               assigned_scheduled_id=instance.id, schedule_ride_slug=instance.ride.slug,
-                                              schedule_ride_title=instance.ride.schedule_title, )
+                                            )
 
 
 @receiver(post_save, sender=AcceptAssignedScheduled)
 def alert_accepted_assigned_scheduled_to_driver(sender, created, instance, **kwargs):
     title = "Ride assigned accepted"
     notification_tag = "Ride Accepted"
-    message = f"{instance.driver.username} has accepted ride '{instance.assigned_to_driver.ride.schedule_title}'"
+    message = f"{instance.driver.username} has accepted ride '{instance.assigned_to_driver.ride}'"
     admin_user = User.objects.get(id=1)
 
     if created:
@@ -134,7 +134,7 @@ def alert_accepted_assigned_scheduled_to_driver(sender, created, instance, **kwa
 def alert_rejected_assigned_scheduled_to_driver(sender, created, instance, **kwargs):
     title = "Ride assigned rejected"
     notification_tag = "Ride Rejected"
-    message = f"{instance.driver.username} has rejected ride '{instance.assigned_to_driver.ride.schedule_title}'"
+    message = f"{instance.driver.username} has rejected ride '{instance.assigned_to_driver.ride}'"
     admin_user = User.objects.get(id=1)
 
     if created:
@@ -149,7 +149,7 @@ def alert_rejected_assigned_scheduled_to_driver(sender, created, instance, **kwa
 def alert_cancelled_ride(sender, created, instance, **kwargs):
     title = "ScheduleRide Cancelled"
     notification_tag = "ScheduleRide Cancelled"
-    message = f"{instance.passenger.username} has Cancelled ride '{instance.ride.schedule_title}'"
+    message = f"{instance.passenger.username} has Cancelled ride '{instance.ride}'"
     admin_user = User.objects.get(id=1)
 
     if created:

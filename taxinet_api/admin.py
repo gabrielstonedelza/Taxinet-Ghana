@@ -7,12 +7,13 @@ from .models import (ScheduleRide, Complains, ConfirmDriverPayment, AcceptedSche
                      RejectAssignedScheduled, CancelScheduledRide, ContactUs, ContactAdmin, PassengersWallet,
                      AskToLoadWallet, AddToUpdatedWallets, DriverStartTrip, DriverEndTrip, DriverAlertArrival,
                      DriversWallet, DriverAddToUpdatedWallets, DriverAskToLoadWallet, RegisterVehicle,
-                     AddToPaymentToday, WorkAndPay, OtherWallet, Wallets, LoadWallet, UpdatedWallets, RideMessages,ExpensesRequest)
+                     AddToPaymentToday, WorkAndPay, OtherWallet, Wallets, LoadWallet, UpdatedWallets, RideMessages,
+                     ExpensesRequest)
 
 
 class AdminScheduleRide(admin.ModelAdmin):
-    list_display = ['id', 'assigned_driver', 'passenger', 'schedule_title', 'schedule_type', 'schedule_priority',
-                    'schedule_description', 'ride_type', 'pickup_location', 'drop_off_location', 'pick_up_time',
+    list_display = ['id', 'assigned_driver', 'passenger', 'schedule_type',
+                    'ride_type', 'pickup_location', 'drop_off_location', 'pick_up_time',
                     'start_date', 'status', 'price', 'charge', 'date_scheduled']
     search_fields = ['id', 'passenger', 'assigned_driver']
 

@@ -111,9 +111,8 @@ class ScheduleRideSerializer(serializers.ModelSerializer):
     class Meta:
         model = ScheduleRide
         fields = ['id', 'username', 'assigned_driver', 'passenger', 'admins_username', 'administrator',
-                  'schedule_title',
-                  'schedule_priority', 'ride_type',
-                  'schedule_type', 'schedule_description', 'pick_up_time', 'start_date', 'completed',
+                  'ride_type',
+                  'schedule_type', 'pick_up_time', 'start_date', 'completed',
                   'pickup_location', 'drop_off_location', 'status', 'price', 'charge', 'date_scheduled',
                   'time_scheduled', 'get_passenger_number',
                   'get_administrator_profile_pic', 'slug',
@@ -135,9 +134,8 @@ class AdminScheduleRideSerializer(serializers.ModelSerializer):
     class Meta:
         model = ScheduleRide
         fields = ['id', 'assigned_driver', 'passenger', 'get_assigned_driver_name', 'administrator',
-                  'schedule_title',
-                  'schedule_priority', 'ride_type',
-                  'schedule_type', 'schedule_description', 'pick_up_time', 'start_date', 'completed',
+                  'ride_type',
+                  'schedule_type', 'pick_up_time', 'start_date', 'completed',
                   'pickup_location', 'drop_off_location', 'status', 'price', 'charge', 'date_scheduled',
                   'time_scheduled', 'get_passenger_number',
                   'get_administrator_profile_pic', 'slug', 'get_passenger_name',
