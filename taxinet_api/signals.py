@@ -107,14 +107,16 @@ def alert_assigned_scheduled_to_driver(sender, created, instance, **kwargs):
     title = "New ride assigned"
     notification_tag = "Ride Assigned"
     message = f"'{instance.ride}' has been assigned to {instance.driver.username} "
+    users = [instance.driver, instance.passenger]
 
     if created:
-        ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
-                                              notification_message=message, notification_tag=notification_tag,
-                                              notification_from=instance.administrator,
-                                              notification_to=[instance.driver, instance.passenger],
-                                              assigned_scheduled_id=instance.id, schedule_ride_slug=instance.ride.slug,
-                                              )
+        for i in users:
+            ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                                  notification_message=message, notification_tag=notification_tag,
+                                                  notification_from=instance.administrator,
+                                                  notification_to=i,
+                                                  assigned_scheduled_id=instance.id, schedule_ride_slug=instance.ride.slug,
+                                                  )
 
 
 @receiver(post_save, sender=AcceptAssignedScheduled)
