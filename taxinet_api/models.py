@@ -234,6 +234,10 @@ class ScheduleRide(models.Model):
     passenger_phone = models.CharField(max_length=100, default="", blank=True)
     driver_username = models.CharField(max_length=100, default="", blank=True, )
     driver_phone = models.CharField(max_length=100, default="", blank=True)
+    pickup_lng = models.CharField(max_length=255, blank=True, default="")
+    pickup_lat = models.CharField(max_length=255, blank=True, default="")
+    drop_off_lat = models.CharField(max_length=255, blank=True, default="")
+    drop_off_lng = models.CharField(max_length=255, blank=True, default="")
 
     def __str__(self):
         return str(self.passenger.username)

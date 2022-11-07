@@ -118,7 +118,7 @@ class ScheduleRideSerializer(serializers.ModelSerializer):
                   'get_administrator_profile_pic', 'slug',
                   'get_passenger_profile_pic', 'get_passenger_name', 'get_assigned_driver_name', 'read',
                   'get_assigned_driver_profile_pic', 'passenger_username',
-                  'passenger_phone', 'driver_username', 'driver_phone']
+                  'passenger_phone', 'driver_username', 'driver_phone', 'pickup_lng', 'pickup_lat', 'drop_off_lat', 'drop_off_lng']
         read_only_fields = ['passenger']
 
     def get_username(self, user):
@@ -140,7 +140,7 @@ class AdminScheduleRideSerializer(serializers.ModelSerializer):
                   'time_scheduled', 'get_passenger_number',
                   'get_administrator_profile_pic', 'slug', 'get_passenger_name',
                   'get_passenger_profile_pic', 'get_assigned_driver_profile_pic', 'passenger_username',
-                  'passenger_phone', 'driver_username', 'driver_phone']
+                  'passenger_phone', 'driver_username', 'driver_phone', 'pickup_lng', 'pickup_lat', 'drop_off_lat', 'drop_off_lng']
 
 
 class ScheduledNotificationSerializer(serializers.ModelSerializer):
