@@ -130,7 +130,7 @@ def alert_assigned_scheduled_to_driver(sender, created, instance, **kwargs):
         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                               notification_message=message, notification_tag=notification_tag,
                                               notification_from=instance.administrator,
-                                              notification_to=instance.driver,
+                                              notification_to=instance.ride.assigned_driver,
                                               assigned_scheduled_id=instance.id,
                                               schedule_ride_slug=instance.ride.slug,
                                               )
