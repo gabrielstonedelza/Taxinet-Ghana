@@ -982,7 +982,6 @@ class WorkAndPay(models.Model):
 
 # new updates
 class Stocks(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
     item_name = models.CharField(max_length=200, )
     quantity = models.IntegerField(default=0)
     date_added = models.DateField(auto_now_add=True)

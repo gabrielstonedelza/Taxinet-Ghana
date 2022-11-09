@@ -397,5 +397,5 @@ class MonthlySalarySerializer(serializers.ModelSerializer):
 class StocksSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stocks
-        fields = ['id', 'user', 'item_name', 'quantity', 'date_added', 'time_added']
+        fields = ['id', 'item_name', 'quantity', 'date_added', 'time_added']
 
