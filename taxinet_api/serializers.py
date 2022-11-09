@@ -10,7 +10,7 @@ from .models import (Complains,
                      AddToUpdatedWallets, DriverStartTrip, DriverEndTrip, DriverAlertArrival, DriversWallet,
                      DriverAddToUpdatedWallets, DriverAskToLoadWallet, RegisterVehicle, AddToPaymentToday, WorkAndPay,
                      OtherWallet, Wallets, LoadWallet, UpdatedWallets, RideMessages, ExpensesRequest, PrivateChatId,
-                     AddToBlockList, PrivateUserMessage, Stocks, MonthlySalary,
+                  PrivateUserMessage, Stocks, MonthlySalary,
                      PayPromoterCommission, PrivateChatId, AddToBlockList
                      )
 
