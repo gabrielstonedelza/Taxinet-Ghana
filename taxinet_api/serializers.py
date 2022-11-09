@@ -385,7 +385,7 @@ class PrivateChatIdSerializer(serializers.ModelSerializer):
 class PayPromoterCommissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = PayPromoterCommission
-        fields = ['id', 'amount', 'date_paid', 'time_paid']
+        fields = ['id', 'amount', 'promoter', 'date_paid', 'time_paid']
 
 
 class MonthlySalarySerializer(serializers.ModelSerializer):
