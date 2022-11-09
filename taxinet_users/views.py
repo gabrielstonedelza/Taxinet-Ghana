@@ -283,6 +283,19 @@ def get_all_my_passengers(request, username):
     return Response(serializer.data)
 
 
+class AllPromotersProfileView(generics.ListCreateAPIView):
+    queryset = PromoterProfile.objects.all().order_by("-date_created")
+    serializer_class = PromoterProfileSerializer
+    permission_classes = [AllowAny]
+
+    @method_decorator(cache_page(60 * 60 * 2))
+    def list(self, request):
+        # Note the use of `get_queryset()` instead of `self.queryset`
+        queryset = self.get_queryset()
+        serializer = PromoterProfileSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def promoter_profile(request):

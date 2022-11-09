@@ -9,9 +9,9 @@ from rest_framework.views import APIView
 from datetime import datetime, date, time, timedelta
 from rest_framework import filters
 
-from taxinet_users.models import PassengerProfile, DriverProfile, InvestorsProfile, User
+from taxinet_users.models import PassengerProfile, DriverProfile, InvestorsProfile, User, PromoterProfile
 from taxinet_users.serializers import AdminPassengerProfileSerializer, InvestorsProfileSerializer, \
-    DriverProfileSerializer, UsersSerializer, PassengerProfileSerializer
+    DriverProfileSerializer, UsersSerializer, PassengerProfileSerializer, PromoterProfileSerializer
 from .models import (Complains, AddToUpdatedWallets,
                      DriversLocation, ConfirmDriverPayment, DriverVehicleInventory,
                      AcceptedScheduledRides, RejectedScheduledRides,
@@ -1460,6 +1460,14 @@ class SearchPayments(generics.ListAPIView):
     search_fields = ['username', 'phone']
 
 
+class SearchPromoter(generics.ListAPIView):
+    permission_classes = [permissions.AllowAny]
+    queryset = PromoterProfile.objects.all()
+    serializer_class = PromoterProfileSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['username', 'phone']
+
+
 # new updates
 @api_view(['GET', 'DELETE'])
 @permission_classes([permissions.AllowAny])
@@ -1609,4 +1617,3 @@ def get_all_stocks(request):
     users = Stocks.objects.all().order_by('-date_added')
     serializer = StocksSerializer(users, many=True)
     return Response(serializer.data)
-

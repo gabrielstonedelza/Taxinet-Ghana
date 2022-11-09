@@ -194,6 +194,7 @@ urlpatterns = [
     path("search_wallet/", views.SearchWallet.as_view()),
     path("search_ride_request/", views.SearchScheduleRequest.as_view()),
     path("search_driver/", views.SearchDriver.as_view()),
+    path("search_promoter/", views.SearchPromoter.as_view()),
     path("search_passenger/", views.SearchPassenger.as_view()),
     path("search_investor/", views.SearchInvestor.as_view()),
     path("search_payments/", views.SearchPayments.as_view()),
