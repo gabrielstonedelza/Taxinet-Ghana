@@ -60,7 +60,7 @@ DRIVER_PAYMENT_CONFIRMATION = (
 )
 SCHEDULE_TYPES = (
     ("Select Schedule Type", "Select Schedule Type"),
-    ("One Time", "One Time"),
+    ("Short Trip", "Short Trip"),
     ("Daily", "Daily"),
     ("Days", "Days"),
     ("Weekly", "Weekly"),
@@ -216,7 +216,7 @@ class ScheduleRide(models.Model):
                                         default=1)
     passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="passenger_scheduling_ride")
     administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1)
-    schedule_type = models.CharField(max_length=255, default="One Time", choices=SCHEDULE_TYPES)
+    schedule_type = models.CharField(max_length=255, default="Short Trip", choices=SCHEDULE_TYPES)
     ride_type = models.CharField(max_length=50, default="Taxinet Ride", choices=RIDE_TYPE)
     pickup_location = models.CharField(max_length=255, blank=True, default="")
     drop_off_location = models.CharField(max_length=255, blank=True, default="")
@@ -249,6 +249,8 @@ class ScheduleRide(models.Model):
         self.driver_phone = self.assigned_driver.phone_number
         value = self.pk
         self.slug = slugify(value, allow_unicode=True)
+        if self.schedule_type == "Short Trip":
+            self.assigned_driver = self.assigned_driver
         super().save(*args, **kwargs)
 
     def get_administrator_profile_pic(self):
@@ -933,6 +935,8 @@ class ExpensesRequest(models.Model):
     guarantor = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     driver = models.ForeignKey(DeUser, on_delete=models.CASCADE, null=True, related_name="driver_making_expense")
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_requesting_expense_cash")
+    item_name = models.CharField(max_length=200, default="")
+    quantity = models.IntegerField(default=0)
     amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
     reason = models.TextField(default="")
     request_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
@@ -974,4 +978,85 @@ class WorkAndPay(models.Model):
 
     def get_driver_username(self):
         return self.driver.username
-    
+
+
+# new updates
+class Stocks(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    item_name = models.CharField(max_length=200, )
+    quantity = models.IntegerField(default=0)
+    date_added = models.DateField(auto_now_add=True)
+    time_added = models.TimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.item_name
+
+
+class MonthlySalary(models.Model):
+    driver = models.ForeignKey(User, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
+    date_paid = models.DateField(auto_now_add=True)
+    time_paid = models.TimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.driver.username
+
+
+class PayPromoterCommission(models.Model):
+    promoter = models.ForeignKey(User, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
+    date_paid = models.DateField(auto_now_add=True)
+    time_paid = models.TimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.promoter.username
+
+
+class PrivateChatId(models.Model):
+    chat_id = models.CharField(max_length=400, blank=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.chat_id
+
+
+class PrivateUserMessage(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.CASCADE)
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="chatter2")
+    private_chat_id = models.CharField(max_length=400, blank=True)
+    message = models.TextField()
+    read = models.BooleanField(default=False)
+    isSender = models.BooleanField(default=False)
+    isReceiver = models.BooleanField(default=False)
+    timestamp = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.private_chat_id
+
+    def get_senders_username(self):
+        return self.sender.username
+
+    def get_receivers_username(self):
+        return self.receiver.username
+
+    def save(self, *args, **kwargs):
+        senders_username = self.sender.username
+        receiver_username = self.receiver.username
+        sender_receiver = str(senders_username) + str(receiver_username)
+        receiver_sender = str(receiver_username) + str(senders_username)
+
+        self.private_chat_id = sender_receiver
+
+        super().save(*args, **kwargs)
+
+
+class AddToBlockList(models.Model):
+    administrator = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_being_blocked")
+    date_blocked = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user.username
+
+    def get_username(self):
+        return self.user.username

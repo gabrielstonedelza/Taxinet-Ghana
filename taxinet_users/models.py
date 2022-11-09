@@ -19,7 +19,7 @@ APP_TYPE = (
 
 
 class User(AbstractUser):
-    email = models.EmailField(unique=True, max_length=255)
+    email = models.EmailField(max_length=255)
     user_type = models.CharField(max_length=50, choices=APP_TYPE, default="Passenger")
     full_name = models.CharField(max_length=100, unique=True)
     phone_number = models.CharField(max_length=16, unique=True)

@@ -198,4 +198,25 @@ urlpatterns = [
     path("search_investor/", views.SearchInvestor.as_view()),
     path("search_payments/", views.SearchPayments.as_view()),
 
+    #     new updates
+    # private and group messages
+    path("private_message_detail/<str:private_chat_id>/", views.private_message_detail),
+    path("get_private_message/<int:user1>/<int:user2>/", views.get_private_message),
+    path("send_private_message/", views.send_private_message),
+    #     block listing
+    path("add_to_blocked/", views.add_to_blocked),
+    path("get_blocked_users/", views.get_blocked_users),
+    path("remove_from_blocked/<int:id>/", views.remove_from_blocked),
+    path("delete_user/<int:pk>/", views.user_delete),
+    # promoter
+    path("add_promoter_commission/", views.add_promoter_commission),
+    path("get_promoter_commissions/", views.get_promoter_commissions),
+    path("get_promoter_commission/", views.get_promoter_commission),
+    #     monthly salary
+    path("add_monthly_salary/", views.add_monthly_salary),
+    path("get_monthly_salaries/", views.get_monthly_salaries),
+    path("get_my_salary/", views.get_my_salary),
+    #     stocks
+    path("add_stock/", views.add_stock),
+    path("get_all_stocks/", views.get_all_stocks),
 ]

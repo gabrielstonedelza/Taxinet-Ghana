@@ -8,7 +8,8 @@ from .models import (ScheduleRide, Complains, ConfirmDriverPayment, AcceptedSche
                      RejectAssignedScheduled, CancelScheduledRide, PassengersWallet, AskToLoadWallet, DriverStartTrip,
                      DriverEndTrip, DriverAlertArrival, DriversWallet,
                      DriverAddToUpdatedWallets, DriverAskToLoadWallet, AddToPaymentToday, OtherWallet, WorkAndPay,
-                     Wallets, LoadWallet, UpdatedWallets, ExpensesRequest)
+                     Wallets, LoadWallet, UpdatedWallets, ExpensesRequest, PrivateUserMessage, Stocks, MonthlySalary,
+                     PayPromoterCommission, PrivateChatId, AddToBlockList)
 from django.conf import settings
 
 User = settings.AUTH_USER_MODEL
@@ -46,18 +47,20 @@ def alert_rejected_ride(sender, created, instance, **kwargs):
 
 @receiver(post_save, sender=CompletedScheduledRides)
 def alert_completed_ride(sender, created, instance, **kwargs):
-    users = [instance.scheduled_ride.passenger,
-             instance.scheduled_ride.assigned_driver]
     title = "Your trip is completed"
     notification_tag = "Ride Completed"
     message = f"Your trip from {instance.scheduled_ride.pick_up} to {instance.scheduled_ride.drop_off} is now completed."
     if created:
-        for i in users:
-            ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
-                                                  notification_tag=notification_tag, notification_message=message,
-                                                  notification_from=instance.scheduled_ride.administrator,
-                                                  notification_to=i,
-                                                  ride_id=instance.ride.id)
+        ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                              notification_tag=notification_tag, notification_message=message,
+                                              notification_from=instance.scheduled_ride.administrator,
+                                              notification_to=instance.scheduled_ride.passenger,
+                                              ride_id=instance.ride.id)
+        ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                              notification_tag=notification_tag, notification_message=message,
+                                              notification_from=instance.scheduled_ride.administrator,
+                                              notification_to=instance.scheduled_ride.assigned_driver,
+                                              ride_id=instance.ride.id)
 
 
 @receiver(post_save, sender=ScheduleRide)
@@ -67,12 +70,20 @@ def alert_schedule(sender, created, instance, **kwargs):
     message = f"{instance.passenger.username} wants schedule with you"
 
     if created:
-        ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
-                                              notification_message=message, notification_tag=notification_tag,
-                                              notification_from=instance.passenger,
-                                              notification_to=instance.administrator,
-                                              schedule_ride_id=instance.id, schedule_ride_slug=instance.slug,
-                                              )
+        if instance.schedule_type == "Short Trip":
+            ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                                  notification_message=message, notification_tag=notification_tag,
+                                                  notification_from=instance.passenger,
+                                                  notification_to=instance.administrator,
+                                                  schedule_ride_id=instance.id, schedule_ride_slug=instance.slug,
+                                                  )
+        else:
+            ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                                  notification_message=message, notification_tag=notification_tag,
+                                                  notification_from=instance.passenger,
+                                                  notification_to=instance.administrator,
+                                                  schedule_ride_id=instance.id, schedule_ride_slug=instance.slug,
+                                                  )
 
 
 @receiver(post_save, sender=ExpensesRequest)
@@ -107,16 +118,22 @@ def alert_assigned_scheduled_to_driver(sender, created, instance, **kwargs):
     title = "New ride assigned"
     notification_tag = "Ride Assigned"
     message = f"'{instance.ride}' has been assigned to {instance.driver.username} "
-    users = [instance.driver, instance.passenger]
 
     if created:
-        for i in users:
-            ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
-                                                  notification_message=message, notification_tag=notification_tag,
-                                                  notification_from=instance.administrator,
-                                                  notification_to=i,
-                                                  assigned_scheduled_id=instance.id, schedule_ride_slug=instance.ride.slug,
-                                                  )
+        ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                              notification_message=message, notification_tag=notification_tag,
+                                              notification_from=instance.administrator,
+                                              notification_to=instance.passenger,
+                                              assigned_scheduled_id=instance.id,
+                                              schedule_ride_slug=instance.ride.slug,
+                                              )
+        ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                              notification_message=message, notification_tag=notification_tag,
+                                              notification_from=instance.administrator,
+                                              notification_to=instance.driver,
+                                              assigned_scheduled_id=instance.id,
+                                              schedule_ride_slug=instance.ride.slug,
+                                              )
 
 
 @receiver(post_save, sender=AcceptAssignedScheduled)
@@ -283,14 +300,16 @@ def alert_driver_start_trip(sender, created, instance, **kwargs):
     title = "Trip Started"
     notification_tag = "Trip Started"
     message = f"{instance.driver.username} has started trip {instance.ride}"
-    users = [instance.administrator, instance.passenger]
 
     if created:
-        for i in users:
-            ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
-                                                  notification_message=message, notification_tag=notification_tag,
-                                                  notification_to=i,
-                                                  )
+        ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                              notification_message=message, notification_tag=notification_tag,
+                                              notification_to=instance.administrator,
+                                              )
+        ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                              notification_message=message, notification_tag=notification_tag,
+                                              notification_to=instance.passenger,
+                                              )
 
 
 @receiver(post_save, sender=DriverEndTrip)
@@ -298,14 +317,16 @@ def alert_driver_end_trip(sender, created, instance, **kwargs):
     title = "Trip Ended"
     notification_tag = "Trip Ended"
     message = f"{instance.driver.username} has ended trip {instance.ride}"
-    users = [instance.administrator, instance.passenger]
 
     if created:
-        for i in users:
-            ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
-                                                  notification_message=message, notification_tag=notification_tag,
-                                                  notification_to=i,
-                                                  )
+        ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                              notification_message=message, notification_tag=notification_tag,
+                                              notification_to=instance.administrator,
+                                              )
+        ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                              notification_message=message, notification_tag=notification_tag,
+                                              notification_to=instance.passenger,
+                                              )
 
 
 @receiver(post_save, sender=DriverAlertArrival)
@@ -364,14 +385,17 @@ def alert_driver_payment_Today(sender, created, instance, **kwargs):
     title = "Payment Today"
     notification_tag = "Payment Today"
     message = f"70 GHS was deducted from your wallet.Your wallet is now {instance.amount}"
-    users = [instance.administrator, instance.driver]
 
     if created:
-        for i in users:
-            ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
-                                                  notification_message=message, notification_tag=notification_tag,
-                                                  notification_to=i,
-                                                  )
+        ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                              notification_message=message, notification_tag=notification_tag,
+                                              notification_to=instance.administrator,
+                                              )
+
+        ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                              notification_message=message, notification_tag=notification_tag,
+                                              notification_to=instance.driver,
+                                              )
 
 
 @receiver(post_save, sender=OtherWallet)
@@ -396,3 +420,57 @@ def alert_added_to_work_and_pay(sender, created, instance, **kwargs):
         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                               notification_message=message, notification_tag=notification_tag,
                                               notification_to=instance.driver, )
+
+
+# new updates
+@receiver(post_save, sender=PrivateUserMessage)
+def alert_private_message(sender, created, instance, **kwargs):
+    title = f"New private message"
+
+    if created:
+        if instance.sender:
+            message = f"{instance.sender.username} sent you a message"
+            ScheduledNotifications.objects.create(item_id=instance.id, notification_title=title,
+                                                  notification_message=message,
+                                                  notification_to=instance.receiver)
+        if instance.receiver:
+            message = f"{instance.receiver.username} sent you a message"
+            ScheduledNotifications.objects.create(item_id=instance.id, notification_title=title,
+                                                  notification_message=message,
+                                                  notification_to=instance.sender)
+
+
+@receiver(post_save, sender=AddToBlockList)
+def alert_account_blocked(sender, created, instance, **kwargs):
+    title = "Account Blocked"
+    message = f"Your account was blocked by the administrator"
+    notification_tag = "Account Blocked"
+
+    if created:
+        ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                              notification_message=message, notification_tag=notification_tag,
+                                              notification_to=instance.user, notification_from=instance.administrator)
+
+
+@receiver(post_save, sender=PayPromoterCommission)
+def alert_promoter_commission(sender, created, instance, **kwargs):
+    title = "Commission Payment"
+    message = f"Your wallet was credited with {instance.amount}"
+    notification_tag = "Commission Payment"
+
+    if created:
+        ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                              notification_message=message, notification_tag=notification_tag,
+                                              notification_to=instance.promoter)
+
+
+@receiver(post_save, sender=MonthlySalary)
+def alert_promoter_commission(sender, created, instance, **kwargs):
+    title = "Monthly Salary Payment"
+    message = f"GHS{instance.amount} was deposited into your accounts"
+    notification_tag = "Monthly Salary Payment"
+
+    if created:
+        ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                              notification_message=message, notification_tag=notification_tag,
+                                              notification_to=instance.driver)

@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 from datetime import datetime, date, time, timedelta
 from rest_framework import filters
 
-from taxinet_users.models import PassengerProfile, DriverProfile, InvestorsProfile
+from taxinet_users.models import PassengerProfile, DriverProfile, InvestorsProfile, User
 from taxinet_users.serializers import AdminPassengerProfileSerializer, InvestorsProfileSerializer, \
     DriverProfileSerializer, UsersSerializer, PassengerProfileSerializer
 from .models import (Complains, AddToUpdatedWallets,
@@ -21,7 +21,9 @@ from .models import (Complains, AddToUpdatedWallets,
                      Wallets, RideMessages, ExpensesRequest,
                      RegisterVehicle, WorkAndPay, OtherWallet,
                      DriverEndTrip, DriverAlertArrival, DriversWallet, LoadWallet, UpdatedWallets,
-                     DriverAddToUpdatedWallets, DriverAskToLoadWallet, AddToPaymentToday)
+                     DriverAddToUpdatedWallets, DriverAskToLoadWallet, AddToPaymentToday, PrivateUserMessage, Stocks,
+                     MonthlySalary, PayPromoterCommission,
+                     AddToBlockList)
 from .serializers import (ComplainsSerializer, ContactUsSerializer,
                           ConfirmDriverPaymentSerializer, DriversLocationSerializer, ScheduleRideSerializer,
                           RegisterVehicleSerializer, ExpensesRequestSerializer,
@@ -36,7 +38,9 @@ from .serializers import (ComplainsSerializer, ContactUsSerializer,
                           DriverEndTripSerializer, DriverAlertArrivalSerializer, DriversWalletSerializer,
                           DriverAddToUpdatedWalletsSerializer, LoadWalletSerializer,
                           AddToPaymentTodaySerializer, WorkAndPaySerializer, OtherWalletSerializer, WalletsSerializer,
-                          LoadWalletSerializer, UpdatedWalletsSerializer, RideMessagesSerializer)
+                          LoadWalletSerializer, UpdatedWalletsSerializer, RideMessagesSerializer,
+                          PrivateUserMessageSerializer, AddToBlockListSerializer, StocksSerializer,
+                          MonthlySalarySerializer, PayPromoterCommissionSerializer)
 from django.http import Http404
 
 
@@ -1421,7 +1425,7 @@ class SearchScheduleRequest(generics.ListAPIView):
     queryset = ScheduleRide.objects.all()
     serializer_class = ScheduleRideSerializer
     filter_backends = [filters.SearchFilter]
-    search_fields = ['passenger_username', 'passenger_phone', 'driver_username', 'driver_phone','schedule_title']
+    search_fields = ['passenger_username', 'passenger_phone', 'driver_username', 'driver_phone', 'schedule_title']
 
 
 class SearchDriver(generics.ListAPIView):
@@ -1454,3 +1458,155 @@ class SearchPayments(generics.ListAPIView):
     serializer_class = AddToPaymentTodaySerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['username', 'phone']
+
+
+# new updates
+@api_view(['GET', 'DELETE'])
+@permission_classes([permissions.AllowAny])
+def user_delete(request, pk):
+    try:
+        user = User.objects.get(pk=pk)
+        user.delete()
+    except User.DoesNotExist:
+        return Http404
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# private messages
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def send_private_message(request):
+    serializer = PrivateUserMessageSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_private_message(request, user1, user2):
+    all_messages = []
+    messages1 = PrivateUserMessage.objects.filter(sender=user1, receiver=user2).order_by('-timestamp')
+    messages2 = PrivateUserMessage.objects.filter(sender=user2, receiver=user1).order_by('-timestamp')
+    for i in messages1:
+        all_messages.append(i)
+    for m in messages2:
+        all_messages.append(m)
+    serializer = PrivateUserMessageSerializer(all_messages, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def private_message_detail(request, user1, user2):
+    message = PrivateUserMessage.objects.get(sender=user1, receiver=user2)
+    if message:
+        message.read = True
+        message.save()
+    serializer = PrivateUserMessageSerializer(message, many=False)
+    return Response(serializer.data)
+
+
+# block list
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def add_to_blocked(request):
+    serializer = AddToBlockListSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'DELETE'])
+@permission_classes([permissions.AllowAny])
+def remove_from_blocked(request, id):
+    try:
+        user_blocked = get_object_or_404(AddToBlockList, id=id)
+        user_blocked.delete()
+    except User.DoesNotExist:
+        return Http404
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_blocked_users(request):
+    users = AddToBlockList.objects.all().order_by('-date_blocked')
+    serializer = AddToBlockListSerializer(users, many=True)
+    return Response(serializer.data)
+
+
+# promoter commission
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def add_promoter_commission(request):
+    serializer = PayPromoterCommissionSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_promoter_commissions(request):
+    users = PayPromoterCommission.objects.all().order_by('-date_paid')
+    serializer = PayPromoterCommissionSerializer(users, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_promoter_commission(request):
+    users = PayPromoterCommission.objects.filter(user=request.user).order_by('-date_paid')
+    serializer = PayPromoterCommissionSerializer(users, many=True)
+    return Response(serializer.data)
+
+
+# monthly salary
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def add_monthly_salary(request):
+    serializer = MonthlySalarySerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_monthly_salaries(request):
+    users = MonthlySalary.objects.all().order_by('-date_paid')
+    serializer = MonthlySalarySerializer(users, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_my_salary(request):
+    users = MonthlySalary.objects.filter(driver=request.user).order_by('-date_paid')
+    serializer = MonthlySalarySerializer(users, many=True)
+    return Response(serializer.data)
+
+
+# stocks
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def add_stock(request):
+    serializer = StocksSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_all_stocks(request):
+    users = Stocks.objects.all().order_by('-date_added')
+    serializer = StocksSerializer(users, many=True)
+    return Response(serializer.data)
+

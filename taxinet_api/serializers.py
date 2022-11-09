@@ -9,7 +9,9 @@ from .models import (Complains,
                      RejectAssignedScheduled, CancelScheduledRide, ContactUs, PassengersWallet, AskToLoadWallet,
                      AddToUpdatedWallets, DriverStartTrip, DriverEndTrip, DriverAlertArrival, DriversWallet,
                      DriverAddToUpdatedWallets, DriverAskToLoadWallet, RegisterVehicle, AddToPaymentToday, WorkAndPay,
-                     OtherWallet, Wallets, LoadWallet, UpdatedWallets, RideMessages, ExpensesRequest
+                     OtherWallet, Wallets, LoadWallet, UpdatedWallets, RideMessages, ExpensesRequest, PrivateChatId,
+                     AddToBlockList, PrivateUserMessage, Stocks, MonthlySalary,
+                     PayPromoterCommission, PrivateChatId, AddToBlockList
                      )
 
 
@@ -118,7 +120,8 @@ class ScheduleRideSerializer(serializers.ModelSerializer):
                   'get_administrator_profile_pic', 'slug',
                   'get_passenger_profile_pic', 'get_passenger_name', 'get_assigned_driver_name', 'read',
                   'get_assigned_driver_profile_pic', 'passenger_username',
-                  'passenger_phone', 'driver_username', 'driver_phone', 'pickup_lng', 'pickup_lat', 'drop_off_lat', 'drop_off_lng']
+                  'passenger_phone', 'driver_username', 'driver_phone', 'pickup_lng', 'pickup_lat', 'drop_off_lat',
+                  'drop_off_lng']
         read_only_fields = ['passenger']
 
     def get_username(self, user):
@@ -140,7 +143,8 @@ class AdminScheduleRideSerializer(serializers.ModelSerializer):
                   'time_scheduled', 'get_passenger_number',
                   'get_administrator_profile_pic', 'slug', 'get_passenger_name',
                   'get_passenger_profile_pic', 'get_assigned_driver_profile_pic', 'passenger_username',
-                  'passenger_phone', 'driver_username', 'driver_phone', 'pickup_lng', 'pickup_lat', 'drop_off_lat', 'drop_off_lng']
+                  'passenger_phone', 'driver_username', 'driver_phone', 'pickup_lng', 'pickup_lat', 'drop_off_lat',
+                  'drop_off_lng']
 
 
 class ScheduledNotificationSerializer(serializers.ModelSerializer):
@@ -354,4 +358,44 @@ class ExpensesRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = ExpensesRequest
         fields = ['id', 'guarantor', 'user', 'get_username', 'amount', 'reason', 'request_status', 'date_requested',
-                  'time_requested']
+                  'time_requested', 'item_name', 'quantity']
+
+
+# new updates
+class AddToBlockListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AddToBlockList
+        fields = ['id', 'administrator', 'user', 'date_blocked', 'get_username']
+
+
+class PrivateUserMessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PrivateUserMessage
+        fields = ['id', 'sender', 'receiver', 'private_chat_id', 'message', 'read', 'get_date',
+                  'get_senders_username', 'get_receivers_username', 'timestamp', 'isSender', 'isReceiver']
+        # read_only_fields = ['sender', 'receiver']
+
+
+class PrivateChatIdSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PrivateChatId
+        fields = ['id', 'chat_id', 'date_created']
+
+
+class PayPromoterCommissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PayPromoterCommission
+        fields = ['id', 'amount', 'date_paid', 'time_paid']
+
+
+class MonthlySalarySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MonthlySalary
+        fields = ['id', 'driver', 'amount', 'date_paid', 'time_paid']
+
+
+class StocksSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Stocks
+        fields = ['id', 'user', 'item_name', 'quantity', 'date_added', 'time_added']
+
