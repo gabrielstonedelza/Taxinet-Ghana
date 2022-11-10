@@ -223,6 +223,7 @@ class ScheduleRide(models.Model):
     pick_up_time = models.CharField(max_length=100, blank=True, )
     start_date = models.CharField(max_length=100, blank=True, )
     completed = models.BooleanField(default=False)
+    days = models.CharField(max_length=200, blank=True, default="")
     status = models.CharField(max_length=50, choices=SCHEDULE_STATUS, default="Pending")
     price = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
     charge = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
