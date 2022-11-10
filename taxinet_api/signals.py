@@ -70,20 +70,13 @@ def alert_schedule(sender, created, instance, **kwargs):
     message = f"{instance.passenger.username} wants schedule with you"
 
     if created:
-        if instance.schedule_type == "Short Trip":
-            ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
-                                                  notification_message=message, notification_tag=notification_tag,
-                                                  notification_from=instance.passenger,
-                                                  notification_to=instance.assigned_driver,
-                                                  schedule_ride_id=instance.id, schedule_ride_slug=instance.slug,
-                                                  )
-        else:
-            ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
-                                                  notification_message=message, notification_tag=notification_tag,
-                                                  notification_from=instance.passenger,
-                                                  notification_to=instance.administrator,
-                                                  schedule_ride_id=instance.id, schedule_ride_slug=instance.slug,
-                                                  )
+
+        ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                              notification_message=message, notification_tag=notification_tag,
+                                              notification_from=instance.passenger,
+                                              notification_to=instance.administrator,
+                                              schedule_ride_id=instance.id, schedule_ride_slug=instance.slug,
+                                              )
 
 
 @receiver(post_save, sender=ExpensesRequest)
@@ -430,12 +423,12 @@ def alert_private_message(sender, created, instance, **kwargs):
     if created:
         if instance.sender:
             message = f"{instance.sender.username} sent you a message"
-            ScheduledNotifications.objects.create(item_id=instance.id, notification_title=title,
+            ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                                   notification_message=message,
                                                   notification_to=instance.receiver)
         if instance.receiver:
             message = f"{instance.receiver.username} sent you a message"
-            ScheduledNotifications.objects.create(item_id=instance.id, notification_title=title,
+            ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                                   notification_message=message,
                                                   notification_to=instance.sender)
 

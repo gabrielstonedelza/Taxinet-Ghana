@@ -249,8 +249,6 @@ class ScheduleRide(models.Model):
         self.driver_phone = self.assigned_driver.phone_number
         value = self.pk
         self.slug = slugify(value, allow_unicode=True)
-        if self.schedule_type == "Short Trip":
-            self.assigned_driver = self.assigned_driver
         super().save(*args, **kwargs)
 
     def get_administrator_profile_pic(self):
