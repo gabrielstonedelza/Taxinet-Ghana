@@ -1617,3 +1617,11 @@ def get_all_stocks(request):
     users = Stocks.objects.all().order_by('-date_added')
     serializer = StocksSerializer(users, many=True)
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_passengers_requests(request, passenger):
+    requests = ScheduleRide.objects.filter(passenger=passenger).order_by('-date_scheduled')
+    serializer = ScheduleRideSerializer(requests, many=True)
+    return Response(serializer.data)
