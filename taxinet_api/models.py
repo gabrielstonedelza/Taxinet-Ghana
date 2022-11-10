@@ -1046,6 +1046,19 @@ class PrivateUserMessage(models.Model):
 
         super().save(*args, **kwargs)
 
+    def get_sender_profile_pic(self):
+        my_sender = User.objects.get(username=self.sender.username)
+        if my_sender.user_type == "Passenger":
+            my_passenger = PassengerProfile.objects.get(user=self.sender)
+            if my_passenger:
+                return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
+            return ""
+        if my_sender.user_type == "Driver":
+            my_driver = DriverProfile.objects.get(user=self.sender)
+            if my_driver:
+                return "https://taxinetghana.xyz" + my_driver.profile_pic.url
+            return ""
+
 
 class AddToBlockList(models.Model):
     administrator = models.ForeignKey(User, on_delete=models.CASCADE, default=1)

@@ -372,7 +372,7 @@ class PrivateUserMessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = PrivateUserMessage
         fields = ['id', 'sender', 'receiver', 'private_chat_id', 'message', 'read',
-                  'get_senders_username', 'get_receivers_username', 'timestamp', 'isSender', 'isReceiver']
+                  'get_senders_username', 'get_receivers_username', 'timestamp', 'isSender', 'isReceiver', 'get_sender_profile_pic']
         # read_only_fields = ['sender', 'receiver']
 
 
