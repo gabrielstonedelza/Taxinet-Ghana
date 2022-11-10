@@ -371,7 +371,7 @@ class AddToBlockListSerializer(serializers.ModelSerializer):
 class PrivateUserMessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = PrivateUserMessage
-        fields = ['id', 'sender', 'receiver', 'private_chat_id', 'message', 'read', 'get_date',
+        fields = ['id', 'sender', 'receiver', 'private_chat_id', 'message', 'read',
                   'get_senders_username', 'get_receivers_username', 'timestamp', 'isSender', 'isReceiver']
         # read_only_fields = ['sender', 'receiver']
 
