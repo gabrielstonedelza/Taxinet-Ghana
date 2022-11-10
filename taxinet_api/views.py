@@ -1568,7 +1568,7 @@ def get_promoter_commissions(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_promoter_commission(request):
-    users = PayPromoterCommission.objects.filter(user=request.user).order_by('-date_paid')
+    users = PayPromoterCommission.objects.filter(promoter=request.user).order_by('-date_paid')
     serializer = PayPromoterCommissionSerializer(users, many=True)
     return Response(serializer.data)
 
