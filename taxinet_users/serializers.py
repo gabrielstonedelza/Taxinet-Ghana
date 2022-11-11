@@ -8,13 +8,13 @@ from .models import User, DriverProfile, PassengerProfile, AddToVerified, AddCar
 class UserCreateSerializer(UserCreateSerializer):
     class Meta(UserCreateSerializer.Meta):
         model = User
-        fields = ('id', 'email', 'username', 'password', 'user_type', 'phone_number', 'full_name', 'promoter')
+        fields = ('id', 'email', 'username', 'password', 'user_type', 'phone_number', 'full_name', 'promoter', 'driver_tracker_sim')
 
 
 class UsersSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'email', 'username', 'phone_number', 'full_name', 'user_type', 'promoter')
+        fields = ('id', 'email', 'username', 'phone_number', 'full_name', 'user_type', 'promoter', 'driver_tracker_sim')
 
 
 class DriverProfileSerializer(serializers.ModelSerializer):

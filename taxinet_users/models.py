@@ -24,6 +24,7 @@ class User(AbstractUser):
     full_name = models.CharField(max_length=100, unique=True)
     phone_number = models.CharField(max_length=16, unique=True)
     promoter = models.CharField(max_length=100, default="", blank=True)
+    driver_tracker_sim = models.CharField(max_length=100, blank=True, default="")
 
     REQUIRED_FIELDS = ['user_type', 'email', 'full_name', 'phone_number', 'promoter']
     USERNAME_FIELD = 'username'

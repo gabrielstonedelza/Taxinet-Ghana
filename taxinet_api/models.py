@@ -767,7 +767,6 @@ class RegisterVehicle(models.Model):
     # fleet_car = models.CharField(max_length=20, choices=FLEET_CAR, default="Unselected", blank=True)
     code_name = models.CharField(max_length=50, blank=True)
     category = models.CharField(max_length=50, choices=VEHICLE_CATEGORY, default="Comfort")
-    # picture = models.ImageField(upload_to="car_photos", blank=True)
     date_registered = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
