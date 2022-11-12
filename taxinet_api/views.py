@@ -221,8 +221,8 @@ def admin_get_all_requests_by_date(request, request_date):
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
-def admin_ride_detail(request, slug):
-    ride = get_object_or_404(ScheduleRide, slug=slug)
+def admin_ride_detail(request, id):
+    ride = get_object_or_404(ScheduleRide, id=id)
     if ride:
         ride.read = "Read"
         ride.save()
