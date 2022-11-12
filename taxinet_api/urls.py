@@ -29,7 +29,7 @@ urlpatterns = [
     path("admin_get_all_requests_by_date/<str:request_date>/", views.admin_get_all_requests_by_date),
     path("admin_get_five_requests/", views.admin_get_five_requests),
     path("admin_request_detail/<str:id>/", views.admin_ride_detail),
-    path("admin_update_requested_ride/<str:slug>/", views.admin_update_requested_ride),
+    path("admin_update_requested_ride/<int:id>/", views.admin_update_requested_ride),
     path("admin_assign_request_to_driver/", views.admin_assign_request_to_driver),
     path("admin_get_all_assigned_drivers/", views.admin_get_all_assigned_drivers),
     path("add_to_updated_wallets/", views.add_to_updated_wallets),

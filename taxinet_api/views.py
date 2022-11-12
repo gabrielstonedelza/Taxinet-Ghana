@@ -232,8 +232,8 @@ def admin_ride_detail(request, id):
 
 @api_view(['GET', 'PUT'])
 @permission_classes([permissions.AllowAny])
-def admin_update_requested_ride(request, slug):
-    ride = get_object_or_404(ScheduleRide, slug=slug)
+def admin_update_requested_ride(request, id):
+    ride = get_object_or_404(ScheduleRide, id=id)
     serializer = AdminScheduleRideSerializer(ride, data=request.data)
     if serializer.is_valid():
         serializer.save()
