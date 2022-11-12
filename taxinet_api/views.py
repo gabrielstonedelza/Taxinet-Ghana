@@ -339,8 +339,8 @@ def admin_get_cancelled_schedules(request):
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
-def admin_get_scheduled_for_one_time(request):
-    one_time_schedule = ScheduleRide.objects.filter(schedule_type="One Time").order_by('-date_scheduled')
+def admin_get_scheduled_for_short_trips(request):
+    one_time_schedule = ScheduleRide.objects.filter(schedule_type="Short Trip").order_by('-date_scheduled')
     serializer = ScheduleRideSerializer(one_time_schedule, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 

@@ -47,7 +47,7 @@ urlpatterns = [
     path("admin_get_scheduled_for_weekly/", views.admin_get_scheduled_for_weekly),
     path("admin_get_scheduled_for_days/", views.admin_get_scheduled_for_days),
     path("admin_get_scheduled_for_daily/", views.admin_get_scheduled_for_daily),
-    path("admin_get_scheduled_for_one_time/", views.admin_get_scheduled_for_one_time),
+    path("admin_get_scheduled_for_short_trips/", views.admin_get_scheduled_for_short_trips),
     path("admin_get_all_user_notifications/", views.admin_get_all_user_notifications),
 
     # admin urls
