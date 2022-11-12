@@ -74,6 +74,9 @@ class DriverProfile(models.Model):
         self.unique_code = self.user.username[:5] + str(random.randint(20, 500))
         super().save(*args, **kwargs)
 
+    def get_driver_tracker_sim_number(self):
+        return self.user.driver_tracker_sim
+
     def get_user_type(self):
         return self.user.user_type
 

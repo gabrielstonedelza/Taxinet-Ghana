@@ -29,7 +29,7 @@ class DriverProfileSerializer(serializers.ModelSerializer):
                   'next_of_kin', 'next_of_kin_number', 'driver_profile_pic', 'get_drivers_license',
                   'taxinet_number', 'unique_code', 'verified', 'get_front_side_ghana_card', 'get_back_side_ghana_card',
                   'get_drivers_email',
-                  'get_drivers_phone_number', 'get_user_type', 'username', 'phone']
+                  'get_drivers_phone_number', 'get_user_type', 'username', 'phone', 'get_driver_tracker_sim_number']
         read_only_fields = ['user']
 
     def get_username(self, user):
