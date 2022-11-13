@@ -1347,6 +1347,14 @@ def get_wallet_by_user(request, user_id):
     return Response(serializer.data)
 
 
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_wallet_by_username(request, username):
+    wallet = get_object_or_404(Wallets, username=username)
+    serializer = WalletsSerializer(wallet, many=False)
+    return Response(serializer.data)
+
+
 # ride messages
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])

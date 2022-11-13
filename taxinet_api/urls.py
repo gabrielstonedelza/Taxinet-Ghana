@@ -178,6 +178,7 @@ urlpatterns = [
     path("get_user_wallet/", views.get_user_wallet),
     path("user_update_wallet/<int:user>/", views.user_update_wallet),
     path("get_wallet_by_user/<int:user_id>/", views.get_wallet_by_user),
+    path("get_wallet_by_username/<str:username>/", views.get_wallet_by_username),
 
     #     driver and passenger messages on ride
     path("send_message/<int:id>/", views.send_message),
