@@ -69,6 +69,9 @@ class DriverProfile(models.Model):
     def __str__(self):
         return self.user.username
 
+    def user_blocked(self):
+        return self.user.user_blocked
+
     def save(self, *args, **kwargs):
         self.username = self.user.username
         self.phone = self.user.phone_number
