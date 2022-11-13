@@ -47,4 +47,6 @@ urlpatterns = [
     #
     path("add_to_verified_profile/", views.add_to_verified_profile),
     path("add_to_uploaded_cards/", views.add_to_uploaded_cards),
+    path('update_blocked/<int:id>/', views.update_blocked),
+    path('get_all_blocked_users/', views.get_all_blocked_users),
 ]
