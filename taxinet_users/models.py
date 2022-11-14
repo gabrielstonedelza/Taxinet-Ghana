@@ -23,7 +23,7 @@ class User(AbstractUser):
     user_type = models.CharField(max_length=50, choices=APP_TYPE, default="Passenger")
     full_name = models.CharField(max_length=100, unique=True)
     phone_number = models.CharField(max_length=16, unique=True)
-    promoter = models.CharField(max_length=100, default="", blank=True)
+    promoter = models.CharField(max_length=100, default="admin", blank=True)
     driver_tracker_sim = models.CharField(max_length=100, blank=True, default="")
     user_blocked = models.BooleanField(default=False)
 
