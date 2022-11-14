@@ -253,6 +253,11 @@ class AccountsProfile(models.Model):
     user = models.OneToOneField(DeUser, on_delete=models.CASCADE, related_name="accounts_profile")
     profile_pic = models.ImageField(upload_to="accounts_profile_pics", default="default_user.png")
     date_created = models.DateTimeField(default=timezone.now)
+    unique_code = models.CharField(max_length=500, default='')
+
+    def save(self, *args, **kwargs):
+        self.unique_code = self.user.username[:5] + str(random.randint(20, 500))
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.user.username
@@ -273,6 +278,11 @@ class PromoterProfile(models.Model):
     user = models.OneToOneField(DeUser, on_delete=models.CASCADE, related_name="promoter_profile")
     profile_pic = models.ImageField(upload_to="promoter_profile_pics", default="default_user.png")
     date_created = models.DateTimeField(default=timezone.now)
+    unique_code = models.CharField(max_length=500, default='')
+
+    def save(self, *args, **kwargs):
+        self.unique_code = self.user.username[:5] + str(random.randint(20, 500))
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.user.username
@@ -302,6 +312,11 @@ class RideAdminProfile(models.Model):
     user = models.OneToOneField(DeUser, on_delete=models.CASCADE, related_name="ridesadmin_profile")
     profile_pic = models.ImageField(upload_to="ridesadmin_profile_pics", default="default_user.png")
     date_created = models.DateTimeField(default=timezone.now)
+    unique_code = models.CharField(max_length=500, default='')
+
+    def save(self, *args, **kwargs):
+        self.unique_code = self.user.username[:5] + str(random.randint(20, 500))
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.user.username

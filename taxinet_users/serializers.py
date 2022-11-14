@@ -94,7 +94,7 @@ class AccountsProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = AccountsProfile
         fields = ['id', 'get_username', 'user', 'profile_pic', 'passenger_profile_pic',
-                  'get_user_type']
+                  'get_user_type', 'unique_code']
         read_only_fields = ['user']
 
 
@@ -102,7 +102,7 @@ class PromoterProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = PromoterProfile
         fields = ['id', 'get_username', 'user', 'profile_pic', 'promoter_profile_pic',
-                  'get_user_type', 'get_email', 'get_phone_number', 'date_created', 'get_full_name']
+                  'get_user_type', 'get_email', 'get_phone_number', 'date_created', 'get_full_name', 'unique_code']
         read_only_fields = ['user']
 
 
@@ -110,7 +110,7 @@ class RideAdminProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = RideAdminProfile
         fields = ['id', 'get_username', 'user', 'profile_pic', 'passenger_profile_pic',
-                  'get_user_type']
+                  'get_user_type', 'unique_code']
         read_only_fields = ['user']
 
 
