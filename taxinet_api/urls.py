@@ -122,7 +122,7 @@ urlpatterns = [
     path("get_drives_assigned_and_active_schedules/", views.get_drives_assigned_and_active_schedules),
 
     #     driver get schedule types
-    path('get_driver_scheduled_for_one_time/', views.get_driver_scheduled_for_short_trip),
+    path('get_driver_scheduled_for_short_trip/', views.get_driver_scheduled_for_short_trip),
     path('get_driver_scheduled_for_daily/', views.get_driver_scheduled_for_daily),
     path('get_driver_scheduled_for_days/', views.get_driver_scheduled_for_days),
     path('get_driver_scheduled_for_weekly/', views.get_driver_scheduled_for_weekly),
