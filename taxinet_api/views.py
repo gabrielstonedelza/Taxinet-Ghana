@@ -944,7 +944,7 @@ def driver_alert_passenger(request):
 # get schedule types and driver
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
-def get_driver_scheduled_for_one_time(request):
+def get_driver_scheduled_for_short_trip(request):
     one_time_schedule = ScheduleRide.objects.filter(schedule_type="Short Trip").filter(
         assigned_driver=request.user).filter(completed=False).order_by('-date_scheduled')
     serializer = ScheduleRideSerializer(one_time_schedule, many=True)
