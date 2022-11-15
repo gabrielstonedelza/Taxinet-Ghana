@@ -1638,6 +1638,17 @@ def get_passengers_requests(request, passenger):
     return Response(serializer.data)
 
 
+@api_view(['GET', 'PUT'])
+@permission_classes([permissions.IsAuthenticated])
+def update_stock(request, id):
+    stock = get_object_or_404(Stocks, id=id)
+    serializer = StocksSerializer(stock, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 # drivers commission,
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])

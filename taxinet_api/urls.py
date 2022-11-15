@@ -221,6 +221,7 @@ urlpatterns = [
     #     stocks
     path("add_stock/", views.add_stock),
     path("get_all_stocks/", views.get_all_stocks),
+    path("update_stock/<int:id>/", views.update_stock),
 
     #     passenger requests
     path("get_passengers_requests/<int:passenger>/", views.get_passengers_requests),
