@@ -1692,3 +1692,15 @@ def driver_commission_to_wallet(request):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# update commission
+@api_view(['GET', 'PUT'])
+@permission_classes([permissions.IsAuthenticated])
+def update_commission(request, user):
+    commission = get_object_or_404(DriversCommission, user=user)
+    serializer = DriversCommissionSerializer(commission, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
