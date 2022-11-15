@@ -1695,12 +1695,13 @@ def driver_commission_to_wallet(request):
 
 
 # update commission
-@api_view(['GET', 'PUT'])
+@api_view(['GET', 'DELETE'])
 @permission_classes([permissions.AllowAny])
-def update_commission(request, id):
-    commission = get_object_or_404(DriversCommission, id=id)
-    serializer = DriversCommissionSerializer(commission, data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+def user_commissions_delete(request, driver):
+    try:
+        commissions = DriversCommission.objects.filter(driver=driver)
+        for i in commissions:
+            i.delete()
+    except User.DoesNotExist:
+        return Http404
+    return Response(status=status.HTTP_204_NO_CONTENT)

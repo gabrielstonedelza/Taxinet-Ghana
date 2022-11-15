@@ -232,7 +232,6 @@ urlpatterns = [
     path("get_drivers_commissions_requests/", views.get_drivers_commissions_requests),
 
     #     commission to wallet
-
     path("driver_commission_to_wallet/", views.driver_commission_to_wallet),
-    path("update_commission/<int:id>/", views.DriversCommissionSerializer)
+    path("user_commissions_delete/<int:driver>/", views.user_commissions_delete)
 ]
