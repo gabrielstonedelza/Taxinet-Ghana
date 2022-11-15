@@ -223,5 +223,11 @@ urlpatterns = [
     path("get_all_stocks/", views.get_all_stocks),
 
     #     passenger requests
-    path("get_passengers_requests/<int:passenger>/", views.get_passengers_requests)
+    path("get_passengers_requests/<int:passenger>/", views.get_passengers_requests),
+    #     drivers commissions
+    path("add_driver_commission/", views.add_driver_commission),
+    path("get_drivers_commissions/", views.get_drivers_commissions),
+    path("get_my_commission/", views.get_my_commission),
+    path("driver_request_commission/", views.driver_request_commission),
+    path("get_drivers_commissions_requests/", views.get_drivers_commissions_requests),
 ]

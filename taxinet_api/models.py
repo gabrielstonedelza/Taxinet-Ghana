@@ -1073,3 +1073,25 @@ class AddToBlockList(models.Model):
 
     def get_username(self):
         return self.user.username
+
+
+class DriversCommission(models.Model):
+    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
+    date_paid = models.DateField(auto_now_add=True)
+    time_paid = models.TimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.driver.username
+
+
+class DriverRequestCommission(models.Model):
+    administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1)
+    accounts = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=2, related_name="accounts_wallet")
+    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="accounts_driver")
+    amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
+    date_requested = models.DateField(auto_now_add=True)
+    time_requested = models.TimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.driver.username

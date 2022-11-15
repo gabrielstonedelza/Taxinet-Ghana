@@ -12,7 +12,7 @@ from rest_framework import filters
 from taxinet_users.models import PassengerProfile, DriverProfile, InvestorsProfile, User, PromoterProfile
 from taxinet_users.serializers import AdminPassengerProfileSerializer, InvestorsProfileSerializer, \
     DriverProfileSerializer, UsersSerializer, PassengerProfileSerializer, PromoterProfileSerializer
-from .models import (Complains, AddToUpdatedWallets,
+from .models import (Complains, AddToUpdatedWallets, DriversCommission, DriverRequestCommission,
                      DriversLocation, ConfirmDriverPayment, DriverVehicleInventory,
                      AcceptedScheduledRides, RejectedScheduledRides,
                      CompletedScheduledRides, ScheduledNotifications, ScheduleRide, AssignScheduleToDriver,
@@ -38,9 +38,10 @@ from .serializers import (ComplainsSerializer, ContactUsSerializer,
                           DriverEndTripSerializer, DriverAlertArrivalSerializer, DriversWalletSerializer,
                           DriverAddToUpdatedWalletsSerializer, LoadWalletSerializer,
                           AddToPaymentTodaySerializer, WorkAndPaySerializer, OtherWalletSerializer, WalletsSerializer,
+                          DriverRequestCommissionSerializer,
                           LoadWalletSerializer, UpdatedWalletsSerializer, RideMessagesSerializer,
                           PrivateUserMessageSerializer, AddToBlockListSerializer, StocksSerializer,
-                          MonthlySalarySerializer, PayPromoterCommissionSerializer)
+                          MonthlySalarySerializer, PayPromoterCommissionSerializer, DriversCommissionSerializer)
 from django.http import Http404
 
 
@@ -1632,4 +1633,49 @@ def get_all_stocks(request):
 def get_passengers_requests(request, passenger):
     requests = ScheduleRide.objects.filter(passenger=passenger).order_by('-date_scheduled')
     serializer = ScheduleRideSerializer(requests, many=True)
+    return Response(serializer.data)
+
+
+# drivers commission,
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def add_driver_commission(request):
+    serializer = DriversCommissionSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_drivers_commissions(request):
+    users = MonthlySalary.objects.all().order_by('-date_paid')
+    serializer = DriversCommissionSerializer(users, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_my_commission(request):
+    users = DriversCommission.objects.filter(driver=request.user).order_by('-date_paid')
+    serializer = DriversCommissionSerializer(users, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def driver_request_commission(request):
+    serializer = DriverRequestCommissionSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_drivers_commissions_requests(request):
+    users = DriverRequestCommission.objects.all().order_by('-date_requested')
+    serializer = DriverRequestCommissionSerializer(users, many=True)
     return Response(serializer.data)

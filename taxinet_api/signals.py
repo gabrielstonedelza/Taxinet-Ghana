@@ -9,7 +9,7 @@ from .models import (ScheduleRide, Complains, ConfirmDriverPayment, AcceptedSche
                      DriverEndTrip, DriverAlertArrival, DriversWallet,
                      DriverAddToUpdatedWallets, DriverAskToLoadWallet, AddToPaymentToday, OtherWallet, WorkAndPay,
                      Wallets, LoadWallet, UpdatedWallets, ExpensesRequest, PrivateUserMessage, Stocks, MonthlySalary,
-                     PayPromoterCommission, PrivateChatId, AddToBlockList)
+                     PayPromoterCommission, PrivateChatId, AddToBlockList, DriversCommission, DriverRequestCommission)
 from django.conf import settings
 
 User = settings.AUTH_USER_MODEL
@@ -70,7 +70,6 @@ def alert_schedule(sender, created, instance, **kwargs):
     message = f"{instance.passenger.username} wants schedule with you"
 
     if created:
-
         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                               notification_message=message, notification_tag=notification_tag,
                                               notification_from=instance.passenger,
@@ -467,3 +466,31 @@ def alert_promoter_commission(sender, created, instance, **kwargs):
         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                               notification_message=message, notification_tag=notification_tag,
                                               notification_to=instance.driver)
+
+
+@receiver(post_save, sender=DriversCommission)
+def alert_driver_commission(sender, created, instance, **kwargs):
+    title = "Commission Received"
+    message = f"You have received an amount of {instance.amount} as commission for your payment"
+    notification_tag = "Commission Received"
+
+    if created:
+        ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                              notification_message=message, notification_tag=notification_tag,
+                                              notification_to=instance.driver)
+
+
+@receiver(post_save, sender=DriverRequestCommission)
+def alert_driver_request_commission(sender, created, instance, **kwargs):
+    title = "Commission redeem request"
+    message = f"{instance.driver.username} wants to redeem commission worth of {instance.amount}"
+    notification_tag = "Commission Received"
+
+    if created:
+        ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                              notification_message=message, notification_tag=notification_tag,
+                                              notification_to=instance.administrator)
+
+        ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                              notification_message=message, notification_tag=notification_tag,
+                                              notification_to=instance.accounts)
