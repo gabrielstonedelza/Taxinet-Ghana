@@ -22,6 +22,7 @@ from .models import (Complains, AddToUpdatedWallets, DriversCommission, DriverRe
                      RegisterVehicle, WorkAndPay, OtherWallet,
                      DriverEndTrip, DriverAlertArrival, DriversWallet, LoadWallet, UpdatedWallets,
                      DriverAddToUpdatedWallets, DriverAskToLoadWallet, AddToPaymentToday, PrivateUserMessage, Stocks,
+                     DriverTransferCommissionToWallet,
                      MonthlySalary, PayPromoterCommission,
                      AddToBlockList)
 from .serializers import (ComplainsSerializer, ContactUsSerializer,
@@ -38,6 +39,7 @@ from .serializers import (ComplainsSerializer, ContactUsSerializer,
                           DriverEndTripSerializer, DriverAlertArrivalSerializer, DriversWalletSerializer,
                           DriverAddToUpdatedWalletsSerializer, LoadWalletSerializer,
                           AddToPaymentTodaySerializer, WorkAndPaySerializer, OtherWalletSerializer, WalletsSerializer,
+                          DriverTransferCommissionToWalletSerializer,
                           DriverRequestCommissionSerializer,
                           LoadWalletSerializer, UpdatedWalletsSerializer, RideMessagesSerializer,
                           PrivateUserMessageSerializer, AddToBlockListSerializer, StocksSerializer,
@@ -1679,3 +1681,14 @@ def get_drivers_commissions_requests(request):
     users = DriverRequestCommission.objects.all().order_by('-date_requested')
     serializer = DriverRequestCommissionSerializer(users, many=True)
     return Response(serializer.data)
+
+
+# commission to wallet
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def driver_commission_to_wallet(request):
+    serializer = DriverTransferCommissionToWalletSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

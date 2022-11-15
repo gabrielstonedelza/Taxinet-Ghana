@@ -10,9 +10,9 @@ from .models import (Complains,
                      AddToUpdatedWallets, DriverStartTrip, DriverEndTrip, DriverAlertArrival, DriversWallet,
                      DriverAddToUpdatedWallets, DriverAskToLoadWallet, RegisterVehicle, AddToPaymentToday, WorkAndPay,
                      OtherWallet, Wallets, LoadWallet, UpdatedWallets, RideMessages, ExpensesRequest, PrivateChatId,
-                     DriversCommission,DriverRequestCommission,
+                     DriversCommission, DriverRequestCommission,
                      PrivateUserMessage, Stocks, MonthlySalary,
-                     PayPromoterCommission, PrivateChatId, AddToBlockList
+                     PayPromoterCommission, PrivateChatId, AddToBlockList, DriverTransferCommissionToWallet
                      )
 
 
@@ -411,4 +411,10 @@ class DriversCommissionSerializer(serializers.ModelSerializer):
 class DriverRequestCommissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = DriverRequestCommission
-        fields = ['id', 'driver', 'amount', 'date_requsted', 'time_requsted']
+        fields = ['id', 'driver', 'amount', 'date_requested', 'time_requested']
+
+
+class DriverTransferCommissionToWalletSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DriverTransferCommissionToWallet
+        fields = ['id', 'driver', 'amount', 'date_transferred', 'time_transferred']

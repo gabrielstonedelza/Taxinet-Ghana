@@ -9,7 +9,8 @@ from .models import (ScheduleRide, Complains, ConfirmDriverPayment, AcceptedSche
                      DriverEndTrip, DriverAlertArrival, DriversWallet,
                      DriverAddToUpdatedWallets, DriverAskToLoadWallet, AddToPaymentToday, OtherWallet, WorkAndPay,
                      Wallets, LoadWallet, UpdatedWallets, ExpensesRequest, PrivateUserMessage, Stocks, MonthlySalary,
-                     PayPromoterCommission, PrivateChatId, AddToBlockList, DriversCommission, DriverRequestCommission)
+                     PayPromoterCommission, PrivateChatId, AddToBlockList, DriversCommission, DriverRequestCommission,
+                     DriverTransferCommissionToWallet)
 from django.conf import settings
 
 User = settings.AUTH_USER_MODEL
@@ -494,3 +495,15 @@ def alert_driver_request_commission(sender, created, instance, **kwargs):
         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                               notification_message=message, notification_tag=notification_tag,
                                               notification_to=instance.accounts)
+
+
+@receiver(post_save, sender=DriverTransferCommissionToWallet)
+def alert_driver_request_commission(sender, created, instance, **kwargs):
+    title = "Commission to wallet"
+    message = f"You have transferred {instance.amount} of your commission to your wallet"
+    notification_tag = "Commission to wallet"
+
+    if created:
+        ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                              notification_message=message, notification_tag=notification_tag,
+                                              notification_to=instance.driver)

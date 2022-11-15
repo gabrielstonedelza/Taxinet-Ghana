@@ -1095,3 +1095,13 @@ class DriverRequestCommission(models.Model):
 
     def __str__(self):
         return self.driver.username
+
+
+class DriverTransferCommissionToWallet(models.Model):
+    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
+    date_transferred = models.DateField(auto_now_add=True)
+    time_transferred = models.TimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.driver.username

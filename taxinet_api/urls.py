@@ -230,4 +230,8 @@ urlpatterns = [
     path("get_my_commission/", views.get_my_commission),
     path("driver_request_commission/", views.driver_request_commission),
     path("get_drivers_commissions_requests/", views.get_drivers_commissions_requests),
+
+    #     commission to wallet
+
+    path("driver_commission_to_wallet/", views.driver_commission_to_wallet),
 ]
