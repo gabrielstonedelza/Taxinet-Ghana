@@ -1696,7 +1696,7 @@ def driver_commission_to_wallet(request):
 
 # update commission
 @api_view(['GET', 'PUT'])
-@permission_classes([permissions.AllowAny])
+@permission_classes([permissions.IsAuthenticated])
 def update_commission(request, driver):
     commission = get_object_or_404(DriversCommission, driver=driver)
     serializer = DriversCommissionSerializer(commission, data=request.data)
