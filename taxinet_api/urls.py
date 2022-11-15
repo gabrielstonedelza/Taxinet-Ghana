@@ -234,5 +234,5 @@ urlpatterns = [
     #     commission to wallet
 
     path("driver_commission_to_wallet/", views.driver_commission_to_wallet),
-    path("update_commission/<int:driver>/", views.DriversCommissionSerializer)
+    path("update_commission/<str:driver>/", views.DriversCommissionSerializer)
 ]
