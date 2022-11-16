@@ -854,7 +854,7 @@ class Wallets(models.Model):
 
 
 class LoadWallet(models.Model):
-    administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1, related_name="loadwallet_admin")
+    administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1, related_name="load-wallet_admin")
     user = models.ForeignKey(DeUser, on_delete=models.CASCADE)
     title = models.CharField(max_length=200, default="Wants to load wallet")
     amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)

@@ -1,9 +1,9 @@
 from django.shortcuts import render, get_object_or_404
 from .models import User, DriverProfile, PassengerProfile, AddToVerified, AddCardsUploaded, InvestorsProfile, \
-    PromoterProfile
+    PromoterProfile, AccountsProfile
 from .serializers import (UsersSerializer, DriverProfileSerializer, PassengerProfileSerializer, AddToVerifiedSerializer, \
                           AddCardsUploadedSerializer, AdminPassengerProfileSerializer, InvestorsProfileSerializer,
-                          PromoterProfileSerializer)
+                          PromoterProfileSerializer, AccountsProfileSerializer)
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import viewsets, permissions, generics, status
 from rest_framework.response import Response
@@ -322,3 +322,16 @@ def get_all_blocked_users(request):
     users = User.objects.filter(user_blocked=True)
     serializer = UsersSerializer(users, many=True)
     return Response(serializer.data)
+
+
+class AccountProfileView(generics.ListCreateAPIView):
+    queryset = AccountsProfile.objects.all().order_by("-date_created")
+    serializer_class = AccountsProfileSerializer
+    permission_classes = [AllowAny]
+
+    @method_decorator(cache_page(60 * 60 * 2))
+    def list(self, request):
+        # Note the use of `get_queryset()` instead of `self.queryset`
+        queryset = self.get_queryset()
+        serializer = AccountsProfileSerializer(queryset, many=True)
+        return Response(serializer.data)
