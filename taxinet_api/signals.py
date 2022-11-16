@@ -10,7 +10,7 @@ from .models import (ScheduleRide, Complains, ConfirmDriverPayment, AcceptedSche
                      DriverAddToUpdatedWallets, DriverAskToLoadWallet, AddToPaymentToday, OtherWallet, WorkAndPay,
                      Wallets, LoadWallet, UpdatedWallets, ExpensesRequest, PrivateUserMessage, Stocks, MonthlySalary,
                      PayPromoterCommission, PrivateChatId, AddToBlockList, DriversCommission, DriverRequestCommission,
-                     DriverTransferCommissionToWallet)
+                     DriverTransferCommissionToWallet, WalletDeduction)
 from django.conf import settings
 
 User = settings.AUTH_USER_MODEL
@@ -507,3 +507,15 @@ def alert_driver_request_commission(sender, created, instance, **kwargs):
         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                               notification_message=message, notification_tag=notification_tag,
                                               notification_to=instance.driver)
+
+
+@receiver(post_save, sender=WalletDeduction)
+def alert_wallet_deducted(sender, created, instance, **kwargs):
+    title = "Action on wallet"
+    message = f"An amount of {instance.amount} was deducted from your wallet,reason is {instance.reason}"
+    notification_tag = "Commission to wallet"
+
+    if created:
+        ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                              notification_message=message, notification_tag=notification_tag,
+                                              notification_to=instance.user)

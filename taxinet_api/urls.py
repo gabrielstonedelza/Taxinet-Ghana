@@ -234,5 +234,8 @@ urlpatterns = [
 
     #     commission to wallet
     path("driver_commission_to_wallet/", views.driver_commission_to_wallet),
-    path("user_commissions_delete/<int:driver>/", views.user_commissions_delete)
+    path("user_commissions_delete/<int:driver>/", views.user_commissions_delete),
+
+    #     wallet deduction
+    path("deduct_wallet/", views.deduct_wallet)
 ]

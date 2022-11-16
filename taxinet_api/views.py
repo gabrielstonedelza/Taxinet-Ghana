@@ -21,7 +21,7 @@ from .models import (Complains, AddToUpdatedWallets, DriversCommission, DriverRe
                      Wallets, RideMessages, ExpensesRequest,
                      RegisterVehicle, WorkAndPay, OtherWallet,
                      DriverEndTrip, DriverAlertArrival, DriversWallet, LoadWallet, UpdatedWallets,
-                     DriverAddToUpdatedWallets, DriverAskToLoadWallet, AddToPaymentToday, PrivateUserMessage, Stocks,
+                     DriverAddToUpdatedWallets, DriverAskToLoadWallet, AddToPaymentToday, PrivateUserMessage, Stocks,WalletDeduction,
                      DriverTransferCommissionToWallet,
                      MonthlySalary, PayPromoterCommission,
                      AddToBlockList)
@@ -40,7 +40,7 @@ from .serializers import (ComplainsSerializer, ContactUsSerializer,
                           DriverAddToUpdatedWalletsSerializer, LoadWalletSerializer,
                           AddToPaymentTodaySerializer, WorkAndPaySerializer, OtherWalletSerializer, WalletsSerializer,
                           DriverTransferCommissionToWalletSerializer,
-                          DriverRequestCommissionSerializer,
+                          DriverRequestCommissionSerializer,WalletDeductionSerializer,
                           LoadWalletSerializer, UpdatedWalletsSerializer, RideMessagesSerializer,
                           PrivateUserMessageSerializer, AddToBlockListSerializer, StocksSerializer,
                           MonthlySalarySerializer, PayPromoterCommissionSerializer, DriversCommissionSerializer)
@@ -1716,3 +1716,14 @@ def user_commissions_delete(request, driver):
     except User.DoesNotExist:
         return Http404
     return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# wallet deduction
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def deduct_wallet(request):
+    serializer = WalletDeductionSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

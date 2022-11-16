@@ -1105,3 +1105,14 @@ class DriverTransferCommissionToWallet(models.Model):
 
     def __str__(self):
         return self.driver.username
+
+
+class WalletDeduction(models.Model):
+    user = models.ForeignKey(DeUser, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
+    reason = models.CharField(max_length=200, blank=True, )
+    date_transferred = models.DateField(auto_now_add=True)
+    time_transferred = models.TimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user.username

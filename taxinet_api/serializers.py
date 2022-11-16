@@ -9,7 +9,7 @@ from .models import (Complains,
                      RejectAssignedScheduled, CancelScheduledRide, ContactUs, PassengersWallet, AskToLoadWallet,
                      AddToUpdatedWallets, DriverStartTrip, DriverEndTrip, DriverAlertArrival, DriversWallet,
                      DriverAddToUpdatedWallets, DriverAskToLoadWallet, RegisterVehicle, AddToPaymentToday, WorkAndPay,
-                     OtherWallet, Wallets, LoadWallet, UpdatedWallets, RideMessages, ExpensesRequest, PrivateChatId,
+                     OtherWallet, Wallets, LoadWallet, UpdatedWallets, RideMessages, ExpensesRequest, PrivateChatId,WalletDeduction,
                      DriversCommission, DriverRequestCommission,
                      PrivateUserMessage, Stocks, MonthlySalary,
                      PayPromoterCommission, PrivateChatId, AddToBlockList, DriverTransferCommissionToWallet
@@ -418,3 +418,9 @@ class DriverTransferCommissionToWalletSerializer(serializers.ModelSerializer):
     class Meta:
         model = DriverTransferCommissionToWallet
         fields = ['id', 'driver', 'amount', 'date_transferred', 'time_transferred']
+
+
+class WalletDeductionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WalletDeduction
+        fields = ['id', 'user', 'amount', 'reason', 'date_transferred', 'time_transferred']
