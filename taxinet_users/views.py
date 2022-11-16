@@ -189,18 +189,18 @@ def get_drivers_profile(request, id):
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
-def get_drivers_profile_by_unique_code(request, unique_code):
-    driver = get_object_or_404(DriverProfile, unique_code=unique_code)
+def get_user_by_unique_code(request, unique_code):
+    driver = get_object_or_404(User, unique_code=unique_code)
     serializer = DriverProfileSerializer(driver, many=False)
     return Response(serializer.data)
 
 
-@api_view(['GET'])
-@permission_classes([permissions.AllowAny])
-def get_passengers_profile_by_unique_code(request, unique_code):
-    passenger = get_object_or_404(PassengerProfile, unique_code=unique_code)
-    serializer = PassengerProfileSerializer(passenger, many=False)
-    return Response(serializer.data)
+# @api_view(['GET'])
+# @permission_classes([permissions.AllowAny])
+# def get_passengers_profile_by_unique_code(request, unique_code):
+#     passenger = get_object_or_404(PassengerProfile, unique_code=unique_code)
+#     serializer = PassengerProfileSerializer(passenger, many=False)
+#     return Response(serializer.data)
 
 
 # user details

@@ -8,13 +8,13 @@ from .models import User, DriverProfile, PassengerProfile, AddToVerified, AddCar
 class UserCreateSerializer(UserCreateSerializer):
     class Meta(UserCreateSerializer.Meta):
         model = User
-        fields = ('id', 'email', 'username', 'password', 'user_type', 'phone_number', 'full_name', 'promoter', 'driver_tracker_sim', 'user_blocked')
+        fields = ('id', 'email', 'username', 'password', 'user_type', 'phone_number', 'full_name', 'promoter', 'driver_tracker_sim', 'user_blocked', 'unique_code')
 
 
 class UsersSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'email', 'username', 'phone_number', 'full_name', 'user_type', 'promoter', 'driver_tracker_sim', 'user_blocked')
+        fields = ('id', 'email', 'username', 'phone_number', 'full_name', 'user_type', 'promoter', 'driver_tracker_sim', 'user_blocked', 'unique_code')
 
 
 class DriverProfileSerializer(serializers.ModelSerializer):
@@ -27,7 +27,7 @@ class DriverProfileSerializer(serializers.ModelSerializer):
                   'car_model', 'front_side_ghana_card', 'get_drivers_full_name',
                   'back_side_ghana_card', 'name_on_ghana_card', 'ghana_card_number', 'digital_address',
                   'next_of_kin', 'next_of_kin_number', 'driver_profile_pic', 'get_drivers_license',
-                  'taxinet_number', 'unique_code', 'verified', 'get_front_side_ghana_card', 'get_back_side_ghana_card',
+                  'taxinet_number', 'verified', 'get_front_side_ghana_card', 'get_back_side_ghana_card',
                   'get_drivers_email',
                   'get_drivers_phone_number', 'get_user_type', 'username', 'phone', 'get_driver_tracker_sim_number', 'user_blocked']
         read_only_fields = ['user']
@@ -48,7 +48,7 @@ class PassengerProfileSerializer(serializers.ModelSerializer):
                   'verified',
                   'next_of_kin', 'next_of_kin_number', 'get_passengers_email',
                   'get_passengers_phone_number', 'get_front_side_ghana_card', 'get_back_side_ghana_card',
-                  'get_passengers_full_name', 'unique_code', 'get_user_type', 'username', 'phone', 'promoter',
+                  'get_passengers_full_name',  'get_user_type', 'username', 'phone', 'promoter',
                   'get_promoter_username', ]
         read_only_fields = ['user']
 
@@ -94,7 +94,7 @@ class AccountsProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = AccountsProfile
         fields = ['id', 'get_username', 'user', 'profile_pic', 'passenger_profile_pic',
-                  'get_user_type', 'unique_code']
+                  'get_user_type', ]
         read_only_fields = ['user']
 
 
@@ -102,7 +102,7 @@ class PromoterProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = PromoterProfile
         fields = ['id', 'get_username', 'user', 'profile_pic', 'promoter_profile_pic',
-                  'get_user_type', 'get_email', 'get_phone_number', 'date_created', 'get_full_name', 'unique_code']
+                  'get_user_type', 'get_email', 'get_phone_number', 'date_created', 'get_full_name', ]
         read_only_fields = ['user']
 
 
@@ -110,7 +110,7 @@ class RideAdminProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = RideAdminProfile
         fields = ['id', 'get_username', 'user', 'profile_pic', 'passenger_profile_pic',
-                  'get_user_type', 'unique_code']
+                  'get_user_type', ]
         read_only_fields = ['user']
 
 

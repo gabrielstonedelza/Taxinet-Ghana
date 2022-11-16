@@ -26,6 +26,11 @@ class User(AbstractUser):
     promoter = models.CharField(max_length=100, default="admin", blank=True)
     driver_tracker_sim = models.CharField(max_length=100, blank=True, default="")
     user_blocked = models.BooleanField(default=False)
+    unique_code = models.CharField(max_length=500, default='')
+
+    def save(self, *args, **kwargs):
+        self.unique_code = self.user.username[:5] + str(random.randint(20, 500))
+        super().save(*args, **kwargs)
 
     REQUIRED_FIELDS = ['user_type', 'email', 'full_name', 'phone_number', 'promoter', 'driver_tracker_sim']
     USERNAME_FIELD = 'username'
@@ -60,7 +65,7 @@ class DriverProfile(models.Model):
     next_of_kin = models.CharField(max_length=100, blank=True)
     next_of_kin_number = models.CharField(max_length=100, blank=True)
     taxinet_number = models.CharField(max_length=100, default=0)
-    unique_code = models.CharField(max_length=500, default='')
+    # unique_code = models.CharField(max_length=500, default='')
     verified = models.BooleanField(default=False)
     date_created = models.DateTimeField(default=timezone.now)
     username = models.CharField(max_length=100, default="", blank=True, )
@@ -75,7 +80,7 @@ class DriverProfile(models.Model):
     def save(self, *args, **kwargs):
         self.username = self.user.username
         self.phone = self.user.phone_number
-        self.unique_code = self.user.username[:5] + str(random.randint(20, 500))
+        # self.unique_code = self.user.username[:5] + str(random.randint(20, 500))
         super().save(*args, **kwargs)
 
     def get_driver_tracker_sim_number(self):
@@ -124,7 +129,7 @@ class PassengerProfile(models.Model):
     next_of_kin_number = models.CharField(max_length=100, blank=True)
     referral = models.CharField(max_length=100, blank=True)
     verified = models.BooleanField(default=False)
-    unique_code = models.CharField(max_length=500, default='')
+    # unique_code = models.CharField(max_length=500, default='')
     date_created = models.DateTimeField(default=timezone.now)
     username = models.CharField(max_length=100, default="", blank=True, )
     phone = models.CharField(max_length=100, default="", blank=True)
@@ -140,7 +145,7 @@ class PassengerProfile(models.Model):
         self.promoter = self.user.promoter
         self.username = self.user.username
         self.phone = self.user.phone_number
-        self.unique_code = self.user.username[:5] + str(random.randint(20, 500))
+        # self.unique_code = self.user.username[:5] + str(random.randint(20, 500))
         super().save(*args, **kwargs)
 
     def get_user_type(self):
@@ -253,10 +258,10 @@ class AccountsProfile(models.Model):
     user = models.OneToOneField(DeUser, on_delete=models.CASCADE, related_name="accounts_profile")
     profile_pic = models.ImageField(upload_to="accounts_profile_pics", default="default_user.png")
     date_created = models.DateTimeField(default=timezone.now)
-    unique_code = models.CharField(max_length=500, default='')
+    # unique_code = models.CharField(max_length=500, default='')
 
     def save(self, *args, **kwargs):
-        self.unique_code = self.user.username[:5] + str(random.randint(20, 500))
+        # self.unique_code = self.user.username[:5] + str(random.randint(20, 500))
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -278,10 +283,10 @@ class PromoterProfile(models.Model):
     user = models.OneToOneField(DeUser, on_delete=models.CASCADE, related_name="promoter_profile")
     profile_pic = models.ImageField(upload_to="promoter_profile_pics", default="default_user.png")
     date_created = models.DateTimeField(default=timezone.now)
-    unique_code = models.CharField(max_length=500, default='')
+    # unique_code = models.CharField(max_length=500, default='')
 
     def save(self, *args, **kwargs):
-        self.unique_code = self.user.username[:5] + str(random.randint(20, 500))
+        # self.unique_code = self.user.username[:5] + str(random.randint(20, 500))
         super().save(*args, **kwargs)
 
     def __str__(self):
