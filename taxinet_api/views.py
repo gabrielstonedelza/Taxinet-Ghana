@@ -1259,7 +1259,7 @@ def admin_load_users_wallet(request):
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def admin_get_all_users_wallet(request):
-    wallets = Wallets.objects.all().order_by('-date_loaded')
+    wallets = Wallets.objects.exclude(user=1).order_by('-date_loaded')
     serializer = WalletsSerializer(wallets, many=True)
     return Response(serializer.data)
 
