@@ -1077,7 +1077,7 @@ class AddToBlockList(models.Model):
 
 class DriversCommission(models.Model):
     driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
+    amount = models.DecimalField(max_digits=19, decimal_places=4, blank=True)
     date_paid = models.DateField(auto_now_add=True)
     time_paid = models.TimeField(auto_now_add=True)
 
