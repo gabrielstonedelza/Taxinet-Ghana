@@ -190,8 +190,8 @@ def get_drivers_profile(request, id):
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def get_user_by_unique_code(request, unique_code):
-    driver = get_object_or_404(User, unique_code=unique_code)
-    serializer = DriverProfileSerializer(driver, many=False)
+    user = get_object_or_404(User, unique_code=unique_code)
+    serializer = UsersSerializer(user, many=False)
     return Response(serializer.data)
 
 
