@@ -29,7 +29,7 @@ class User(AbstractUser):
     unique_code = models.CharField(max_length=500, default='')
 
     def save(self, *args, **kwargs):
-        self.unique_code = self.user.username[:5] + str(random.randint(20, 500))
+        self.unique_code = self.username[:5] + str(random.randint(20, 500))
         super().save(*args, **kwargs)
 
     REQUIRED_FIELDS = ['user_type', 'email', 'full_name', 'phone_number', 'promoter', 'driver_tracker_sim']
