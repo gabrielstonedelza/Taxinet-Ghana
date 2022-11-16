@@ -819,7 +819,7 @@ class Wallets(models.Model):
     user = models.OneToOneField(DeUser, on_delete=models.CASCADE, related_name="user_only_profile")
     username = models.CharField(max_length=100, default="", blank=True, )
     phone = models.CharField(max_length=100, default="", blank=True)
-    amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
+    amount = models.DecimalField(blank=True, decimal_places=6, max_digits=10, default=00.00)
     date_loaded = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
@@ -994,7 +994,7 @@ class Stocks(models.Model):
 
 class MonthlySalary(models.Model):
     driver = models.ForeignKey(User, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
+    amount = models.DecimalField(max_digits=19, decimal_places=6, blank=True)
     date_paid = models.DateField(auto_now_add=True)
     time_paid = models.TimeField(auto_now_add=True)
 
@@ -1004,7 +1004,7 @@ class MonthlySalary(models.Model):
 
 class PayPromoterCommission(models.Model):
     promoter = models.ForeignKey(User, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
+    amount = models.DecimalField(max_digits=19, decimal_places=6, blank=True)
     date_paid = models.DateField(auto_now_add=True)
     time_paid = models.TimeField(auto_now_add=True)
 
@@ -1077,7 +1077,7 @@ class AddToBlockList(models.Model):
 
 class DriversCommission(models.Model):
     driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=19, decimal_places=4, blank=True)
+    amount = models.DecimalField(max_digits=19, decimal_places=6, blank=True)
     date_paid = models.DateField(auto_now_add=True)
     time_paid = models.TimeField(auto_now_add=True)
 
@@ -1089,7 +1089,7 @@ class DriverRequestCommission(models.Model):
     administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1)
     accounts = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=2, related_name="accounts_wallet")
     driver = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="accounts_driver")
-    amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
+    amount = models.DecimalField(max_digits=19, decimal_places=6, blank=True)
     date_requested = models.DateField(auto_now_add=True)
     time_requested = models.TimeField(auto_now_add=True)
 
@@ -1109,7 +1109,7 @@ class DriverTransferCommissionToWallet(models.Model):
 
 class WalletDeduction(models.Model):
     user = models.ForeignKey(DeUser, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
+    amount = models.DecimalField(max_digits=19, decimal_places=6, blank=True)
     reason = models.CharField(max_length=200, blank=True, )
     date_transferred = models.DateField(auto_now_add=True)
     time_transferred = models.TimeField(auto_now_add=True)
