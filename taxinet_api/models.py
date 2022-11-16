@@ -1099,7 +1099,7 @@ class DriverRequestCommission(models.Model):
 
 class DriverTransferCommissionToWallet(models.Model):
     driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
+    amount = models.DecimalField(max_digits=19, decimal_places=6, blank=True)
     date_transferred = models.DateField(auto_now_add=True)
     time_transferred = models.TimeField(auto_now_add=True)
 
