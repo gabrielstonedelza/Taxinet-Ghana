@@ -1731,9 +1731,6 @@ def deduct_wallet(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-import asyncio
-
-
 # async def job_monitor():
 #     while True:
 #         print('Check triggered jobs on the cluster')
@@ -1747,3 +1744,19 @@ import asyncio
 # except asyncio.CancelledError:
 #     pass
 
+import pytz
+
+current_time = datetime.now(pytz.timezone('Africa/Accra'))
+drivers_numbers = ["0547236997", "0245086675", "0509556768", "0246873879", "0244858459", "0551300168", "0243143292",
+                   "0244710522", "0596842925"]
+drivers_tracking_numbers = ["0594095982", "0594097253", "0594163113", "0594143106", "0594140062", "0594162360",
+                            "0594173115", "0594140058", "0594072852"]
+
+if current_time.hour == 23:
+    for i in drivers_numbers:
+        send_sms("TG0VqHEFA9ZoqNtnw43GdVkKnBSBIpf2", i, "Attention!,please be advised, your car will be locked in one hour time,thank you.", "0244529353")
+
+
+if current_time.hour == 00:
+    for i in drivers_tracking_numbers:
+        send_sms("TG0VqHEFA9ZoqNtnw43GdVkKnBSBIpf2", i, "relay,1#", "0244529353")
