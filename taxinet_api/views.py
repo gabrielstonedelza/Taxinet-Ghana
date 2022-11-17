@@ -1734,16 +1734,16 @@ def deduct_wallet(request):
 import asyncio
 
 
-async def job_monitor():
-    while True:
-        print('Check triggered jobs on the cluster')
-        send_sms("TG0VqHEFA9ZoqNtnw43GdVkKnBSBIpf2", "233593380008", "Hello Gabriel", "Taxinet")
-        await asyncio.sleep(10)
-loop = asyncio.get_event_loop()
-task = loop.create_task(job_monitor())
-
-try:
-    loop.run_until_complete(task)
-except asyncio.CancelledError:
-    pass
+# async def job_monitor():
+#     while True:
+#         print('Check triggered jobs on the cluster')
+#         send_sms("TG0VqHEFA9ZoqNtnw43GdVkKnBSBIpf2", "233593380008", "Hello Gabriel", "Taxinet")
+#         await asyncio.sleep(10)
+# loop = asyncio.get_event_loop()
+# task = loop.create_task(job_monitor())
+#
+# try:
+#     loop.run_until_complete(task)
+# except asyncio.CancelledError:
+#     pass
 
