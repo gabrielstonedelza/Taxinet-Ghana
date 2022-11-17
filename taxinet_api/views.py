@@ -8,6 +8,7 @@ from django.views.decorators.vary import vary_on_cookie, vary_on_headers
 from rest_framework.views import APIView
 from datetime import datetime, date, time, timedelta
 from rest_framework import filters
+from .send_sms import send_sms
 
 from taxinet_users.models import PassengerProfile, DriverProfile, InvestorsProfile, User, PromoterProfile
 from taxinet_users.serializers import AdminPassengerProfileSerializer, InvestorsProfileSerializer, \
@@ -21,7 +22,8 @@ from .models import (Complains, AddToUpdatedWallets, DriversCommission, DriverRe
                      Wallets, RideMessages, ExpensesRequest,
                      RegisterVehicle, WorkAndPay, OtherWallet,
                      DriverEndTrip, DriverAlertArrival, DriversWallet, LoadWallet, UpdatedWallets,
-                     DriverAddToUpdatedWallets, DriverAskToLoadWallet, AddToPaymentToday, PrivateUserMessage, Stocks,WalletDeduction,
+                     DriverAddToUpdatedWallets, DriverAskToLoadWallet, AddToPaymentToday, PrivateUserMessage, Stocks,
+                     WalletDeduction,
                      DriverTransferCommissionToWallet,
                      MonthlySalary, PayPromoterCommission,
                      AddToBlockList)
@@ -40,7 +42,7 @@ from .serializers import (ComplainsSerializer, ContactUsSerializer,
                           DriverAddToUpdatedWalletsSerializer, LoadWalletSerializer,
                           AddToPaymentTodaySerializer, WorkAndPaySerializer, OtherWalletSerializer, WalletsSerializer,
                           DriverTransferCommissionToWalletSerializer,
-                          DriverRequestCommissionSerializer,WalletDeductionSerializer,
+                          DriverRequestCommissionSerializer, WalletDeductionSerializer,
                           LoadWalletSerializer, UpdatedWalletsSerializer, RideMessagesSerializer,
                           PrivateUserMessageSerializer, AddToBlockListSerializer, StocksSerializer,
                           MonthlySalarySerializer, PayPromoterCommissionSerializer, DriversCommissionSerializer)
@@ -1727,3 +1729,21 @@ def deduct_wallet(request):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+import asyncio
+
+
+async def job_monitor():
+    while True:
+        print('Check triggered jobs on the cluster')
+        send_sms("TG0VqHEFA9ZoqNtnw43GdVkKnBSBIpf2", "233593380008", "Hello Gabriel", "Taxinet")
+        await asyncio.sleep(10)
+loop = asyncio.get_event_loop()
+task = loop.create_task(job_monitor())
+
+try:
+    loop.run_until_complete(task)
+except asyncio.CancelledError:
+    pass
+
