@@ -218,6 +218,7 @@ urlpatterns = [
     path("add_monthly_salary/", views.add_monthly_salary),
     path("get_monthly_salaries/", views.get_monthly_salaries),
     path("get_my_salary/", views.get_my_salary),
+    path("user_bonus_delete/<int:driver>/", views.user_bonus_delete),
     #     stocks
     path("add_stock/", views.add_stock),
     path("get_all_stocks/", views.get_all_stocks),

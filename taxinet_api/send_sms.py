@@ -15,7 +15,7 @@ def send_sms(api_key, phone, message, sender_id):
 
     # content = urllib.urlopen(url).read()
     content = urllib.request.urlopen(url)
-    print(content)
+    print("Message sent")
     # content contains the response from TextCus
 
     # Defining variables to be used inside function
