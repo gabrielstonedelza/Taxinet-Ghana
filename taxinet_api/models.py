@@ -784,7 +784,7 @@ class RegisterVehicle(models.Model):
 class AddToPaymentToday(models.Model):
     administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1, related_name="payment_admin")
     driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
-    amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
+    amount = models.DecimalField(blank=True, decimal_places=2, max_digits=20, default=00.00)
     title = models.CharField(max_length=255, default="Payment Today")
     read = models.CharField(max_length=10, choices=READ_STATUS, default="Not Read")
     date_paid = models.DateField(auto_now_add=True)
