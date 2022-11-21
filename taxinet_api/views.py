@@ -17,7 +17,7 @@ from .models import (Complains, AddToUpdatedWallets, DriversCommission, DriverRe
                      DriversLocation, ConfirmDriverPayment, DriverVehicleInventory,
                      AcceptedScheduledRides, RejectedScheduledRides,
                      CompletedScheduledRides, ScheduledNotifications, ScheduleRide, AssignScheduleToDriver,
-                     AcceptAssignedScheduled, ContactUs,
+                     AcceptAssignedScheduled, ContactUs, WalletAddition,
                      RejectAssignedScheduled, CancelScheduledRide, PassengersWallet, AskToLoadWallet, DriverStartTrip,
                      Wallets, RideMessages, ExpensesRequest,
                      RegisterVehicle, WorkAndPay, OtherWallet,
@@ -33,7 +33,7 @@ from .serializers import (ComplainsSerializer, ContactUsSerializer,
                           AcceptedScheduledRidesSerializer, \
                           RejectedScheduledRidesSerializer, DriverVehicleInventorySerializer,
                           CompletedScheduledRidesSerializer, \
-                          ScheduledNotificationSerializer,
+                          ScheduledNotificationSerializer, WalletAdditionSerializer,
                           CancelledScheduledRideSerializer, RejectScheduleToDriverSerializer,
                           AdminScheduleRideSerializer,
                           AcceptScheduleToDriverSerializer, AssignScheduleToDriverSerializer, PassengerWalletSerializer,
@@ -1617,8 +1617,8 @@ def get_my_salary(request):
 @permission_classes([permissions.AllowAny])
 def user_bonus_delete(request, driver):
     try:
-        commissions = MonthlySalary.objects.filter(driver=driver)
-        for i in commissions:
+        bonuses = MonthlySalary.objects.filter(driver=driver)
+        for i in bonuses:
             i.delete()
     except User.DoesNotExist:
         return Http404
@@ -1742,6 +1742,15 @@ def deduct_wallet(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def add_to_wallet(request):
+    serializer = WalletAdditionSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # import pytz
 #
