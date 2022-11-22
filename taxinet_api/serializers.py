@@ -443,4 +443,4 @@ class WorkExtraSerializer(serializers.ModelSerializer):
 class CallForInspectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = CallForInspection
-        fields = ['id', 'driver', 'day_for_inspection', 'date_informed', 'time_informed']
+        fields = ['id', 'driver', 'day_for_inspection', 'time_for_inspection', 'date_informed', 'time_informed']

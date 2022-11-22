@@ -209,6 +209,16 @@ REQUEST_STATUS = (
     ("Pending", "Pending")
 )
 
+INSPECTION_DAYS = (
+    ("Monday", "Monday"),
+    ("Tuesday", "Tuesday"),
+    ("Wednesday", "Wednesday"),
+    ("Thursday", "Thursday"),
+    ("Friday", "Friday"),
+    ("Saturday", "Saturday"),
+    ("Sunday", "Sunday"),
+)
+
 
 # working and functioning now models
 class ScheduleRide(models.Model):
@@ -1143,7 +1153,8 @@ class WorkExtra(models.Model):
 
 class CallForInspection(models.Model):
     driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
-    day_for_inspection = models.CharField(max_length=100)
+    day_for_inspection = models.CharField(max_length=100, choices=INSPECTION_DAYS, default="Monday")
+    time_for_inspection = models.CharField(max_length=100,default="")
     date_informed = models.DateField(auto_now_add=True)
     time_informed = models.TimeField(auto_now_add=True)
 
