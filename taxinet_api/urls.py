@@ -243,4 +243,8 @@ urlpatterns = [
     #     work extra
     path("activate_work_extra/", views.activate_work_extra),
     path("get_activated_work_extra/", views.get_activated_work_extra),
+    #     call for inspection
+    path("call_for_inspection/", views.call_for_inspection),
+    path("get_all_call_for_inspection/", views.get_all_call_for_inspection),
+    path("get_all_my_call_for_inspection/", views.get_all_my_call_for_inspection),
 ]

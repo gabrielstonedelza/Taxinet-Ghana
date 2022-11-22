@@ -16,9 +16,10 @@ from taxinet_users.serializers import AdminPassengerProfileSerializer, Investors
 from .models import (Complains, AddToUpdatedWallets, DriversCommission, DriverRequestCommission,
                      DriversLocation, ConfirmDriverPayment, DriverVehicleInventory,
                      AcceptedScheduledRides, RejectedScheduledRides,
-                     CompletedScheduledRides, ScheduledNotifications, ScheduleRide, AssignScheduleToDriver,WorkExtra,
+                     CompletedScheduledRides, ScheduledNotifications, ScheduleRide, AssignScheduleToDriver, WorkExtra,
                      AcceptAssignedScheduled, ContactUs, WalletAddition,
                      RejectAssignedScheduled, CancelScheduledRide, PassengersWallet, AskToLoadWallet, DriverStartTrip,
+                     CallForInspection,
                      Wallets, RideMessages, ExpensesRequest,
                      RegisterVehicle, WorkAndPay, OtherWallet,
                      DriverEndTrip, DriverAlertArrival, DriversWallet, LoadWallet, UpdatedWallets,
@@ -40,12 +41,14 @@ from .serializers import (ComplainsSerializer, ContactUsSerializer,
                           AskToLoadWalletSerializer, AddToUpdatedWalletsSerializer, DriverStartTripSerializer,
                           DriverEndTripSerializer, DriverAlertArrivalSerializer, DriversWalletSerializer,
                           DriverAddToUpdatedWalletsSerializer, LoadWalletSerializer,
-                          AddToPaymentTodaySerializer, WorkAndPaySerializer, OtherWalletSerializer, WalletsSerializer,WorkExtraSerializer,
+                          AddToPaymentTodaySerializer, WorkAndPaySerializer, OtherWalletSerializer, WalletsSerializer,
+                          WorkExtraSerializer,
                           DriverTransferCommissionToWalletSerializer,
                           DriverRequestCommissionSerializer, WalletDeductionSerializer,
                           LoadWalletSerializer, UpdatedWalletsSerializer, RideMessagesSerializer,
                           PrivateUserMessageSerializer, AddToBlockListSerializer, StocksSerializer,
-                          MonthlySalarySerializer, PayPromoterCommissionSerializer, DriversCommissionSerializer)
+                          MonthlySalarySerializer, PayPromoterCommissionSerializer, CallForInspectionSerializer,
+                          DriversCommissionSerializer)
 from django.http import Http404
 
 
@@ -1768,6 +1771,33 @@ def activate_work_extra(request):
 def get_activated_work_extra(request):
     work_extras = WorkExtra.objects.all().order_by('-date_paid')
     serializer = WorkExtraSerializer(work_extras, many=True)
+    return Response(serializer.data)
+
+
+# call for Inspection
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def call_for_inspection(request):
+    serializer = CallForInspectionSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_all_call_for_inspection(request):
+    work_extras = CallForInspection.objects.all().order_by('-date_informed')
+    serializer = CallForInspectionSerializer(work_extras, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_all_my_call_for_inspection(request):
+    work_extras = CallForInspection.objects.filter(driver=request.user).order_by('-date_informed')
+    serializer = CallForInspectionSerializer(work_extras, many=True)
     return Response(serializer.data)
 
 # import pytz

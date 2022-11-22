@@ -13,7 +13,8 @@ from .models import (Complains,
                      WalletDeduction,
                      DriversCommission, DriverRequestCommission,
                      PrivateUserMessage, Stocks, MonthlySalary, WalletAddition,
-                     PayPromoterCommission, PrivateChatId, AddToBlockList, DriverTransferCommissionToWallet, WorkExtra
+                     PayPromoterCommission, PrivateChatId, AddToBlockList, DriverTransferCommissionToWallet, WorkExtra,
+                     CallForInspection
                      )
 
 
@@ -437,3 +438,9 @@ class WorkExtraSerializer(serializers.ModelSerializer):
     class Meta:
         model = WorkExtra
         fields = ['id', 'driver', 'amount', 'administrator', 'date_paid', 'time_paid']
+
+
+class CallForInspectionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CallForInspection
+        fields = ['id', 'driver', 'day_for_inspection', 'date_informed', 'time_informed']

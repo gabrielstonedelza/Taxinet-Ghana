@@ -10,7 +10,7 @@ from .models import (ScheduleRide, Complains, ConfirmDriverPayment, AcceptedSche
                      DriverAddToUpdatedWallets, DriverAskToLoadWallet, AddToPaymentToday, OtherWallet, WorkAndPay,
                      Wallets, LoadWallet, UpdatedWallets, ExpensesRequest, PrivateUserMessage, Stocks, MonthlySalary,
                      PayPromoterCommission, PrivateChatId, AddToBlockList, DriversCommission, DriverRequestCommission,
-                     WalletAddition, WorkExtra,
+                     WalletAddition, WorkExtra, CallForInspection,
                      DriverTransferCommissionToWallet, WalletDeduction)
 from django.conf import settings
 
@@ -550,3 +550,16 @@ def alert_wallet_added(sender, created, instance, **kwargs):
         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                               notification_message=message1, notification_tag=notification_tag,
                                               notification_to=instance.administrator)
+
+
+@receiver(post_save, sender=CallForInspection)
+def alert_called_for_inspection(sender, created, instance, **kwargs):
+    title = "Called For Inspection"
+    message = f"Please you are to report to Taxinet for on {instance.day_for_inspection} for vehicle inspection.Thank you."
+
+    notification_tag = "Called For Inspection"
+
+    if created:
+        ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                              notification_message=message, notification_tag=notification_tag,
+                                              notification_to=instance.driver)
