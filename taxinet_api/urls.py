@@ -239,5 +239,8 @@ urlpatterns = [
 
     #     wallet deduction
     path("deduct_wallet/", views.deduct_wallet),
-    path("add_to_wallet/", views.add_to_wallet)
+    path("add_to_wallet/", views.add_to_wallet),
+    #     work extra
+    path("activate_work_extra/", views.activate_work_extra),
+    path("get_activated_work_extra/", views.get_activated_work_extra),
 ]

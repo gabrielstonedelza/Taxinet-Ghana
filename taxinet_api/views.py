@@ -16,7 +16,7 @@ from taxinet_users.serializers import AdminPassengerProfileSerializer, Investors
 from .models import (Complains, AddToUpdatedWallets, DriversCommission, DriverRequestCommission,
                      DriversLocation, ConfirmDriverPayment, DriverVehicleInventory,
                      AcceptedScheduledRides, RejectedScheduledRides,
-                     CompletedScheduledRides, ScheduledNotifications, ScheduleRide, AssignScheduleToDriver,
+                     CompletedScheduledRides, ScheduledNotifications, ScheduleRide, AssignScheduleToDriver,WorkExtra,
                      AcceptAssignedScheduled, ContactUs, WalletAddition,
                      RejectAssignedScheduled, CancelScheduledRide, PassengersWallet, AskToLoadWallet, DriverStartTrip,
                      Wallets, RideMessages, ExpensesRequest,
@@ -40,7 +40,7 @@ from .serializers import (ComplainsSerializer, ContactUsSerializer,
                           AskToLoadWalletSerializer, AddToUpdatedWalletsSerializer, DriverStartTripSerializer,
                           DriverEndTripSerializer, DriverAlertArrivalSerializer, DriversWalletSerializer,
                           DriverAddToUpdatedWalletsSerializer, LoadWalletSerializer,
-                          AddToPaymentTodaySerializer, WorkAndPaySerializer, OtherWalletSerializer, WalletsSerializer,
+                          AddToPaymentTodaySerializer, WorkAndPaySerializer, OtherWalletSerializer, WalletsSerializer,WorkExtraSerializer,
                           DriverTransferCommissionToWalletSerializer,
                           DriverRequestCommissionSerializer, WalletDeductionSerializer,
                           LoadWalletSerializer, UpdatedWalletsSerializer, RideMessagesSerializer,
@@ -1751,6 +1751,24 @@ def add_to_wallet(request):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def activate_work_extra(request):
+    serializer = WorkExtraSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_activated_work_extra(request):
+    work_extras = WorkExtra.objects.all().order_by('-date_paid')
+    serializer = WorkExtraSerializer(work_extras, many=True)
+    return Response(serializer.data)
 
 # import pytz
 #

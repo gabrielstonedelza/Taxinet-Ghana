@@ -13,7 +13,7 @@ from .models import (Complains,
                      WalletDeduction,
                      DriversCommission, DriverRequestCommission,
                      PrivateUserMessage, Stocks, MonthlySalary, WalletAddition,
-                     PayPromoterCommission, PrivateChatId, AddToBlockList, DriverTransferCommissionToWallet
+                     PayPromoterCommission, PrivateChatId, AddToBlockList, DriverTransferCommissionToWallet, WorkExtra
                      )
 
 
@@ -426,7 +426,14 @@ class WalletDeductionSerializer(serializers.ModelSerializer):
         model = WalletDeduction
         fields = ['id', 'user', 'amount', 'reason', 'date_transferred', 'time_transferred']
 
+
 class WalletAdditionSerializer(serializers.ModelSerializer):
     class Meta:
         model = WalletAddition
         fields = ['id', 'user', 'amount', 'reason', 'date_transferred', 'time_transferred']
+
+
+class WorkExtraSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WorkExtra
+        fields = ['id', 'driver', 'amount', 'administrator', 'date_paid', 'time_paid']

@@ -1127,3 +1127,15 @@ class WalletAddition(models.Model):
 
     def __str__(self):
         return self.user.username
+
+
+# drivers work extra
+class WorkExtra(models.Model):
+    administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE,related_name="work_extra_admin")
+    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
+    date_paid = models.DateField(auto_now_add=True)
+    time_paid = models.TimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.driver.username

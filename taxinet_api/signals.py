@@ -10,7 +10,7 @@ from .models import (ScheduleRide, Complains, ConfirmDriverPayment, AcceptedSche
                      DriverAddToUpdatedWallets, DriverAskToLoadWallet, AddToPaymentToday, OtherWallet, WorkAndPay,
                      Wallets, LoadWallet, UpdatedWallets, ExpensesRequest, PrivateUserMessage, Stocks, MonthlySalary,
                      PayPromoterCommission, PrivateChatId, AddToBlockList, DriversCommission, DriverRequestCommission,
-                     WalletAddition,
+                     WalletAddition, WorkExtra,
                      DriverTransferCommissionToWallet, WalletDeduction)
 from django.conf import settings
 
@@ -532,3 +532,21 @@ def alert_wallet_added(sender, created, instance, **kwargs):
         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                               notification_message=message, notification_tag=notification_tag,
                                               notification_to=instance.user)
+
+
+@receiver(post_save, sender=WorkExtra)
+def alert_wallet_added(sender, created, instance, **kwargs):
+    title = "Work Extra Activated"
+    message = f"You have activated the work extra and an amount of ₵{instance.amount} has deducted from your wallet"
+
+    message1 = f"{instance.driver.username} activated the work extra and an amount of ₵{instance.amount} has deducted from his wallet"
+    notification_tag = "Work Extra Activated"
+
+    if created:
+        ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                              notification_message=message, notification_tag=notification_tag,
+                                              notification_to=instance.driver)
+
+        ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                              notification_message=message1, notification_tag=notification_tag,
+                                              notification_to=instance.administrator)
