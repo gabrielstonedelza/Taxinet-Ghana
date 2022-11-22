@@ -437,7 +437,7 @@ class WalletAdditionSerializer(serializers.ModelSerializer):
 class WorkExtraSerializer(serializers.ModelSerializer):
     class Meta:
         model = WorkExtra
-        fields = ['id', 'driver', 'amount', 'administrator', 'date_paid', 'time_paid']
+        fields = ['id', 'driver', 'amount', 'administrator', 'date_paid', 'time_paid', 'get_username']
 
 
 class CallForInspectionSerializer(serializers.ModelSerializer):

@@ -1150,6 +1150,9 @@ class WorkExtra(models.Model):
     def __str__(self):
         return self.driver.username
 
+    def get_username(self):
+        return self.driver.username
+
 
 class CallForInspection(models.Model):
     driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
