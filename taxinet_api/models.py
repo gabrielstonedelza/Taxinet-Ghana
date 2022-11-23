@@ -499,7 +499,7 @@ class DriverVehicleInventory(models.Model):
     date_checked = models.DateField(auto_now_add=True)
     time_checked = models.TimeField(auto_now_add=True)
     read = models.CharField(max_length=10, choices=READ_STATUS, default="Not Read")
-    inspector_name = models.CharField(max_length=50,default="",)
+    inspector_name = models.CharField(max_length=50)
 
     def __str__(self):
         return f"{self.driver.username} has check car today"
