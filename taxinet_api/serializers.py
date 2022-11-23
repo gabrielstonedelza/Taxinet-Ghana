@@ -220,7 +220,7 @@ class DriverVehicleInventorySerializer(serializers.ModelSerializer):
                   'tail_rear_lights', 'reverse_lights', 'interior_lights', 'engine_noise', 'excessive_smoke',
                   'foot_break', 'hand_break', 'wheel_bearing_noise', 'warning_triangle', 'fire_extinguisher',
                   'first_aid_box', 'checked_today', 'date_checked', 'time_checked', 'get_drivers_name',
-                  'get_driver_profile_pic', 'read', 'registration_number', 'unique_number', 'vehicle_brand', 'millage']
+                  'get_driver_profile_pic', 'read', 'registration_number', 'unique_number', 'vehicle_brand', 'millage', 'inspector_name']
         read_only_fields = ['driver']
 
     def get_username(self, user):
