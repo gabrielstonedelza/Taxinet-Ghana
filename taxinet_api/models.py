@@ -172,6 +172,7 @@ VEHICLE_CATEGORY = (
 )
 
 TOYOTA_BRANDS = (
+    ("Select a brand","Select a brand"),
     ("Avalon", "Avalon"),
     ("BELTA", "BELTA"),
     ("CAMRY", "CAMRY"),
