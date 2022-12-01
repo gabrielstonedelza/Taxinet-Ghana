@@ -223,7 +223,7 @@ INSPECTION_DAYS = (
 TOP_UP_OPTIONS = (
     ("Select Payment Option", "Select Payment Option"),
     ("Mobile Money", "Mobile Money"),
-    ("Bank", "Bank"),
+    ("Ecobank", "Ecobank"),
 )
 
 
