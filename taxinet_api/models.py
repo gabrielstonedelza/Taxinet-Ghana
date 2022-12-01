@@ -1182,3 +1182,6 @@ class UserRequestTopUp(models.Model):
     transaction_id = models.CharField(max_length=100, )
     date_requested = models.DateField(auto_now_add=True)
     time_requested = models.TimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user.username
