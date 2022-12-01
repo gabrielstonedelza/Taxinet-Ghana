@@ -172,7 +172,7 @@ VEHICLE_CATEGORY = (
 )
 
 TOYOTA_BRANDS = (
-    ("Select a brand","Select a brand"),
+    ("Select a brand", "Select a brand"),
     ("Avalon", "Avalon"),
     ("BELTA", "BELTA"),
     ("CAMRY", "CAMRY"),
@@ -218,6 +218,11 @@ INSPECTION_DAYS = (
     ("Friday", "Friday"),
     ("Saturday", "Saturday"),
     ("Sunday", "Sunday"),
+)
+
+TOP_UP_OPTIONS = (
+    ("Mobile Money", "Mobile Money"),
+    ("Bank", "Bank"),
 )
 
 
@@ -1165,3 +1170,14 @@ class CallForInspection(models.Model):
 
     def __str__(self):
         return self.driver.username
+
+
+class UserRequestTopUp(models.Model):
+    user = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="user_requesting_topup")
+    administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1)
+    accounts = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=2, related_name="accounts")
+    amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
+    top_up_option = models.CharField(max_length=20, default="Mobile Money")
+    transaction_id = models.CharField(max_length=100, )
+    date_requested = models.DateField(auto_now_add=True)
+    time_requested = models.TimeField(auto_now_add=True)

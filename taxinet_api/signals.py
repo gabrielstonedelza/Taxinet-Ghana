@@ -9,6 +9,7 @@ from .models import (ScheduleRide, Complains, ConfirmDriverPayment, AcceptedSche
                      DriverEndTrip, DriverAlertArrival, DriversWallet,
                      DriverAddToUpdatedWallets, DriverAskToLoadWallet, AddToPaymentToday, OtherWallet, WorkAndPay,
                      Wallets, LoadWallet, UpdatedWallets, ExpensesRequest, PrivateUserMessage, Stocks, MonthlySalary,
+                     UserRequestTopUp,
                      PayPromoterCommission, PrivateChatId, AddToBlockList, DriversCommission, DriverRequestCommission,
                      WalletAddition, WorkExtra, CallForInspection,
                      DriverTransferCommissionToWallet, WalletDeduction)
@@ -563,3 +564,17 @@ def alert_called_for_inspection(sender, created, instance, **kwargs):
         ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
                                               notification_message=message, notification_tag=notification_tag,
                                               notification_to=instance.driver)
+
+
+@receiver(post_save, sender=UserRequestTopUp)
+def alert_user_wants_top_ip(sender, created, instance, **kwargs):
+    title = "Top Up Needed"
+    message = f"{instance.user.username} wants to top up their wallet with the amount of GHS{instance.amount}"
+
+    ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                          notification_message=message,
+                                          notification_to=instance.administrator)
+
+    ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                          notification_message=message,
+                                          notification_to=instance.accounts)

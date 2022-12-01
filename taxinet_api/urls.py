@@ -247,4 +247,9 @@ urlpatterns = [
     path("call_for_inspection/", views.call_for_inspection),
     path("get_all_call_for_inspection/", views.get_all_call_for_inspection),
     path("get_all_my_call_for_inspection/", views.get_all_my_call_for_inspection),
+
+    #     top-ups
+    path("request_top_up/", views.request_top_up),
+    path("get_all_request_top_up/", views.get_all_request_top_up),
+    path("get_all_my_request_top_up/", views.get_all_my_request_top_up),
 ]

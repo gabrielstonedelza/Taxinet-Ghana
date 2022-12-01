@@ -9,7 +9,7 @@ from .models import (ScheduleRide, Complains, ConfirmDriverPayment, AcceptedSche
                      DriversWallet, DriverAddToUpdatedWallets, DriverAskToLoadWallet, RegisterVehicle,
                      AddToPaymentToday, WorkAndPay, OtherWallet, Wallets, LoadWallet, UpdatedWallets, RideMessages,
                      ExpensesRequest,PrivateUserMessage, Stocks, MonthlySalary,
-                     PayPromoterCommission, PrivateChatId, AddToBlockList, DriversCommission, WalletAddition,DriverRequestCommission, DriverTransferCommissionToWallet,WalletDeduction, WorkExtra, CallForInspection)
+                     PayPromoterCommission, PrivateChatId, AddToBlockList, DriversCommission, WalletAddition,DriverRequestCommission, DriverTransferCommissionToWallet,WalletDeduction, WorkExtra, CallForInspection, UserRequestTopUp)
 
 
 class AdminScheduleRide(admin.ModelAdmin):
@@ -23,6 +23,7 @@ class AdminScheduleRide(admin.ModelAdmin):
 
 
 admin.site.register(WalletAddition)
+admin.site.register(UserRequestTopUp)
 admin.site.register(CallForInspection)
 admin.site.register(WorkExtra)
 admin.site.register(DriversCommission)

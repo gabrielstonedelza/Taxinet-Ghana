@@ -18,7 +18,7 @@ from .models import (Complains, AddToUpdatedWallets, DriversCommission, DriverRe
                      AcceptedScheduledRides, RejectedScheduledRides,
                      CompletedScheduledRides, ScheduledNotifications, ScheduleRide, AssignScheduleToDriver, WorkExtra,
                      AcceptAssignedScheduled, ContactUs, WalletAddition,
-                     RejectAssignedScheduled, CancelScheduledRide, PassengersWallet, AskToLoadWallet, DriverStartTrip,
+                     RejectAssignedScheduled, CancelScheduledRide, PassengersWallet, AskToLoadWallet, DriverStartTrip,UserRequestTopUp,
                      CallForInspection,
                      Wallets, RideMessages, ExpensesRequest,
                      RegisterVehicle, WorkAndPay, OtherWallet,
@@ -29,7 +29,7 @@ from .models import (Complains, AddToUpdatedWallets, DriversCommission, DriverRe
                      MonthlySalary, PayPromoterCommission,
                      AddToBlockList)
 from .serializers import (ComplainsSerializer, ContactUsSerializer,
-                          ConfirmDriverPaymentSerializer, DriversLocationSerializer, ScheduleRideSerializer,
+                          ConfirmDriverPaymentSerializer, DriversLocationSerializer, ScheduleRideSerializer,UserRequestTopUpSerializer,
                           RegisterVehicleSerializer, ExpensesRequestSerializer,
                           AcceptedScheduledRidesSerializer, \
                           RejectedScheduledRidesSerializer, DriverVehicleInventorySerializer,
@@ -1798,6 +1798,33 @@ def get_all_call_for_inspection(request):
 def get_all_my_call_for_inspection(request):
     work_extras = CallForInspection.objects.filter(driver=request.user).order_by('-date_informed')
     serializer = CallForInspectionSerializer(work_extras, many=True)
+    return Response(serializer.data)
+
+
+# top up
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def request_top_up(request):
+    serializer = UserRequestTopUpSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_all_request_top_up(request):
+    top_ups = UserRequestTopUp.objects.all().order_by('-date_requested')
+    serializer = UserRequestTopUpSerializer(top_ups, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_all_my_request_top_up(request):
+    my_top_ups = UserRequestTopUp.objects.filter(user=request.user).order_by('-date_requested')
+    serializer = UserRequestTopUpSerializer(my_top_ups, many=True)
     return Response(serializer.data)
 
 # import pytz
