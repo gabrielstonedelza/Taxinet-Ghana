@@ -1803,7 +1803,7 @@ def get_all_my_call_for_inspection(request):
 
 # top up
 @api_view(['POST'])
-@permission_classes([permissions.AllowAny])
+@permission_classes([permissions.IsAuthenticated])
 def request_top_up(request):
     serializer = UserRequestTopUpSerializer(data=request.data)
     if serializer.is_valid():
