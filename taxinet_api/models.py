@@ -221,6 +221,7 @@ INSPECTION_DAYS = (
 )
 
 TOP_UP_OPTIONS = (
+    ("Select Payment Option", "Select Payment Option"),
     ("Mobile Money", "Mobile Money"),
     ("Bank", "Bank"),
 )
@@ -1177,7 +1178,7 @@ class UserRequestTopUp(models.Model):
     administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1)
     accounts = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=2, related_name="accounts")
     amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
-    top_up_option = models.CharField(max_length=20, default="Mobile Money")
+    top_up_option = models.CharField(max_length=50, default="Mobile Money", choices=TOP_UP_OPTIONS)
     transaction_id = models.CharField(max_length=100, )
     date_requested = models.DateField(auto_now_add=True)
     time_requested = models.TimeField(auto_now_add=True)
