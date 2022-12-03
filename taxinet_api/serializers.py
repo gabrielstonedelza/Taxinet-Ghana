@@ -451,4 +451,4 @@ class CallForInspectionSerializer(serializers.ModelSerializer):
 class UserRequestTopUpSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserRequestTopUp
-        fields = ['id', 'user', 'amount', 'transaction_id', 'date_requested', 'time_requested', 'top_up_option']
+        fields = ['id', 'user', 'amount', 'transaction_id', 'date_requested', 'time_requested', 'top_up_option', 'get_username']
