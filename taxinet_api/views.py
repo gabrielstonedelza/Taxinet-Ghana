@@ -773,7 +773,7 @@ def get_scheduled_by_driver(request):
 @permission_classes([permissions.IsAuthenticated])
 def get_all_user_notifications(request):
     notifications = ScheduledNotifications.objects.filter(notification_to_passenger=request.user).order_by(
-        '-date_created')
+        '-date_created')[:50]
     serializer = ScheduledNotificationSerializer(notifications, many=True)
     return Response(serializer.data)
 
@@ -792,7 +792,7 @@ def get_all_driver_notifications(request):
 def get_user_notifications(request):
     notifications = ScheduledNotifications.objects.filter(notification_to=request.user).filter(
         read="Not Read").order_by(
-        '-date_created')
+        '-date_created')[:50]
     serializer = ScheduledNotificationSerializer(notifications, many=True)
     return Response(serializer.data)
 
@@ -802,7 +802,7 @@ def get_user_notifications(request):
 def get_triggered_notifications(request):
     notifications = ScheduledNotifications.objects.filter(notification_to=request.user).filter(
         notification_trigger="Triggered").filter(
-        read="Not Read").order_by('-date_created')
+        read="Not Read").order_by('-date_created')[:50]
     serializer = ScheduledNotificationSerializer(notifications, many=True)
     return Response(serializer.data)
 
@@ -811,7 +811,7 @@ def get_triggered_notifications(request):
 @permission_classes([permissions.IsAuthenticated])
 def read_notification(request):
     notifications = ScheduledNotifications.objects.filter(notification_to=request.user).filter(
-        read="Not Read").order_by('-date_created')
+        read="Not Read").order_by('-date_created')[:50]
     for i in notifications:
         i.read = "Read"
         i.save()
@@ -1001,7 +1001,7 @@ def get_driver_scheduled_for_monthly(request):
 @permission_classes([permissions.IsAuthenticated])
 def get_all_passenger_notifications(request):
     notifications = ScheduledNotifications.objects.filter(notification_to=request.user).order_by(
-        '-date_created')
+        '-date_created')[:50]
     serializer = ScheduledNotificationSerializer(notifications, many=True)
     return Response(serializer.data)
 
@@ -1011,7 +1011,7 @@ def get_all_passenger_notifications(request):
 def get_passenger_notifications(request):
     notifications = ScheduledNotifications.objects.filter(notification_to=request.user).filter(
         read="Not Read").order_by(
-        '-date_created')
+        '-date_created')[:50]
     serializer = ScheduledNotificationSerializer(notifications, many=True)
     return Response(serializer.data)
 
@@ -1021,7 +1021,7 @@ def get_passenger_notifications(request):
 def get_passengers_triggered_notifications(request):
     notifications = ScheduledNotifications.objects.filter(notification_to=request.user).filter(
         notification_trigger="Triggered").filter(
-        read="Not Read").order_by('-date_created')
+        read="Not Read").order_by('-date_created')[:50]
     serializer = ScheduledNotificationSerializer(notifications, many=True)
     return Response(serializer.data)
 
