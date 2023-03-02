@@ -1827,20 +1827,13 @@ def get_all_my_request_top_up(request):
     serializer = UserRequestTopUpSerializer(my_top_ups, many=True)
     return Response(serializer.data)
 
-# import pytz
-#
-# current_time = datetime.now(pytz.timezone('Africa/Accra'))
-# drivers_numbers = ["0547236997", "0245086675", "0509556768", "0246873879", "0244858459", "0551300168", "0243143292",
-#                    "0244710522", "0596842925"]
-# drivers_tracking_numbers = ["0594095982", "0594097253", "0594163113", "0594143106", "0594140062", "0594162360",
-#                             "0594173115", "0594140058", "0594072852"]
-#
-# if current_time.hour == 11:
-#     for i in drivers_numbers:
-#         send_sms("TG0VqHEFA9ZoqNtnw43GdVkKnBSBIpf2", i,
-#                  "Attention!,please be advised, your car will be locked in one hour time,thank you.", "0244529353")
-#
-# print(current_time.hour)
-# if current_time.hour == 12:
-#     for i in drivers_tracking_numbers:
-#         send_sms("TG0VqHEFA9ZoqNtnw43GdVkKnBSBIpf2", i, "relay,1#", "0244529353")
+# approve inventory
+@api_view(['GET', 'PUT'])
+@permission_classes([permissions.AllowAny])
+def approve_inventory(request, id):
+    inventory = get_object_or_404(DriverVehicleInventory, id=id)
+    serializer = DriverVehicleInventorySerializer(inventory, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

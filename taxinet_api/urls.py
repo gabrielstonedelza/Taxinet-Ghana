@@ -252,4 +252,7 @@ urlpatterns = [
     path("request_top_up/", views.request_top_up),
     path("get_all_request_top_up/", views.get_all_request_top_up),
     path("get_all_my_request_top_up/", views.get_all_my_request_top_up),
+
+#     approve inventory
+    path('approve_inventory/<int:id>/', views.approve_inventory),
 ]

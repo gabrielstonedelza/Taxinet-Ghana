@@ -16,6 +16,7 @@ from .models import (ScheduleRide, Complains, ConfirmDriverPayment, AcceptedSche
 from django.conf import settings
 
 User = settings.AUTH_USER_MODEL
+
 from taxinet_users.models import User, AddToVerified, AddCardsUploaded
 
 

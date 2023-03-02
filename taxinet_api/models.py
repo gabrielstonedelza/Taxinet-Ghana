@@ -467,9 +467,9 @@ class DriversLocation(models.Model):
 class DriverVehicleInventory(models.Model):
     administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1, related_name="inventory")
     driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
-    registration_number = models.CharField(max_length=255, default="")
-    unique_number = models.CharField(max_length=30, default="")
-    vehicle_brand = models.CharField(max_length=255, default="Vitz", choices=TOYOTA_BRANDS)
+    # registration_number = models.CharField(max_length=255, default="")
+    # unique_number = models.CharField(max_length=30, default="")
+    # vehicle_brand = models.CharField(max_length=255, default="Vitz", choices=TOYOTA_BRANDS)
     millage = models.CharField(max_length=255, default="")
     windscreen = models.CharField(max_length=30, choices=INVENTORY_OPTIONS, default="No")
     side_mirror = models.CharField(max_length=30, choices=INVENTORY_OPTIONS, default="No")
@@ -507,6 +507,7 @@ class DriverVehicleInventory(models.Model):
     time_checked = models.TimeField(auto_now_add=True)
     read = models.CharField(max_length=10, choices=READ_STATUS, default="Not Read")
     inspector_name = models.CharField(max_length=50)
+    approved = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.driver.username} has check car today"
