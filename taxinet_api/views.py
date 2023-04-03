@@ -1167,21 +1167,6 @@ def admin_get_payment_detail(request, id):
     return Response(serializer.data)
 
 
-@api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
-def get_my_work_and_pay(request):
-    work_and_pay = WorkAndPay.objects.filter(driver=request.user).order_by('-date_started')
-    serializer = WorkAndPaySerializer(work_and_pay, many=True)
-    return Response(serializer.data)
-
-
-@api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
-def get_work_and_pay_detail(request, id):
-    wallet = get_object_or_404(WorkAndPay, id=id)
-    serializer = WorkAndPaySerializer(wallet, many=False)
-    return Response(serializer.data)
-
 
 # wallet transfer
 @api_view(['POST'])
@@ -1833,6 +1818,51 @@ def get_all_my_request_top_up(request):
 def approve_inventory(request, id):
     inventory = get_object_or_404(DriverVehicleInventory, id=id)
     serializer = DriverVehicleInventorySerializer(inventory, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# work and pay for drivers
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_my_work_and_pay(request):
+    work_and_pay = WorkAndPay.objects.filter(driver=request.user).order_by('-date_started')
+    serializer = WorkAndPaySerializer(work_and_pay, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_work_and_pay_detail(request, id):
+    work_and_pay = get_object_or_404(WorkAndPay, id=id)
+    serializer = WorkAndPaySerializer(work_and_pay, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_all_drivers_work_and_pay(request):
+    works_and_pays = WorkAndPay.objects.all().order_by('-date_started')
+    serializer = WorkAndPaySerializer(works_and_pays,many=True)
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def add_to_work_and_pay(request):
+    serializer = WorkAndPaySerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'PUT'])
+@permission_classes([permissions.AllowAny])
+def pay_for_week(request,id):
+    work_and_pay = get_object_or_404(WorkAndPay,id=id)
+    serializer = WorkAndPaySerializer(work_and_pay,data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)

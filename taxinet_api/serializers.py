@@ -318,8 +318,8 @@ class AddToPaymentTodaySerializer(serializers.ModelSerializer):
 class WorkAndPaySerializer(serializers.ModelSerializer):
     class Meta:
         model = WorkAndPay
-        fields = ['id', 'driver', 'amount_to_pay', 'amount_paid', 'start_date', 'end_date', 'years', 'fully_paid',
-                  'date_started', 'time_started', 'get_assigned_driver_profile_pic', 'get_driver_username']
+        fields = ['id', 'driver', 'total_amount_to_pay', 'total_value_of_car', 'upfront_cash', 'remaining_balance', 'interest_on_car', 'principle_amount_to_pay',
+                  'monthly_payment', 'weekly_payment', 'daily_payment', 'number_of_years', 'start_date', 'end_date', 'fully_paid', 'date_started', 'time_started','get_assigned_driver_profile_pic', 'get_driver_username']
 
 
 class OtherWalletSerializer(serializers.ModelSerializer):

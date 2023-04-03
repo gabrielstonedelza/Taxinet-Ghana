@@ -155,9 +155,6 @@ urlpatterns = [
     #     drivers payments_today
     path("add_to_drivers_payment_today/", views.add_to_drivers_payment_today),
 
-    #     drivers work and pay
-    path("get_my_work_and_pay/", views.get_my_work_and_pay),
-    path("get_work_and_pay_detail/<int:id>/", views.get_work_and_pay_detail),
 
     #     drivers daily payments
     path("payment_today/", views.payments_today),
@@ -255,4 +252,11 @@ urlpatterns = [
 
 #     approve inventory
     path('approve_inventory/<int:id>/', views.approve_inventory),
+
+#     drivers work and pay
+    path("get_my_work_and_pay/", views.get_my_work_and_pay),
+    path("get_all_drivers_work_and_pay/", views.get_all_drivers_work_and_pay),
+    path("add_to_work_and_pay/", views.add_to_work_and_pay),
+    path("get_work_and_pay_detail/<int:id>/", views.get_work_and_pay_detail),
+    path("pay_for_week/<int:id>/", views.pay_for_week),
 ]
