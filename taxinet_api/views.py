@@ -1262,6 +1262,15 @@ def user_wallet_detail(request, id):
     return Response(serializer.data)
 
 
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_user_wallet_detail(request, id):
+    user = User.objects.get(id=id)
+    wallet = Wallets.objects.filter(user=user)
+    serializer = WalletsSerializer(wallet, many=False)
+    return Response(serializer.data)
+
+
 @api_view(['GET', 'PUT'])
 @permission_classes([permissions.AllowAny])
 def admin_update_wallet(request, id):
