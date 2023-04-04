@@ -991,7 +991,7 @@ class WorkAndPay(models.Model):
     date_started = models.DateField(auto_now_add=True)
     time_started = models.TimeField(auto_now_add=True)
 
-    def __srt__(self):
+    def __str__(self):
         return f"{self.driver.username} has been added to work and pay system"
 
     def get_assigned_driver_profile_pic(self):
