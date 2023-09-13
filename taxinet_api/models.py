@@ -1,21 +1,13 @@
-from email.policy import default
-from random import choices
-from sre_constants import CATEGORY
-
-from django.shortcuts import get_object_or_404
-from django.db import models
 from django.conf import settings
-from taxinet_users.models import DriverProfile, PassengerProfile, User, InvestorsProfile, AdministratorsProfile
+from django.db import models
 from django.utils import timezone
 from django.utils.text import slugify
+
+from taxinet_users.models import DriverProfile, PassengerProfile, User, AdministratorsProfile
 
 DeUser = settings.AUTH_USER_MODEL
 
 #
-
-
-from datetime import datetime, date, time, timedelta
-
 # Create your models here.
 READ_STATUS = (
     ("Read", "Read"),

@@ -85,9 +85,9 @@ WSGI_APPLICATION = 'taxinet.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'taxinet',
-        'USER': 'taxinetuser',
-        'PASSWORD': 'TaxiNetTransport',
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
         'HOST': 'localhost',
         'PORT': '5432',
         # 'ENGINE': 'django.db.backends.sqlite3',
