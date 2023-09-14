@@ -1,40 +1,28 @@
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from . import views
-from .views import AllPassengersView, AllPassengersProfileView, AllDriversProfileView, AllInvestorsProfileView, \
-    AllPromotersView, AllPromotersProfileView, AccountProfileView
+from .views import AllPassengersView, AllPassengersProfileView
 
 urlpatterns = [
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.authtoken')),
     path('', views.taxinet_home, name="home"),
-    path('driver-profile/', views.driver_profile),
     path('get_user/', views.get_user),
     path('get_passenger_profile/<int:id>/', views.get_passenger_profile),
-    path('get_drivers_profile/<int:id>/', views.get_drivers_profile),
-    path('get_user_by_unique_code/<str:unique_code>/', views.get_user_by_unique_code),
-    # path('get_passengers_profile_by_unique_code/<str:unique_code>/', views.get_passengers_profile_by_unique_code),
     path('get_passenger_details/<int:id>/', views.get_passenger_details),
-    path('get_drivers_details/<int:id>/', views.get_drivers_details),
     path('all_passengers/', views.get_all_passengers),
-    path('get_all_my_passengers/<str:username>/', views.get_all_my_passengers),
+
     path('get_all_passengers/', AllPassengersView.as_view()),
-    path('get_all_promoters/', AllPromotersView.as_view()),
+
     path('all_passengers_profile/', AllPassengersProfileView.as_view()),
-    path('all_investors_profile/', AllInvestorsProfileView.as_view()),
-    path('all_drivers_profile/', AllDriversProfileView.as_view()),
-    path('all_promoters_profile/', AllPromotersProfileView.as_view()),
-    path('account_profile/', AccountProfileView.as_view()),
-    path('all_drivers/', views.get_all_drivers),
-    path('all_investors/', views.get_all_investors),
+
     path('all_users/', views.get_all_user),
     path('search_users/', views.GetAllUsers.as_view()),
     path('users/', views.AllUsers.as_view()),
     path('passenger-profile/', views.passenger_profile),
-    path('promoter_profile/', views.promoter_profile),
-    path('update_driver_profile/', views.update_driver_profile),
+
     path('update_passenger_profile/', views.update_passenger_profile),
-    path('admin_update_passenger_profile/<int:id>/', views.admin_update_passenger_profile),
+
     path('update_username/', views.update_username),
     path('password-reset/', auth_views.PasswordResetView.as_view(
         template_name='taxinet_users/password_reset.html'), name='password_reset'),
@@ -45,9 +33,6 @@ urlpatterns = [
     path('password-reset-complete/', auth_views.PasswordResetCompleteView.as_view(
         template_name='taxinet_users/password_reset_complete.html'), name='password_reset_complete'),
 
-    #
-    path("add_to_verified_profile/", views.add_to_verified_profile),
-    path("add_to_uploaded_cards/", views.add_to_uploaded_cards),
     path('update_blocked/<int:id>/', views.update_blocked),
     path('get_all_blocked_users/', views.get_all_blocked_users),
 ]

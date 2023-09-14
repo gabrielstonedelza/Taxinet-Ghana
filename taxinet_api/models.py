@@ -3,7 +3,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.text import slugify
 
-from taxinet_users.models import DriverProfile, PassengerProfile, User, AdministratorsProfile
+from taxinet_users.models import  Profile, User
 
 DeUser = settings.AUTH_USER_MODEL
 
@@ -24,20 +24,29 @@ NOTIFICATIONS_TRIGGERS = (
     ("Not Triggered", "Not Triggered"),
 )
 
-DRIVER_STATUS = (
+RENT_STATUS = (
     ("Booked", "Booked"),
     ("Not Booked", "Not Booked"),
+    ("Completed", "Completed"),
 )
 
-ACCEPT_SCHEDULE_RIDE = (
-    ("Accept", "Accept"),
-    ("Reject", "Reject"),
+RENT_VEHICLE_TYPE = (
+    ("Select Rent Type","Select Rent Type"),
+    ("Truck","Truck"),
+    ("Luxury","Luxury"),
+    ("Bus","Bus"),
 )
-ACCEPT_RIDE_STATUS = (
-    ("Accepted", "Accepted"),
-    ("Rejected", "Rejected"),
+RENT_DRIVER_TYPE =(
+    ("Select Driver Type","Select Driver Type"),
+    ("Self Drive","Self Drive"),
+    ("With A Driver","With A Driver"),
 )
-
+CAR_TYPE = (
+    ("Select Card Type","Select Card Type"),
+    ("Standard","Standard"),
+    ("4WD/SUV","4WD/SUV"),
+    ("Van","Van"),
+)
 SCHEDULE_RIDE_OPTIONS = (
     ("One Time", "One Time"),
     ("Daily", "Daily"),
@@ -46,17 +55,13 @@ SCHEDULE_RIDE_OPTIONS = (
     ("Monthly", "Monthly"),
 )
 
-DRIVER_PAYMENT_CONFIRMATION = (
-    ("Confirmed", "Confirmed"),
-    ("Not Confirmed", "Not Confirmed"),
-)
 SCHEDULE_TYPES = (
     ("Select Schedule Type", "Select Schedule Type"),
-    ("Short Trip", "Short Trip"),
-    ("Daily", "Daily"),
-    ("Days", "Days"),
-    ("Weekly", "Weekly"),
-    ("Until Cancelled", "Until Cancelled"),
+    ("School Pick up And Drop Off", "School Pick up And Drop Off"),
+    ("Office Pick up And Drop Off", "Office Pick up And Drop Off"),
+    ("Airport Pick up And Drop Off", "Airport Pick up And Drop Off"),
+    ("Delivery Pick up And Drop Off", "Delivery Pick up And Drop Off"),
+    ("Hotel Pick up And Drop Off", "Hotel Pick up And Drop Off"),
 )
 
 SCHEDULE_PRIORITY = (
@@ -65,10 +70,6 @@ SCHEDULE_PRIORITY = (
     ("Low", "Low"),
 )
 
-RIDE_TYPE = (
-    ("Taxinet Ride", "Taxinet Ride"),
-    ("Taxinet Luxury", "Taxinet Luxury"),
-)
 
 INVENTORY_OPTIONS = (
     ("Select Option", "Select Option"),
@@ -78,7 +79,6 @@ INVENTORY_OPTIONS = (
 
 SCHEDULE_STATUS = (
     ("Pending", "Pending"),
-    ("Reviewing", "Reviewing"),
     ("Active", "Active"),
     ("Cancelled", "Cancelled"),
 )
@@ -217,75 +217,52 @@ TOP_UP_OPTIONS = (
     ("Mobile Money", "Mobile Money"),
     ("Ecobank", "Ecobank"),
 )
-
+SCHEDULE_DURATION = (
+    ("Select Schedule Duration", "Select Schedule Duration"),
+    ("One Time", "One Time"),
+    ("Daily", "Daily"),
+    ("Weekly", "Weekly"),
+    ("Monthly", "Monthly"),
+    ("Days", "Days"),
+)
 
 # working and functioning now models
 class ScheduleRide(models.Model):
-    assigned_driver = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="driver_to_be_assigned_schedule",
-                                        default=1)
+    administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="main_admin",default=1)
     passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="passenger_scheduling_ride")
-    administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1)
-    schedule_type = models.CharField(max_length=255, default="Short Trip", choices=SCHEDULE_TYPES)
-    ride_type = models.CharField(max_length=50, default="Taxinet Ride", choices=RIDE_TYPE)
+    schedule_type = models.CharField(max_length=255, default="Airport Pick up And Drop Off", choices=SCHEDULE_TYPES)
+    schedule_duration = models.CharField(max_length=255, default="One Time", choices=SCHEDULE_DURATION)
     pickup_location = models.CharField(max_length=255, blank=True, default="")
     drop_off_location = models.CharField(max_length=255, blank=True, default="")
     pick_up_time = models.CharField(max_length=100, blank=True, )
     start_date = models.CharField(max_length=100, blank=True, )
     completed = models.BooleanField(default=False)
-    days = models.CharField(max_length=200, blank=True, default="")
+    day1 = models.CharField(max_length=15, blank=True, default="")
+    day2 = models.CharField(max_length=15, blank=True, default="")
+    day3 = models.CharField(max_length=15, blank=True, default="")
+    day4 = models.CharField(max_length=15, blank=True, default="")
+    day5 = models.CharField(max_length=15, blank=True, default="")
+    day6 = models.CharField(max_length=15, blank=True, default="")
+    day7 = models.CharField(max_length=15, blank=True, default="")
     status = models.CharField(max_length=50, choices=SCHEDULE_STATUS, default="Pending")
     price = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
     charge = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
-    slug = models.SlugField(max_length=100, default='', blank=True)
     date_scheduled = models.DateField(auto_now_add=True)
     time_scheduled = models.TimeField(auto_now_add=True)
-    read = models.CharField(max_length=10, choices=READ_STATUS, default="Not Read")
-    passenger_username = models.CharField(max_length=100, default="", blank=True, )
-    passenger_phone = models.CharField(max_length=100, default="", blank=True)
-    driver_username = models.CharField(max_length=100, default="", blank=True, )
-    driver_phone = models.CharField(max_length=100, default="", blank=True)
     pickup_lng = models.CharField(max_length=255, blank=True, default="")
     pickup_lat = models.CharField(max_length=255, blank=True, default="")
     drop_off_lat = models.CharField(max_length=255, blank=True, default="")
     drop_off_lng = models.CharField(max_length=255, blank=True, default="")
 
     def __str__(self):
-        return str(self.passenger.username)
-
-    def save(self, *args, **kwargs):
-        self.passenger_username = self.passenger.username
-        self.driver_username = self.assigned_driver.username
-        self.passenger_phone = self.passenger.phone_number
-        self.driver_phone = self.assigned_driver.phone_number
-        value = self.pk
-        self.slug = slugify(value, allow_unicode=True)
-        super().save(*args, **kwargs)
-
-    def get_administrator_profile_pic(self):
-        de_admin = AdministratorsProfile.objects.get(user=self.administrator)
-        if de_admin:
-            return "https://taxinetghana.xyz" + de_admin.profile_pic.url
-        return ""
+        return self.schedule_type
 
     def get_passenger_profile_pic(self):
         my_passenger = User.objects.get(username=self.passenger.username)
         if my_passenger.user_type == "Passenger":
-            my_passenger = PassengerProfile.objects.get(user=self.passenger)
+            my_passenger = Profile.objects.get(user=self.passenger)
             if my_passenger:
                 return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
-            return ""
-
-    def get_assigned_driver_profile_pic(self):
-        driver = User.objects.get(username=self.assigned_driver.username)
-        if driver.user_type == "Administrator":
-            de_driver = AdministratorsProfile.objects.get(user=self.assigned_driver)
-            if de_driver:
-                return "https://taxinetghana.xyz" + de_driver.profile_pic.url
-            return ""
-        elif driver.user_type == "Driver":
-            de_driver = DriverProfile.objects.get(user=self.assigned_driver)
-            if de_driver:
-                return "https://taxinetghana.xyz" + de_driver.profile_pic.url
             return ""
 
     def get_passenger_name(self):
@@ -293,76 +270,6 @@ class ScheduleRide(models.Model):
 
     def get_passenger_number(self):
         return self.passenger.phone_number
-
-    def get_driver_phone_number(self):
-        return self.assigned_driver.phone_number
-
-    def get_assigned_driver_name(self):
-        return self.assigned_driver.username
-
-
-class AssignScheduleToDriver(models.Model):
-    administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1)
-    ride = models.OneToOneField(ScheduleRide, on_delete=models.CASCADE)
-    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="Driver_receiving_scheduled_ride")
-    ride_accepted = models.BooleanField(default=False)
-    date_assigned = models.DateField(auto_now_add=True)
-    time_assigned = models.TimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.ride} was assigned to {self.driver}"
-
-
-class AcceptAssignedScheduled(models.Model):
-    assigned_to_driver = models.ForeignKey(AssignScheduleToDriver, on_delete=models.CASCADE)
-    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
-    date_accepted = models.DateField(auto_now_add=True)
-    time_accepted = models.TimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.driver.username} accepted ride {self.assigned_to_driver.ride}"
-
-
-class RejectAssignedScheduled(models.Model):
-    assigned_to_driver = models.ForeignKey(AssignScheduleToDriver, on_delete=models.CASCADE)
-    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
-    date_rejected = models.DateField(auto_now_add=True)
-    time_rejected = models.TimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.driver.username} rejected ride {self.assigned_to_driver.ride}"
-
-
-class AcceptedScheduledRides(models.Model):
-    scheduled_ride = models.ForeignKey(ScheduleRide, on_delete=models.CASCADE)
-    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="driver_accepting_scheduled_ride")
-    date_accepted = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.driver} accepted ride {self.scheduled_ride.id}"
-
-
-class RejectedScheduledRides(models.Model):
-    scheduled_ride = models.ForeignKey(ScheduleRide, on_delete=models.CASCADE)
-    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="driver_rejecting_scheduled_ride")
-    date_rejected = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.driver} rejected ride {self.scheduled_ride.id}"
-
-
-class CompletedScheduledRides(models.Model):
-    scheduled_ride = models.ForeignKey(ScheduleRide, on_delete=models.CASCADE)
-    date_completed = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"Ride {self.scheduled_ride.id} for today is complete"
-
-    def get_passenger_username(self):
-        return self.scheduled_ride.passenger.username
-
-    def assigned_driver(self):
-        return self.scheduled_ride.assigned_driver.username
 
 
 class CancelScheduledRide(models.Model):
@@ -372,96 +279,22 @@ class CancelScheduledRide(models.Model):
     time_cancelled = models.TimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.ride
+        return self.ride.schedule_type
 
 
 class Complains(models.Model):
     administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1, related_name="complains")
     complainant = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="user_making_complain")
-    offender = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="offender")
     complain = models.TextField(blank=True)
     date_posted = models.DateTimeField(auto_now_add=True)
-    read = models.CharField(max_length=10, choices=READ_STATUS, default="Not Read")
 
     def __str__(self):
         return f"{self.complainant.username} just posted a complain"
 
 
-class ConfirmDriverPayment(models.Model):
-    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
-    payment_confirmed = models.BooleanField(default=False)
-    bank_payment_reference = models.CharField(max_length=100)
-    amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
-    date_confirmed = models.DateTimeField(auto_now_add=True)
-    date_posted = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        if self.payment_confirmed == "Not Confirmed":
-            return f"{self.driver.username}'s previous payment pending confirmation"
-        else:
-            return f"{self.driver.username}'s previous payment is confirmed"
-
-    def get_driver_profile_pic(self):
-        my_passenger = DriverProfile.objects.get(user=self.driver)
-        if my_passenger:
-            return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
-        return ""
-
-
-class DriversLocation(models.Model):
-    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
-    place_id = models.CharField(max_length=100, blank=True)
-    location_name = models.CharField(max_length=100, default="")
-    drivers_lat = models.CharField(max_length=255, null=True, blank=True)
-    drivers_lng = models.CharField(max_length=255, null=True, blank=True)
-    date_updated = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.driver.username}'s location is updated"
-
-    def get_drivers_pic(self):
-        drivers_profile = DriverProfile.objects.get(user=self.driver)
-        if drivers_profile:
-            return "https://taxinetghana.xyz" + drivers_profile.profile_pic.url
-        return ""
-
-    def get_drivers_name(self):
-        drivers_profile = DriverProfile.objects.get(user=self.driver)
-        if drivers_profile:
-            return drivers_profile.name_on_ghana_card
-        return ""
-
-    def drivers_plate(self):
-        drivers_profile = DriverProfile.objects.get(user=self.driver)
-        if drivers_profile:
-            return drivers_profile.license_plate
-        return ""
-
-    def drivers_car_model(self):
-        drivers_profile = DriverProfile.objects.get(user=self.driver)
-        if drivers_profile:
-            return drivers_profile.car_model
-        return ""
-
-    def drivers_car_name(self):
-        drivers_profile = DriverProfile.objects.get(user=self.driver)
-        if drivers_profile:
-            return drivers_profile.car_name
-        return ""
-
-    def drivers_taxinet_number(self):
-        drivers_profile = DriverProfile.objects.get(user=self.driver)
-        if drivers_profile:
-            return drivers_profile.taxinet_number
-        return ""
-
-
-class DriverVehicleInventory(models.Model):
+class VehicleInventory(models.Model):
     administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1, related_name="inventory")
-    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
-    # registration_number = models.CharField(max_length=255, default="")
-    # unique_number = models.CharField(max_length=30, default="")
-    # vehicle_brand = models.CharField(max_length=255, default="Vitz", choices=TOYOTA_BRANDS)
+    passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE)
     millage = models.CharField(max_length=255, default="")
     windscreen = models.CharField(max_length=30, choices=INVENTORY_OPTIONS, default="No")
     side_mirror = models.CharField(max_length=30, choices=INVENTORY_OPTIONS, default="No")
@@ -502,16 +335,10 @@ class DriverVehicleInventory(models.Model):
     approved = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.driver.username} has check car today"
+        return f"{self.passenger.username} has check car today"
 
     def get_drivers_name(self):
-        return self.driver.username
-
-    def get_driver_profile_pic(self):
-        my_driver = DriverProfile.objects.get(user=self.driver)
-        if my_driver:
-            return "https://taxinetghana.xyz" + my_driver.profile_pic.url
-        return ""
+        return self.passenger.username
 
 
 class ScheduledNotifications(models.Model):
@@ -533,16 +360,12 @@ class ScheduledNotifications(models.Model):
                                                   null=True)
     passengers_pickup = models.CharField(max_length=255, null=True, blank=True)
     passengers_dropOff = models.CharField(max_length=255, null=True, blank=True)
-    schedule_ride_slug = models.CharField(max_length=255, blank=True)
     schedule_ride_id = models.CharField(max_length=255, blank=True)
+    rent_car_id = models.CharField(max_length=255, blank=True)
+    rent_car_title = models.CharField(max_length=255, blank=True)
     schedule_ride_title = models.CharField(max_length=255, blank=True)
-    schedule_ride_accepted_id = models.CharField(max_length=255, blank=True)
-    schedule_ride_rejected_id = models.CharField(max_length=255, blank=True)
     completed_schedule_ride_id = models.CharField(max_length=255, blank=True)
     drivers_inventory_id = models.CharField(max_length=255, blank=True, default='')
-    assigned_scheduled_id = models.CharField(max_length=255, blank=True, default='')
-    accept_assigned_scheduled_id = models.CharField(max_length=255, blank=True, default='')
-    reject_assigned_scheduled_id = models.CharField(max_length=255, blank=True, default='')
     complain_id = models.CharField(max_length=255, blank=True)
     reply_id = models.CharField(max_length=255, blank=True)
     review_id = models.CharField(max_length=255, blank=True)
@@ -552,14 +375,6 @@ class ScheduledNotifications(models.Model):
 
     def __str__(self):
         return self.notification_title
-
-    # def get_passengers_notification_from_pic(self):
-    #     my_user = User.objects.get(username=self.notification_from.username)
-    #     if my_user.user_type == "Passenger":
-    #         my_passenger = PassengerProfile.objects.get(user=self.notification_from)
-    #         if my_passenger:
-    #             return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
-    #         return ""
 
 
 class ContactUs(models.Model):
@@ -582,184 +397,6 @@ class ContactAdmin(models.Model):
 
     def __str__(self):
         return self.user.username
-
-
-class PassengersWallet(models.Model):
-    administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1,
-                                      related_name="administrator_for_wallet")
-    passenger = models.OneToOneField(DeUser, on_delete=models.CASCADE, related_name="passenger_only_profile")
-    de_passenger = models.ForeignKey(PassengerProfile, on_delete=models.CASCADE,
-                                     related_name="passengerloadingwallet")
-    amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
-    date_loaded = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return str(self.amount)
-
-    def get_passengers_name(self):
-        return self.passenger.username
-
-    def get_amount(self):
-        return self.amount
-
-    def get_passenger_profile_pic(self):
-        return "https://taxinetghana.xyz" + self.de_passenger.profile_pic.url
-
-
-class AskToLoadWallet(models.Model):
-    administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1, related_name="administrator")
-    title = models.CharField(max_length=200, default="Wants to load wallet")
-    passenger = models.ForeignKey(PassengerProfile, on_delete=models.CASCADE)
-    amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
-    date_requested = models.DateField(auto_now_add=True)
-    time_requested = models.TimeField(auto_now_add=True)
-    read = models.CharField(max_length=10, choices=READ_STATUS, default="Not Read")
-
-    def save(self, *args, **kwargs):
-        self.title = f"{self.passenger.user.username} wants to load wallet"
-        super().save(*args, **kwargs)
-
-    def __str__(self):
-        return self.title
-
-    def get_passengers_name(self):
-        return self.passenger.user.username
-
-    def get_amount(self):
-        return str(self.amount)
-
-    def get_passenger_profile_pic(self):
-        return "https://taxinetghana.xyz" + self.passenger.profile_pic.url
-
-
-class AddToUpdatedWallets(models.Model):
-    wallet = models.ForeignKey(PassengersWallet, on_delete=models.CASCADE)
-    date_updated = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.wallet.passenger.username}'s wallet was updated."
-
-
-class DriverStartTrip(models.Model):
-    administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1, related_name="start_trip")
-    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
-    passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="passenger_enjoying_trip")
-    ride = models.CharField(max_length=255, default="", )
-    date_started = models.DateField(auto_now_add=True)
-    time_started = models.TimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.driver.username} started trip"
-
-
-class DriverEndTrip(models.Model):
-    administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1, related_name="end_trip")
-    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
-    passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="passenger_enjoying_trip_to_end")
-    ride = models.CharField(max_length=255, default="", )
-    price = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
-    payment_method = models.CharField(max_length=30, choices=PAYMENT_METHODS, default="Wallet")
-    time_elapsed = models.CharField(max_length=225, default="00:00:00")
-    date_stopped = models.DateField(auto_now_add=True)
-    time_stopped = models.TimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.driver.username} ended trip"
-
-
-class OtherWallet(models.Model):
-    sender = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="user_sending_wallet")
-    receiver = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="user_receiving_wallet")
-    amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
-    date_transferred = models.DateField(auto_now_add=True)
-    time_transferred = models.TimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.sender.username} sent GHS{self.amount} to {self.receiver.username}"
-
-    def get_profile_pic(self):
-        sender = User.objects.get(username=self.sender.username)
-
-        if sender.user_type == "Driver":
-            de_driver = DriverProfile.objects.get(user=self.sender)
-            if de_driver:
-                return "https://taxinetghana.xyz" + de_driver.profile_pic.url
-            return ""
-
-        if sender.user_type == "Passenger":
-            de_passenger = PassengerProfile.objects.get(user=self.sender)
-            if de_passenger:
-                return "https://taxinetghana.xyz" + de_passenger.profile_pic.url
-            return ""
-
-
-class DriverAlertArrival(models.Model):
-    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
-    passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="passenger_being_alerted")
-    date_alerted = models.DateField(auto_now_add=True)
-    time_alerted = models.TimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.driver.username} has arrived"
-
-
-class DriversWallet(models.Model):
-    administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1,
-                                      related_name="drivers_administrator_for_wallet")
-    driver = models.OneToOneField(DeUser, on_delete=models.CASCADE, related_name="driver_only_profile")
-    de_driver = models.ForeignKey(DriverProfile, on_delete=models.CASCADE, related_name="driverswallet", null=True)
-    amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
-    default_amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=70.00)
-    date_loaded = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return str(self.amount)
-
-    def get_drivers_name(self):
-        return self.driver.username
-
-    def get_amount(self):
-        return self.amount
-
-    def get_drivers_profile_pic(self):
-        return "https://taxinetghana.xyz" + self.de_driver.profile_pic.url
-
-    # def driver_auto_payment(self):
-
-
-class DriverAskToLoadWallet(models.Model):
-    administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1,
-                                      related_name="administrator_loadWallet")
-    title = models.CharField(max_length=200, default="Wants to load wallet")
-    driver = models.ForeignKey(DriverProfile, on_delete=models.CASCADE)
-    amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
-    date_requested = models.DateField(auto_now_add=True)
-    time_requested = models.TimeField(auto_now_add=True)
-    read = models.CharField(max_length=10, choices=READ_STATUS, default="Not Read")
-
-    def save(self, *args, **kwargs):
-        self.title = f"{self.driver.user.username} wants to load wallet"
-        super().save(*args, **kwargs)
-
-    def __str__(self):
-        return self.title
-
-    def get_drivers_name(self):
-        return self.driver.user.username
-
-    def get_amount(self):
-        return str(self.amount)
-
-    def get_drivers_profile_pic(self):
-        return "https://taxinetghana.xyz" + self.driver.profile_pic.url
-
-
-class DriverAddToUpdatedWallets(models.Model):
-    wallet = models.ForeignKey(DriversWallet, on_delete=models.CASCADE)
-    date_updated = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.wallet.driver.username}'s wallet was updated."
 
 
 class RegisterVehicle(models.Model):
@@ -792,39 +429,6 @@ class RegisterVehicle(models.Model):
     #     return ""
 
 
-class AddToPaymentToday(models.Model):
-    administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1, related_name="payment_admin")
-    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
-    amount = models.DecimalField(blank=True, decimal_places=2, max_digits=20, default=00.00)
-    title = models.CharField(max_length=255, default="Payment Today")
-    read = models.CharField(max_length=10, choices=READ_STATUS, default="Not Read")
-    date_paid = models.DateField(auto_now_add=True)
-    time_paid = models.TimeField(auto_now_add=True)
-    username = models.CharField(max_length=100, default="", blank=True, )
-    phone = models.CharField(max_length=100, default="", blank=True)
-
-    def __str__(self):
-        return f"{self.driver.username} has made payment today"
-
-    def save(self, *args, **kwargs):
-        self.username = self.driver.username
-        self.phone = self.driver.phone_number
-        value = f"{self.driver.username} has made payment today"
-        self.title = value
-        super().save(*args, **kwargs)
-
-    def get_driver_profile_pic(self):
-        driver = User.objects.get(username=self.driver.username)
-        if driver.user_type == "Driver":
-            de_driver = DriverProfile.objects.get(user=self.driver)
-            if de_driver:
-                return "https://taxinetghana.xyz" + de_driver.profile_pic.url
-            return ""
-
-    def get_drivers_full_name(self):
-        return self.driver.full_name
-
-
 # new wallets
 class Wallets(models.Model):
     user = models.OneToOneField(DeUser, on_delete=models.CASCADE, related_name="user_only_profile")
@@ -849,13 +453,8 @@ class Wallets(models.Model):
 
     def get_profile_pic(self):
         user = User.objects.get(username=self.user.username)
-        if user.user_type == "Driver":
-            de_driver = DriverProfile.objects.get(user=self.user)
-            if de_driver:
-                return "https://taxinetghana.xyz" + de_driver.profile_pic.url
-            return ""
-        elif user.user_type == "Passenger":
-            de_passenger = PassengerProfile.objects.get(user=self.user)
+        if user.user_type == "Passenger":
+            de_passenger = Profile.objects.get(user=self.user)
             if de_passenger:
                 return "https://taxinetghana.xyz" + de_passenger.profile_pic.url
             return ""
@@ -882,13 +481,8 @@ class LoadWallet(models.Model):
 
     def get_profile_pic(self):
         user = User.objects.get(username=self.user.username)
-        if user.user_type == "Driver":
-            de_driver = DriverProfile.objects.get(user=self.user)
-            if de_driver:
-                return "https://taxinetghana.xyz" + de_driver.profile_pic.url
-            return ""
-        elif user.user_type == "Passenger":
-            de_passenger = PassengerProfile.objects.get(user=self.user)
+        if user.user_type == "Passenger":
+            de_passenger = Profile.objects.get(user=self.user)
             if de_passenger:
                 return "https://taxinetghana.xyz" + de_passenger.profile_pic.url
             return ""
@@ -911,280 +505,60 @@ class UpdatedWallets(models.Model):
         return f"{self.wallet.user.username}'s wallet was updated."
 
 
-class RideMessages(models.Model):
-    ride = models.ForeignKey(ScheduleRide, on_delete=models.CASCADE)
-    user = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="user_sending_message")
-    message = models.TextField()
-    read = models.BooleanField(default=False)
-    date_sent = models.DateField(auto_now_add=True)
-    time_sent = models.TimeField(auto_now_add=True)
+# for renting a car
+
+class RegisterCarForRent(models.Model):
+    name = models.CharField(max_length=100)
+    car_type = models.CharField(max_length=100,choices=CAR_TYPE,default="Standard")
+    number_of_passengers = models.IntegerField(default=5)
+    transmission = models.CharField(max_length=100,choices=VEHICLE_TRANSMISSION,default="Automatic")
+    air_condition = models.BooleanField(default=False)
+    car_color = models.CharField(max_length=100)
+    date_added = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.ride.schedule_title} got a message"
+        return self.name
 
-    def get_profile_pic(self):
-        # get driver profile
-        user = User.objects.get(username=self.user.username)
-        if user.user_type == "Driver":
-            de_driver = DriverProfile.objects.get(user=self.user)
-            if de_driver:
-                return "https://taxinetghana.xyz" + de_driver.profile_pic.url
-            return ""
-        elif user.user_type == "Passenger":
-            de_passenger = PassengerProfile.objects.get(user=self.user)
-            if de_passenger:
-                return "https://taxinetghana.xyz" + de_passenger.profile_pic.url
-            return ""
-
-    def get_username(self):
-        return self.user.username
-
-    def get_user_type(self):
-        return self.user.user_type
-
-
-class ExpensesRequest(models.Model):
-    guarantor = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
-    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE, null=True, related_name="driver_making_expense")
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_requesting_expense_cash")
-    item_name = models.CharField(max_length=200, default="")
-    quantity = models.IntegerField(default=0)
-    amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
-    reason = models.TextField(default="")
-    request_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
-    date_requested = models.DateField(auto_now_add=True)
-    time_requested = models.TimeField(auto_now_add=True)
+class RentACar(models.Model):
+    passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="passenger_renting")
+    number_of_days_renting = models.IntegerField(default=1)
+    pick_up_time = models.CharField(max_length=30)
+    pick_up_date = models.CharField(max_length=30)
+    drop_off_time = models.CharField(max_length=30)
+    drop_off_date = models.CharField(max_length=30)
+    rented_car = models.ForeignKey(RegisterCarForRent, on_delete=models.CASCADE, related_name="rented_car")
+    driver_type = models.CharField(max_length=255, choices=RENT_DRIVER_TYPE, default="Self Drive")
+    rent_status = models.CharField(max_length=105, choices=RENT_STATUS, default="Not Booked")
+    date_booked = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Expense request made for {self.amount} by {self.user.username}"
+        return f"{self.passenger.username} has requested to rent {self.rent_vehicle_type}"
 
-    def get_username(self):
-        return self.user.username
+    def get_passenger_name(self):
+        return self.passenger.username
 
-    def get_driver_username(self):
-        return self.driver.username
+    def get_passenger_full_name(self):
+        return self.passenger.full_name
 
+    def get_passenger_phone_number(self):
+        return self.passenger.phone_number
 
-class WorkAndPay(models.Model):
-    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
-    total_amount_to_pay = models.DecimalField(blank=True, decimal_places=2, max_digits=19, default=00.00)
-    total_value_of_car = models.DecimalField(blank=True, decimal_places=2, max_digits=19, default=00.00)
-    upfront_cash = models.DecimalField(blank=True, decimal_places=2, max_digits=19, default=00.00)
-    remaining_balance = models.DecimalField(blank=True, decimal_places=2, max_digits=19, default=00.00)
-    interest_on_car = models.DecimalField(blank=True, decimal_places=2, max_digits=19, default=00.00)
-    principle_amount_to_pay = models.DecimalField(blank=True, decimal_places=2, max_digits=19, default=00.00)
-    monthly_payment = models.DecimalField(blank=True, decimal_places=2, max_digits=19, default=00.00)
-    weekly_payment = models.DecimalField(blank=True, decimal_places=2, max_digits=19, default=00.00)
-    daily_payment = models.DecimalField(blank=True, decimal_places=2, max_digits=19, default=00.00)
-    number_of_years = models.IntegerField(default=2)
-    start_date = models.CharField(max_length=20, blank=True)
-    end_date = models.CharField(max_length=20, blank=True)
-    fully_paid = models.BooleanField(default=False)
-    date_started = models.DateField(auto_now_add=True)
-    time_started = models.TimeField(auto_now_add=True)
+    def get_rented_car_name(self):
+        return self.rented_car.name
 
-    def __str__(self):
-        return f"{self.driver.username} has been added to work and pay system"
+    def get_car_type(self):
+        return self.rented_car.car_type
 
-    def get_assigned_driver_profile_pic(self):
-        driver = User.objects.get(username=self.driver.username)
+    def get_car_num_of_passenger(self):
+        return self.rented_car.number_of_passengers
 
-        if driver.user_type == "Driver":
-            de_driver = DriverProfile.objects.get(user=self.driver)
-            if de_driver:
-                return "https://taxinetghana.xyz" + de_driver.profile_pic.url
-            return ""
+    def get_car_transmission(self):
+        return self.rented_car.transmission
 
-    def get_driver_username(self):
-        return self.driver.username
+    def get_car_air_condition(self):
+        return self.rented_car.air_condition
+
+    def get_car_color(self):
+        return self.rented_car.car_color
 
 
-# new updates
-class Stocks(models.Model):
-    item_name = models.CharField(max_length=200, )
-    quantity = models.IntegerField(default=0)
-    date_added = models.DateField(auto_now_add=True)
-    time_added = models.TimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.item_name
-
-
-class MonthlySalary(models.Model):
-    driver = models.ForeignKey(User, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
-    date_paid = models.DateField(auto_now_add=True)
-    time_paid = models.TimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.driver.username
-
-
-class PayPromoterCommission(models.Model):
-    promoter = models.ForeignKey(User, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
-    date_paid = models.DateField(auto_now_add=True)
-    time_paid = models.TimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.promoter.username
-
-
-class PrivateChatId(models.Model):
-    chat_id = models.CharField(max_length=400, blank=True)
-    date_created = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.chat_id
-
-
-class PrivateUserMessage(models.Model):
-    sender = models.ForeignKey(User, on_delete=models.CASCADE)
-    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="chatter2")
-    private_chat_id = models.CharField(max_length=400, blank=True)
-    message = models.TextField()
-    read = models.BooleanField(default=False)
-    isSender = models.BooleanField(default=False)
-    isReceiver = models.BooleanField(default=False)
-    timestamp = models.DateTimeField(default=timezone.now)
-
-    def __str__(self):
-        return self.private_chat_id
-
-    def get_senders_username(self):
-        return self.sender.username
-
-    def get_receivers_username(self):
-        return self.receiver.username
-
-    def save(self, *args, **kwargs):
-        senders_username = self.sender.username
-        receiver_username = self.receiver.username
-        sender_receiver = str(senders_username) + str(receiver_username)
-        receiver_sender = str(receiver_username) + str(senders_username)
-
-        self.private_chat_id = sender_receiver
-
-        super().save(*args, **kwargs)
-
-    def get_sender_profile_pic(self):
-        my_sender = User.objects.get(username=self.sender.username)
-        if my_sender.user_type == "Passenger":
-            my_passenger = PassengerProfile.objects.get(user=self.sender)
-            if my_passenger:
-                return "https://taxinetghana.xyz" + my_passenger.profile_pic.url
-            return ""
-        if my_sender.user_type == "Driver":
-            my_driver = DriverProfile.objects.get(user=self.sender)
-            if my_driver:
-                return "https://taxinetghana.xyz" + my_driver.profile_pic.url
-            return ""
-
-
-class AddToBlockList(models.Model):
-    administrator = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_being_blocked")
-    date_blocked = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.user.username
-
-    def get_username(self):
-        return self.user.username
-
-
-class DriversCommission(models.Model):
-    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
-    date_paid = models.DateField(auto_now_add=True)
-    time_paid = models.TimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.driver.username
-
-
-class DriverRequestCommission(models.Model):
-    administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1)
-    accounts = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=2, related_name="accounts_wallet")
-    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="accounts_driver")
-    amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
-    date_requested = models.DateField(auto_now_add=True)
-    time_requested = models.TimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.driver.username
-
-
-class DriverTransferCommissionToWallet(models.Model):
-    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
-    date_transferred = models.DateField(auto_now_add=True)
-    time_transferred = models.TimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.driver.username
-
-
-class WalletDeduction(models.Model):
-    user = models.ForeignKey(DeUser, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
-    reason = models.CharField(max_length=200, blank=True, )
-    date_transferred = models.DateField(auto_now_add=True)
-    time_transferred = models.TimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.user.username
-
-
-class WalletAddition(models.Model):
-    user = models.ForeignKey(DeUser, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
-    reason = models.CharField(max_length=200, blank=True, )
-    date_transferred = models.DateField(auto_now_add=True)
-    time_transferred = models.TimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.user.username
-
-
-# drivers work extra
-class WorkExtra(models.Model):
-    administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="work_extra_admin")
-    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
-    date_paid = models.DateField(auto_now_add=True)
-    time_paid = models.TimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.driver.username
-
-    def get_username(self):
-        return self.driver.username
-
-
-class CallForInspection(models.Model):
-    driver = models.ForeignKey(DeUser, on_delete=models.CASCADE)
-    day_for_inspection = models.CharField(max_length=100, choices=INSPECTION_DAYS, default="Monday")
-    time_for_inspection = models.CharField(max_length=100, default="")
-    date_informed = models.DateField(auto_now_add=True)
-    time_informed = models.TimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.driver.username
-
-
-class UserRequestTopUp(models.Model):
-    user = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="user_requesting_topup")
-    administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1)
-    accounts = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=2, related_name="accounts")
-    amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
-    top_up_option = models.CharField(max_length=50, default="Mobile Money", choices=TOP_UP_OPTIONS)
-    transaction_id = models.CharField(max_length=100, )
-    date_requested = models.DateField(auto_now_add=True)
-    time_requested = models.TimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.user.username
-
-    def get_username(self):
-        return self.user.username

@@ -1,113 +1,26 @@
 from pyexpat import model
 
 from rest_framework import serializers
-from .models import (Complains,
-                     DriversLocation, ConfirmDriverPayment,
-                     AcceptedScheduledRides, RejectedScheduledRides,
-                     CompletedScheduledRides, ScheduledNotifications, DriverVehicleInventory, ScheduleRide,
-                     UserRequestTopUp,
-                     AssignScheduleToDriver, AcceptAssignedScheduled,
-                     RejectAssignedScheduled, CancelScheduledRide, ContactUs, PassengersWallet, AskToLoadWallet,
-                     AddToUpdatedWallets, DriverStartTrip, DriverEndTrip, DriverAlertArrival, DriversWallet,
-                     DriverAddToUpdatedWallets, DriverAskToLoadWallet, RegisterVehicle, AddToPaymentToday, WorkAndPay,
-                     OtherWallet, Wallets, LoadWallet, UpdatedWallets, RideMessages, ExpensesRequest, PrivateChatId,
-                     WalletDeduction,
-                     DriversCommission, DriverRequestCommission,
-                     PrivateUserMessage, Stocks, MonthlySalary, WalletAddition,
-                     PayPromoterCommission, PrivateChatId, AddToBlockList, DriverTransferCommissionToWallet, WorkExtra,
-                     CallForInspection
+from .models import (Complains,RentACar,RegisterCarForRent,
+                      ScheduledNotifications, ScheduleRide,
+                      CancelScheduledRide, ContactUs, RegisterVehicle,  Wallets, LoadWallet, UpdatedWallets
                      )
 
-
-class AddToUpdatedWalletsSerializer(serializers.ModelSerializer):
+class RegisterCarForRentSerializer(serializers.ModelSerializer):
     class Meta:
-        model = AddToUpdatedWallets
-        fields = ['id', 'wallet', 'date_updated']
-
-
+        model = RegisterCarForRent
+        fields = ['id','name','car_type','number_of_passengers','transmission','air_condition','car_color','date_added']
+class RentACarSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RentACar
+        fields = ['id','passenger','number_of_days_renting','pick_up_time','pick_up_date','drop_off_time','drop_off_date','rented_car','driver_type','rent_status','date_booked','get_passenger_name','get_passenger_full_name','get_passenger_phone_number','get_rented_car_name','get_car_type','get_car_num_of_passenger','get_car_transmission','get_car_air_condition','get_car_color']
+        read_only_fields = ['passenger']
 class CancelledScheduledRideSerializer(serializers.ModelSerializer):
-    username = serializers.SerializerMethodField('get_username')
 
     class Meta:
         model = CancelScheduledRide
-        fields = ['id', 'username', 'ride', 'passenger', 'date_cancelled', 'time_cancelled']
+        fields = ['id', 'ride', 'passenger', 'date_cancelled', 'time_cancelled']
         read_only_fields = ['passenger']
-
-    def get_username(self, user):
-        username = user.passenger.username
-        return username
-
-
-class RejectScheduleToDriverSerializer(serializers.ModelSerializer):
-    username = serializers.SerializerMethodField('get_username')
-
-    class Meta:
-        model = RejectAssignedScheduled
-        fields = ['id', 'username', 'assigned_to_driver', 'driver', 'date_rejected', 'time_rejected']
-        read_only_fields = ['driver']
-
-    def get_username(self, user):
-        username = user.driver.username
-        return username
-
-
-class AcceptScheduleToDriverSerializer(serializers.ModelSerializer):
-    username = serializers.SerializerMethodField('get_username')
-
-    class Meta:
-        model = AcceptAssignedScheduled
-        fields = ['id', 'username', 'assigned_to_driver', 'driver', 'date_accepted', 'time_accepted']
-        read_only_fields = ['driver']
-
-    def get_username(self, user):
-        username = user.driver.username
-        return username
-
-
-class AssignScheduleToDriverSerializer(serializers.ModelSerializer):
-    username = serializers.SerializerMethodField('get_username')
-
-    class Meta:
-        model = AssignScheduleToDriver
-        fields = ['id', 'username', 'administrator', 'ride', 'driver', 'ride_accepted', 'date_assigned',
-                  'time_assigned']
-
-    def get_username(self, user):
-        username = user.driver.username
-        return username
-
-
-class AcceptedScheduledRidesSerializer(serializers.ModelSerializer):
-    username = serializers.SerializerMethodField('get_username')
-
-    class Meta:
-        model = AcceptedScheduledRides
-        fields = ['id', 'scheduled_ride', 'username', 'driver', 'date_accepted']
-        read_only_fields = ['driver']
-
-    def get_username(self, user):
-        username = user.driver.username
-        return username
-
-
-class RejectedScheduledRidesSerializer(serializers.ModelSerializer):
-    username = serializers.SerializerMethodField('get_username')
-
-    class Meta:
-        model = RejectedScheduledRides
-        fields = ['id', 'scheduled_ride', 'username', 'driver', 'date_rejected']
-        read_only_fields = ['driver']
-
-    def get_username(self, user):
-        username = user.driver.username
-        return username
-
-
-class CompletedScheduledRidesSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CompletedScheduledRides
-        fields = ['id', 'scheduled_ride', 'date_accepted', 'get_passenger_username',
-                  'assigned_driver']
 
 
 class ScheduleRideSerializer(serializers.ModelSerializer):
@@ -178,123 +91,10 @@ class ComplainsSerializer(serializers.ModelSerializer):
         return username
 
 
-class ConfirmDriverPaymentSerializer(serializers.ModelSerializer):
-    username = serializers.SerializerMethodField('get_username')
-
-    class Meta:
-        model = ConfirmDriverPayment
-        fields = ['id', 'username', 'driver', 'payment_confirmed', 'bank_payment_reference', 'amount', 'date_confirmed',
-                  'date_posted']
-
-        read_only_fields = ['driver']
-
-    def get_username(self, user):
-        username = user.driver.username
-        return username
-
-
-class DriversLocationSerializer(serializers.ModelSerializer):
-    username = serializers.SerializerMethodField('get_username')
-
-    class Meta:
-        model = DriversLocation
-        fields = ['id', 'username', 'driver', 'place_id', 'date_updated', 'get_drivers_pic', 'get_drivers_name',
-                  'drivers_plate', 'drivers_car_model', 'drivers_car_name', 'drivers_taxinet_number', 'drivers_lat',
-                  'drivers_lng', 'location_name']
-        read_only_fields = ['driver']
-
-    def get_username(self, user):
-        username = user.driver.username
-        return username
-
-
-class DriverVehicleInventorySerializer(serializers.ModelSerializer):
-    username = serializers.SerializerMethodField('get_username')
-
-    class Meta:
-        model = DriverVehicleInventory
-        fields = ['id', 'username', 'administrator', 'driver', 'windscreen', 'side_mirror', 'registration_plate',
-                  'tire_pressure',
-                  'driving_mirror', 'tire_thread_depth', 'wheel_nuts', 'engine_oil', 'fuel_level', 'break_fluid',
-                  'radiator_engine_coolant', 'power_steering_fluid', 'wiper_washer_fluid', 'seat_belts',
-                  'steering_wheel', 'horn', 'electric_windows', 'windscreen_wipers', 'head_lights', 'trafficators',
-                  'tail_rear_lights', 'reverse_lights', 'interior_lights', 'engine_noise', 'excessive_smoke',
-                  'foot_break', 'hand_break', 'wheel_bearing_noise', 'warning_triangle', 'fire_extinguisher',
-                  'first_aid_box', 'checked_today', 'date_checked', 'time_checked', 'get_drivers_name',
-                  'get_driver_profile_pic', 'read', 'millage','approved',
-                  'inspector_name']
-        read_only_fields = ['driver']
-
-    def get_username(self, user):
-        username = user.driver.username
-        return username
-
-
 class ContactUsSerializer(serializers.ModelSerializer):
     class Meta:
         model = ContactUs
         fields = ['id', 'name', 'email', 'phone', 'message', 'date_sent']
-
-
-class PassengerWalletSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = PassengersWallet
-        fields = ['id', 'passenger', 'amount', 'date_loaded', 'get_passengers_name', 'get_amount',
-                  'get_passenger_profile_pic']
-
-
-class AskToLoadWalletSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = AskToLoadWallet
-        fields = ['id', 'passenger', 'administrator', 'amount', 'date_requested', 'get_passengers_name', 'get_amount',
-                  'time_requested',
-                  'title', 'read', 'get_passenger_profile_pic']
-        read_only_fields = ['passenger']
-
-
-class DriverStartTripSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = DriverStartTrip
-        fields = ['id', 'driver', 'administrator', 'passenger', 'ride', 'date_started', 'time_started']
-        read_only_fields = ['driver']
-
-
-class DriverEndTripSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = DriverEndTrip
-        fields = ['id', 'driver', 'administrator', 'passenger', 'ride', 'time_elapsed', 'date_stopped', 'time_stopped',
-                  'price',
-                  'payment_method']
-        read_only_fields = ['driver']
-
-
-class DriverAlertArrivalSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = DriverAlertArrival
-        fields = ['id', 'driver', 'passenger', 'date_alerted', 'time_alerted']
-        read_only_fields = ['driver']
-
-
-# drivers
-class DriverAddToUpdatedWalletsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = DriverAddToUpdatedWallets
-        fields = ['id', 'wallet', 'date_updated']
-
-
-class DriversWalletSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = DriversWallet
-        fields = ['id', 'driver', 'amount', 'date_loaded', 'get_drivers_name', 'get_amount',
-                  'get_drivers_profile_pic']
-
-
-class DriverAskToLoadWalletSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = DriverAskToLoadWallet
-        fields = ['id', 'driver', 'amount', 'date_requested', 'get_drivers_name', 'get_amount', 'time_requested',
-                  'title', 'read', 'get_drivers_profile_pic']
-        read_only_fields = ['driver']
 
 
 class RegisterVehicleSerializer(serializers.ModelSerializer):
@@ -304,29 +104,6 @@ class RegisterVehicleSerializer(serializers.ModelSerializer):
                   'registration_certificate_number', 'taxi_license_number', 'transmission', 'boosters',
                   'child_safety_seats', 'code_name', 'category',
                   'date_registered']
-
-
-class AddToPaymentTodaySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = AddToPaymentToday
-        fields = ['id', 'driver', 'administrator', 'amount', 'title', 'read', 'date_paid', 'time_paid',
-                  'get_driver_profile_pic',
-                  'get_drivers_full_name', 'username', 'phone']
-        read_only_fields = ['driver']
-
-
-class WorkAndPaySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = WorkAndPay
-        fields = ['id', 'driver', 'total_amount_to_pay', 'total_value_of_car', 'upfront_cash', 'remaining_balance', 'interest_on_car', 'principle_amount_to_pay',
-                  'monthly_payment', 'weekly_payment', 'daily_payment', 'number_of_years', 'start_date', 'end_date', 'fully_paid', 'date_started', 'time_started','get_assigned_driver_profile_pic', 'get_driver_username']
-
-
-class OtherWalletSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = OtherWallet
-        fields = ['id', 'sender', 'receiver', 'amount', 'date_transferred', 'time_transferred', 'get_profile_pic']
-        read_only_fields = ['sender']
 
 
 # new wallet system
@@ -350,105 +127,3 @@ class UpdatedWalletsSerializer(serializers.ModelSerializer):
         model = UpdatedWallets
         fields = ['id', 'wallet', 'date_updated']
 
-
-class RideMessagesSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = RideMessages
-        fields = ['id', 'ride', 'user', 'message', 'read', 'date_sent', 'time_sent', 'get_profile_pic', 'get_username',
-                  'get_user_type']
-        read_only_fields = ['ride']
-
-
-class ExpensesRequestSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ExpensesRequest
-        fields = ['id', 'guarantor', 'user', 'get_username', 'amount', 'reason', 'request_status', 'date_requested',
-                  'time_requested', 'item_name', 'quantity']
-
-
-# new updates
-class AddToBlockListSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = AddToBlockList
-        fields = ['id', 'administrator', 'user', 'date_blocked', 'get_username']
-
-
-class PrivateUserMessageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = PrivateUserMessage
-        fields = ['id', 'sender', 'receiver', 'private_chat_id', 'message', 'read',
-                  'get_senders_username', 'get_receivers_username', 'timestamp', 'isSender', 'isReceiver',
-                  'get_sender_profile_pic']
-        # read_only_fields = ['sender', 'receiver']
-
-
-class PrivateChatIdSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = PrivateChatId
-        fields = ['id', 'chat_id', 'date_created']
-
-
-class PayPromoterCommissionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = PayPromoterCommission
-        fields = ['id', 'amount', 'promoter', 'date_paid', 'time_paid']
-
-
-class MonthlySalarySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = MonthlySalary
-        fields = ['id', 'driver', 'amount', 'date_paid', 'time_paid']
-
-
-class StocksSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Stocks
-        fields = ['id', 'item_name', 'quantity', 'date_added', 'time_added']
-
-
-class DriversCommissionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = DriversCommission
-        fields = ['id', 'driver', 'amount', 'date_paid', 'time_paid']
-
-
-class DriverRequestCommissionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = DriverRequestCommission
-        fields = ['id', 'driver', 'amount', 'date_requested', 'time_requested']
-
-
-class DriverTransferCommissionToWalletSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = DriverTransferCommissionToWallet
-        fields = ['id', 'driver', 'amount', 'date_transferred', 'time_transferred']
-
-
-class WalletDeductionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = WalletDeduction
-        fields = ['id', 'user', 'amount', 'reason', 'date_transferred', 'time_transferred']
-
-
-class WalletAdditionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = WalletAddition
-        fields = ['id', 'user', 'amount', 'reason', 'date_transferred', 'time_transferred']
-
-
-class WorkExtraSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = WorkExtra
-        fields = ['id', 'driver', 'amount', 'administrator', 'date_paid', 'time_paid', 'get_username']
-
-
-class CallForInspectionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CallForInspection
-        fields = ['id', 'driver', 'day_for_inspection', 'time_for_inspection', 'date_informed', 'time_informed']
-
-
-class UserRequestTopUpSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserRequestTopUp
-        fields = ['id', 'user', 'amount', 'transaction_id', 'date_requested', 'time_requested', 'top_up_option', 'get_username']

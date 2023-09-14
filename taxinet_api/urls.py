@@ -3,43 +3,18 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    # admin urls
-    path("admin_add_driver_to_work_and_pay/", views.admin_add_driver_to_work_and_pay),
-    path("admin_get_all_work_and_pay/", views.admin_get_all_work_and_pay),
-    path("work_and_pay_detail/<int:id>/", views.work_and_pay_detail),
-    path("get_all_payments_today/", views.get_all_payments_today),
-    path("get_payments_today/", views.get_payments_today),
-    path("admin_get_payment_detail/<int:id>/", views.admin_get_payment_detail),
-    path("admin_get_all_drivers_payments_by_date/<str:payment_date>/",
-         views.admin_get_all_drivers_payments_by_date),
+
     # vehicles
-    path("vehicle_detail/<int:id>/", views.vehicle_detail),
+    path("vehicle_detail/<int:id>/", views.get_vehicle_detail),
     path("vehicle_update/<int:id>/", views.update_vehicle),
-    path("all_vehicles/", views.admin_get_all_registered_vehicles),
-    path("admin_register_vehicle/", views.admin_register_vehicle),
-    #
-    path("delete_assigned_driver/<int:pk>/", views.delete_assigned_driver),
-    path("admin_load_passengers_wallet/", views.admin_load_passengers_wallet),
-    path("admin_get_all_passengers_wallet/", views.admin_get_all_passengers_wallet),
-    path("wallet_detail/<int:id>/", views.wallet_detail),
-    path("update_wallet/<int:id>/", views.update_wallet),
-    path("load_wallet_detail/<int:id>/", views.load_wallet_detail),
-    path("admin_get_all_request_to_load_wallet/", views.admin_get_all_request_to_load_wallet),
+    path("all_vehicles/", views.get_all_registered_vehicles),
+
     path("admin_get_all_requests/", views.admin_get_all_requests),
     path("admin_get_all_requests_by_date/<str:request_date>/", views.admin_get_all_requests_by_date),
     path("admin_get_five_requests/", views.admin_get_five_requests),
     path("admin_request_detail/<str:id>/", views.admin_ride_detail),
     path("admin_update_requested_ride/<int:id>/", views.admin_update_requested_ride),
-    path("admin_assign_request_to_driver/", views.admin_assign_request_to_driver),
-    path("admin_get_all_assigned_drivers/", views.admin_get_all_assigned_drivers),
-    path("add_to_updated_wallets/", views.add_to_updated_wallets),
 
-    path("admin_get_all_drivers_inventories/", views.admin_get_all_drivers_inventories),
-    path("admin_get_all_drivers_inventories_by_date/<str:inventory_date>/",
-         views.admin_get_all_drivers_inventories_by_date),
-    path("admin_get_inventories_today/", views.admin_get_inventories_today),
-    path("admin_get_driver_inventory/<int:driver_id>/", views.admin_get_driver_inventory),
-    path("admin_get_driver_inventory_detail/<int:id>/", views.admin_get_inventory_detail),
     path("admin_get_pending_schedules/", views.admin_get_pending_schedules),
     path("admin_get_reviewing_schedules/", views.admin_get_reviewing_schedules),
     path("admin_get_active_schedules/", views.admin_get_active_schedules),
@@ -61,13 +36,7 @@ urlpatterns = [
     path('request_ride/new/', views.request_ride),
     path('update_requested_ride/<int:ride_id>/', views.update_requested_ride),
     path('delete_requested_ride/<int:ride_id>/', views.delete_requested_ride),
-    path('get_all_rejected_rides/', views.get_all_rejected_rides),
-    path('add_to_rejected_rides/', views.add_to_rejected_rides),
-    path('get_all_accepted_rides/', views.get_all_accepted_rides),
-    path('add_to_accepted_rides/', views.add_to_accepted_rides),
 
-    path('get_all_completed_rides/', views.get_all_completed_rides),
-    path('add_to_completed_rides/', views.add_to_completed_rides),
 
     path('one_time_schedule/', views.get_scheduled_for_one_time),
     path('daily_schedules/', views.get_scheduled_for_daily),
@@ -82,41 +51,16 @@ urlpatterns = [
     path('user_complains/', views.user_complains),
     path('complain/<int:complain_id>/', views.get_detailed_complain),
 
-    #     drivers confirmed payments
-    path('payment/new/', views.post_payment),
-    path('get_drivers_payments/', views.get_all_driver_payments),
-
-    #     drivers inventoryOptions
-    path("get_driver_inventory/", views.get_driver_inventory),
-    path("get_all_drivers_inventories/", views.get_all_drivers_inventories),
-    path("add_drivers_inventories/", views.create_drivers_inventory),
-    path("driver_inventory_details/<int:id>/", views.drivers_inventory_detail),
-
-    path('add_to_assigned_rejected/', views.add_to_assigned_rejected),
-    path('get_all_rejected_assigned_ride/', views.get_all_rejected_assigned_ride),
-    path('add_to_assigned_accepted/', views.add_to_assigned_accepted),
-    path('get_all_accepted_assigned_ride/', views.get_all_accepted_assigned_ride),
-    path('assign_to_driver/', views.assign_to_driver),
-    path('get_all_assigned_ride/', views.get_all_assigned_ride),
+    #     drivers confirmed payment
     path('cancel_schedule/', views.cancel_schedule),
     path('get_all_cancelled_ride/', views.get_all_cancelled_ride),
 
     path("post_to_contact/", views.send_to_contact),
     path("get_all_contact_us_messages/", views.get_all_contact_us_messages),
 
-    #     wallets
-    path("request_to_load_wallet/", views.request_to_load_wallet),
-    path("get_my_wallet/", views.get_my_wallet),
-
     #     passengers schedules
     path("get_my_active_schedules/", views.get_my_active_schedules),
 
-    #     driver start and end trips
-    path('driver_start_trip/', views.driver_start_trip),
-    path('driver_end_trip/', views.driver_end_trip),
-
-    #     driver alert arrrival
-    path("driver_alert_passenger/", views.driver_alert_passenger),
     #
     path("get_drives_assigned_schedules/", views.get_drives_assigned_schedules),
     path("get_drives_assigned_and_active_schedules/", views.get_drives_assigned_and_active_schedules),
@@ -141,123 +85,29 @@ urlpatterns = [
     path('user_read_notifications/', views.read_notification),
     path("notification/<int:id>/", views.notification_detail),
 
-    #     drivers wallet
-    path('add_to_drivers_updated_wallets/', views.add_to_drivers_updated_wallets),
-    path('admin_load_drivers_wallet/', views.admin_load_drivers_wallet),
-    path('admin_get_all_drivers_wallet/', views.admin_get_all_drivers_wallet),
-    path('get_drivers_wallet/', views.get_drivers_wallet),
-    path('request_to_load_drivers_wallet/', views.request_to_load_drivers_wallet),
-    path('admin_get_all_drivers_request_to_load_wallet/', views.admin_get_all_drivers_request_to_load_wallet),
-    path('drivers_wallet_detail/<int:id>/', views.drivers_wallet_detail),
-    path('update_drivers_wallet/<int:id>/', views.update_drivers_wallet),
-    path('load_drivers_wallet_detail/<int:id>/', views.load_drivers_wallet_detail),
-
-    #     drivers payments_today
-    path("add_to_drivers_payment_today/", views.add_to_drivers_payment_today),
-
-
-    #     drivers daily payments
-    path("payment_today/", views.payments_today),
-    path("payment_detail<int:id>/", views.payment_detail),
-
-    #     other wallet transfers
-    path("transfer_to_wallet/", views.transfer_to_wallet),
-
     #     new wallet system
     path("admin_load_users_wallet/", views.admin_load_users_wallet),
     path("admin_get_all_users_wallet/", views.admin_get_all_users_wallet),
     path("user_wallet_detail/<int:id>/", views.user_wallet_detail),
     path("get_user_wallet_detail/<int:id>/", views.get_user_wallet_detail),
     path("admin_update_wallet/<int:id>/", views.admin_update_wallet),
-    path("admin_get_load_wallet_requests_detail/<int:id>/", views.admin_get_load_wallet_requests_detail),
-    path("get_all_request_to_load_wallet/", views.get_all_request_to_load_wallet),
-    path("admin_add_to_updated_wallets/", views.admin_add_to_updated_wallets),
-    path("user_request_to_load_wallet/", views.user_request_to_load_wallet),
     path("get_user_wallet/", views.get_user_wallet),
     path("user_update_wallet/<int:user>/", views.user_update_wallet),
     path("get_wallet_by_user/<int:user_id>/", views.get_wallet_by_user),
     path("get_wallet_by_username/<str:username>/", views.get_wallet_by_username),
 
-    #     driver and passenger messages on ride
-    path("send_message/<int:id>/", views.send_message),
-    path("get_all_ride_messages/<int:id>/", views.get_all_ride_messages),
-
-    #     expenses
-    path("add_expenses/", views.add_expenses),
-    path("get_all_expenses/", views.get_all_expenses),
-    path("get_expenses_today/", views.get_expenses_today),
-    path("expense_detail/<int:id>/", views.expense_detail),
-    path("get_expenses_get_by_date/<str:expense_date>/", views.get_expenses_get_by_date),
 
     #     searches
     path("search_wallet/", views.SearchWallet.as_view()),
     path("search_ride_request/", views.SearchScheduleRequest.as_view()),
-    path("search_driver/", views.SearchDriver.as_view()),
-    path("search_promoter/", views.SearchPromoter.as_view()),
-    path("search_passenger/", views.SearchPassenger.as_view()),
-    path("search_investor/", views.SearchInvestor.as_view()),
-    path("search_payments/", views.SearchPayments.as_view()),
 
-    #     new updates
-    # private and group messages
-    path("private_message_detail/<str:private_chat_id>/", views.private_message_detail),
-    path("get_private_message/<int:user1>/<int:user2>/", views.get_private_message),
-    path("send_private_message/", views.send_private_message),
-    #     block listing
-    path("add_to_blocked/", views.add_to_blocked),
-    path("get_blocked_users/", views.get_blocked_users),
-    path("remove_from_blocked/<int:id>/", views.remove_from_blocked),
-    path("delete_user/<int:pk>/", views.user_delete),
-    # promoter
-    path("add_promoter_commission/", views.add_promoter_commission),
-    path("get_promoter_commissions/", views.get_promoter_commissions),
-    path("get_promoter_commission/", views.get_promoter_commission),
-    #     monthly salary
-    path("add_monthly_salary/", views.add_monthly_salary),
-    path("get_monthly_salaries/", views.get_monthly_salaries),
-    path("get_my_salary/", views.get_my_salary),
-    path("user_bonus_delete/<int:driver>/", views.user_bonus_delete),
-    #     stocks
-    path("add_stock/", views.add_stock),
-    path("get_all_stocks/", views.get_all_stocks),
-    path("update_stock/<int:id>/", views.update_stock),
+    # register and rent car
+    path("register_car_for_rent/",views.register_car_for_rent),
+    path("get_all_registered_vehicles/",views.get_all_registered_vehicles),
+    path("update_vehicle/<int:id>/",views.update_vehicle),
+    path("get_vehicle_detail/<int:id>/",views.get_vehicle_detail),
+    path("rent_car/",views.rent_car),
+    path("get_all_my_rented_car_details/",views.get_all_my_rented_car_details),
+    path("update_my_rented_car_status/<int:id>/",views.update_my_rented_car_status),
+    ]
 
-    #     passenger requests
-    path("get_passengers_requests/<int:passenger>/", views.get_passengers_requests),
-    #     drivers commissions
-    path("add_driver_commission/", views.add_driver_commission),
-    path("get_drivers_commissions/", views.get_drivers_commissions),
-    path("get_my_commission/", views.get_my_commission),
-    path("driver_request_commission/", views.driver_request_commission),
-    path("get_drivers_commissions_requests/", views.get_drivers_commissions_requests),
-
-    #     commission to wallet
-    path("driver_commission_to_wallet/", views.driver_commission_to_wallet),
-    path("user_commissions_delete/<int:driver>/", views.user_commissions_delete),
-
-    #     wallet deduction
-    path("deduct_wallet/", views.deduct_wallet),
-    path("add_to_wallet/", views.add_to_wallet),
-    #     work extra
-    path("activate_work_extra/", views.activate_work_extra),
-    path("get_activated_work_extra/", views.get_activated_work_extra),
-    #     call for inspection
-    path("call_for_inspection/", views.call_for_inspection),
-    path("get_all_call_for_inspection/", views.get_all_call_for_inspection),
-    path("get_all_my_call_for_inspection/", views.get_all_my_call_for_inspection),
-
-    #     top-ups
-    path("request_top_up/", views.request_top_up),
-    path("get_all_request_top_up/", views.get_all_request_top_up),
-    path("get_all_my_request_top_up/", views.get_all_my_request_top_up),
-
-#     approve inventory
-    path('approve_inventory/<int:id>/', views.approve_inventory),
-
-#     drivers work and pay
-    path("get_my_work_and_pay/", views.get_my_work_and_pay),
-    path("get_all_drivers_work_and_pay/", views.get_all_drivers_work_and_pay),
-    path("add_to_work_and_pay/", views.add_to_work_and_pay),
-    path("get_work_and_pay_detail/<int:id>/", views.get_work_and_pay_detail),
-    path("pay_for_week/<int:id>/", views.pay_for_week),
-]
