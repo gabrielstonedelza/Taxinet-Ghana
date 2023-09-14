@@ -2,10 +2,15 @@ from pyexpat import model
 
 from rest_framework import serializers
 from .models import (Complains,RentACar,RegisterCarForRent,
-                      ScheduledNotifications, ScheduleRide,
+                      ScheduledNotifications, ScheduleRide,RegisteredCarImages,
                       CancelScheduledRide, ContactUs, RegisterVehicle,  Wallets, LoadWallet, UpdatedWallets
                      )
 
+
+class RegisteredCarImagesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RegisteredCarImages
+        fields = ['id','registered_car','image','date_added','get_car_picture']
 class RegisterCarForRentSerializer(serializers.ModelSerializer):
     class Meta:
         model = RegisterCarForRent

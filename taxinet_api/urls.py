@@ -109,5 +109,9 @@ urlpatterns = [
     path("rent_car/",views.rent_car),
     path("get_all_my_rented_car_details/",views.get_all_my_rented_car_details),
     path("update_my_rented_car_status/<int:id>/",views.update_my_rented_car_status),
+
+    #
+    path("add_image_to_registered_car/",views.add_image_to_registered_car),
+    path("get_all_registered_images/<int:id>/",views.get_all_registered_images),
     ]
 

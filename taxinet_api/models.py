@@ -525,6 +525,19 @@ class RegisterCarForRent(models.Model):
             return "https://taxinetghana.xyz" + self.picture.url
         return ''
 
+class RegisteredCarImages(models.Model):
+    registered_car = models.ForeignKey(RegisterCarForRent, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to="register_car_images")
+    date_added = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.date_added.name
+
+    def get_car_picture(self):
+        if self.image:
+            return "https://taxinetghana.xyz" + self.image.url
+        return ''
+
 class RentACar(models.Model):
     passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="passenger_renting")
     number_of_days_renting = models.IntegerField(default=1)

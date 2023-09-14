@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import (ScheduleRide, Complains,  ScheduledNotifications,  CancelScheduledRide, ContactUs, ContactAdmin, RegisterVehicle,RentACar,
+from .models import (ScheduleRide, Complains,  ScheduledNotifications,  CancelScheduledRide, ContactUs, ContactAdmin, RegisterVehicle,RentACar,RegisteredCarImages,RegisterCarForRent,
                      Wallets, LoadWallet, UpdatedWallets)
 
 
@@ -14,6 +14,8 @@ class AdminScheduleRide(admin.ModelAdmin):
         model = ScheduleRide
 
 admin.site.register(RentACar)
+admin.site.register(RegisteredCarImages)
+admin.site.register(RegisterCarForRent)
 
 
 admin.site.register(LoadWallet)

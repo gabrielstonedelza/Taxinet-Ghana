@@ -10,13 +10,31 @@ from rest_framework.response import Response
 from taxinet_users.models import Profile,  User
 from taxinet_users.serializers import  ProfileSerializer
 from .models import (Complains, ScheduledNotifications, ScheduleRide,  ContactUs,CancelScheduledRide,
-                     Wallets,RentACar,RegisterCarForRent,
+                     Wallets,RentACar,RegisterCarForRent,RegisteredCarImages,
                      RegisterVehicle, LoadWallet)
 from .serializers import (ComplainsSerializer, ContactUsSerializer,RegisterCarForRentSerializer,
                            ScheduleRideSerializer,RentACarSerializer,
-                          ScheduledNotificationSerializer,
+                          ScheduledNotificationSerializer,RegisteredCarImagesSerializer,
                           CancelledScheduledRideSerializer,
                           AdminScheduleRideSerializer, WalletsSerializer)
+
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def add_image_to_registered_car(request):
+    serializer = RegisteredCarImagesSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_all_registered_images(request,id):
+    car = get_object_or_404(RegisterCarForRent,id=id)
+    images = RegisteredCarImages.objects.filter(registered_car=car).order_by('-date_added')
+    serializer = RegisteredCarImagesSerializer(images, many=True)
+    return Response(serializer.data)
 
 
 # register vehicle for rental
