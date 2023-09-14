@@ -9,11 +9,11 @@ from .models import (Complains,RentACar,RegisterCarForRent,
 class RegisterCarForRentSerializer(serializers.ModelSerializer):
     class Meta:
         model = RegisterCarForRent
-        fields = ['id','name','car_type','number_of_passengers','transmission','air_condition','car_color','date_added']
+        fields = ['id','name','car_type','number_of_passengers','transmission','air_condition','car_color','date_added','picture','get_car_picture']
 class RentACarSerializer(serializers.ModelSerializer):
     class Meta:
         model = RentACar
-        fields = ['id','passenger','number_of_days_renting','pick_up_time','pick_up_date','drop_off_time','drop_off_date','rented_car','driver_type','rent_status','date_booked','get_passenger_name','get_passenger_full_name','get_passenger_phone_number','get_rented_car_name','get_car_type','get_car_num_of_passenger','get_car_transmission','get_car_air_condition','get_car_color']
+        fields = ['id','passenger','number_of_days_renting','pick_up_time','pick_up_date','drop_off_time','drop_off_date','rented_car','driver_type','rent_status','date_booked','get_passenger_name','get_passenger_full_name','get_passenger_phone_number','get_rented_car_name','get_car_type','get_car_num_of_passenger','get_car_transmission','get_car_air_condition','get_car_color','get_rented_car_picture']
         read_only_fields = ['passenger']
 class CancelledScheduledRideSerializer(serializers.ModelSerializer):
 

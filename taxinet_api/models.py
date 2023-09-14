@@ -514,10 +514,16 @@ class RegisterCarForRent(models.Model):
     transmission = models.CharField(max_length=100,choices=VEHICLE_TRANSMISSION,default="Automatic")
     air_condition = models.BooleanField(default=False)
     car_color = models.CharField(max_length=100)
+    picture = models.ImageField(upload_to="registered_cars",default="taxinet_cab.png")
     date_added = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
+
+    def get_car_picture(self):
+        if self.picture:
+            return "https://taxinetghana.xyz" + self.picture.url
+        return ''
 
 class RentACar(models.Model):
     passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="passenger_renting")
@@ -560,5 +566,11 @@ class RentACar(models.Model):
 
     def get_car_color(self):
         return self.rented_car.car_color
+
+    def get_rented_car_picture(self):
+        if self.rented_car.picture:
+            return "https://taxinetghana.xyz" + self.rented_car.picture.url
+        return ''
+
 
 
