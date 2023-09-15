@@ -1,9 +1,7 @@
 from django.conf import settings
 from django.db import models
-from django.utils import timezone
-from django.utils.text import slugify
 
-from taxinet_users.models import  Profile, User
+from taxinet_users.models import Profile, User
 
 DeUser = settings.AUTH_USER_MODEL
 

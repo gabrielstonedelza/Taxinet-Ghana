@@ -21,7 +21,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = Profile
         fields = ['id', 'user', 'profile_pic', 'passenger_profile_pic',  'get_passengers_email',
                   'get_passengers_phone_number',
-                  'get_passengers_full_name',  'get_user_type', 'phone' ]
+                  'get_passengers_full_name',  'get_user_type']
         read_only_fields = ['user']
 
 
