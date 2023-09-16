@@ -272,7 +272,7 @@ class ScheduleRide(models.Model):
 
 class CancelScheduledRide(models.Model):
     ride = models.ForeignKey(ScheduleRide, on_delete=models.CASCADE)
-    passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="passenger_cancelling_ride")
+    passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE,related_name="passenger_cancelling_ride")
     date_cancelled = models.DateField(auto_now_add=True)
     time_cancelled = models.TimeField(auto_now_add=True)
 
@@ -350,12 +350,12 @@ class ScheduledNotifications(models.Model):
     notification_from = models.ForeignKey(DeUser, on_delete=models.CASCADE, null=True)
     notification_to = models.ForeignKey(DeUser, on_delete=models.CASCADE, related_name="DeUser_receiving_notification",
                                         null=True)
-    notification_to_admin = models.ForeignKey(DeUser, on_delete=models.CASCADE,
-                                              related_name="admin_receiving_notification",
-                                              null=True)
-    notification_to_passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE,
-                                                  related_name="Passenger_receiving_notification",
-                                                  null=True)
+    # notification_to_admin = models.ForeignKey(DeUser, on_delete=models.CASCADE,
+    #                                           related_name="admin_receiving_notification",
+    #                                           null=True)
+    # notification_to_passenger = models.ForeignKey(DeUser, on_delete=models.CASCADE,
+    #                                               related_name="Passenger_receiving_notification",
+    #                                               null=True)
     passengers_pickup = models.CharField(max_length=255, null=True, blank=True)
     passengers_dropOff = models.CharField(max_length=255, null=True, blank=True)
     schedule_ride_id = models.CharField(max_length=255, blank=True)
@@ -430,15 +430,9 @@ class RegisterVehicle(models.Model):
 # new wallets
 class Wallets(models.Model):
     user = models.OneToOneField(DeUser, on_delete=models.CASCADE, related_name="user_only_profile")
-    username = models.CharField(max_length=100, default="", blank=True, )
-    phone = models.CharField(max_length=100, default="", blank=True)
-    amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
+    amount = models.DecimalField(decimal_places=2, max_digits=10, default=00.00)
     date_loaded = models.DateTimeField(auto_now_add=True)
 
-    def save(self, *args, **kwargs):
-        self.username = self.user.username
-        self.phone = self.user.phone_number
-        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.user.username} wallet is loaded with GHS{self.amount}"
@@ -461,40 +455,6 @@ class Wallets(models.Model):
         return self.user.user_type
 
 
-class LoadWallet(models.Model):
-    administrator = models.ForeignKey(DeUser, on_delete=models.CASCADE, default=1, related_name="loadwallet_admin")
-    user = models.ForeignKey(DeUser, on_delete=models.CASCADE)
-    title = models.CharField(max_length=200, default="Wants to load wallet")
-    amount = models.DecimalField(blank=True, decimal_places=2, max_digits=10, default=00.00)
-    date_requested = models.DateField(auto_now_add=True)
-    time_requested = models.TimeField(auto_now_add=True)
-    read = models.CharField(max_length=10, choices=READ_STATUS, default="Not Read")
-
-    def save(self, *args, **kwargs):
-        self.title = f"{self.user.username} wants to load wallet"
-        super().save(*args, **kwargs)
-
-    def __str__(self):
-        return self.title
-
-    def get_profile_pic(self):
-        user = User.objects.get(username=self.user.username)
-        if user.user_type == "Passenger":
-            de_passenger = Profile.objects.get(user=self.user)
-            if de_passenger:
-                return "https://taxinetghana.xyz" + de_passenger.profile_pic.url
-            return ""
-
-    def get_username(self):
-        return self.user.username
-
-    def get_full_name(self):
-        return self.user.full_name
-
-    def get_user_type(self):
-        return self.user.user_type
-
-
 class UpdatedWallets(models.Model):
     wallet = models.ForeignKey(Wallets, on_delete=models.CASCADE)
     date_updated = models.DateTimeField(auto_now_add=True)
@@ -502,6 +462,8 @@ class UpdatedWallets(models.Model):
     def __str__(self):
         return f"{self.wallet.user.username}'s wallet was updated."
 
+    def get_updated_amount(self):
+        return self.wallet.amount
 
 # for renting a car
 

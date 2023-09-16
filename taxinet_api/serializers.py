@@ -3,7 +3,7 @@ from pyexpat import model
 from rest_framework import serializers
 from .models import (Complains,RentACar,RegisterCarForRent,
                       ScheduledNotifications, ScheduleRide,RegisteredCarImages,
-                      CancelScheduledRide, ContactUs, RegisterVehicle,  Wallets, LoadWallet, UpdatedWallets
+                      CancelScheduledRide, ContactUs, RegisterVehicle,  Wallets, UpdatedWallets
                      )
 
 
@@ -79,7 +79,7 @@ class ScheduledNotificationSerializer(serializers.ModelSerializer):
                   'complain_id', 'reply_id', 'review_id', 'rating_id', 'payment_confirmed_id',
                   'date_created',
                   'passengers_pickup', 'passengers_dropOff',
-                  'drivers_inventory_id', 'notification_to_passenger']
+                  'drivers_inventory_id',]
 
 
 class ComplainsSerializer(serializers.ModelSerializer):
@@ -116,15 +116,7 @@ class WalletsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Wallets
         fields = ['id', 'user', 'amount', 'date_loaded', 'get_profile_pic', 'get_username', 'get_full_name',
-                  'get_user_type', 'username', 'phone']
-
-
-class LoadWalletSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = LoadWallet
-        fields = ['id', 'user', 'title', 'amount', 'date_requested', 'time_requested', 'read', 'get_profile_pic',
-                  'get_username', 'get_full_name']
-        read_only_fields = ['user']
+                  'get_user_type',]
 
 
 class UpdatedWalletsSerializer(serializers.ModelSerializer):
