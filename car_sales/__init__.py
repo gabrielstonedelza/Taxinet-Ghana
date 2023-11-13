@@ -1,0 +1,1 @@
+default_app_config = "car_sales.apps.CarSalesConfig"
