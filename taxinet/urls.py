@@ -5,6 +5,8 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 urlpatterns = [
+    path('auth/', include('djoser.urls')),
+    path('auth/', include('djoser.urls.authtoken')),
     path('admin/', admin.site.urls),
     path('car_sales/', include('car_sales.urls')),
     path('deliveries/', include('deliveries.urls')),
