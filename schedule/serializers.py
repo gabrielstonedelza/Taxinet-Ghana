@@ -3,8 +3,6 @@ from .models import ScheduleRide
 
 
 class ScheduleRideSerializer(serializers.ModelSerializer):
-    username = serializers.SerializerMethodField('get_username')
-    admins_username = serializers.SerializerMethodField('get_admins_username')
 
     class Meta:
         model = ScheduleRide
