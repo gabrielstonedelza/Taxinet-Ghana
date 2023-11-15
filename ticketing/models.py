@@ -4,7 +4,6 @@ from users.models import User
 AIRLINES = (
     ("Africa World Airlines","Africa World Airlines"),
     ("PassionAir","PassionAir"),
-    ("Hour","Hour"),
 )
 
 AIRPORTS = (
