@@ -16,6 +16,10 @@ FLIGHT_TYPE = (
     ("One Way","One Way"),
 )
 
+FLIGHT_STATUS = (
+    ("Pending","Pending"),
+    ("Booked","Booked"),
+)
 
 class Booking(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
@@ -27,7 +31,7 @@ class Booking(models.Model):
     departure_time = models.CharField(max_length=20)
     returning_date = models.CharField(max_length=20,blank=True)
     returning_time = models.CharField(max_length=20,blank=True)
-    flight_booked = models.BooleanField(default=False)
+    flight_booked = models.CharField(max_length=20,choices=FLIGHT_STATUS,default="Pending")
     date_booked = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
