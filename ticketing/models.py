@@ -39,6 +39,7 @@ class Booking(models.Model):
 class AddToBooked(models.Model):
     booking = models.ForeignKey(Booking,on_delete=models.CASCADE)
     user = models.ForeignKey(User,on_delete=models.CASCADE,related_name="user_being_booked")
+    flight_booked = models.CharField(max_length=20, default="Booked")
     date_added = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
