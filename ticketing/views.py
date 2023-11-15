@@ -45,7 +45,7 @@ def book_flight(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_my_flight_requests(request):
-    flights = Booking.objects.filter(user=request.user).order_by('-date_booked')
+    flights = Booking.objects.filter(user=request.user).filter(flight_booked="Pending").order_by('-date_booked')
     serializer = BookingSerializer(flights, many=True)
     return Response(serializer.data)
 
@@ -53,7 +53,7 @@ def get_my_flight_requests(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_all_flight_requests(request):
-    flights = Booking.objects.all().order_by('-date_booked')
+    flights = Booking.objects.filter(flight_booked="Pending").order_by('-date_booked')
     serializer = BookingSerializer(flights, many=True)
     return Response(serializer.data)
 
