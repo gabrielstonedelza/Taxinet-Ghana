@@ -8,8 +8,8 @@ AIRLINES = (
 )
 
 AIRPORTS = (
-    ("Kumasi Airport (KSI)","Kumasi Airport (KSI)"),
-    ("Accra (ACC)","Kumasi Airport (KSI)Accra (ACC)"),
+    ("Kumasi Airport (KMS)","Kumasi Airport (KMS)"),
+    ("Accra Airport(ACC)","Accra Airport(ACC)"),
 )
 
 FLIGHT_TYPE = (
