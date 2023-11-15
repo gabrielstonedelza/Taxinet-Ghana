@@ -3,8 +3,36 @@ from django.shortcuts import get_object_or_404
 from rest_framework import permissions, generics, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from .models import RequestDriveAndPay
-from .serializers import RequestDriveAndPaySerializer
+from .models import RequestDriveAndPay, AddToApprovedDriveAndPay
+from .serializers import RequestDriveAndPaySerializer,AddToApprovedDriveAndPaySerializer
+
+
+
+@api_view(['GET','POST'])
+@permission_classes([permissions.IsAuthenticated])
+def add_to_drive_and_pay_complete(request,id):
+    pay_drive = get_object_or_404(AddToApprovedDriveAndPay,id=id)
+    serializer = AddToApprovedDriveAndPaySerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(drive_and_pay=pay_drive)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_all_my_approved_drive_and_pay(request):
+    my_approved = AddToApprovedDriveAndPay.objects.filter(user=request.user).order_by('-date_approved')
+    serializer = AddToApprovedDriveAndPaySerializer(my_approved, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_all_approved_drive_and_pay(request):
+    approved = AddToApprovedDriveAndPay.objects.all().order_by('-date_approved')
+    serializer = AddToApprovedDriveAndPaySerializer(approved, many=True)
+    return Response(serializer.data)
 
 
 @api_view(['POST'])

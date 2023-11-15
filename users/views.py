@@ -12,7 +12,7 @@ from .serializers import UsersSerializer
 
 
 def home(request):
-    return render(request, "taxinet_users/taxinet_home.html")
+    return render(request, "users/taxinet_home.html")
 
 
 class AllUsers(generics.ListCreateAPIView):

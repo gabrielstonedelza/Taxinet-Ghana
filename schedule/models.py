@@ -64,3 +64,7 @@ class ScheduleRide(models.Model):
 
     def get_user_number(self):
         return self.user.phone_number
+
+
+class ApprovedSchedules(models.Model):
+    schedule = models.ForeignKey(ScheduleRide,on_delete=models.CASCADE)
