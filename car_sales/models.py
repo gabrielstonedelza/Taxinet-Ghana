@@ -62,6 +62,11 @@ class Vehicle(models.Model):
     def __str__(self):
         return self.name
 
+    def get_car_pic(self):
+        if self.picture:
+            return "https://taxinetghana.xyz" + self.picture.url
+        return ''
+
 
 class AddCarImage(models.Model):
     vehicle = models.ForeignKey(Vehicle,on_delete=models.CASCADE)
@@ -70,6 +75,11 @@ class AddCarImage(models.Model):
 
     def __str__(self):
         return self.vehicle.name
+
+    def get_car_pic(self):
+        if self.image:
+            return "https://taxinetghana.xyz" + self.image.url
+        return ''
 
 
 class BuyVehicle(models.Model):
