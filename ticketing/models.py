@@ -40,6 +40,9 @@ class Booking(models.Model):
     def get_username(self):
         return self.user.username
 
+    def get_user_phone(self):
+        return self.user.phone_number
+
 class AddToBooked(models.Model):
     booking = models.ForeignKey(Booking,on_delete=models.CASCADE)
     user = models.ForeignKey(User,on_delete=models.CASCADE,related_name="user_being_booked")

@@ -4,7 +4,7 @@ from .models import Booking,AddToBooked
 class BookingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Booking
-        fields = ['id','user','airline','departure_airport','arrival_airport','flight_type','departure_date','departure_time','returning_date','returning_time','flight_booked','date_booked','get_username']
+        fields = ['id','user','airline','departure_airport','arrival_airport','flight_type','departure_date','departure_time','returning_date','returning_time','flight_booked','date_booked','get_username','get_user_phone']
         read_only_fields = ['user']
 
 
