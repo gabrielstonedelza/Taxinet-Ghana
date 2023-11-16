@@ -37,6 +37,14 @@ def get_all_vehicles_images(request,id):
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
+def get_vehicle(request,id):
+    vehicle = get_object_or_404(Vehicle,id=id)
+    serializer = AddCarImageSerializer(vehicle, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
 def get_all_vehicles_for_sale(request):
     vehicles = Vehicle.objects.filter(purpose="For Sale").order_by('-date_added')
     serializer = VehicleSerializer(vehicles, many=True)
