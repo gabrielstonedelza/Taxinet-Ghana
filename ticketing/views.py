@@ -34,7 +34,7 @@ def get_booked_flights(request):
 
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
-def book_flight(request):
+def request_flight(request):
     serializer = BookingSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save(user=request.user)
