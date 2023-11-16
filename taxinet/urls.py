@@ -18,4 +18,5 @@ urlpatterns = [
     path('ticketing/', include('ticketing.urls')),
     path('users/', include('users.urls')),
     path('wallets/', include('wallets.urls')),
+    path('referrals/', include('referrals.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

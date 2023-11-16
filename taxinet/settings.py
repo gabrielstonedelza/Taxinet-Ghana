@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'ticketing',
     'users',
     'wallets',
+    'referrals',
     'djoser',
     'corsheaders',
     'crispy_forms',

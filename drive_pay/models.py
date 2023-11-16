@@ -17,6 +17,9 @@ class RequestDriveAndPay(models.Model):
     request_approved = models.BooleanField(default=False)
     date_requested = models.DateTimeField(auto_now_add=True)
 
+    def get_user_phone(self):
+        return self.user.phone_number
+
     def __str__(self):
         return self.user.username
 
@@ -29,6 +32,9 @@ class AddToApprovedDriveAndPay(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE,related_name="user_being_approved_for_dnp")
     assigned_driver = models.ForeignKey(User, on_delete=models.CASCADE,related_name="driver_being_approved_for_dnp",default=1)
     date_approved = models.DateTimeField(auto_now_add=True)
+
+
+
 
     def __str__(self):
         return self.user.username

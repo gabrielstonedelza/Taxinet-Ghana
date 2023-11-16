@@ -8,7 +8,8 @@ urlpatterns = [
     path("get_all_vehicles_images/<int:id>/",views.get_all_vehicles_images),
     path("delete_purchase/<int:id>/",views.delete_purchase),
     path("delete_vehicle/<int:id>/",views.delete_vehicle),
-    path("get_all_vehicles/",views.get_all_vehicles),
+    path("get_all_vehicles_for_sale/", views.get_all_vehicles_for_sale),
+    path("get_all_vehicles_for_rent/",views.get_all_vehicles_for_rent),
     path("get_my_purchase_requests/",views.get_my_purchase_requests),
     path("get_all_purchase_requests/",views.get_all_purchase_requests),
 ]

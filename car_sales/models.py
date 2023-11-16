@@ -35,7 +35,13 @@ FUEL_TYPE = (
     ("Gasoline","Gasoline"),
 )
 
+VEHICLE_PURPOSE = (
+    ("For Sale","For Sale"),
+    ("For Pay And Drive","For Pay And Drive"),
+)
+
 class Vehicle(models.Model):
+    purpose = models.CharField(max_length=50,choices=VEHICLE_PURPOSE, default="For Sale")
     name = models.CharField(max_length=50)
     price = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
     location = models.CharField(max_length=100)

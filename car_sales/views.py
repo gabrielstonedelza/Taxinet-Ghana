@@ -37,8 +37,8 @@ def get_all_vehicles_images(request,id):
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
-def get_all_vehicles(request):
-    vehicles = Vehicle.objects.all().order_by('-date_added')
+def get_all_vehicles_for_sale(request):
+    vehicles = Vehicle.objects.filter(purpose="For Sale").order_by('-date_added')
     serializer = VehicleSerializer(vehicles, many=True)
     return Response(serializer.data)
 
@@ -79,3 +79,11 @@ def delete_vehicle(request, id):
     except Vehicle.DoesNotExist:
         return Http404
     return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_all_vehicles_for_rent(request):
+    vehicles = Vehicle.objects.filter(purpose="For Pay And Drive").order_by('-date_added')
+    serializer = VehicleSerializer(vehicles, many=True)
+    return Response(serializer.data)
