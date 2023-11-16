@@ -1,5 +1,6 @@
 from django.db import models
 from users.models import User
+from car_sales.models import Vehicle
 
 
 PAYMENT_PERIODS = (
@@ -15,19 +16,30 @@ DRIVING_STYLE = (
 
 class RequestPayAndDrive(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
-    car = models.CharField(max_length=100)
+    car  = models.ForeignKey(Vehicle, on_delete=models.CASCADE,related_name="car_for_pay_and_drive")
     drive_type = models.CharField(max_length=50, choices=DRIVING_STYLE, default="Self Drive")
     pick_up_date = models.CharField(max_length=10)
     payment_period = models.CharField(max_length=10, choices=PAYMENT_PERIODS, default="1 Yr")
     period_total_price = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
-    request_approved = models.BooleanField(default=False)
+    request_approved = models.CharField(max_length=30, default="Pending")
     date_requested = models.DateTimeField(auto_now_add=True)
+
+    def get_user_phone(self):
+        return self.user.phone_number
 
     def __str__(self):
         return self.user.username
 
     def get_username(self):
         return self.user.username
+
+    def get_car_name(self):
+        return self.car.name
+
+    def get_car_pic(self):
+        if self.car.picture:
+            return "https://taxinetghana.xyz" + self.car.picture.url
+        return ''
 
 
 class AddToApprovedPayAndDrive(models.Model):
@@ -40,7 +52,7 @@ class AddToApprovedPayAndDrive(models.Model):
         return self.user.username
 
     def get_car_name(self):
-        return self.pay_and_drive.car
+        return self.pay_and_drive.car.name
 
     def get_driver_type(self):
         return self.pay_and_drive.drive_type

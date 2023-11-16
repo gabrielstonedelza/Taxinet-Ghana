@@ -3,6 +3,8 @@ from django.shortcuts import get_object_or_404
 from rest_framework import permissions, generics, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
+
+from car_sales.models import Vehicle
 from .models import RequestPayAndDrive,AddToApprovedPayAndDrive
 from .serializers import RequestPayAndDriveSerializer,AddToApprovedPayAndDriveSerializer
 from django.core.mail import EmailMessage
@@ -36,10 +38,11 @@ def get_all_approved_pay_and_drive(request):
 
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
-def request_pay_and_drive(request):
+def request_pay_and_drive(request,id):
+    vehicle = get_object_or_404(Vehicle, id=id)
     serializer = RequestPayAndDriveSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save(user=request.user)
+    if serializer.is_valid(user=request.user):
+        serializer.save(user=request.user,car=vehicle)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -47,7 +50,7 @@ def request_pay_and_drive(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_my_pay_and_drive_requests(request):
-    my_requests = RequestPayAndDrive.objects.filter(user=request.user).order_by('-date_requested')
+    my_requests = RequestPayAndDrive.objects.filter(user=request.user).filter(request_approved="Pending").order_by('-date_requested')
     serializer = RequestPayAndDriveSerializer(my_requests, many=True)
     return Response(serializer.data)
 
