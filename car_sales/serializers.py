@@ -4,13 +4,13 @@ from .models import Vehicle, AddCarImage,BuyVehicle
 class VehicleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Vehicle
-        fields = "__all__"
+        fields = ['id','purpose','name','price','location','milage','engine_type','interior_color','exterior_color','vin','car_id','picture','transmission','fog_light','push_start','reverse_camera','sun_roof','date_added','get_car_pic']
 
 
 class AddCarImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = AddCarImage
-        fields = "__all__"
+        fields = ['id','vehicle','image','date_added','get_car_pic']
 
 
 class BuyVehicleSerializer(serializers.ModelSerializer):
