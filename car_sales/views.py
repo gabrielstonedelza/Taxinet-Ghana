@@ -39,7 +39,7 @@ def get_all_vehicles_images(request,id):
 @permission_classes([permissions.IsAuthenticated])
 def get_vehicle(request,id):
     vehicle = get_object_or_404(Vehicle,id=id)
-    serializer = AddCarImageSerializer(vehicle, many=False)
+    serializer = VehicleSerializer(vehicle, many=False)
     return Response(serializer.data)
 
 
