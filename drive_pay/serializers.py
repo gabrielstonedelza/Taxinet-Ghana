@@ -4,7 +4,7 @@ from .models import RequestDriveAndPay, AddToApprovedDriveAndPay
 class RequestDriveAndPaySerializer(serializers.ModelSerializer):
     class Meta:
         model = RequestDriveAndPay
-        fields = ['id','user','car','period','pick_up_date','drop_off_date','period_total_price','date_requested','get_username','request_approved','get_user_phone','get_car_pic']
+        fields = ['id','user','car','period','pick_up_date','drop_off_date','period_total_price','date_requested','get_username','request_approved','get_user_phone','get_car_pic','get_car_name']
         read_only_fields = ['user','car']
 
 
