@@ -6,6 +6,16 @@ from rest_framework.response import Response
 from .models import Vehicle, AddCarImage,BuyVehicle
 from .serializers import VehicleSerializer, AddCarImageSerializer, BuyVehicleSerializer
 
+@api_view(['GET','POST'])
+@permission_classes([permissions.IsAuthenticated])
+def request_to_buy(request,id):
+    vehicle = get_object_or_404(Vehicle,id=id)
+    serializer = BuyVehicleSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(user=request.user,vehicle=vehicle)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])

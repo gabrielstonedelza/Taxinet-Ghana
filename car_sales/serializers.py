@@ -17,4 +17,4 @@ class BuyVehicleSerializer(serializers.ModelSerializer):
     class Meta:
         model = BuyVehicle
         fields = ['id','user','vehicle','date_requested']
-        read_only_fields = ['user']
+        read_only_fields = ['user','vehicle']

@@ -5,6 +5,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from .models import RequestDriveAndPay, AddToApprovedDriveAndPay
 from .serializers import RequestDriveAndPaySerializer,AddToApprovedDriveAndPaySerializer
+from car_sales.models import Vehicle
 
 
 
@@ -35,12 +36,13 @@ def get_all_approved_drive_and_pay(request):
     return Response(serializer.data)
 
 
-@api_view(['POST'])
+@api_view(['GET','POST'])
 @permission_classes([permissions.IsAuthenticated])
-def request_drive_and_pay(request):
+def request_drive_and_pay(request,id):
+    vehicle = get_object_or_404(Vehicle,id=id)
     serializer = RequestDriveAndPaySerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save(user=request.user)
+        serializer.save(user=request.user,car=vehicle)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
