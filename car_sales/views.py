@@ -3,8 +3,9 @@ from django.shortcuts import get_object_or_404
 from rest_framework import permissions, generics, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from .models import Vehicle, AddCarImage,BuyVehicle
-from .serializers import VehicleSerializer, AddCarImageSerializer, BuyVehicleSerializer
+from .models import Vehicle, AddCarImage,BuyVehicle, AddToApprovedVehiclePurchases
+from .serializers import VehicleSerializer, AddCarImageSerializer, BuyVehicleSerializer,AddToApprovedVehiclePurchasesSerializer
+
 
 @api_view(['GET','POST'])
 @permission_classes([permissions.IsAuthenticated])
@@ -64,8 +65,16 @@ def get_all_vehicles_for_sale(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_my_purchase_requests(request):
-    purchases = BuyVehicle.objects.filter(user=request.user).order_by('-date_requested')
+    purchases = BuyVehicle.objects.filter(user=request.user).filter(request_approved="Pending").order_by('-date_requested')
     serializer = BuyVehicleSerializer(purchases, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_my_purchase_requests_approved(request):
+    purchases = AddToApprovedVehiclePurchases.objects.filter(user=request.user).order_by('-date_approved')
+    serializer = AddToApprovedVehiclePurchasesSerializer(purchases, many=True)
     return Response(serializer.data)
 
 

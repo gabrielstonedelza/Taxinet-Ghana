@@ -85,7 +85,17 @@ class AddCarImage(models.Model):
 class BuyVehicle(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE)
+    request_approved = models.CharField(max_length=50, default="Pending")
     date_requested = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.vehicle.name
+
+
+class AddToApprovedVehiclePurchases(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE)
+    date_approved = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.vehicle.name

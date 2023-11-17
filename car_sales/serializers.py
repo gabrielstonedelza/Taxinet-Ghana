@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Vehicle, AddCarImage,BuyVehicle
+from .models import Vehicle, AddCarImage,BuyVehicle, AddToApprovedVehiclePurchases
 
 class VehicleSerializer(serializers.ModelSerializer):
     class Meta:
@@ -16,5 +16,10 @@ class AddCarImageSerializer(serializers.ModelSerializer):
 class BuyVehicleSerializer(serializers.ModelSerializer):
     class Meta:
         model = BuyVehicle
-        fields = ['id','user','vehicle','date_requested']
+        fields = ['id','user','vehicle','date_requested','request_approved']
         read_only_fields = ['user','vehicle']
+
+class AddToApprovedVehiclePurchasesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AddToApprovedVehiclePurchases
+        fields = ['id','user','vehicle','date_approved']
