@@ -8,7 +8,7 @@ class Wallets(models.Model):
 
 
     def __str__(self):
-        return f"{self.user.username} wallet is loaded with GHS{self.amount}"
+        return self.pk
 
     def get_username(self):
         return self.user.username
