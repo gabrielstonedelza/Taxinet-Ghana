@@ -23,3 +23,6 @@ class Profile(models.Model):
     def get_users_full_name(self):
         return self.user.full_name
 
+    def get_username(self):
+        return self.user.username
+
