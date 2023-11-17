@@ -49,6 +49,11 @@ class AddToBooked(models.Model):
     flight_booked = models.CharField(max_length=20, default="Booked")
     date_added = models.DateTimeField(auto_now_add=True)
 
+    def get_username(self):
+        return self.user.username
+
+    def get_user_phone(self):
+        return self.user.phone_number
     def __str__(self):
         return self.user.username
 
