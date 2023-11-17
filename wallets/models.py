@@ -18,7 +18,7 @@ class Wallets(models.Model):
 
 
 class UpdatedWallets(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="user_with_updated_wallet")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_with_updated_wallet")
     wallet = models.ForeignKey(Wallets, on_delete=models.CASCADE)
     amount = models.DecimalField(decimal_places=2, max_digits=10, default=00.00)
     date_updated = models.DateTimeField(auto_now_add=True)
