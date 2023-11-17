@@ -28,7 +28,7 @@ def get_my_delivery_requests(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_all_deliveries(request):
-    deliveries = RequestDelivery.objects.all().order_by('-date_requested')
+    deliveries = RequestDelivery.objects.filter(request_approved="Pending").order_by('-date_requested')
     serializer = RequestDeliverySerializer(deliveries, many=True)
     return Response(serializer.data)
 

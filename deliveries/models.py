@@ -13,7 +13,7 @@ class RequestDelivery(models.Model):
     delivery_truck = models.CharField(max_length=30,choices=DELIVERY_VEHICLES,default="Truck")
     pick_up_date = models.CharField(max_length=10)
     delivery_date = models.CharField(max_length=10)
-    request_approved = models.BooleanField(default=False)
+    request_approved = models.CharField(max_length=30,default="Pending")
     date_requested = models.DateTimeField(auto_now_add=True)
 
 
