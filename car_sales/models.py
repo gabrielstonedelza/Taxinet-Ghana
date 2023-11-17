@@ -88,6 +88,11 @@ class BuyVehicle(models.Model):
     request_approved = models.CharField(max_length=50, default="Pending")
     date_requested = models.DateTimeField(auto_now_add=True)
 
+    def get_user(self):
+        return self.user.username
+
+    def get_user_number(self):
+        return self.user.phone_number
     def __str__(self):
         return self.vehicle.name
 

@@ -80,8 +80,16 @@ def get_my_purchase_requests_approved(request):
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
+def get_all_purchase_requests_approved(request):
+    purchases = AddToApprovedVehiclePurchases.objects.all().order_by('-date_approved')
+    serializer = AddToApprovedVehiclePurchasesSerializer(purchases, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
 def get_all_purchase_requests(request):
-    purchases = BuyVehicle.objects.all().order_by('-date_requested')
+    purchases = BuyVehicle.objects.filter(request_approved="Pending").order_by('-date_requested')
     serializer = BuyVehicleSerializer(purchases, many=True)
     return Response(serializer.data)
 
