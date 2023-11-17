@@ -24,7 +24,7 @@ def update_wallet(request, id,amount):
     if serializer.is_valid():
         UpdatedWallets.objects.create(user=wallet.user,wallet=wallet,amount=amount)
         wallet.amount + Decimal(amount)
-        wallet.save()
+        wallet.amount.save()
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
