@@ -3,7 +3,10 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 DeUser = settings.AUTH_USER_MODEL
-
+ACCOUNT_STATUS = (
+    ("Not Approved","Not Approved"),
+    ("Approved","Approved"),
+)
 
 class User(AbstractUser):
     email = models.EmailField(max_length=255)
@@ -11,7 +14,7 @@ class User(AbstractUser):
     phone_number = models.CharField(max_length=16, unique=True)
     user_tracker_sim = models.CharField(max_length=100, blank=True, default="")
     user_blocked = models.BooleanField(default=False)
-    user_approved = models.CharField(max_length=16,blank=True,default="Not approved")
+    user_approved = models.CharField(max_length=16,choices=ACCOUNT_STATUS,default="Not Approved")
 
     REQUIRED_FIELDS = ['email', 'full_name', 'phone_number', 'user_tracker_sim']
     USERNAME_FIELD = 'username'
