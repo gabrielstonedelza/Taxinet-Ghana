@@ -91,6 +91,13 @@ class BuyVehicle(models.Model):
     def __str__(self):
         return self.vehicle.name
 
+    def get_car_name(self):
+        return self.vehicle.name
+    def get_car_pic(self):
+        if self.vehicle.picture:
+            return "https://taxinetghana.xyz" + self.vehicle.picture.url
+        return ''
+
 
 class AddToApprovedVehiclePurchases(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -16,7 +16,7 @@ class AddCarImageSerializer(serializers.ModelSerializer):
 class BuyVehicleSerializer(serializers.ModelSerializer):
     class Meta:
         model = BuyVehicle
-        fields = ['id','user','vehicle','date_requested','request_approved']
+        fields = ['id','user','vehicle','date_requested','request_approved','get_car_name','get_car_pic']
         read_only_fields = ['user','vehicle']
 
 class AddToApprovedVehiclePurchasesSerializer(serializers.ModelSerializer):
