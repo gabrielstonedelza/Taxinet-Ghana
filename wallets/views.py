@@ -20,10 +20,13 @@ def get_all_wallets(request):
 
 @api_view(['GET', 'PUT'])
 @permission_classes([permissions.AllowAny])
-def update_wallet(request, id):
+def update_wallet(request, id,amount):
     wallet = get_object_or_404(Wallets, id=id)
     serializer = WalletsSerializer(wallet, data=request.data)
     if serializer.is_valid():
+        UpdatedWallets.objects.create(user=wallet.user,wallet=wallet,amount=amount)
+        user_wallet = wallet.amount + amount
+        user_wallet.save()
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
