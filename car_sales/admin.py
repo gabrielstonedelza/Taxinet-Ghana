@@ -20,7 +20,7 @@ class AdminVehicleModel(admin.ModelAdmin):
     class Meta:
         model = Vehicle
 
-admin.site.register(Vehicle)
+admin.site.register(Vehicle,AdminVehicleModel)
 admin.site.register(AddCarImage)
 admin.site.register(BuyVehicle,AdminBuyVehicleModel)
 admin.site.register(AddToApprovedVehiclePurchases,AdminAddToApprovedVehiclePurchases)
