@@ -6,7 +6,7 @@ from users.models import User
 
 
 @receiver(post_save,sender=UpdatedWallets)
-def alert_booking_request(sender,created,instance,**kwargs):
+def alert_wallet_updated(sender,created,instance,**kwargs):
     if created:
         admin_user = User.objects.get(id=1)
         title = "Wallet Updated"

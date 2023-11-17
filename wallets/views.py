@@ -1,13 +1,11 @@
-from django.http import Http404
 from django.shortcuts import get_object_or_404
-from rest_framework import filters
-from rest_framework import permissions, generics, status
+from rest_framework import permissions, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
+from decimal import Decimal
 
-from .models import Wallets,UpdatedWallets
-from .serializers import WalletsSerializer,UpdatedWalletsSerializer
-
+from .models import Wallets, UpdatedWallets
+from .serializers import WalletsSerializer, UpdatedWalletsSerializer
 
 
 @api_view(['GET'])
@@ -25,7 +23,7 @@ def update_wallet(request, id,amount):
     serializer = WalletsSerializer(wallet, data=request.data)
     if serializer.is_valid():
         UpdatedWallets.objects.create(user=wallet.user,wallet=wallet,amount=amount)
-        user_wallet = wallet.amount + float(amount)
+        user_wallet = wallet.amount + Decimal(amount)
         user_wallet.save()
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
