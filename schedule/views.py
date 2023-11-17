@@ -31,7 +31,7 @@ def get_all_my_schedules(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_all_schedules(request):
-    schedules = ScheduleRide.objects.all().order_by('-date_scheduled')
+    schedules = ScheduleRide.objects.filter(status="Pending").order_by('-date_scheduled')
     serializer = ScheduleRideSerializer(schedules, many=True)
     return Response(serializer.data)
 
