@@ -26,3 +26,6 @@ class Profile(models.Model):
     def get_username(self):
         return self.user.username
 
+    def get_user_approved(self):
+        return self.user.user_approved
+
