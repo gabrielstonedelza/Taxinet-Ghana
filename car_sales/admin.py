@@ -16,7 +16,7 @@ class AdminAddToApprovedVehiclePurchases(admin.ModelAdmin):
 
 
 class AdminVehicleModel(admin.ModelAdmin):
-    list_display = ['id','purpose','name','price','location','milage','engine_type','interior_color','exterior_color','vin','car_id','picture','transmission','fog_light','push_start','reverse_camera','sun_roof','date_added']
+    list_display = ['id','purpose','rent_type','name','price','location','milage','engine_type','interior_color','exterior_color','vin','car_id','picture','transmission','fog_light','push_start','reverse_camera','sun_roof','date_added']
     class Meta:
         model = Vehicle
 
