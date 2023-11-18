@@ -119,6 +119,6 @@ def delete_vehicle(request, id):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_all_vehicles_for_rent(request):
-    vehicles = Vehicle.objects.filter(purpose="For Pay And Drive").order_by('-date_added')
+    vehicles = Vehicle.objects.filter(purpose="For Rent").order_by('-date_added')
     serializer = VehicleSerializer(vehicles, many=True)
     return Response(serializer.data)

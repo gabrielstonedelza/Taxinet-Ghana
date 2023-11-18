@@ -37,11 +37,15 @@ FUEL_TYPE = (
 
 VEHICLE_PURPOSE = (
     ("For Sale","For Sale"),
-    ("For Pay And Drive","For Pay And Drive"),
+    ("For Rent","For Rent"),
 )
-
+RENT_TYPE = (
+    ("Pay And Drive","Pay And Drive"),
+    ("Drive And Pay","Drive And Pay"),
+)
 class Vehicle(models.Model):
     purpose = models.CharField(max_length=50,choices=VEHICLE_PURPOSE, default="For Sale")
+    rent_type = models.CharField(max_length=50,choices=RENT_TYPE, default="Pay And Drive")
     name = models.CharField(max_length=50)
     price = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
     location = models.CharField(max_length=100)

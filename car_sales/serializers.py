@@ -4,7 +4,7 @@ from .models import Vehicle, AddCarImage,BuyVehicle, AddToApprovedVehiclePurchas
 class VehicleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Vehicle
-        fields = ['id','purpose','name','price','location','milage','engine_type','interior_color','exterior_color','vin','car_id','picture','transmission','fog_light','push_start','reverse_camera','sun_roof','date_added','get_car_pic']
+        fields = ['id','purpose','rent_type','name','price','location','milage','engine_type','interior_color','exterior_color','vin','car_id','picture','transmission','fog_light','push_start','reverse_camera','sun_roof','date_added','get_car_pic']
 
 
 class AddCarImageSerializer(serializers.ModelSerializer):
