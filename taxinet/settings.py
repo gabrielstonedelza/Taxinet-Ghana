@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'users',
     'wallets',
     'referrals',
+    'driver_inventory',
     'djoser',
     'corsheaders',
     'crispy_forms',

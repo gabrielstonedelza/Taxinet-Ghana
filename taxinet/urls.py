@@ -19,4 +19,5 @@ urlpatterns = [
     path('users/', include('users.urls')),
     path('wallets/', include('wallets.urls')),
     path('referrals/', include('referrals.urls')),
+    path('inventory/', include('driver_inventory.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
