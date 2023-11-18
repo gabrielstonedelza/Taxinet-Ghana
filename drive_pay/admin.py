@@ -9,7 +9,7 @@ class AdminDriveAndPay(admin.ModelAdmin):
         model = RequestDriveAndPay
 
 class AdminAddToApprovedDriveAndPay(admin.ModelAdmin):
-    list_display = ['id','user','drive_and_pay','assigned_driver','related_name','date_approved']
+    list_display = ['id','user','drive_and_pay','assigned_driver','date_approved']
 
     class Meta:
         model = AddToApprovedDriveAndPay
