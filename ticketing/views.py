@@ -83,7 +83,7 @@ def request_flight(request,flight_id):
     flight = get_object_or_404(AvailableFlights,id=flight_id)
     serializer = RequestBookingSerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save(flight=flight)
+        serializer.save(flight=flight,user=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
