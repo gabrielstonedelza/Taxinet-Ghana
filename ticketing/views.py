@@ -23,6 +23,21 @@ def get_available_flights(request):
     serializer = AvailableFlightsSerializer(flights, many=True)
     return Response(serializer.data)
 
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_available_flights_for_passion_air(request):
+    flights = AvailableFlights.objects.filter(airline="PassionAir").order_by('-date_added')
+    serializer = AvailableFlightsSerializer(flights, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_available_flights_for_awa(request):
+    flights = AvailableFlights.objects.filter(airline="Africa World Airlines").order_by('-date_added')
+    serializer = AvailableFlightsSerializer(flights, many=True)
+    return Response(serializer.data)
+
 
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
