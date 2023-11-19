@@ -80,7 +80,7 @@ def delete_flight(request, id):
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
 def request_flight(request,flight_id):
-    flight = get_object_or_404(AvailableFlights,id=id)
+    flight = get_object_or_404(AvailableFlights,id=flight_id)
     serializer = RequestBookingSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save(flight=flight)
