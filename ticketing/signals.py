@@ -10,7 +10,7 @@ def alert_booking_request(sender,created,instance,**kwargs):
     if created:
         admin_user = User.objects.get(id=1)
         title = "Flight Request"
-        message = f"{instance.user.username} wants to book a flight from {instance.departure_airport} to {instance.arrival_airport} on {instance.departure_date} @ {instance.departure_time}."
+        message = f"{instance.user.username} wants to book a flight from {instance.flight.departure_airport} to {instance.flight.arrival_airport} on {instance.flight.departure_date} @ {instance.flight.departure_time}."
 
         Notifications.objects.create(item_id=instance.id,notification_title=title,notification_message=message,notification_to=admin_user,notification_from=instance.user)
 
