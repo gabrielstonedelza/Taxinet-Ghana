@@ -14,7 +14,7 @@ class AdminRequestBooking(admin.ModelAdmin):
     class Meta:
         model = RequestBooking
 class AdminAvailableFlights(admin.ModelAdmin):
-    list_display = ['id','airline','departure_airport','arrival_airport','flight_type','departure_date','flight_duration','departure_time','price','returning_date','returning_time','arrival_time','date_added']
+    list_display = ['id','airline','departure_airport','departure_time','arrival_airport','flight_type','departure_date','flight_duration','departure_time','price','returning_date','returning_time','arrival_time','date_added']
     class Meta:
         model = AvailableFlights
 

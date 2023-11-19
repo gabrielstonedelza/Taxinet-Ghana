@@ -11,7 +11,7 @@ class BookingSerializer(serializers.ModelSerializer):
 class AvailableFlightsSerializer(serializers.ModelSerializer):
     class Meta:
         model = AvailableFlights
-        fields = ['id','airline','departure_airport','arrival_airport','flight_type','departure_date','flight_duration','departure_time','price','returning_date','returning_time','arrival_time','date_added']
+        fields = ['id','airline','departure_airport','departure_time','arrival_airport','flight_type','departure_date','flight_duration','departure_time','price','returning_date','returning_time','arrival_time','date_added']
 
 class RequestBookingSerializer(serializers.ModelSerializer):
     class Meta:
