@@ -130,8 +130,8 @@ class RequestBooking(models.Model):
     flight = models.ForeignKey(AvailableFlights,on_delete=models.CASCADE,related_name="chosen_flight_to_request",null=True)
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     flight_booked = models.CharField(max_length=20,choices=FLIGHT_STATUS,default="Pending")
-    adults = models.CharField(max_length=11, choices=ADULTS,default="1")
-    infants = models.CharField(max_length=11, choices=INFANTS,default="1")
+    adults = models.IntegerField(default=1)
+    infants = models.IntegerField(default=0)
     date_booked = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
