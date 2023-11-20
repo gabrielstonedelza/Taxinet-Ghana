@@ -3,7 +3,7 @@ from django.contrib import admin
 from .models import Booking,AvailableFlights,RequestBooking
 
 class AdminBooking(admin.ModelAdmin):
-    list_display = ['id','user','flight','infants','adults','flight_booked','date_booked']
+    list_display = ['id','user','flight','infants','adults','flight_booked','date_booked','flight_type','returning_date','returning_time']
 
     class Meta:
         model = Booking
@@ -14,7 +14,7 @@ class AdminRequestBooking(admin.ModelAdmin):
     class Meta:
         model = RequestBooking
 class AdminAvailableFlights(admin.ModelAdmin):
-    list_display = ['id','airline','departure_airport','departure_time','arrival_airport','flight_type','departure_date','flight_duration','departure_time','price','returning_date','returning_time','arrival_time','date_added']
+    list_display = ['id','airline','departure_airport','departure_time','arrival_airport','departure_date','flight_duration','departure_time','price','arrival_time','date_added']
     class Meta:
         model = AvailableFlights
 

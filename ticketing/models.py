@@ -41,6 +41,7 @@ ADULTS = (
 )
 
 INFANTS = (
+    ("0","0"),
     ("1","1"),
     ("2","2"),
     ("3","3"),
@@ -62,15 +63,12 @@ class AvailableFlights(models.Model):
     airline = models.CharField(max_length=100, choices=AIRLINES,default="PassionAir")
     departure_airport = models.CharField(max_length=100, choices=AIRPORTS,default="Kumasi (KSI)")
     arrival_airport = models.CharField(max_length=100, choices=AIRPORTS,default="Kumasi (KSI)")
-    flight_type = models.CharField(max_length=100, choices=FLIGHT_TYPE,default="Round Trip")
     departure_date = models.DateField(default=timezone.now)
     arrival_date = models.DateField(default=timezone.now)
     flight_duration = models.IntegerField(default=45)
     departure_time = models.TimeField(default=timezone.now)
     arrival_time = models.TimeField(default=timezone.now)
     price = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
-    returning_date = models.DateField(default=timezone.now)
-    returning_time = models.TimeField(default=timezone.now)
     date_added = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -81,8 +79,11 @@ class Booking(models.Model):
     flight = models.ForeignKey(AvailableFlights,on_delete=models.CASCADE,related_name="chosen_flight",null=True)
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     flight_booked = models.CharField(max_length=20,choices=FLIGHT_STATUS,default="Pending")
+    flight_type = models.CharField(max_length=100, choices=FLIGHT_TYPE, default="Round Trip")
+    returning_date = models.DateField(default=timezone.now)
+    returning_time = models.TimeField(default=timezone.now)
     adults = models.CharField(max_length=11, choices=ADULTS,default="1")
-    infants = models.CharField(max_length=11, choices=INFANTS,default="1")
+    infants = models.CharField(max_length=11, choices=INFANTS,default="0")
     date_booked = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -104,8 +105,6 @@ class Booking(models.Model):
     def get_arrival_airport(self):
         return self.flight.arrival_airport
 
-    def get_flight_type(self):
-        return self.flight.flight_type
 
     def get_depart_date(self):
         return self.flight.departure_date
@@ -120,13 +119,6 @@ class Booking(models.Model):
 
     def get_price(self):
         return self.flight.price
-
-    def get_return_date(self):
-        return self.flight.returning_date
-
-    def get_return_time(self):
-        return self.flight.returning_time
-
 
     def get_arrival_time(self):
         return self.flight.arrival_time
@@ -158,9 +150,6 @@ class RequestBooking(models.Model):
     def get_arrival_airport(self):
         return self.flight.arrival_airport
 
-    def get_flight_type(self):
-        return self.flight.flight_type
-
     def get_depart_date(self):
         return self.flight.departure_date
     def get_arrival_date(self):
@@ -174,12 +163,6 @@ class RequestBooking(models.Model):
 
     def get_price(self):
         return self.flight.price
-
-    def get_return_date(self):
-        return self.flight.returning_date
-
-    def get_return_time(self):
-        return self.flight.returning_time
 
 
     def get_arrival_time(self):
