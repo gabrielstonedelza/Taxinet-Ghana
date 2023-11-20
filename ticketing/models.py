@@ -1,5 +1,7 @@
 from django.db import models
 from users.models import User
+from django.utils import timezone
+
 
 AIRLINES = (
     ("Africa World Airlines","Africa World Airlines"),
@@ -61,13 +63,13 @@ class AvailableFlights(models.Model):
     departure_airport = models.CharField(max_length=100, choices=AIRPORTS,default="Kumasi Airport (KSI)")
     arrival_airport = models.CharField(max_length=100, choices=AIRPORTS,default="Kumasi Airport (KSI)")
     flight_type = models.CharField(max_length=100, choices=FLIGHT_TYPE,default="Round Trip")
-    departure_date = models.CharField(max_length=20)
+    departure_date = models.DateTimeField(default=timezone.now)
     flight_duration = models.IntegerField(default=45)
-    departure_time = models.CharField(max_length=20)
-    arrival_time = models.CharField(max_length=20)
+    departure_time = models.DateTimeField(default=timezone.now)
+    arrival_time = models.DateTimeField(default=timezone.now)
     price = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
-    returning_date = models.CharField(max_length=20,blank=True)
-    returning_time = models.CharField(max_length=20,blank=True)
+    returning_date = models.DateTimeField(default=timezone.now)
+    returning_time = models.DateTimeField(default=timezone.now)
     date_added = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
