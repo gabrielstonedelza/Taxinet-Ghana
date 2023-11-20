@@ -16,5 +16,5 @@ class AvailableFlightsSerializer(serializers.ModelSerializer):
 class RequestBookingSerializer(serializers.ModelSerializer):
     class Meta:
         model = RequestBooking
-        fields = ['id','user','flight','flight_booked','date_booked','get_username','get_user_phone','adults','infants','get_airline','get_depart_airport','get_arrival_airport''get_depart_date','get_flight_duration','get_depart_time','get_price','get_arrival_time','get_arrival_date']
+        fields = ['id','user','flight','flight_booked','date_booked','get_username','get_user_phone','adults','infants','get_airline','get_depart_airport','get_arrival_airport','get_depart_date','get_flight_duration','get_depart_time','get_price','get_arrival_time','get_arrival_date']
         read_only_fields = ['flight','user']
