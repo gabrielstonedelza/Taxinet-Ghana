@@ -63,13 +63,14 @@ class AvailableFlights(models.Model):
     departure_airport = models.CharField(max_length=100, choices=AIRPORTS,default="Kumasi Airport (KSI)")
     arrival_airport = models.CharField(max_length=100, choices=AIRPORTS,default="Kumasi Airport (KSI)")
     flight_type = models.CharField(max_length=100, choices=FLIGHT_TYPE,default="Round Trip")
-    departure_date = models.DateTimeField(default=timezone.now)
+    departure_date = models.DateField(default=timezone.now)
+    arrival_date = models.DateField(default=timezone.now)
     flight_duration = models.IntegerField(default=45)
-    departure_time = models.DateTimeField(default=timezone.now)
-    arrival_time = models.DateTimeField(default=timezone.now)
+    departure_time = models.TimeField(default=timezone.now)
+    arrival_time = models.TimeField(default=timezone.now)
     price = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
-    returning_date = models.DateTimeField(default=timezone.now)
-    returning_time = models.DateTimeField(default=timezone.now)
+    returning_date = models.DateField(default=timezone.now)
+    returning_time = models.TimeField(default=timezone.now)
     date_added = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -108,6 +109,8 @@ class Booking(models.Model):
 
     def get_depart_date(self):
         return self.flight.departure_date
+    def get_arrival_date(self):
+        return self.flight.arrival_date
 
     def get_flight_duration(self):
         return self.flight.flight_duration
@@ -160,6 +163,8 @@ class RequestBooking(models.Model):
 
     def get_depart_date(self):
         return self.flight.departure_date
+    def get_arrival_date(self):
+        return self.flight.arrival_date
 
     def get_flight_duration(self):
         return self.flight.flight_duration
