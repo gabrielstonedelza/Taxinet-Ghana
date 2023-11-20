@@ -60,8 +60,8 @@ REQUEST_STATUS = (
 )
 class AvailableFlights(models.Model):
     airline = models.CharField(max_length=100, choices=AIRLINES,default="PassionAir")
-    departure_airport = models.CharField(max_length=100, choices=AIRPORTS,default="Kumasi Airport (KSI)")
-    arrival_airport = models.CharField(max_length=100, choices=AIRPORTS,default="Kumasi Airport (KSI)")
+    departure_airport = models.CharField(max_length=100, choices=AIRPORTS,default="Kumasi (KSI)")
+    arrival_airport = models.CharField(max_length=100, choices=AIRPORTS,default="Kumasi (KSI)")
     flight_type = models.CharField(max_length=100, choices=FLIGHT_TYPE,default="Round Trip")
     departure_date = models.DateField(default=timezone.now)
     arrival_date = models.DateField(default=timezone.now)
