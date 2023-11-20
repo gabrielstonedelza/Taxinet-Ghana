@@ -9,12 +9,12 @@ AIRLINES = (
 )
 
 AIRPORTS = (
-    ("Kumasi Airport (KMS)","Kumasi Airport (KMS)"),
-    ("Accra Airport(ACC)","Accra Airport(ACC)"),
-    ("Takoradi Airport(TKD)","Takoradi Airport(TKD)"),
-    ("Tamale Airport(TML)","Tamale Airport(TML)"),
-    ("Wa Airport(WZA)","Wa Airport(AWZA"),
-    ("Sunyani Airport(NYI)","Sunyani Airport(NYI)"),
+    ("Kumasi (KMS)","Kumasi (KMS)"),
+    ("Accra (ACC)","Accra (ACC)"),
+    ("Takoradi (TKD)","Takoradi (TKD)"),
+    ("Tamale (TML)","Tamale (TML)"),
+    ("Wa (WZA)","Wa (AWZA"),
+    ("Sunyani (NYI)","Sunyani (NYI)"),
 )
 
 FLIGHT_TYPE = (
