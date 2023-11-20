@@ -18,5 +18,5 @@ urlpatterns = [
     path("delete_flight/<int:id>/",views.delete_flight),
 
 #     search flight
-    path("search_flight<str:depart_date>/<str:airline>/",views.search_flight)
+    path("search_flight/<str:depart_date>/<str:airline>/",views.search_flight)
 ]
