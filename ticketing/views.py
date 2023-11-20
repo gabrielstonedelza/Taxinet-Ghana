@@ -113,3 +113,12 @@ def delete_flight(request, id):
     except RequestBooking.DoesNotExist:
         return Http404
     return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# search flight by date and airline
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def search_flight(request,depart_date,airline):
+    flights = AvailableFlights.objects.filter(departure_date=depart_date).filter(airline=airline).order_by('-date_added')
+    serializer = AvailableFlightsSerializer(flights, many=True)
+    return Response(serializer.data)

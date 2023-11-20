@@ -16,4 +16,7 @@ urlpatterns = [
     path("get_all_my_requested_flights/",views.get_all_my_requested_flights),
     path("get_all_requested_flights/",views.get_all_requested_flights),
     path("delete_flight/<int:id>/",views.delete_flight),
+
+#     search flight
+    path("search_flight<str:depart_date>/<str:airline>/",views.search_flight)
 ]
