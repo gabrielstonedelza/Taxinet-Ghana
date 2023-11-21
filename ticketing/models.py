@@ -80,6 +80,8 @@ class Booking(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     flight_booked = models.CharField(max_length=20,choices=FLIGHT_STATUS,default="Pending")
     flight_type = models.CharField(max_length=100, choices=FLIGHT_TYPE, default="Round Trip")
+    user_phone_number = models.CharField(max_length=15,default="0244000000")
+    date_of_birth = models.DateField(default=timezone.now)
     returning_date = models.DateField(default=timezone.now)
     returning_time = models.TimeField(default=timezone.now)
     adults = models.CharField(max_length=11, choices=ADULTS,default="1")

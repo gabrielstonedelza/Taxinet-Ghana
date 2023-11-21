@@ -4,7 +4,7 @@ from .models import Booking, AvailableFlights,RequestBooking
 class BookingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Booking
-        fields = ['id','user','flight','flight_booked','date_booked','get_username','get_user_phone','adults','infants','get_airline','get_depart_airport','get_arrival_airport','get_depart_date','get_flight_duration','get_depart_time','get_price','get_arrival_time','get_arrival_date','flight_type','returning_date','returning_time']
+        fields = ['id','user','flight','flight_booked','date_booked','get_username','get_user_phone','adults','infants','get_airline','get_depart_airport','get_arrival_airport','get_depart_date','get_flight_duration','get_depart_time','get_price','get_arrival_time','get_arrival_date','flight_type','returning_date','returning_time','user_phone_number','date_of_birth']
         read_only_fields = ['flight']
 
 
