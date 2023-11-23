@@ -59,6 +59,9 @@ class AddToApprovedDriveAndPay(models.Model):
     def get_payment_period(self):
         return self.drive_and_pay.period
 
+    def get_period(self):
+        return self.drive_and_pay.peroid
+
     def get_total_price(self):
         return self.drive_and_pay.period_total_price
 
