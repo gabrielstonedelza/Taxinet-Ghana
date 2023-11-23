@@ -39,6 +39,7 @@ class AddToApprovedDriveAndPay(models.Model):
     drive_and_pay = models.ForeignKey(RequestDriveAndPay,on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE,related_name="user_being_approved_for_dnp")
     assigned_driver = models.ForeignKey(User, on_delete=models.CASCADE,related_name="driver_being_approved_for_dnp",default=1)
+    user_tracker_sim = models.CharField(max_length=100, blank=True, default="")
     date_approved = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -64,3 +65,6 @@ class AddToApprovedDriveAndPay(models.Model):
 
     def get_date_requested(self):
         return self.drive_and_pay.date_requested
+
+    def get_drive_type(self):
+        return self.drive_and_pay.drive_type

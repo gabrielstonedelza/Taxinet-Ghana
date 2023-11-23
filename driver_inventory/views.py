@@ -1,10 +1,10 @@
-from django.http import Http404
-from django.shortcuts import get_object_or_404
-from rest_framework import permissions, generics, status
+from rest_framework import permissions, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
+
 from .models import DriverVehicleInventory
 from .serializers import DriverVehicleInventorySerializer
+
 
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
