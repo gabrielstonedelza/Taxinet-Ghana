@@ -1,5 +1,12 @@
 from rest_framework import serializers
-from .models import RequestDriveAndPay, AddToApprovedDriveAndPay
+from .models import RequestDriveAndPay, AddToApprovedDriveAndPay,LockCarForTheDay
+
+
+class LockCarForTheDaySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LockCarForTheDay
+        fields = ['id','user','points','date_added','get_username']
+        read_only_fields = ['user']
 
 class RequestDriveAndPaySerializer(serializers.ModelSerializer):
     class Meta:

@@ -3,8 +3,8 @@ from django.shortcuts import get_object_or_404
 from rest_framework import permissions, generics, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from .models import RequestDriveAndPay, AddToApprovedDriveAndPay
-from .serializers import RequestDriveAndPaySerializer,AddToApprovedDriveAndPaySerializer
+from .models import RequestDriveAndPay, AddToApprovedDriveAndPay, LockCarForTheDay
+from .serializers import RequestDriveAndPaySerializer,AddToApprovedDriveAndPaySerializer, LockCarForTheDaySerializer
 from car_sales.models import Vehicle
 
 
@@ -72,3 +72,13 @@ def delete_drive_and_pay(request, id):
     except RequestDriveAndPay.DoesNotExist:
         return Http404
     return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def lock_car(request):
+    serializer = LockCarForTheDaySerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(user=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

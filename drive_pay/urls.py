@@ -9,4 +9,5 @@ urlpatterns = [
     path("add_to_drive_and_pay_complete/<int:id>/", views.add_to_drive_and_pay_complete),
     path("get_all_my_approved_drive_and_pay/", views.get_all_my_approved_drive_and_pay),
     path("get_all_approved_drive_and_pay/", views.get_all_approved_drive_and_pay),
+    path("lock_car/", views.lock_car),
 ]

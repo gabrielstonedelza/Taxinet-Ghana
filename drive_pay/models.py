@@ -71,3 +71,14 @@ class AddToApprovedDriveAndPay(models.Model):
 
     def get_drive_type(self):
         return self.drive_and_pay.drive_type
+
+class LockCarForTheDay(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    points = models.IntegerField(default=0)
+    date_added = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user.username
+
+    def get_username(self):
+        return self.user.username
