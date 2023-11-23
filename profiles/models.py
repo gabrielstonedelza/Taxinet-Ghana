@@ -14,6 +14,9 @@ class Profile(models.Model):
             return "https://taxinetghana.xyz" + self.profile_pic.url
         return ''
 
+    def get_user_tracker_sim(self):
+        return self.user.user_tracker_sim
+
     def get_users_email(self):
         return self.user.email
 
