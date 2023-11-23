@@ -78,9 +78,9 @@ TOYOTA_BRANDS = (
 
 class DriverVehicleInventory(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    registration_number = models.CharField(max_length=255, default="")
-    unique_number = models.CharField(max_length=30, default="")
-    vehicle_brand = models.CharField(max_length=255, default="Vitz", choices=TOYOTA_BRANDS)
+    # registration_number = models.CharField(max_length=255, default="")
+    # unique_number = models.CharField(max_length=30, default="")
+    # vehicle_brand = models.CharField(max_length=255, default="Vitz", choices=TOYOTA_BRANDS)
     millage = models.CharField(max_length=255, default="")
     windscreen = models.CharField(max_length=30, choices=INVENTORY_OPTIONS, default="No")
     side_mirror = models.CharField(max_length=30, choices=INVENTORY_OPTIONS, default="No")
