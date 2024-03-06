@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'schedule',
     'ticketing',
     'users',
+    'kitchen',
     'wallets',
     'referrals',
     'driver_inventory',

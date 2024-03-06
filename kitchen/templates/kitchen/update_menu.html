@@ -1,0 +1,21 @@
+{% extends "kitchen/base.html"%}
+{% load crispy_forms_tags %}
+{% block title %}
+Update food item
+{% endblock %}
+{% block content%}
+<div class="add-food-item-container">
+
+    <h3 class="text-center">Update {{ blog.title }}</h3>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form|crispy }}
+        </div>
+        <div class="form-group">
+            <button type="submit" class="butt">Update</button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

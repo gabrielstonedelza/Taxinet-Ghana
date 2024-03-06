@@ -1,0 +1,35 @@
+{% extends "kitchen/base.html"%} {% block title %} Menu Preview {% endblock %}
+{% block content %}
+
+<div class="navbar">
+  <div id="add_new_food_item">
+    <a href="{% url 'add_food_item' %}" class="butt">Add Food Item</a>
+  </div>
+  <div id="view_menu">
+    <a href="{% url 'food_menu' %}" class="butt">View Menu</a>
+  </div>
+</div>
+<br />
+<div class="container">
+  <div class="menu-container">
+    <ul class="row">
+      {% for food in food %}
+      <li class="col-6 col-md-6">
+        <div class="blog-details">
+          <div class="item">
+            <img src="{{ food.image.url }}" alt="" />
+            <p class="food-name">
+              {{ food.name }} <br />
+              <span class="food-price">${{ food.price }}</span>
+            </p>
+        
+            <a class="butt" href="{% url 'update_menu' food.id %}">Update</a>
+          </div>
+        </div>
+        <br />
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock content %}

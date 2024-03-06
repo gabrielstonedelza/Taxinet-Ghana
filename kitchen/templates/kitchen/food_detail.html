@@ -1,0 +1,25 @@
+{% extends "kitchen/base.html"%}
+{% block title %}
+{{ blog.title }}
+{% endblock %}
+{% block content %}
+
+<div class="container">
+    <br>
+    <div class="blog-detail-container">
+        <div class="de-blog">
+            <div class="blog-detail-img">
+                {% if food_item.image %}
+                    <img src="{{ food.image.url }}" alt="">
+                {% endif %}
+                <h5>{{ food_item.name }}</h5>
+                <small class="text-muted">${{ food_item.price }}</small>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+

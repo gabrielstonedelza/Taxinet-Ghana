@@ -1,0 +1,24 @@
+{% extends "kitchen/base.html"%} 
+{% block title %} Menu {% endblock %} 
+{% load static %} 
+{% block content %}
+
+<div class="container main-back">
+  <div class="justback"></div>
+  <!-- <img class="logo" src="{% static 'kitchen/images/logo_name.png' %}" alt="" /> -->
+  <br>
+  <ul class="main-menu-details">
+    {% for food in food_item %}
+    <li class="">
+        <div class="item">
+          <img src="{{ food.image.url }}" alt="" />
+          <p class="food-name">
+            {{ food.name }} <br />
+            <span class="food-price">${{ food.price }}</span>
+          </p>
+        </div>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock content %}
