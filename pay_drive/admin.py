@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import RequestPayAndDrive, AddToApprovedPayAndDrive
+from .models import RequestPayAndDrive, AddToApprovedPayAndDrive, PayDailyPayAndDrive
 
 class AdminRequestPayAndDrive(admin.ModelAdmin):
     list_display = ['id','user','car','drive_type','pick_up_date','payment_period','period_total_price','request_approved','date_requested']
@@ -14,3 +14,4 @@ class AdminAddToApprovedPayAndDrive(admin.ModelAdmin):
 
 admin.site.register(RequestPayAndDrive,AdminRequestPayAndDrive)
 admin.site.register(AddToApprovedPayAndDrive,AdminAddToApprovedPayAndDrive)
+admin.site.register(PayDailyPayAndDrive)
