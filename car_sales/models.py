@@ -61,7 +61,7 @@ class Vehicle(models.Model):
     exterior_color = models.CharField(max_length=30,choices=COLOR_CHOICES,default="Black")
     vin = models.CharField(max_length=100)
     car_id = models.CharField(max_length=100)
-    picture = models.ImageField(upload_to="cars_initial_pics")
+    picture = models.ImageField(upload_to="cars_initial_pics",default="taxinet_cab.png")
     transmission = models.CharField(max_length=30,choices=VEHICLE_TRANSMISSION,default="Automatic")
     fog_light = models.BooleanField(default=False)
     push_start = models.BooleanField(default=False)
