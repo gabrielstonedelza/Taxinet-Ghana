@@ -5,9 +5,28 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
 from car_sales.models import Vehicle
-from .models import RequestPayAndDrive,AddToApprovedPayAndDrive
-from .serializers import RequestPayAndDriveSerializer,AddToApprovedPayAndDriveSerializer
+from .models import RequestPayAndDrive,AddToApprovedPayAndDrive, PayDailyPayAndDrive
+from .serializers import RequestPayAndDriveSerializer,AddToApprovedPayAndDriveSerializer,PayDailyPayAndDriveSerializer
 from django.core.mail import EmailMessage
+
+# payment daily
+@api_view(['GET','POST'])
+@permission_classes([permissions.IsAuthenticated])
+def add_to_pay_and_drive_daily(request):
+    serializer = PayDailyPayAndDriveSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(user=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_all_my_daily_payment_for_pay_and_drive(request):
+    my_daily_payments = PayDailyPayAndDrive.objects.filter(user=request.user).order_by('-date_paid')
+    serializer = PayDailyPayAndDriveSerializer(my_daily_payments, many=True)
+    return Response(serializer.data)
+# payment daily
 
 @api_view(['GET','POST'])
 @permission_classes([permissions.IsAuthenticated])

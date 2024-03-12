@@ -1,5 +1,11 @@
 from rest_framework import serializers
-from .models import RequestPayAndDrive, AddToApprovedPayAndDrive
+from .models import RequestPayAndDrive, AddToApprovedPayAndDrive, PayDailyPayAndDrive
+
+class PayDailyPayAndDriveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PayDailyPayAndDrive
+        fields = ['id','approved_drive','user','amount','date_paid']
+        read_only_fields = ['user']
 
 class RequestPayAndDriveSerializer(serializers.ModelSerializer):
     class Meta:
