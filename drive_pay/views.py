@@ -3,15 +3,15 @@ from django.shortcuts import get_object_or_404
 from rest_framework import permissions, generics, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from .models import RequestDriveAndPay, AddToApprovedDriveAndPay, PayExtraForDriveAndPay
-from .serializers import RequestDriveAndPaySerializer,AddToApprovedDriveAndPaySerializer, LockCarForTheDaySerializer,PayExtraForDriveAndPaySerializer
+from .models import RequestDriveAndPay, AddToApprovedDriveAndPay, PayExtraForDriveAndPay,PayDailyForPayAndDrive
+from .serializers import RequestDriveAndPaySerializer,AddToApprovedDriveAndPaySerializer, LockCarForTheDaySerializer,PayExtraForDriveAndPaySerializer, PayDailyForPayAndDriveSerializer
 from car_sales.models import Vehicle
 
 # extra payment
 @api_view(['GET','POST'])
 @permission_classes([permissions.IsAuthenticated])
-def add_to_extra_drive_and_pay(request):
-    serializer = PayExtraForDriveAndPaySerializer(data=request.data)
+def add_to_drive_and_pay_daily(request):
+    serializer = PayDailyForPayAndDriveSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save(user=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -20,9 +20,9 @@ def add_to_extra_drive_and_pay(request):
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
-def get_all_my_extra_payments_for_drive_and_pay(request):
-    my_extra_payments = PayExtraForDriveAndPay.objects.filter(user=request.user).order_by('-date_paid')
-    serializer = PayExtraForDriveAndPaySerializer(my_extra_payments, many=True)
+def get_all_my_daily_payments_for_drive_and_pay(request):
+    my_extra_payments = PayDailyForPayAndDrive.objects.filter(user=request.user).order_by('-date_paid')
+    serializer = PayDailyForPayAndDriveSerializer(my_extra_payments, many=True)
     return Response(serializer.data)
 # extra payment
 

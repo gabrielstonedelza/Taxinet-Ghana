@@ -10,6 +10,6 @@ urlpatterns = [
     path("get_all_my_approved_drive_and_pay/", views.get_all_my_approved_drive_and_pay),
     path("get_all_approved_drive_and_pay/", views.get_all_approved_drive_and_pay),
     path("lock_car/", views.lock_car),
-    path("add_to_extra_drive_and_pay/", views.add_to_extra_drive_and_pay),
-    path("get_all_my_extra_payments_for_drive_and_pay/", views.get_all_my_extra_payments_for_drive_and_pay),
+    path("add_to_drive_and_pay_daily/", views.add_to_drive_and_pay_daily),
+    path("get_all_my_daily_payments_for_drive_and_pay/", views.get_all_my_daily_payments_for_drive_and_pay),
 ]

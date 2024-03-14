@@ -5,15 +5,15 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
 from car_sales.models import Vehicle
-from .models import RequestPayAndDrive,AddToApprovedPayAndDrive, PayDailyPayAndDrive
-from .serializers import RequestPayAndDriveSerializer,AddToApprovedPayAndDriveSerializer,PayDailyPayAndDriveSerializer
+from .models import RequestPayAndDrive,AddToApprovedPayAndDrive, PayDailyPayAndDrive, PayExtraDriveAndPay
+from .serializers import RequestPayAndDriveSerializer,AddToApprovedPayAndDriveSerializer,PayDailyPayAndDriveSerializer,PayExtraDriveAndPaySerializer
 from django.core.mail import EmailMessage
 
 # payment daily
 @api_view(['GET','POST'])
 @permission_classes([permissions.IsAuthenticated])
-def add_to_pay_and_drive_daily(request):
-    serializer = PayDailyPayAndDriveSerializer(data=request.data)
+def add_to_pay_and_drive_extra(request):
+    serializer = PayExtraDriveAndPaySerializer(data=request.data)
     if serializer.is_valid():
         serializer.save(user=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -22,9 +22,9 @@ def add_to_pay_and_drive_daily(request):
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
-def get_all_my_daily_payment_for_pay_and_drive(request):
-    my_daily_payments = PayDailyPayAndDrive.objects.filter(user=request.user).order_by('-date_paid')
-    serializer = PayDailyPayAndDriveSerializer(my_daily_payments, many=True)
+def get_all_my_extra_payment_for_pay_and_drive(request):
+    my_daily_payments = PayExtraDriveAndPay.objects.filter(user=request.user).order_by('-date_paid')
+    serializer = PayExtraDriveAndPaySerializer(my_daily_payments, many=True)
     return Response(serializer.data)
 # payment daily
 
