@@ -42,6 +42,7 @@ VEHICLE_PURPOSE = (
 RENT_TYPE = (
     ("Pay And Drive","Pay And Drive"),
     ("Drive And Pay","Drive And Pay"),
+    ("Buy","Buy"),
 )
 
 DRIVE_TYPE = (
