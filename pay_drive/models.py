@@ -19,6 +19,7 @@ class RequestPayAndDrive(models.Model):
     car  = models.ForeignKey(Vehicle, on_delete=models.CASCADE,related_name="car_for_pay_and_drive")
     drive_type = models.CharField(max_length=50, choices=DRIVING_STYLE, default="Self Drive")
     pick_up_date = models.CharField(max_length=10)
+    drop_off_date = models.CharField(max_length=10, default="")
     payment_period = models.CharField(max_length=10, choices=PAYMENT_PERIODS, default="1 Yr")
     period_total_price = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
     request_approved = models.CharField(max_length=30, default="Pending")

@@ -10,7 +10,7 @@ class PayDailyPayAndDriveSerializer(serializers.ModelSerializer):
 class RequestPayAndDriveSerializer(serializers.ModelSerializer):
     class Meta:
         model = RequestPayAndDrive
-        fields = ['id','user','car','pick_up_date','payment_period','period_total_price','request_approved','date_requested','get_username','get_car_pic','get_car_name','get_user_phone']
+        fields = ['id','user','car','pick_up_date','drop_off_date','payment_period','period_total_price','request_approved','date_requested','get_username','get_car_pic','get_car_name','get_user_phone']
         read_only_fields = ['user','car']
 
 
