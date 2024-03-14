@@ -1,6 +1,7 @@
 from django.db import models
 from users.models import User
 from car_sales.models import Vehicle
+from django.utils import timezone
 
 DRIVING_STYLE = (
     ("Self Drive","Self Drive"),
@@ -98,6 +99,8 @@ class PayDailyForPayAndDrive(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="payment_daily_pay_and_drive")
     amount = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
     date_paid = models.DateTimeField(auto_now_add=True)
+    month_paid = models.DateField(default=timezone.now)
+    year_paid = models.DateField(default=timezone.now)
 
 
     def __str__(self):

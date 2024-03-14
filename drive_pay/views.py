@@ -6,14 +6,31 @@ from rest_framework.response import Response
 from .models import RequestDriveAndPay, AddToApprovedDriveAndPay, PayExtraForDriveAndPay,PayDailyForPayAndDrive
 from .serializers import RequestDriveAndPaySerializer,AddToApprovedDriveAndPaySerializer, LockCarForTheDaySerializer,PayExtraForDriveAndPaySerializer, PayDailyForPayAndDriveSerializer
 from car_sales.models import Vehicle
+from datetime import datetime
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_bank_deposits_for_today(request):
+    my_date = datetime.today()
+    de_date = my_date.date()
+    your_bank_requests = BankDeposit.objects.filter(agent=request.user).filter(
+        deposited_month=de_date.month).filter(deposited_year=de_date.year).filter(deposit_paid="Not Paid").order_by(
+        '-date_requested')
+    serializer = BankDepositSerializer(your_bank_requests, many=True)
+    return Response(serializer.data)
 
 # extra payment
 @api_view(['GET','POST'])
 @permission_classes([permissions.IsAuthenticated])
 def add_to_drive_and_pay_daily(request):
+    my_date = datetime.today()
+    de_date = my_date.date()
     serializer = PayDailyForPayAndDriveSerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save(user=request.user)
+        if not PayDailyForPayAndDrive.objects.filter(user=request.user).filter(
+        month_paid=de_date.month).filter(year_paid=de_date.year).exists():
+            serializer.save(user=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

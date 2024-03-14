@@ -5,7 +5,7 @@ from .models import RequestDriveAndPay, AddToApprovedDriveAndPay,LockCarForTheDa
 class PayDailyForPayAndDriveSerializer(serializers.ModelSerializer):
     class Meta:
         model = PayDailyForPayAndDrive
-        fields = ['id','approved_drive','user','amount','date_paid']
+        fields = ['id','approved_drive','user','amount','date_paid','month_paid','year_paid']
         read_only_fields = ['user']
 class PayExtraForDriveAndPaySerializer(serializers.ModelSerializer):
     class Meta:
