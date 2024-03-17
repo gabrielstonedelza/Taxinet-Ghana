@@ -10,6 +10,9 @@ class Wallets(models.Model):
     def __str__(self):
         return str(self.pk)
 
+    def get_user_phone(self):
+        return self.user.phone_number
+
     def get_username(self):
         return self.user.username
 

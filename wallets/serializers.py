@@ -6,7 +6,7 @@ from .models import Wallets, UpdatedWallets
 class WalletsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Wallets
-        fields = ['id','user','amount','date_loaded','get_username','get_full_name']
+        fields = ['id','user','amount','date_loaded','get_username','get_full_name','get_user_phone']
 
 
 class UpdatedWalletsSerializer(serializers.ModelSerializer):
