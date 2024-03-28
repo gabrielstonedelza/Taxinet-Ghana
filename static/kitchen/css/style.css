@@ -147,6 +147,28 @@ ul {
     font-weight: bold;
     font-size: 12px;
   }
+
+  .main-menu-details {
+    max-width: 550px;
+    margin: auto;
+    display: grid;
+    padding-left: 120px;
+    grid-template-columns: repeat(2, 1fr);
+
+    /* grid-gap: 10px;
+    gap: 0.5rem; */
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .main-menu-details .item .food-name {
+    text-transform: capitalize;
+    font-weight: bold;
+    font-size: 10px;
+    width: 100%;
+    color: #64750f;
+  }
 }
 
 @media only screen and (max-width: 600px) {
@@ -159,5 +181,24 @@ ul {
     color: red;
     font-weight: bold;
     font-size: 12px;
+  }
+
+  .main-menu-details {
+    max-width: 550px;
+    margin: auto;
+    display: grid;
+    padding-left: 120px;
+    grid-template-columns: repeat(2, 1fr);
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .main-menu-details .item .food-name {
+    text-transform: capitalize;
+    font-weight: bold;
+    font-size: 10px;
+    width: 100%;
+    color: #64750f;
   }
 }
