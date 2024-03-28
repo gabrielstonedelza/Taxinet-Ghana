@@ -130,7 +130,7 @@ ul {
 .main-menu-details .item .food-price {
   color: red;
   font-weight: bold;
-  font-size: 15px;
+  font-size: 13px;
 }
 
 /* media queries */
@@ -140,5 +140,24 @@ ul {
   .main-menu-details .item img {
     width: 45px;
     height: 45px;
+  }
+
+  .main-menu-details .item .food-price {
+    color: red;
+    font-weight: bold;
+    font-size: 12px;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .main-menu-details .item img {
+    width: 45px;
+    height: 45px;
+  }
+
+  .main-menu-details .item .food-price {
+    color: red;
+    font-weight: bold;
+    font-size: 12px;
   }
 }
