@@ -149,7 +149,7 @@ ul {
   }
 
   .main-menu-details {
-    max-width: 550px;
+    max-width: 600px;
     margin: auto;
     display: grid;
     padding-left: 120px;
@@ -184,10 +184,10 @@ ul {
   }
 
   .main-menu-details {
-    max-width: 550px;
+    max-width: 600px;
     margin: auto;
     display: grid;
-    padding-left: 120px;
+    padding-left: 100px;
     grid-template-columns: repeat(2, 1fr);
     justify-content: center;
     align-items: center;
