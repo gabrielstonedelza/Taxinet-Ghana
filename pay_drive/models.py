@@ -76,6 +76,11 @@ class AddToApprovedPayAndDrive(models.Model):
     def get_date_requested(self):
         return self.pay_and_drive.date_requested
 
+    def get_car_pic(self):
+        if self.pay_and_drive.car.picture:
+            return "https://taxinetghana.xyz" + self.pay_and_drive.car.picture.url
+        return ''
+
 
 class PayDailyPayAndDrive(models.Model):
     approved_drive = models.ForeignKey(AddToApprovedPayAndDrive, on_delete=models.CASCADE)

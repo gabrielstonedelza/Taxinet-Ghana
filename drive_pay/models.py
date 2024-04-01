@@ -48,6 +48,11 @@ class AddToApprovedDriveAndPay(models.Model):
     user_tracker_sim = models.CharField(max_length=100, blank=True, default="")
     date_approved = models.DateTimeField(auto_now_add=True)
 
+    def get_car_pic(self):
+        if self.drive_and_pay.car.picture:
+            return "https://taxinetghana.xyz" + self.drive_and_pay.car.picture.url
+        return ''
+
     def __str__(self):
         return self.user.username
 
