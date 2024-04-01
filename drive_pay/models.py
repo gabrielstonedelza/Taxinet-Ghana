@@ -8,6 +8,11 @@ DRIVING_STYLE = (
     ("With Driver","With Driver"),
 )
 
+REQUEST_STATUS = (
+    ("Pending","Pending"),
+    ("Approved","Approved"),
+)
+
 class RequestDriveAndPay(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     car  = models.ForeignKey(Vehicle, on_delete=models.CASCADE,related_name="car_for_drive_and_pay")
@@ -16,7 +21,7 @@ class RequestDriveAndPay(models.Model):
     pick_up_date = models.CharField(max_length=10)
     drop_off_date = models.CharField(max_length=10)
     period_total_price = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
-    request_approved = models.CharField(max_length=50, default="Pending")
+    request_approved = models.CharField(max_length=50,choices=REQUEST_STATUS, default="Pending")
     date_requested = models.DateTimeField(auto_now_add=True)
 
     def get_car_name(self):

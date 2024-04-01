@@ -14,6 +14,11 @@ DRIVING_STYLE = (
     ("With Driver","With Driver"),
 )
 
+REQUEST_STATUS = (
+    ("Pending","Pending"),
+    ("Approved","Approved"),
+)
+
 class RequestPayAndDrive(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     car  = models.ForeignKey(Vehicle, on_delete=models.CASCADE,related_name="car_for_pay_and_drive")
@@ -22,7 +27,7 @@ class RequestPayAndDrive(models.Model):
     drop_off_date = models.CharField(max_length=10, default="")
     payment_period = models.CharField(max_length=10, choices=PAYMENT_PERIODS, default="1 Yr")
     period_total_price = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
-    request_approved = models.CharField(max_length=30, default="Pending")
+    request_approved = models.CharField(max_length=30,choices=REQUEST_STATUS, default="Pending")
     date_requested = models.DateTimeField(auto_now_add=True)
 
     def get_user_phone(self):
