@@ -47,7 +47,7 @@ def add_to_drive_and_pay_complete(request,id):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_all_my_approved_drive_and_pay(request):
-    my_approved = AddToApprovedDriveAndPay.objects.filter(user=request.user).order_by('-date_approved')
+    my_approved = AddToApprovedDriveAndPay.objects.filter(user=request.user).filter(expired=False).order_by('-date_approved')
     serializer = AddToApprovedDriveAndPaySerializer(my_approved, many=True)
     return Response(serializer.data)
 
@@ -55,7 +55,7 @@ def get_all_my_approved_drive_and_pay(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_all_approved_drive_and_pay(request):
-    approved = AddToApprovedDriveAndPay.objects.all().order_by('-date_approved')
+    approved = AddToApprovedDriveAndPay.objects.filter(expired=False).order_by('-date_approved')
     serializer = AddToApprovedDriveAndPaySerializer(approved, many=True)
     return Response(serializer.data)
 
