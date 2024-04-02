@@ -66,6 +66,9 @@ class AddToApprovedPayAndDrive(models.Model):
     def get_pick_up_date(self):
         return self.pay_and_drive.pick_up_date
 
+    def get_drop_off_date(self):
+        return self.pay_and_drive.drop_off_date
+
     def get_payment_period(self):
         return self.pay_and_drive.payment_period
 
