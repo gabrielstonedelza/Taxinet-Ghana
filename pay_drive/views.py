@@ -91,3 +91,13 @@ def delete_pay_and_drive(request, id):
     except RequestPayAndDrive.DoesNotExist:
         return Http404
     return Response(status=status.HTTP_204_NO_CONTENT)
+
+@api_view(['GET', 'PUT'])
+@permission_classes([permissions.IsAuthenticated])
+def update_approve_pay_drive(request,pk):
+    my_approved = get_object_or_404(AddToApprovedPayAndDrive,pk=pk)
+    serializer = AddToApprovedPayAndDriveSerializer(my_approved, data=request.data)
+    if serializer.is_valid():
+        serializer.save(pay_and_drive=my_approved)
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

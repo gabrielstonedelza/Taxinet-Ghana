@@ -106,3 +106,13 @@ def lock_car(request):
         serializer.save(user=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'PUT'])
+@permission_classes([permissions.IsAuthenticated])
+def update_approve_drive_drive(request,pk):
+    my_approved = get_object_or_404(AddToApprovedDriveAndPay,pk=pk)
+    serializer = AddToApprovedDriveAndPaySerializer(my_approved, data=request.data)
+    if serializer.is_valid():
+        serializer.save(drive_and_pay=my_approved)
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
