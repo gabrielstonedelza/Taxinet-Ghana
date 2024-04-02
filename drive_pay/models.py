@@ -46,6 +46,7 @@ class AddToApprovedDriveAndPay(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE,related_name="user_being_approved_for_dnp")
     assigned_driver = models.ForeignKey(User, on_delete=models.CASCADE,related_name="driver_being_approved_for_dnp",default=1)
     user_tracker_sim = models.CharField(max_length=100, blank=True, default="")
+    expired = models.BooleanField(default=False)
     date_approved = models.DateTimeField(auto_now_add=True)
 
     def get_car_pic(self):

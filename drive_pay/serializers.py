@@ -30,5 +30,5 @@ class RequestDriveAndPaySerializer(serializers.ModelSerializer):
 class AddToApprovedDriveAndPaySerializer(serializers.ModelSerializer):
     class Meta:
         model = AddToApprovedDriveAndPay
-        fields = ['id','user','drive_and_pay','assigned_driver','date_approved','get_car_name','get_drive_type','get_pick_up_date','get_drop_off_date','get_payment_period','get_total_price','get_date_requested','get_drive_type','user_tracker_sim','get_period','get_car_pic']
+        fields = ['id','user','drive_and_pay','assigned_driver','date_approved','get_car_name','get_drive_type','get_pick_up_date','get_drop_off_date','get_payment_period','get_total_price','get_date_requested','get_drive_type','user_tracker_sim','get_period','get_car_pic','expired']
         read_only_fields = ['drive_and_pay']
