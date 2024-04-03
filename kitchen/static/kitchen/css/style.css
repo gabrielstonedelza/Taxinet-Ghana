@@ -83,7 +83,7 @@ ul {
   position: absolute;
   width: 100%;
   height: 100%;
-  background: url("../images/menu_back.jpg");
+  background: url("../images/menu_back.png");
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
@@ -93,6 +93,7 @@ ul {
 
 /* main menu */
 .main-menu-details {
+  /* background-color: white; */
   max-width: 550px;
   margin: auto;
   display: grid;
