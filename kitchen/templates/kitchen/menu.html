@@ -1,5 +1,4 @@
-{% extends "kitchen/base.html"%} 
-{% block title %} Menu Preview {% endblock %}
+{% extends "kitchen/base.html"%} {% block title %} Menu Preview {% endblock %}
 {% block content %}
 
 <div class="navbar">
@@ -23,7 +22,7 @@
               {{ food.name }} <br />
               <span class="food-price">${{ food.price }}</span>
             </p>
-        
+
             <a class="butt" href="{% url 'update_menu' food.id %}">Update</a>
           </div>
         </div>
