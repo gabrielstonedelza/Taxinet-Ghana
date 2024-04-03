@@ -53,6 +53,7 @@ class AddToApprovedPayAndDrive(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE,related_name="user_being_approved")
     assigned_driver = models.ForeignKey(User, on_delete=models.CASCADE,related_name="driver_being_approved",default=1)
     expired = models.BooleanField(default=False)
+    dropped_off = models.BooleanField(default=False)
     date_approved = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
