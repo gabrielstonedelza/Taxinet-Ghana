@@ -1,6 +1,7 @@
 from django.db import models
 from users.models import User
 from car_sales.models import Vehicle
+from cars_for_rent.models import CarsForRent
 
 
 PAYMENT_PERIODS = (
@@ -21,13 +22,14 @@ REQUEST_STATUS = (
 
 class RequestPayAndDrive(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
-    car  = models.ForeignKey(Vehicle, on_delete=models.CASCADE,related_name="car_for_pay_and_drive")
+    car  = models.ForeignKey(CarsForRent, on_delete=models.CASCADE,related_name="car_for_pay_and_drive")
     drive_type = models.CharField(max_length=50, choices=DRIVING_STYLE, default="Self Drive")
     pick_up_date = models.CharField(max_length=10)
     drop_off_date = models.CharField(max_length=10, default="")
-    payment_period = models.CharField(max_length=10, choices=PAYMENT_PERIODS, default="1 Yr")
+    # payment_period = models.CharField(max_length=10, choices=PAYMENT_PERIODS, default="1 Yr")
     period_total_price = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
     request_approved = models.CharField(max_length=30,choices=REQUEST_STATUS, default="Pending")
+    referral = models.CharField(max_length=150,default="")
     date_requested = models.DateTimeField(auto_now_add=True)
 
     def get_user_phone(self):
@@ -70,9 +72,6 @@ class AddToApprovedPayAndDrive(models.Model):
 
     def get_drop_off_date(self):
         return self.pay_and_drive.drop_off_date
-
-    def get_payment_period(self):
-        return self.pay_and_drive.payment_period
 
     def get_total_price(self):
         return self.pay_and_drive.period_total_price

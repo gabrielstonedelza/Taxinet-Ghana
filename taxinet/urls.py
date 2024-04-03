@@ -9,6 +9,7 @@ urlpatterns = [
     path('auth/', include('djoser.urls.authtoken')),
     path('admin/', admin.site.urls),
     path('car_sales/', include('car_sales.urls')),
+    path('for_rent/', include('cars_for_rent.urls')),
     path('deliveries/', include('deliveries.urls')),
     path('drive_pay/', include('drive_pay.urls')),
     path('notifications/', include('notifications.urls')),

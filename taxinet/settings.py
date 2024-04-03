@@ -1,5 +1,4 @@
 
-
 import os
 from pathlib import Path
 import locale
@@ -29,6 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'car_sales',
+    'cars_for_rent',
     'deliveries',
     'drive_pay',
     'notifications',
