@@ -29,7 +29,7 @@ class RequestPayAndDrive(models.Model):
     # payment_period = models.CharField(max_length=10, choices=PAYMENT_PERIODS, default="1 Yr")
     period_total_price = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
     request_approved = models.CharField(max_length=30,choices=REQUEST_STATUS, default="Pending")
-    referral = models.CharField(max_length=150,default="")
+    referral = models.CharField(max_length=150,default="",blank=True)
     date_requested = models.DateTimeField(auto_now_add=True)
 
     def get_user_phone(self):
@@ -60,6 +60,9 @@ class AddToApprovedPayAndDrive(models.Model):
 
     def __str__(self):
         return self.user.username
+
+    def get_referral(self):
+        return self.pay_and_drive.referral
 
     def get_car_name(self):
         return self.pay_and_drive.car.name
