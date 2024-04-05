@@ -236,25 +236,26 @@ ul {
 #contact-address-button {
   position: fixed;
   bottom: 20px; /* Default position for larger screens */
-  right: 50%; /* Center horizontally */
-  transform: translateX(50%); /* Center horizontally */
+  left: 50%; /* Center horizontally */
+  transform: translateX(-50%); /* Center horizontally */
 }
 
 #contact-info {
   display: none;
   position: fixed;
-  bottom: 50px; /* Adjust as needed */
-  right: 20px; /* Adjust as needed */
-  background-color: #64750f;
+  bottom: 50px; /* Default position for larger screens */
+  right: 20px; /* Default position for larger screens */
+  left: 20px; /* Default position for larger screens */
+  background-color: #fff;
   padding: 10px;
   border: 1px solid #ccc;
-  color: #fff;
 }
-@media only screen and (max-width: 500px) {
+
+@media only screen and (max-width: 768px) {
   /* Adjust the button position for mobile/small screens */
   #contact-address-button {
     bottom: 20px;
-    right: 50%;
-    transform: translateX(50%);
+    left: 50%;
+    transform: translateX(-50%);
   }
 }
