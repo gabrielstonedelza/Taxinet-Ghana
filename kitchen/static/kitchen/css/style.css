@@ -250,7 +250,7 @@ ul {
   border: 1px solid #ccc;
   color: #fff;
 }
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 500px) {
   /* Adjust the button position for mobile/small screens */
   #contact-address-button {
     bottom: 20px;
