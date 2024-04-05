@@ -5,18 +5,26 @@
 
 <div class="main-back">
   <div class="justback"></div>
+  <!--  info button -->
+  <div class="call-address-button" id="contact-address-button">
+    <div id="contact-info" class="contact-details">
+      <p>Phone: +1(815)905-3110 <br/> Add: 101 B. W Romeo Road Romeoville, IL 60446</p>
+    </div>
+    <img src="{% static 'kitchen/images/phone-call.png' %}" alt="" />
+    
+  </div>
   <!-- <img class="logo" src="{% static 'kitchen/images/logo_name.png' %}" alt="" /> -->
-  <br>
+  <br />
   <ul class="main-menu-details">
     {% for food in food_item %}
     <li class="">
-        <div class="item">
-          <img src="{{ food.image.url }}" alt="" />
-          <p class="food-name">
-            {{ food.name }} <br />
-            <span class="food-price">${{ food.price }}</span>
-          </p>
-        </div>
+      <div class="item">
+        <img src="{{ food.image.url }}" alt="" />
+        <p class="food-name">
+          {{ food.name }} <br />
+          <span class="food-price">${{ food.price }}</span>
+        </p>
+      </div>
     </li>
     {% endfor %}
   </ul>

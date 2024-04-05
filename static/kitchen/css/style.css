@@ -170,6 +170,17 @@ ul {
     width: 100%;
     color: #64750f;
   }
+  /* call , address button */
+  .call-address-button {
+    position: fixed;
+    top: 650px;
+    left: 500px;
+  }
+
+  .call-address-button img {
+    width: 40px;
+    height: 40px;
+  }
 }
 
 @media only screen and (max-width: 600px) {
@@ -202,4 +213,40 @@ ul {
     width: 100%;
     color: #64750f;
   }
+
+  /* call , address button */
+  .call-address-button {
+    position: fixed;
+    top: 600px;
+    left: 500px;
+  }
+
+  .call-address-button img {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+#contact-address-button img {
+  width: 40px;
+  height: 40px;
+}
+
+/* call , address button */
+#contact-address-button {
+  position: fixed;
+  bottom: 20px; /* Adjust as needed */
+  right: 20px; /* Adjust as needed */
+}
+
+#contact-info {
+  display: none;
+  position: fixed;
+  bottom: 50px; /* Adjust as needed */
+  right: 20px; /* Adjust as needed */
+  background-color: #64750f;
+  padding: 10px;
+  border: 1px solid #ccc;
+  color: #fff;
+  border-radius: 10px;
 }
