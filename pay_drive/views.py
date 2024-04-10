@@ -61,7 +61,7 @@ def get_all_approved_pay_and_drive(request):
 def request_pay_and_drive(request,id):
     vehicle = get_object_or_404(CarsForRent, id=id)
     serializer = RequestPayAndDriveSerializer(data=request.data)
-    if serializer.is_valid(car=vehicle):
+    if serializer.is_valid():
         serializer.save(user=request.user,car=vehicle)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
