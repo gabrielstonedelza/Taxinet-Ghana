@@ -5,6 +5,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
 from car_sales.models import Vehicle
+from cars_for_rent.models import CarsForRent
 from .models import RequestPayAndDrive,AddToApprovedPayAndDrive, PayDailyPayAndDrive, PayExtraDriveAndPay
 from .serializers import RequestPayAndDriveSerializer,AddToApprovedPayAndDriveSerializer,PayDailyPayAndDriveSerializer,PayExtraDriveAndPaySerializer
 from django.core.mail import EmailMessage
@@ -58,7 +59,7 @@ def get_all_approved_pay_and_drive(request):
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
 def request_pay_and_drive(request,id):
-    vehicle = get_object_or_404(Vehicle, id=id)
+    vehicle = get_object_or_404(CarsForRent, id=id)
     serializer = RequestPayAndDriveSerializer(data=request.data)
     if serializer.is_valid(car=vehicle):
         serializer.save(user=request.user,car=vehicle)
