@@ -15,12 +15,12 @@ class PayDailyPayAndDriveSerializer(serializers.ModelSerializer):
 class RequestPayAndDriveSerializer(serializers.ModelSerializer):
     class Meta:
         model = RequestPayAndDrive
-        fields = ['id','user','car','pick_up_date','drop_off_date','period_total_price','request_approved','date_requested','get_username','get_car_pic','get_car_name','get_user_phone','referral','get_referral']
+        fields = ['id','user','car','pick_up_date','drop_off_date','period_total_price','request_approved','date_requested','get_username','get_car_pic','get_car_name','get_user_phone','referral']
         read_only_fields = ['user','car']
 
 
 class AddToApprovedPayAndDriveSerializer(serializers.ModelSerializer):
     class Meta:
         model = AddToApprovedPayAndDrive
-        fields = ['id','user','pay_and_drive','assigned_driver','date_approved','get_car_name','get_driver_type','get_pick_up_date','get_total_price','get_date_requested','get_car_pic','get_drop_off_date','expired','dropped_off']
+        fields = ['id','user','pay_and_drive','assigned_driver','date_approved','get_car_name','get_driver_type','get_pick_up_date','get_total_price','get_date_requested','get_car_pic','get_drop_off_date','expired','dropped_off','get_referral']
         read_only_fields = ['pay_and_drive']
