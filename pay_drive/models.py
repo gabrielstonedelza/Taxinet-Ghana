@@ -61,6 +61,9 @@ class AddToApprovedPayAndDrive(models.Model):
     def __str__(self):
         return self.user.username
 
+    def get_phone_number(self):
+        return self.user.phone_number
+
     def get_referral(self):
         return self.pay_and_drive.referral
 
