@@ -99,6 +99,6 @@ def update_approve_pay_drive(request,pk):
     my_approved = get_object_or_404(AddToApprovedPayAndDrive,pk=pk)
     serializer = AddToApprovedPayAndDriveSerializer(my_approved, data=request.data)
     if serializer.is_valid():
-        serializer.save(pay_and_drive=my_approved)
+        serializer.save(pay_and_drive=my_approved,user=request.user)
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
