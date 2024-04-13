@@ -7,6 +7,7 @@ class CarsForRent(models.Model):
     daily_payment = models.CharField(max_length=500)
     above_a_week = models.CharField(max_length=500)
     picture = models.ImageField(upload_to="Cars_for_rent")
+    description = models.TextField(default="")
     date_added = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
