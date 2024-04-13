@@ -4,7 +4,7 @@ from .models import CarsForRent, AddCarImage
 class CarsForRentSerializer(serializers.ModelSerializer):
     class Meta:
         model = CarsForRent
-        fields = ['id','name','engine_type','seater','daily_payment','above_a_week','picture','date_added','get_car_pic','description']
+        fields = ['id','name','engine_type','seater','picture','date_added','get_car_pic','description']
 
 
 class AddCarImageSerializer(serializers.ModelSerializer):
