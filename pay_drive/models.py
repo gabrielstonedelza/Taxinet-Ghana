@@ -26,6 +26,8 @@ class RequestPayAndDrive(models.Model):
     drive_type = models.CharField(max_length=50, choices=DRIVING_STYLE, default="Self Drive")
     pick_up_date = models.CharField(max_length=10)
     drop_off_date = models.CharField(max_length=10, default="")
+    pick_up_time = models.CharField(max_length=20,blank=True,default="")
+    pick_up_location = models.CharField(max_length=120,blank=True,default="")
     # payment_period = models.CharField(max_length=10, choices=PAYMENT_PERIODS, default="1 Yr")
     period_total_price = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
     request_approved = models.CharField(max_length=30,choices=REQUEST_STATUS, default="Pending")
