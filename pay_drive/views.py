@@ -1,14 +1,13 @@
 from django.http import Http404
 from django.shortcuts import get_object_or_404
-from rest_framework import permissions, generics, status
+from rest_framework import permissions, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
-from car_sales.models import Vehicle
 from cars_for_rent.models import CarsForRent
-from .models import RequestPayAndDrive,AddToApprovedPayAndDrive, PayDailyPayAndDrive, PayExtraDriveAndPay
-from .serializers import RequestPayAndDriveSerializer,AddToApprovedPayAndDriveSerializer,PayDailyPayAndDriveSerializer,PayExtraDriveAndPaySerializer
-from django.core.mail import EmailMessage
+from .models import RequestPayAndDrive, AddToApprovedPayAndDrive, PayExtraDriveAndPay
+from .serializers import RequestPayAndDriveSerializer, AddToApprovedPayAndDriveSerializer, PayExtraDriveAndPaySerializer
+
 
 # payment daily
 @api_view(['GET','POST'])
@@ -28,17 +27,6 @@ def get_all_my_extra_payment_for_pay_and_drive(request):
     serializer = PayExtraDriveAndPaySerializer(my_daily_payments, many=True)
     return Response(serializer.data)
 # payment daily
-
-@api_view(['GET','POST'])
-@permission_classes([permissions.IsAuthenticated])
-def add_to_pay_and_drive_complete(request,id):
-    pay_drive = get_object_or_404(RequestPayAndDrive,id=id)
-    serializer = AddToApprovedPayAndDriveSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save(pay_and_drive=pay_drive)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
@@ -100,5 +88,27 @@ def update_approve_pay_drive(request,pk):
     serializer = AddToApprovedPayAndDriveSerializer(my_approved, data=request.data)
     if serializer.is_valid():
         serializer.save(pay_and_drive=my_approved,user=request.user)
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# admin approve pay and drive request and add user to approved and confirmed requests
+
+@api_view(['GET','POST'])
+@permission_classes([permissions.IsAuthenticated])
+def add_to_pay_and_drive_complete(request,id):
+    pay_drive_request = get_object_or_404(RequestPayAndDrive,id=id)
+    serializer = AddToApprovedPayAndDriveSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(pay_and_drive=pay_drive_request)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'PUT'])
+@permission_classes([permissions.IsAuthenticated])
+def approve_pay_drive_request(request,pk):
+    request_to_approve = get_object_or_404(RequestPayAndDrive,pk=pk)
+    serializer = RequestPayAndDriveSerializer(request_to_approve, data=request.data)
+    if serializer.is_valid():
+        serializer.save(user=request.user,car=request_to_approve)
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

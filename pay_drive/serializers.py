@@ -23,4 +23,4 @@ class AddToApprovedPayAndDriveSerializer(serializers.ModelSerializer):
     class Meta:
         model = AddToApprovedPayAndDrive
         fields = ['id','user','pay_and_drive','assigned_driver','date_approved','get_car_name','get_driver_type','get_pick_up_date','get_total_price','get_date_requested','get_car_pic','get_drop_off_date','expired','dropped_off','get_referral','get_phone_number']
-        read_only_fields = ['pay_and_drive','user']
+        read_only_fields = ['pay_and_drive']
