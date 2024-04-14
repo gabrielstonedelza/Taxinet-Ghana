@@ -46,8 +46,7 @@ def get_all_approved_pay_and_drive(request):
 
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
-def request_pay_and_drive(request,id):
-    vehicle = get_object_or_404(CarsForRent, id=id)
+def request_pay_and_drive(request):
     serializer = RequestPayAndDriveSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
