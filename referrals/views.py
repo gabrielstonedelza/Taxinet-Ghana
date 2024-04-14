@@ -52,7 +52,7 @@ def update_referral_wallet(request, id,amount_to_update):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_all_referrals_wallets(request):
-    wallets = ReferralWallets.objects.all().order_by('-date_added')
+    wallets = ReferralWallets.objects.all().order_by('-date_loaded')
     serializer = ReferralWalletsSerializer(wallets, many=True)
     return Response(serializer.data)
 
