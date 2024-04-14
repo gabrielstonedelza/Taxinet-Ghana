@@ -1,3 +1,7 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Referrals, ReferralWallets, UpdatedReferralWallets
+
+admin.site.register(Referrals)
+admin.site.register(ReferralWallets)
+admin.site.register(UpdatedReferralWallets)
