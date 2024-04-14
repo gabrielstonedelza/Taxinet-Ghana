@@ -65,7 +65,7 @@ def get_my_pay_and_drive_requests(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_all_pay_and_drive_requests(request):
-    all_requests = RequestPayAndDrive.objects.all().order_by('-date_requested')
+    all_requests = RequestPayAndDrive.objects.filter(request_approved="Pending").order_by('-date_requested')
     serializer = RequestPayAndDriveSerializer(all_requests, many=True)
     return Response(serializer.data)
 
