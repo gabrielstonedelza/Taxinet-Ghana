@@ -62,3 +62,14 @@ def get_all_referrals_updated_wallets(request):
     wallets = UpdatedReferralWallets.objects.all().order_by('-date_added')
     serializer = UpdatedReferralWalletsSerializer(wallets, many=True)
     return Response(serializer.data)
+
+
+@api_view(['GET', 'DELETE'])
+@permission_classes([permissions.IsAuthenticated])
+def delete_referral(request, id):
+    try:
+        referral = get_object_or_404(Referrals, id=id)
+        referral.delete()
+    except Referrals.DoesNotExist:
+        return Http404
+    return Response(status=status.HTTP_204_NO_CONTENT)
