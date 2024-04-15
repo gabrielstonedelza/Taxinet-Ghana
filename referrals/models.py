@@ -13,7 +13,7 @@ class ReferralWallets(models.Model):
     amount = models.DecimalField(decimal_places=2, max_digits=10, default=00.00)
     date_loaded = models.DateTimeField(auto_now_add=True)
     def __str__(self):
-        return str(self.pk)
+        return str(self.referral.name)
 
     def get_referral_phone(self):
         return self.referral.phone
