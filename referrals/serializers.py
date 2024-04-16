@@ -9,7 +9,7 @@ class ReferralsSerializer(serializers.ModelSerializer):
 class ReferralWalletsSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReferralWallets
-        fields = ['referral','amount','date_loaded','get_referral_phone','get_referral_name']
+        fields = ['id','referral','amount','date_loaded','get_referral_phone','get_referral_name']
 
 class UpdatedReferralWalletsSerializer(serializers.ModelSerializer):
     class Meta:
