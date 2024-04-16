@@ -73,3 +73,18 @@ def delete_referral(request, id):
     except Referrals.DoesNotExist:
         return Http404
     return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['GET', 'PUT'])
+@permission_classes([permissions.AllowAny])
+def update_referral_wallet_wallet(request, id,amount):
+    wallet = get_object_or_404(ReferralWallets, id=id)
+    serializer = ReferralWalletsSerializer(wallet, data=request.data)
+    if serializer.is_valid():
+        if wallet:
+            UpdatedReferralWallets.objects.create(referral=wallet.referral, referral_wallet=wallet, amount=amount)
+            wallet.amount = wallet.amount + Decimal(amount)
+            wallet.save()
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
