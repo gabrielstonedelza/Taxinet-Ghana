@@ -10,5 +10,6 @@ urlpatterns = [
     path("get_all_referrals_updated_wallets/", views.get_all_referrals_updated_wallets),
     path("update_referral_wallet/<int:id>/<str:amount_to_update>/", views.update_referral_wallet),
     path("delete_referral/<int:id>/", views.delete_referral),
+    path("get_referrals_updated_wallet/<int:id>/", views.get_referrals_updated_wallet),
     path("referral_wallet/<int:id>/<str:amount>/update/",views.update_referral_wallet_wallet),
 ]

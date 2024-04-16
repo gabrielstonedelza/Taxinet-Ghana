@@ -88,3 +88,12 @@ def update_referral_wallet_wallet(request, id,amount):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_referrals_updated_wallet(request,id):
+    referral_wallet = get_object_or_404(ReferralWallets,id=id)
+    wallet = UpdatedReferralWallets.objects.filter(referral_wallet=referral_wallet).order_by('-date_updated')
+    serializer = UpdatedReferralWalletsSerializer(wallet, many=True)
+    return Response(serializer.data)
