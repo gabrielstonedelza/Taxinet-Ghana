@@ -57,5 +57,12 @@ def get_my_wallet(request):
     serializer = WalletsSerializer(wallet, many=True)
     return Response(serializer.data)
 
-
+# get users updated wallet transactions
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_users_updated_wallet(request,id):
+    user_wallet = get_object_or_404(Wallets,id=id)
+    wallet = UpdatedWallets.objects.filter(wallet=user_wallet).order_by('-date_updated')
+    serializer = UpdatedWalletsSerializer(wallet, many=True)
+    return Response(serializer.data)
 

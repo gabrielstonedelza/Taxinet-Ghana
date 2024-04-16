@@ -1,7 +1,7 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from notifications.models import Notifications
-from .models import UpdatedWallets
+from .models import UpdatedWallets,Wallets
 from users.models import User
 
 
