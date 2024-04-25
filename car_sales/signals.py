@@ -31,6 +31,6 @@ def alert_new_vehicle(sender,created,instance,**kwargs):
         admin_user = User.objects.get(id=1)
         users = User.objects.exclude(id=1)
         title = "New Vehicle Added"
-        message = f"Hey hi, Taxinet added a new vehicle to their collection"
+        message = "Hey hi, Taxinet added a new vehicle to their collection"
         for i in users:
             Notifications.objects.create(item_id=instance.id,notification_title=title,notification_message=message,notification_to=i,notification_from=admin_user)
