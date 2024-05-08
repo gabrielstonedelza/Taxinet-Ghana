@@ -4,6 +4,7 @@ class CarsForRent(models.Model):
     name = models.CharField(max_length=100)
     engine_type = models.CharField(max_length=10)
     seater = models.IntegerField(default=5)
+    car_model = models.CharField(max_length=100,default="")
     # daily_payment = models.CharField(max_length=500)
     # above_a_week = models.CharField(max_length=500)
     picture = models.ImageField(upload_to="Cars_for_rent")
