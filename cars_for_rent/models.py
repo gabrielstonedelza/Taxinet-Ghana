@@ -1,12 +1,16 @@
 from django.db import models
 
+CAR_TRANSMISSIONS = (
+    ("Automatic", "Automatic"),
+    ("Manual", "Manual"),
+)
+
 class CarsForRent(models.Model):
     name = models.CharField(max_length=100)
     engine_type = models.CharField(max_length=10)
     seater = models.IntegerField(default=5)
     car_model = models.CharField(max_length=100,default="")
-    # daily_payment = models.CharField(max_length=500)
-    # above_a_week = models.CharField(max_length=500)
+    transmission = models.CharField(max_length=100,default="Automatic")
     picture = models.ImageField(upload_to="Cars_for_rent")
     description = models.TextField(default="")
     date_added = models.DateTimeField(auto_now_add=True)
