@@ -11,6 +11,7 @@ class CarsForRent(models.Model):
     seater = models.IntegerField(default=5)
     car_model = models.CharField(max_length=100,default="")
     transmission = models.CharField(max_length=100,default="Automatic")
+    color = models.CharField(max_length=100,default="Black")
     picture = models.ImageField(upload_to="Cars_for_rent")
     description = models.TextField(default="")
     date_added = models.DateTimeField(auto_now_add=True)
