@@ -28,6 +28,7 @@ class CarsForRent(models.Model):
     description = models.TextField(default="")
     # inside of ksi with a driver
     kk200 = models.CharField(max_length=20,default="Ghc700")
+    just_ksi = models.BooleanField(default=False)
 
     date_added = models.DateTimeField(auto_now_add=True)
 
