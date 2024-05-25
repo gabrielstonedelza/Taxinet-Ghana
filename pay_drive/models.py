@@ -12,7 +12,7 @@ PAYMENT_PERIODS = (
 
 DRIVING_STYLE = (
     ("Self Drive","Self Drive"),
-    ("With Driver","With Driver"),
+    ("With a Driver","With a Driver"),
 )
 
 REQUEST_STATUS = (
