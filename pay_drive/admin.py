@@ -3,7 +3,7 @@ from django.contrib import admin
 from .models import RequestPayAndDrive, AddToApprovedPayAndDrive, PayDailyPayAndDrive
 
 class AdminRequestPayAndDrive(admin.ModelAdmin):
-    list_display = ['id','user','car','drive_type','pick_up_date','period_total_price','request_approved','date_requested','referral','pick_up_time','pick_up_location']
+    list_display = ['id','user','car','drive_type','pick_up_date','drop_off_date','period_total_price','request_approved','date_requested','referral','pick_up_time','pick_up_location']
     class Meta:
         model = RequestPayAndDrive
 
