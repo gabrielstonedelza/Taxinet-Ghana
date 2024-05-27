@@ -1,3 +1,5 @@
+from django.utils import timezone
+
 from django.db import models
 from users.models import User
 from car_sales.models import Vehicle
@@ -58,7 +60,8 @@ class AddToApprovedPayAndDrive(models.Model):
     assigned_driver = models.ForeignKey(User, on_delete=models.CASCADE,related_name="driver_being_approved",default=1)
     expired = models.BooleanField(default=False)
     dropped_off = models.BooleanField(default=False)
-    date_approved = models.DateTimeField(auto_now_add=True)
+    date_approved = models.DateField(default=timezone.now)
+    time_approved = models.TimeField(default=timezone.now)
 
     def __str__(self):
         return self.user.username
