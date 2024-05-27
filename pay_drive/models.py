@@ -84,6 +84,9 @@ class AddToApprovedPayAndDrive(models.Model):
     def get_total_price(self):
         return self.pay_and_drive.period_total_price
 
+    def get_daily_amount(self):
+        return self.pay_and_drive.car.kk200
+
 
     def get_date_requested(self):
         return self.pay_and_drive.date_requested
