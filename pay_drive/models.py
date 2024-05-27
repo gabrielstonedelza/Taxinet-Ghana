@@ -34,8 +34,8 @@ class RequestPayAndDrive(models.Model):
     period_total_price = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
     request_approved = models.CharField(max_length=30,choices=REQUEST_STATUS, default="Pending")
     referral = models.CharField(max_length=150,default="",blank=True)
-    date_requested = models.DateTimeField(default=timezone.now)
-    time_requested = models.DateTimeField(default=timezone.now)
+    date_requested = models.DateField(default=timezone.now)
+    time_requested = models.TimeField(default=timezone.now)
 
     def get_user_phone(self):
         return self.user.phone_number
